@@ -1,9 +1,10 @@
 <?php 
-use Illuminate\Database\Seeder;
-use App\User;
+use Illuminate\Database\Seeder; 
 use App\Models\Role;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Faker\Generator as Faker;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 class UsersTableSeeder extends Seeder
 {
@@ -15,13 +16,13 @@ class UsersTableSeeder extends Seeder
     public function run(Faker $faker)
     {
         User::truncate();
-        //Role::truncate();
-        factory(User::class, 3)->create();
+        DB::table('role_user')->truncate();
+        //factory(User::class, 3)->create();
 
-        $adminRole = Role::where('name','admin');
-        $authorRole = Role::where('name','author');
-        $userRole = Role::where('name','user');
-
+        $adminRole = Role::where('name','admin')->first();
+        $authorRole = Role::where('name','author')->first();
+        $userRole = Role::where('name','user')->first();
+ 
         $admin = User::create([
             'first_name' => 'Admin',
             'last_name' => $faker->name,
@@ -55,11 +56,11 @@ class UsersTableSeeder extends Seeder
             'email_verified_at' => now(),
             'password' => Hash::make('password'),  // password         
             'remember_token' => Str::random(10),
-        ]);
+        ]); 
 
-        //$admin->roles()->attach($adminRole);
-        //$author->roles()->attach($authorRole);
-        //$user->roles()->attach($userRole);
+        $admin->roles()->attach($adminRole);
+        $author->roles()->attach($authorRole);
+        $user->roles()->attach($userRole);
         //App\User::factory()->count(30)->create();
         //
     }
