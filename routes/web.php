@@ -33,9 +33,15 @@ Route::group(['prefix' => 'admin','namespace' => 'Auth\Admin'],function(){
     Route::get('dashboard', 'DashboardController@index'); 
 });
 
-Route::group(['prefix' => 'user', 'namespace' => 'Auth\User'],function(){
+Route::group(['prefix' => 'user', 'namespace' => 'Auth'],function(){
 
     Route::get('dashboard', 'DashboardController@index')->name('dashboard');
+});
+
+Route::group(['prefix' => 'client/orders/', 'namespace' => 'client\Orders'],function(){
+
+    Route::resource('ManualOrders', 'ManualOrdersController');
+    //Route::get('create', 'ManualOrdersController@index')->name('client.manual.orders');
 });
 
 // Route::get('/home', 'Auth\Admin\LoginController@showLoginForm@index')->name('home');
