@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -19,7 +20,7 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
-{{dd(auth()->user()->role_id()->nickname) }}
+
 <body>
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
@@ -83,6 +84,20 @@
                                 
                                 @endif
 
+                            </li>
+
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Orders
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{route('ManualOrders.create')}}">Manual Orders</a>
+                                <a class="dropdown-item" href="#">Stitching Orders</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">S
+                                    omething else here</a>
+                                </div>
                             </li>
                         @endguest
                     </ul>
