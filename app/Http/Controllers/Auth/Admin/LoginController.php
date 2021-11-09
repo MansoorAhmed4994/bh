@@ -23,7 +23,7 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-       //$this->middleware('auth:admin')->except('logout');
+        $this->middleware('guest')->except('logout');
     }
     /**
      * Show the application's login form.
@@ -57,6 +57,7 @@ class LoginController extends Controller
 
             return $this->sendLockoutResponse($request);
         } 
+        
         if ($this->attemptLogin($request)) {
             return $this->sendLoginResponse($request);
         }

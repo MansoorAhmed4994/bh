@@ -1,0 +1,51 @@
+[33m2990f9c[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m HEAD@{0}: revert: Revert "changes by mansoor"
+[33med47d0a[m HEAD@{1}: commit: changes by mansoor
+[33m1028adb[m HEAD@{2}: commit: changes by mansoor
+[33m860b3a1[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{3}: commit: Update composer.json
+[33m4ce6314[m HEAD@{4}: commit: Delete AdminLoginController copy.php
+[33m2482c38[m HEAD@{5}: commit: Update UsersTableSeeder.php
+[33m2aff0cb[m HEAD@{6}: commit: Update AppServiceProvider.php
+[33meb35a8d[m HEAD@{7}: commit: Create ManualOders.php
+[33m63c8a79[m HEAD@{8}: commit: Create Users.php
+[33m40313ea[m HEAD@{9}: commit: Create ResetPasswordController.php
+[33md55f0b9[m HEAD@{10}: commit: Create StitchinOrdersController.php
+[33mce96367[m HEAD@{11}: commit: Create LoginController.php
+[33mc781ded[m HEAD@{12}: commit: Create RegisterController.php
+[33m2b86fb9[m HEAD@{13}: commit: Create DashboardController.php
+[33me09c854[m HEAD@{14}: commit: Update .gitignore
+[33m6a8149b[m HEAD@{15}: commit: Create composer.phar
+[33mdeb2a24[m HEAD@{16}: commit: Delete User.php
+[33m1be40a9[m HEAD@{17}: commit: Create composer.bat
+[33mbfebbba[m HEAD@{18}: commit: Create ForgotPasswordController.php
+[33m19c8137[m HEAD@{19}: commit: Create ConfirmPasswordController.php
+[33m17ad389[m HEAD@{20}: commit: Create create.blade.php
+[33mabc1c21[m HEAD@{21}: commit: Delete UserFactory.php
+[33mdf5ab95[m HEAD@{22}: commit: Create User.php
+[33m184968e[m HEAD@{23}: commit: Update AppServiceProvider.php
+[33m3837de3[m HEAD@{24}: commit: Create composer
+[33m3e8e195[m HEAD@{25}: commit: Update composer.lock
+[33m2db8ac2[m HEAD@{26}: commit: Update auth.php
+[33m0129fd7[m HEAD@{27}: commit: Create RolesTableSeeder.php
+[33m4e9c152[m HEAD@{28}: commit: Create 2021_10_19_191704_create_manual_oders_table.php
+[33m48440bd[m HEAD@{29}: commit: Update 2014_10_12_000001_create_roles_table.php
+[33m92b033b[m HEAD@{30}: commit: Update DatabaseSeeder.php
+[33m94c1287[m HEAD@{31}: commit: Update UsersTableSeeder.php
+[33m0b71bd4[m HEAD@{32}: commit: Update app.blade.php
+[33ma71d7d5[m HEAD@{33}: commit: Create list.blade.php
+[33mce209ed[m HEAD@{34}: commit: Update dashboard.blade.php
+[33m97ae8d0[m HEAD@{35}: commit: Create 2021_10_19_175523_create_role_user_table.php
+[33m9d676fb[m HEAD@{36}: commit: Delete 2021_10_14_223733_create_user_roles_table.php
+[33m6cd072b[m HEAD@{37}: commit: Update web.php
+[33me8164a6[m HEAD@{38}: commit: Update Role.php
+[33ma9f711f[m HEAD@{39}: commit: Update HomeController.php
+[33md574d23[m HEAD@{40}: commit: Update RedirectIfAuthenticated.php
+[33m5ad2885[m HEAD@{41}: commit: Delete ConfirmPasswordController.php
+[33m0deb726[m HEAD@{42}: commit: Create VerificationController.php
+[33mf260f0c[m HEAD@{43}: commit: Create ManualOrdersController.php
+[33mea5d1ce[m HEAD@{44}: commit: Delete RegisterController.php
+[33me0d6354[m HEAD@{45}: commit: Delete VerificationController.php
+[33m833d649[m HEAD@{46}: commit: Delete ResetPasswordController.php
+[33m83e3933[m HEAD@{47}: commit: Delete DashboardController.php
+[33m3de6c50[m HEAD@{48}: commit: Delete ForgotPasswordController.php
+[33m611a78d[m HEAD@{49}: commit: Delete LoginController.php
+[33md1af5c1[m HEAD@{50}: clone: from https://github.com/MansoorAhmed4994/bh.git

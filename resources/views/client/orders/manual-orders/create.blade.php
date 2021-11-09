@@ -1,45 +1,22 @@
  
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>How to Upload Files with Drag 'n' Drop and Image preview in Laravel 8 using dropzone</title>
+@extends('layouts.app')
 
-
-    {{--  dropbox CDN  --}}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.0/min/dropzone.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.0/dropzone.js"></script>
-
-    <!-- Font Awesome JS -->
-    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js"
-        integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous">
-    </script>
-    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js"
-        integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous">
-    </script>
-
-    <!-- Bootstrap CSS CDN -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
-        integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
-
-           <style>
-        .footer {
-            position: fixed;
-            left: 0;
-            bottom: 0;
-            width: 100%;
-            background-color: #9C27B0;
-            color: white;
-            text-align: center;
+@section('content')
+    <style> 
+        div {
+        position: relative;
+        overflow: hidden;
+        }
+        input[type=file] {
+        position: absolute;
+        font-size: 50px;
+        opacity: 0; 
+        right: 0;
+        top: 0;
         }
 
-        body {
-            background-color: #EDF7EF
-        }
+    </style>  
 
-    </style>
-  </head>
-  <body>
     <div class="row mb-3">
         <div class="col-lg-12 margin-tb">
             <div class="text-center">
@@ -47,66 +24,46 @@
             </div>
         </div>
     </div>
+      
+    <div class="container"> 
+         
+        
 
-    <div class="container">
-    <div class="row">
+        <form method="post" action="{{ route('ManualOrders.store') }}" enctype="multipart/form-data" class="dropzone" id="dropzone">
+            @csrf
 
-    </div>        
-    <form method="post" action="{{ route('ManualOrders.store') }}" enctype="multipart/form-data"
-          class="dropzone" id="dropzone">
-            @csrf 
             <div class="form-group">
-                <label for="exampleFormControlInput1">Name</label>
-                <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+                <div class="file btn btn-lg btn-primary">Upload
+                    <input type="file" name="images[]" multiple  required/>
+                    
+                </div>
+                @if($errors->get('images'))<small id="images_error" class="form-text text-danger"> {{$errors->first('images')}} </small>@endif
+            </div>
+
+            <div class="form-group">
+                <label for="First Name">Name</label>
+                <input type="text" class="form-control" id="first_name"  name="first_name" placeholder="First Name" required>
+                @if($errors->get('first_name')) <small id="first_name_error" class="form-text text-danger"></small>{{$errors->first('first_name')}} @endif
             </div> 
 
             <div class="form-group">
                 <label for="Number">Number</label>
-                <input type="email" class="form-control" id="Number" placeholder="Number">
+                <input type="text" class="form-control" id="number"  name="number" placeholder="number Number" required>
+                @if($errors->get('number')) <small id="number_error" class="form-text text-danger">{{$errors->first('number')}} </small>@endif
+            </div>  
+
+            <div class="form-group">
+                <label for="address">Address</label>
+                <textarea class="form-control" id="address1"  name="address1" placeholder="address" required></textarea>
+                <small id="address1_error" class="form-text text-danger">@if($errors->get('address1')) {{$errors->first('address1')}} @endif</small>
             </div> 
 
             <div class="form-group">
-                <label for="exampleFormControlTextarea1">Address</label>
-                <textarea class="form-control" id="price" rows="3"></textarea>
+                <button type="submit" class="btn btn-primary">Save</button>
             </div>
-    </form>
-    </div> 
-    <script type="text/javascript">
-        Dropzone.options.dropzone =
-        {
-            maxFilesize: 12,
-            resizeQuality: 1.0,
-            acceptedFiles: ".jpeg,.jpg,.png,.gif",
-            addRemoveLinks: true,
-            timeout: 60000,
-            removedfile: function(file) 
-            {
-                var name = file.upload.filename;
-                $.ajax({
-                    headers: {
-                                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                            },
-                    type: 'POST',
-                    url: '{{ url("files/destroy") }}',
-                    data: {filename: name},
-                    success: function (data){
-                        console.log("File has been successfully removed!!");
-                    },
-                    error: function(e) {
-                        console.log(e);
-                    }});
-                    var fileRef;
-                    return (fileRef = file.previewElement) != null ? 
-                    fileRef.parentNode.removeChild(file.previewElement) : void 0;
-            },
-            success: function (file, response) {
-                console.log(response);
-            },
-            error: function (file, response) {
-                return false;
-            }
-        };
-    </script>
-
-  </body>
-</html>
+                
+        </form> 
+    </div>
+    
+     
+  @endsection

@@ -50,9 +50,16 @@ class LoginController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function showLoginForm()
+    public function showLoginForm() 
     {
-        return view('auth.user.login');
+        // if(Auth::guard('admin')->check()){
+        //     return redirect()->route('admin.dashboard');
+        // }
+        if(Auth::guard('user')->check())
+        {
+           return redirect()->route('user.dashboard');
+        }
+            return view('auth.user.login');
     }
 
     /**
