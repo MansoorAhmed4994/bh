@@ -15,4 +15,4 @@ storage/*.key
 Homestead.yaml
 Homestead.json
 /.vagrant 
-app/storage/images/orders/
+storage/images/orders/
