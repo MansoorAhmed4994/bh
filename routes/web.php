@@ -36,7 +36,7 @@ Route::group(['prefix' => 'user', 'namespace' => 'Auth' ,'as'=> 'user.'],functio
     Route::get('dashboard', 'DashboardController@index')->name('dashboard');
 });
 
-Route::group(['prefix' => 'client/orders/', 'namespace' => 'client\Orders', 'middleware' => 'auth:user'],function(){
+Route::group(['prefix' => 'client/orders/', 'namespace' => 'Client\Orders', 'middleware' => 'auth:user'],function(){
 
     Route::resource('ManualOrders', 'ManualOrdersController');
     Route::post('ManualOrders/delete-image', 'ManualOrdersController@delete_order_image')->name('ManualOrders.delete.order.image');
