@@ -78,7 +78,7 @@ trait ManualOrderTraits {
              
             if($customers->manual_orders()->save($manual_orders))
             {
-                return 'Order id:  '.$ifexist->first()->id.'   Successfully Placed';
+                return 'Order id:  '.$manual_orders->first()->id.'   Successfully Placed';
             }
         }
         else

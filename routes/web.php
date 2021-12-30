@@ -52,7 +52,7 @@ Route::group(['prefix' => 'client/orders/', 'namespace' => 'Client\Orders', 'mid
 
 Route::group(['prefix' => 'frontend/client/orders/', 'namespace' => 'Frontend\Client\Orders'],function(){
 
-    Route::resource('ManualOrders', 'ManualOrdersController',['as' => 'Frontend'])->except('show');
+    Route::resource('ManualOrders', 'ManualOrdersController',['as' => 'Frontend']);
     //Route::get('ManualOrders/show/{id}', 'ManualOrdersController@show')->name('ManualOrders.show');
     
 });

@@ -44,5 +44,26 @@ class ManualOrdersController extends Controller
         //
     }
     
+    public function show($ManualOrder)
+    
+    { 
+         
+        //return dd();
+        // return Response()->json([
+        //         "success" => false,
+        //         "file" => ''
+        //   ]);
+        $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'manual_orders.customers_id')->where('customers.number',$ManualOrder)->get();
+        if(!$ManualOrder->isEmpty())
+        {
+            return $ManualOrder->first();
+        }
+        else
+        {
+            return 'no value';
+        }
+       
+    }
+    
     //
 }
