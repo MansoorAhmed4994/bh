@@ -131,9 +131,7 @@
             </div> 
         @endif
 
-        <form action="{{ route('ManualOrders.update',$ManualOrder->id) }}" id="update_form" name="update_form" enctype="multipart/form-data"method="post">
-        <input type="hidden" name="_method" value="PUT">
-    <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
+        <form id="update_form" name="update_form" enctype="multipart/form-data"method="post">
              
             <div class="form-group">
             <?php $count=1;?>
@@ -141,12 +139,7 @@
             @if(!empty($ManualOrder->images))
                 @foreach(explode('|', $ManualOrder->images) as $image)  
                     <div class="card" style="width: 18rem;" id="imagebox{{$count}}">
-                        <img class="card-img-top" src="{{asset($image)}}" alt="Card image cap">
-                        <div class="card-body">
-                            <button type="button"  onclick="delete_image_path='{{$image}}';image_box_id='imagebox{{$count}}';" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                            delete
-                            </button> 
-                        </div>
+                        <img class="card-img-top flot-left" src="{{asset($image)}}" alt="Card image cap">
                     </div>
                     <?php $count++;?> 
                 @endforeach

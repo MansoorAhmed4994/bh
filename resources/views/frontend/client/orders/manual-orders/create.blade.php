@@ -1,5 +1,5 @@
  
-@extends('layouts.app')
+@extends('frontend.layouts.app')
 
 @section('content')
     <style> 
@@ -41,7 +41,7 @@
          
         
 
-        <form method="post" action="{{ route('ManualOrders.store') }}" enctype="multipart/form-data" class="dropzone" id="dropzone">
+        <form method="post" action="{{ route('Frontend.ManualOrders.store') }}" enctype="multipart/form-data" class="dropzone" id="dropzone">
             @csrf
 
             <div class="form-group">
