@@ -45,7 +45,7 @@
             @csrf
 
             <div class="form-group">
-                <div class="file btn btn-lg btn-primary">Upload
+                <div class="file btn btn-lg btn-primary">Add Images
                     <input type="file" name="images[]" multiple  required/>
                     
                 </div>

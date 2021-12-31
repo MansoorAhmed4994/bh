@@ -1,4 +1,4 @@
-<?php
+ <?php
 
 namespace App\Http\Controllers\Client\Orders;
 
@@ -36,7 +36,7 @@ class ManualOrdersController extends Controller
         // $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'manual_orders.customers_id')->where('manual_orders.status','pending')->orderBy('manual_orders.created_at', 'DESC')->paginate(5);
         $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')
         ->where('manual_orders.status','pending')
-        ->orderBy('manual_orders.created_at', 'DESC')
+        ->orderBy('manual_orders.created_at', 'ASC')
         ->select('manual_orders.id','manual_orders.customers_id','customers.first_name','manual_orders.description','customers.last_name','customers.number','customers.address','manual_orders.price','manual_orders.images','manual_orders.total_pieces','manual_orders.date_order_paid','manual_orders.status')
         ->paginate(25);
         //dd($list);
@@ -78,7 +78,7 @@ class ManualOrdersController extends Controller
             $query->where('customers.first_name','like',$search_test.'%')
                   ->orWhere('customers.number','like',$search_test.'%');
             })->where('manual_orders.status','like',$order_status.'%')
-            ->orderBy('manual_orders.created_at', 'DESC')
+            ->orderBy('manual_orders.created_at', 'ASC')
             ->select('manual_orders.id','manual_orders.customers_id','manual_orders.description','customers.first_name','customers.last_name','customers.number','customers.address','manual_orders.price','manual_orders.images','manual_orders.total_pieces','manual_orders.date_order_paid','manual_orders.status')
             ->paginate(5);
 //dd($list);

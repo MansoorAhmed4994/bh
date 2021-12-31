@@ -1,1 +1,0 @@
-[30-Dec-2021 15:31:46 UTC] PHP Fatal error:  Trait 'App\Traits\ManualOrderTraits' not found in /home/desenado/manualorders.brandhub.com.pk/app/Http/Controllers/Client/Orders/ManualOrdersController.php on line 17
