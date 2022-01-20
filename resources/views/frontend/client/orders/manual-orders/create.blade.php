@@ -14,6 +14,10 @@
         right: 0;
         top: 0;
         }
+        
+         
+
+        
 
     </style>
     
@@ -45,10 +49,11 @@
             @csrf
 
             <div class="form-group">
-                <div class="file btn btn-lg btn-primary">Add Images
-                    <input type="file" name="images[]" multiple  required/>
-                    
-                </div>
+                <label class="custom-file-upload-button" style="border: 2px dashed black;padding: 50px;border-radius: 15px;">
+                    <input type="file" name="images[]" style="display:none;" multiple  required/>
+                    <i class="bi bi-cloud-upload-fill"></i>Custom Uploadsss
+                </label>
+                
                 @if($errors->get('images'))<small id="images_error" class="form-text text-danger"> {{$errors->first('images')}} </small>@endif
             </div>
             
