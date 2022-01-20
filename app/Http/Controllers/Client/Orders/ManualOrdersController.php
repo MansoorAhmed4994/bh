@@ -1,4 +1,4 @@
- <?php
+<?php
 
 namespace App\Http\Controllers\Client\Orders;
 
@@ -349,10 +349,12 @@ class ManualOrdersController extends Controller
     
     
     
-    // public function print_order_slip( $ManualOrder)
-    // {
-    
+    public function print_order_slip($ManualOrder_id)
+    {
+        $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.id',$ManualOrder_id)->get();
+            //dd($ManualOrder);
+        return view('client.orders.manual-orders.print_slip')->with('ManualOrders',$ManualOrder);
         
-    // }
+    }
  
 }

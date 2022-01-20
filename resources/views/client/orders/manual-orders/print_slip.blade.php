@@ -117,7 +117,7 @@ padding: 5px;
                 		<td style="font-size:8px;padding-top:0px;padding-bottom:0px;">Printed On</td>
                 		<td style="font-size:8px;text-align:center;padding-top:0px;padding-bottom:0px;">{{$ManualOrder->created_at}}</td>
                     </tr>
-                	<tr><td style="font-size:9px; text-align:center;" colspan="6"><span class="notranslate">اگر پیکنگ برقرار نہیں ہے تو پارسل قبول نہ کریں۔ "سی۔او۔ڈی" رقم ادا کرنے سے پہلے پارسل نہیں کھولا جا سکتا۔ "ایم اینڈ پی" پروڈکٹ کے لۓ ذمہ دار نہیں ہے، کسی بھی مسئلے کی صورت میں آن لائن شاپ یا بھیجنے والے سے رابطہ کریں۔</span></td></tr>
+                	<tr><td style="font-size:9px; text-align:center;" colspan="6"><span class="notranslate">اگر پیکنگ برقرار نہیں ہے تو پارسل قبول نہ کریں۔ "سی۔او۔ڈی" رقم ادا کرنے سے پہلے پارسل نہیں کھولا جا سکتا۔</span></td></tr>
                 
                 </tbody>
             </table>
