@@ -52,6 +52,7 @@
           <option value="prepaired">Prepaired</option>
           <option value="confirmed">Confirmed</option>
           <option value="dispatched">Dispatched</option>
+          <option value="print">Print</option>
         </select> 
     </div>
     
@@ -72,6 +73,7 @@
           <option value="prepare">Prepare</option>
           <option value="confirmed">Confirmed</option>
           <option value="dispatched">Dispatched</option>
+          <option value="print">Print</option>
         </select> 
     </div>
     
