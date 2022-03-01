@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Traits\ManualOrderTraits;
 use Illuminate\Http\Request;
 use App\Models\Client\ManualOrders;
+use App\Models\Riders;
 use App\Models\Client\Customers;
 use Illuminate\Support\Facades\File; 
 use Illuminate\Support\Facades\Auth;
@@ -36,9 +37,9 @@ class ManualOrdersController extends Controller
         // $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'manual_orders.customers_id')->where('manual_orders.status','pending')->orderBy('manual_orders.created_at', 'DESC')->paginate(5);
         $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')
         ->where('manual_orders.status','pending')
-        ->orderBy('manual_orders.created_at', 'ASC')
-        ->select('manual_orders.id','manual_orders.customers_id','customers.first_name','manual_orders.description','customers.last_name','customers.number','customers.address','manual_orders.price','manual_orders.images','manual_orders.total_pieces','manual_orders.date_order_paid','manual_orders.status')
-        ->paginate(25);
+        ->orderBy('manual_orders.id', 'ASC')
+        ->select('manual_orders.id','manual_orders.customers_id','customers.first_name','manual_orders.receiver_number','manual_orders.description','manual_orders.reciever_address','customers.last_name','customers.number','customers.address','manual_orders.price','manual_orders.images','manual_orders.total_pieces','manual_orders.date_order_paid','manual_orders.status','manual_orders.created_at','manual_orders.updated_at')
+        ->paginate(20);
         //dd($list);
         return view('client.orders.manual-orders.list')->with('list',$list);
     }
@@ -76,11 +77,15 @@ class ManualOrdersController extends Controller
         $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->
         where(function ($query) use ($search_test) {
             $query->where('customers.first_name','like',$search_test.'%')
-                  ->orWhere('customers.number','like',$search_test.'%');
+                    ->orWhere('customers.first_name','like','%'.$search_test.'%')
+                    ->orWhere('customers.last_name','like',$search_test.'%')
+                    ->orWhere('customers.last_name','like','%'.$search_test.'%')
+                    ->orWhere('customers.number','like','%'.$search_test) 
+                    ->orWhere('customers.number','like',$search_test.'%');
             })->where('manual_orders.status','like',$order_status.'%')
-            ->orderBy('manual_orders.created_at', 'ASC')
-            ->select('manual_orders.id','manual_orders.customers_id','manual_orders.description','customers.first_name','customers.last_name','customers.number','customers.address','manual_orders.price','manual_orders.images','manual_orders.total_pieces','manual_orders.date_order_paid','manual_orders.status')
-            ->paginate(5);
+            ->orderBy('manual_orders.id', 'ASC')
+            ->select('manual_orders.id','manual_orders.customers_id','manual_orders.description','manual_orders.receiver_number','customers.first_name','manual_orders.reciever_address','customers.last_name','customers.number','customers.address','manual_orders.price','manual_orders.images','manual_orders.total_pieces','manual_orders.date_order_paid','manual_orders.status','manual_orders.created_at','manual_orders.updated_at')
+            ->paginate(20);
 //dd($list);
         // $list = $list->all();
         // dd($list->all());
@@ -188,7 +193,11 @@ class ManualOrdersController extends Controller
      */
     public function show($id)
     {
-        dd('working');
+        
+        $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'manual_orders.customers_id')->where('manual_orders.id',$id)->first();
+        //dd(ManualOrders::leftJoin('customers', 'customers.id', '=', 'manual_orders.customers_id')->where('manual_orders.status','pending')); 
+       // dd($ManualOrder) ;
+        return view('client.orders.manual-orders.view')->with('ManualOrder',$ManualOrder);
         //
     }
 
@@ -202,7 +211,7 @@ class ManualOrdersController extends Controller
     {
         
         //dd($ManualOrder);
-        $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'manual_orders.customers_id')->where('manual_orders.id',$ManualOrder)->first();
+        $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.id',$ManualOrder)->first();
         //dd(ManualOrders::leftJoin('customers', 'customers.id', '=', 'manual_orders.customers_id')->where('manual_orders.status','pending')); 
        // dd($ManualOrder) ;
         return view('client.orders.manual-orders.edit')->with('ManualOrder',$ManualOrder);
@@ -268,7 +277,6 @@ class ManualOrdersController extends Controller
         $ManualOrder->reference_number = $request->reference_number;
         $ManualOrder->service_type = $request->service_type;
         $ManualOrder->updated_by = Auth::id();
-        $manual_orders->status = 'pending';
         $ManualOrder->save();
         
         //dd($ManualOrder);c
@@ -304,18 +312,40 @@ class ManualOrdersController extends Controller
     
 
     public function delete_order_image(Request $request)
-    { 
-        if(File::delete($request->delete_path))
+    {  
+        //File::delete($request->delete_path);
+        //dd(file_exists($request->delete_path));
+        // File::delete($request->delete_path)
+        if(file_exists($request->delete_path))
         {
-            $manual_orders = ManualOrders::find($request->order_id); 
-            $manual_orders->images = $request->images;
-            $manual_orders->save(); 
-            
-            return response()->json(['messege' => 'successfully deleted']); 
-        }  
+            if(File::delete($request->delete_path))
+            {
+                $manual_orders = ManualOrders::find($request->order_id); 
+                //dd($manual_orders);
+                $manual_orders->images = $request->images;
+                $status =$manual_orders->save();
+                if($status)
+                {
+                    return response()->json(['messege' => 'successfully deleted']); 
+                }
+            }  
+            else
+            {
+                return 'Some thing went wrong';
+            } 
+        }
         else
         {
-            return 'Some thing went wrong';
+            // dd('working');
+            $manual_orders = ManualOrders::find($request->order_id); 
+            
+            $manual_orders->images = $request->images;
+            //dd($manual_orders->save());
+             $status =$manual_orders->save();
+                if($status)
+                {
+                    return response()->json(['messege' => 'successfully deleted']); 
+                }
         }   
     }
     
@@ -323,27 +353,39 @@ class ManualOrdersController extends Controller
     { 
         $order_action = $request->order_action;
         $order_ids = $request->order_ids;
-        //dd($order_ids);
+       
         if($order_action == 'print')
         {
+             
             $explode_id = explode(',', $order_ids); 
             $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->whereIn('manual_orders.id',$explode_id)->get();
-            
+            //dd($ManualOrder);
             return view('client.orders.manual-orders.print_slip')->with('ManualOrders',$ManualOrder);
                 //dd($order_ids);
         }
         elseif($order_action == 'prepared')
         {
-            
+            $explode_id = explode(',', $order_ids);
+            //dd($explode_id);
+            $ManualOrder = ManualOrders::whereIn('id',$explode_id)->update(['status' => 'prepared']);
+            //dd($ManualOrder);
         }
         elseif($order_action == 'confirmed')
         {
-            
+            $explode_id = explode(',', $order_ids);
+            //dd($explode_id);
+            $ManualOrder = ManualOrders::whereIn('id',$explode_id)->update(['status' => 'confirmed']);
         }
         elseif($order_action == 'dispatched')
         {
-            
+            $explode_id = explode(',', $order_ids);
+            //dd($explode_id);
+            $ManualOrder = ManualOrders::whereIn('id',$explode_id)->update(['status' => 'dispatched']);
+            return redirect()->route('ManualOrders.index')->with('success', 'Order dispatched succussfully ');
+            //return Redirect::back()->with('success', 'Order dispatched succussfully ');
+
         }
+        
         //dd($request->order_action);
     }
     
@@ -352,9 +394,137 @@ class ManualOrdersController extends Controller
     public function print_order_slip($ManualOrder_id)
     {
         $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.id',$ManualOrder_id)->get();
-            //dd($ManualOrder);
+        //dd($ManualOrder);
         return view('client.orders.manual-orders.print_slip')->with('ManualOrders',$ManualOrder);
+    }
+    
+    public function previouse_order_history(Request $request)
+    {
+        $data='';
+        $ManualOrders = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->select('manual_orders.id','manual_orders.customers_id','manual_orders.receiver_number','customers.first_name','manual_orders.created_at','manual_orders.status')->where('customers.number',$request->number)->get();
+        
+        $data =  '
+         <thead>
+                <tr>
+                  <th scope="col">order_id</th>
+                  <th scope="col">First</th>
+                  <th scope="col">number</th>
+                  <th scope="col">date</th>
+                  <th scope="col">status</th>
+                </tr>
+                </thead>
+                <tbody>';
+                foreach($ManualOrders as $ManualOrder)
+                {
+                    // dd($ManualOrder);
+                    $data .= '<tr>
+                      <th>'.$ManualOrder->id.'</th>
+                      <td>'.$ManualOrder->first_name.'</td>
+                      <td>'.$ManualOrder->receiver_number.'</td>
+                      <td>'.$ManualOrder->created_at.'</td>
+                      <td>'.$ManualOrder->status.'</td>';
+                }
+            $data .= '</tbody>';
+        //dd($data);
+        
+        return response()->json(['messege' => $data]); 
+        // return view('client.orders.manual-orders.view')->with('ManualOrder',$ManualOrder);
+    }
+    
+    public function status_order_list($status)
+    {
+        $list_order = 'ASC';
+        if($status == 'pending' || $status == 'confirmed' || $status == 'dispatched'  )
+        {
+            $list_order = 'DESC';
+        }
+        $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.status','like',$status.'%')
+            ->orderBy('manual_orders.id', $list_order)
+            ->select('manual_orders.id','manual_orders.customers_id','manual_orders.description','customers.first_name','customers.last_name','customers.number','manual_orders.receiver_number','manual_orders.reciever_address','manual_orders.price','manual_orders.images','manual_orders.total_pieces','manual_orders.date_order_paid','manual_orders.status','manual_orders.created_at','manual_orders.updated_at')
+            ->paginate(20);
+            //dd($list);
+//dd($list);
+        // $list = $list->all();
+        // dd($list->all());
+        return view('client.orders.manual-orders.list')->with('list',$list);
         
     }
+    
+    public function dispatch_bulk_orders()
+    {
+        $riders = Riders::where('status','active')->get();
+        //dd($riders);
+        return view('client.orders.manual-orders.dispatch_bulk_orders')->with('riders', $riders);
+    }
+    
+    public function get_order_details( $ManualOrder)
+    { 
+        $ManualOrder = ManualOrders::find($ManualOrder);
+        //dd($ManualOrder);
+        if($ManualOrder != null)
+        {
+            return response()->json(['messege' => $ManualOrder]);
+        }
+        else
+        {
+            return response()->json(['messege' => 'no order found']);
+        }
+        return view('client.orders.manual-orders.dispatch');
+    }
+    
+    public function popup_dispatch_edit($ManualOrder)
+    {
+        
+        //dd($ManualOrder);
+        $ManualOrder = ManualOrders::where('manual_orders.id',$ManualOrder)->first();
+        //dd(ManualOrders::leftJoin('customers', 'customers.id', '=', 'manual_orders.customers_id')->where('manual_orders.status','pending')); 
+       // dd($ManualOrder) ;
+        return response()->json(['messege' => $ManualOrder]);
+        //
+    }
+    
+    public function popup_dispatch_update(Request $request, ManualOrders $ManualOrder)
+    {
+        //dd($ManualOrder);
+        $ManualOrder->receiver_name = $request->receiver_name;
+        $ManualOrder->receiver_number = $request->receiver_number;
+        $ManualOrder->reciever_address = $request->reciever_address;  
+        $ManualOrder->price = $request->price;
+        $ManualOrder->cod_amount = $request->cod_amount;
+        $ManualOrder->advance_payment = $request->advance_payment;
+        $ManualOrder->status = 'dispatched';
+        $ManualOrder->updated_by = Auth::id();
+        $status = $ManualOrder->save();
+        
+        return response()->json(['messege' => $status]);
+    }
+    
+    public function testing()
+    {
+        // $url = "http://mnpcourier.com/mycodapi/api/Booking/InsertBookingData";
+
+        // $curl = curl_init($url);
+        // curl_setopt($curl, CURLOPT_URL, $url);
+        // curl_setopt($curl, CURLOPT_POST, true);
+        // curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        
+        // $headers = array(
+        //   "Content-Type: application/json",
+        // );
+        // curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        
+        // $data = '{"username": "mansoor_4b459","password": "Mansoor1@3","consigneeName": "test","consigneeAddress": "test123","consigneeMobNo": "03330139993","consigneeEmail": "string","destinationCityName": "karachi","pieces": "2","weight": "1","codAmount": 1,"custRefNo": "12345689","productDetails": "string","fragile": "string","service": "overnight","remarks": "string","insuranceValue": "string","locationID": "string","AccountNo": "string","InsertType": "0"}';
+        
+        // curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+        
+        // //for debug only!
+        // curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        // curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        
+        // $resp = curl_exec($curl);
+        // curl_close($curl);
+        // var_dump($resp);
+    }
+    
  
 }

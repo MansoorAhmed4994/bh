@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content') 
+    @if (Cookie::get('number') == null)
+        <script>window.location = "{{route('Frontend.ManualOrders.authentication')}}";</script>
+    @endif
 <script>
 var base_url = '<?php echo e(url('/')); ?>';
 var dispatch_order_id =  '';
@@ -203,6 +206,9 @@ var dispatch_order_id =  '';
 </div>
 
 <nav class="navbar navbar-light bg-light">
+
+
+
   <form class="form-inline" method="post" action="{{ route('ManualOrders.search.order') }}">
       @csrf
     <div class="form-group">
@@ -279,7 +285,6 @@ var dispatch_order_id =  '';
                 <th scope="col">Actions</th>
                 <th scope="col">Order ID</th>
                 <th scope="col">First Name</th> 
-                <th scope="col">Reciever Number</th>
                 <th scope="col">Number</th>
                 <th scope="col">Description</th>
                 <!--<th scope="col">Ord. Location</th>-->
@@ -324,8 +329,8 @@ var dispatch_order_id =  '';
                           Actions
                         </button>
                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">            
-                            <a type="button" target="_blank" href="{{route('ManualOrders.edit',$lists->id)}}" class="dropdown-item">Edit</a>             
-                            <a type="button" target="_blank" href="{{route('ManualOrders.show',$lists->id)}}" class="dropdown-item">view</a>
+                            <a type="button" href="{{route('ManualOrders.edit',$lists->id)}}" class="dropdown-item">Edit</a>             
+                            <a type="button" href="{{route('ManualOrders.show',$lists->id)}}" class="dropdown-item">view</a>
                             <a type="button" href="{{route('ManualOrders.print.order.slip',$lists->id)}}" class="dropdown-item">Print Slip</a>
                             <a type="button" href="{{route('ManualOrders.order.status',['prepared',$lists->id])}}" class="dropdown-item">Prepare</a> 
                             <a type="button" href="{{route('ManualOrders.order.status',['confirmed',$lists->id])}}" class="dropdown-item">Confirmed</a> 
@@ -344,24 +349,16 @@ var dispatch_order_id =  '';
                 <!--</form></th>-->
                 <th>{{$lists->id}}</th>
                 <th>{{$lists->first_name}}</th>  
-                <!--<th>{{$lists->number}}</th>-->
-                <?php 
-                $number = substr($lists->number, 1);
-                $number = '+92'.$number;
-                
-                $reciever_number = substr($lists->receiver_number, 1);
-                $reciever_number = '+92'.$reciever_number
-                ?>
-                <th><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>"><?=$reciever_number?></a></th> 
-                <th><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$number?>"><?=$number?></a></th> 
+                <th>{{$lists->number}}</th>  
+                <!--<th><button type="button" onclick="generateLink(this.value)">{{$lists->description}}</button></th> -->
                 <th>{{$lists->description}}</th>
                 <!--<th>{{$lists->order_delivery_location}}</th>-->
                 <th>{{$lists->reciever_address}}</th>
                 <th>{{$lists->price}}</th>
-                <th >
+                <th style="display: flex;">
                     @if(!empty($lists->images))
                         @foreach(explode('|', $lists->images) as $image)   
-                        <img class="pop rounded " style="margin-right: 5px;" src="{{asset($image)}}" alt="Card image cap" width="50" height="50">
+                        <img class="pop rounded float-left" style="margin-right: 5px;" src="{{asset($image)}}" alt="Card image cap" width="50" height="50">
                         @endforeach
                     @endif
                 </th>
@@ -380,80 +377,64 @@ var dispatch_order_id =  '';
 {{ $list->links() }}
 
 <script>
+    print_mnp_slips
+    var base_url = '<?php echo e(url('/')); ?>';
 
-$( document ).ready(function() {
+         
+
+        $( document ).ready(function() {
             
             $('#print_mnp_slips').on('click',function(e)
             {  
-                var base_url = '<?php echo e(url('/')); ?>';
-        
-                 var url = "http://mnpcourier.com/mycodapi/api/Booking/InsertBookingData";
-        
-                var xhr = new XMLHttpRequest();
-                xhr.open("POST", url);
-                
-                xhr.setRequestHeader("Content-Type", "application/json");
-                
-                xhr.onreadystatechange = function () {
-                   if (xhr.readyState === 4) {
-                      console.log(xhr.status);
-                      console.log(xhr.responseText);
-                   }};
-                
-                var data = '{"username": "mansoor_4b459","password": "Mansoor1@3","consigneeName": "test","consigneeAddress": "test123","consigneeMobNo": "03330139993","consigneeEmail": "string","destinationCityName": "karachi","pieces": "0","weight": "0","codAmount": 0,"custRefNo": "12345689","productDetails": "string","fragile": "string","service": "overnight","remarks": "string","insuranceValue": "string","locationID": "string","AccountNo": "string","InsertType": "0"}';
-                
-                xhr.send(data);
-         
+                 
+                $.ajax({
+                    headers: {
+                        
+                        "cache-control": "no-cache",
+                        "content-length": "36",
+                        "content-type": "application/json; charset=utf-8",
+                        "date": "Tue, 25 Jan 2022 11:19:50 GMT",
+                        "expires": "-1",
+                        "pragma": "no-cache",
+                        "server": "Microsoft-IIS/10.0",
+                        "x-aspnet-version": "4.0.30319",
+                        "x-powered-by": "ASP.NET"
+                    },
+                    //url: base_url + '/client/orders/ManualOrders/delete-image',
+                    url: 'http://mnpcourier.com/mycodapi/api/Booking/InsertBookingData',
+                    data: {
+                            "username": "mansoor_4b459",
+                            "password": "Mansoor1@3",
+                            "consigneeName": "test",
+                            "consigneeAddress": "test123",
+                            "consigneeMobNo": "03330139993",
+                            "consigneeEmail": "string",
+                            "destinationCityName": "karachi",
+                            "pieces": 0,
+                            "weight": 0,
+                            "codAmount": 0,
+                            "custRefNo": "12345689",
+                            "productDetails": "string",
+                            "fragile": "string",
+                            "service": "overnight",
+                            "remarks": "string",
+                            "insuranceValue": "string",
+                            "locationID": "string",
+                            "AccountNo": "string",
+                            "InsertType": 0
+                    },
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function(e)
+                    {
+                        console.log(e.messege);   
+                        
+                    },
+                    error: function(e) {
+                        console.log(e.responseText);
+                    }
+                });
             });
         });
-         
-
-        // $( document ).ready(function() {
-            
-        //     $('#print_mnp_slips').on('click',function(e)
-        //     {  
-        //         alert('working');
-        //         $.ajax({
-        //             headers: {
-                        
-                        
-        //                 "Content-Type": "application/json"
-        //             },
-        //             //url: base_url + '/client/orders/ManualOrders/delete-image',
-        //             url: 'http://mnpcourier.com/mycodapi/api/Booking/InsertBookingData',
-        //             data: {
-        //                     "username": "mansoor_4b459",
-        //                     "password": "Mansoor1@3",
-        //                     "consigneeName": "test",
-        //                     "consigneeAddress": "test123",
-        //                     "consigneeMobNo": "03330139993",
-        //                     "consigneeEmail": "string",
-        //                     "destinationCityName": "karachi",
-        //                     "pieces": 0,
-        //                     "weight": 0,
-        //                     "codAmount": 0,
-        //                     "custRefNo": "12345689",
-        //                     "productDetails": "string",
-        //                     "fragile": "string",
-        //                     "service": "overnight",
-        //                     "remarks": "string",
-        //                     "insuranceValue": "string",
-        //                     "locationID": "string",
-        //                     "AccountNo": "string",
-        //                     "InsertType": 0
-        //             },
-        //             type: 'POST',
-        //             dataType: 'json',
-        //             success: function(e)
-        //             {
-        //                 console.log(e.messege);   
-                        
-        //             },
-        //             error: function(e) {
-        //                 console.log(e.responseText);
-        //             }
-        //         });
-        //     });
-        // });
 </script>
 @endsection

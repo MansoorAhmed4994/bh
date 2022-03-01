@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use CountryState;
 use Illuminate\Http\Request;
 use PragmaRX\Countries\Package\Countries;
+use DB;
 
 class HomeController extends Controller
 {
@@ -13,6 +14,10 @@ class HomeController extends Controller
      * @return void
      */
     
+    public function __construct()
+    {
+        $this->middleware('auth:user');
+    }
 
     /**
      * Show the application dashboard.
@@ -21,16 +26,15 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // $countries = new Countries();
-
-        // //$all = $countries->all();
-        // //dd($all);
-        // // $countries = CountryState::getCountries();
-        // // $states = CountryState::getStates('PK');
-        // // dd($states);
-        // // dd($countries->where('cca3', 'USA')->first()->hydrate('cities')->cities);
-        // dd($countries->where('cca3', 'CHN')->first()->hydrateStates()->states->pluck('name', 'postal')->toArray());
-    
-        return view('home');
+        //dd('working');
+         $list =DB::table('manual_orders')
+          ->groupBy('status')
+          ->select('status', DB::raw('count(*) as total'), DB::raw('sum(price) as amount'))
+          ->get();
+          
+          
+         // dd($list);
+        //if ($result->count()) { }
+        return view('dashboard')->with('data',$list);
     }
 }

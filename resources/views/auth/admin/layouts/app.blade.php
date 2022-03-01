@@ -44,29 +44,6 @@
             margin-left:0.7rem; margin-right:0.7rem; margin-bottom: .5rem;
         }
         }	
-        
-        
-        .overlay{
-        display: none;
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        z-index: 999;
-        background: rgba(255,255,255,0.8) center no-repeat;
-    }
-
-    /* Turn off scrollbar when body element has the loading class */
-    body.loading{
-        overflow: hidden; 
-        
-    }
-    /* Make spinner image visible when body element has the loading class */
-    body.loading .overlay{
-        display: block;
-        argin-top: 25%;
-    }
     </style>
 
 
@@ -74,15 +51,8 @@
 </head>
 
 <body>
-    <div class="overlay">
-        <div class="text-center" style="margin-top: 25%;">
-            <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
-              <span class="sr-only">Loading...</span>
-            </div>
-        </div>
-    </div>
     <div id="app"> 
-    
+
 
         
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -103,13 +73,21 @@
                     </ul>
                 @else
                     <ul class="navbar-nav">
-                        <li class="nav-item active"> <a class="nav-link" href="{{route('dashboard')}}">dashboard </a> </li>
+                        <li class="nav-item active"> <a class="nav-link" href="{{route('user.dashboard')}}">dashboard </a> </li>
                         <li class="nav-item dropdown" id="myDropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Manual Orders</a>
                         <ul class="dropdown-menu">
                             <li> <a class="dropdown-item" href="{{route('ManualOrders.create')}}"> Add New order </a></li>
                             <li> <a class="dropdown-item" href="{{route('ManualOrders.index')}}"> List</a></li>
-                            <li> <a class="dropdown-item" href="{{route('ManualOrders.dipatch.bulk.orders')}}">Dispatch Bulk Orders</a></li>
+                        </ul>
+                        
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        <li class="nav-item dropdown" id="myDropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Users</a>
+                        <ul class="dropdown-menu">
+                            <li> <a class="dropdown-item" href="{{route('admin.user.index')}}"> List</a></li>
                         </ul>
                         
                         </li>

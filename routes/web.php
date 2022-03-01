@@ -12,24 +12,32 @@ Auth::routes();
 | contains the "web" middleware group. Now create something great!
 |
 */ 
-Route::get('/', 'HomeController@index')->name('home');
+Route::get('/', 'HomeController@index')->name('dashboard');
 
     //Route::get('/login', 'Auth\Admin\LoginController@showLoginForm')->name('admin.login');
     //Route::post('login', 'Auth\Admin\LoginController@login');
     // Route::post('logout', 'Auth\Admin\LoginController@logout')->name('admin.logout');
 
-Route::group(['prefix' => 'admin','namespace' => 'Auth\Admin'],function(){
+Route::group(['prefix' => 'admin','namespace' => 'Auth\Admin','as'=> 'admin.'],function(){
 
     //Route::get('/admin/login', ['LoginController', 'showLoginForm'])->name('admin.login');
-    Route::get('/login', 'LoginController@showLoginForm')->name('admin.login');
+    Route::get('/login', 'LoginController@showLoginForm')->name('login');
     Route::post('login', 'LoginController@login');
-    Route::post('logout', 'LoginController@logout')->name('admin.logout');
+    Route::post('logout', 'LoginController@logout')->name('logout');
+    Route::get('dashboard', 'DashboardController@index')->name('dashboard');
 });
 
-Route::group(['prefix' => 'admin','namespace' => 'Auth\Admin'],function(){
+Route::group(['prefix' => 'admin/','namespace' => 'Auth\Admin','as'=> 'admin.user.'],function(){
 
-    Route::get('dashboard', 'DashboardController@index'); 
+    // Route::resource('user/', 'UserController')->except('edit');
+    Route::resource('user', 'UserController');
 });
+//Route::get('admin/user/{id}/edit/', 'Auth\Admin\UserController@edit')->name('admin.user.edit');
+
+// Route::group(['prefix' => 'admin','namespace' => 'Auth\Admin','as'=> 'admin.'],function(){
+
+//     Route::get('dashboard', 'DashboardController@index')->name('dashboard'); 
+// });
 
 Route::group(['prefix' => 'user', 'namespace' => 'Auth' ,'as'=> 'user.'],function(){
 
@@ -46,13 +54,35 @@ Route::group(['prefix' => 'client/orders/', 'namespace' => 'Client\Orders', 'mid
     Route::get('ManualOrders/search-order', 'ManualOrdersController@search_order');
     Route::get('ManualOrders/order-status/{status}/{ManualOrder}', 'ManualOrdersController@order_status')->name('ManualOrders.order.status');
     Route::get('ManualOrders/print/order-status/{ManualOrder}', 'ManualOrdersController@print_order_slip')->name('ManualOrders.print.order.slip');
-    Route::post('ManualOrders/print/order-action', 'ManualOrdersController@order_action')->name('ManualOrders.order.action');
+    Route::post('ManualOrders/print/order-action', 'ManualOrdersController@order_action')->name('ManualOrders.order.action'); 
+    Route::get('ManualOrders/status/order-list/{status}', 'ManualOrdersController@status_order_list')->name('ManualOrders.status.order.list'); 
+    Route::post('ManualOrders/previouse/order-history', 'ManualOrdersController@previouse_order_history')->name('ManualOrders.previouse.order.history');
+    Route::get('ManualOrders/dispatch-bulk-orders', 'ManualOrdersController@dispatch_bulk_orders')->name('ManualOrders.dipatch.bulk.orders');
+    Route::get('ManualOrders/get-order-details/{ManualOrder}', 'ManualOrdersController@get_order_details')->name('ManualOrders.get.order.detail');
+    Route::get('ManualOrders/dispatch-order-edit/{ManualOrder}', 'ManualOrdersController@popup_dispatch_edit')->name('ManualOrders.dispatch.order.edit');
+    Route::post('ManualOrders/dispatch-order-edit/{ManualOrder}', 'ManualOrdersController@popup_dispatch_update')->name('ManualOrders.dispatch.order.update');
+    Route::get('ManualOrders/testing', 'ManualOrdersController@testing')->name('ManualOrders.testing');
+    
+    
     //Route::get('create', 'ManualOrdersController@index')->name('client.manual.orders');
 });
 
-Route::group(['prefix' => 'frontend/client/orders/', 'namespace' => 'Frontend\Client\Orders'],function(){
+Route::group(['prefix' => 'frontend/client/orders/', 'namespace' => 'Frontend\Client\Orders','as'=> 'Frontend.'],function(){
 
-    Route::resource('ManualOrders', 'ManualOrdersController',['as' => 'Frontend']);
+    Route::resource('ManualOrders', 'ManualOrdersController');
+    Route::get('ManualOrders/client/authentication/', 'ManualOrdersController@authentication')->name('ManualOrders.authentication');
+    Route::post('ManualOrders/client/authentication/', 'ManualOrdersController@verify_authentication')->name('ManualOrders.create.guest.cookie');
+    //Route::get('ManualOrders/show/{id}', 'ManualOrdersController@show')->name('ManualOrders.show');
+    
+});
+
+
+
+
+Route::group(['prefix' => 'riders',  'middleware' => 'auth:user','as'=> 'Riders.'],function(){
+
+    Route::resource('/', 'RidersController')->except('show');
+    Route::post('/generate-loadsheet', 'LoadSheetController@generate_load_sheet')->name('generate.load.sheet');
     //Route::get('ManualOrders/show/{id}', 'ManualOrdersController@show')->name('ManualOrders.show');
     
 });

@@ -2,6 +2,19 @@
 
 namespace App\Http\Controllers\Auth; 
 use App\Http\Controllers\Controller;  
+use App\Traits\ManualOrderTraits;
+use Illuminate\Http\Request;
+use App\Models\Client\ManualOrders;
+use App\Models\Client\Customers;
+use App\Models\User;
+use Illuminate\Support\Facades\File; 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Carbon\Carbon;
+use DB;
+
+
 class DashboardController extends Controller
 { 
     public function __construct()
@@ -12,6 +25,8 @@ class DashboardController extends Controller
     //
     public function index()
     { 
-        return view('auth.user.dashboard');
+        // $list = ManualOrders::where('status', 'pending');
+        $list = User::all();
+        return view('auth.user.dashboard')->with('users',$list);
     }
 } 

@@ -10,5 +10,11 @@ class ManualOrders extends Model
     {
         return $this->belongsToOne(Customers::class,'customers_id','id');
     }
+    
+    
+    public function riders()
+    {
+        return $this->belongsToOne(Riders::class,'riders_id','id');
+    }
     //
 }

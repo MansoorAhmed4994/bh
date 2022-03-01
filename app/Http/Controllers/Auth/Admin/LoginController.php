@@ -23,7 +23,7 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');
+        // $this->middleware('guest')->except('logout');
     }
     /**
      * Show the application's login form.
@@ -51,21 +51,28 @@ class LoginController extends Controller
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
         // the login attempts for this application. We'll key this by the username and
         // the IP address of the client making these requests into this application.
-        if (method_exists($this, 'hasTooManyLoginAttempts') &&
-            $this->hasTooManyLoginAttempts($request)) {
-            $this->fireLockoutEvent($request);
+        // if (method_exists($this, 'hasTooManyLoginAttempts') &&
+        //     $this->hasTooManyLoginAttempts($request)) {
+        //     $this->fireLockoutEvent($request);
 
-            return $this->sendLockoutResponse($request);
-        } 
+        //     return $this->sendLockoutResponse($request);
+        // } 
         
-        if ($this->attemptLogin($request)) {
-            return $this->sendLoginResponse($request);
-        }
+        // if ($this->attemptLogin($request)) {
+        //     return $this->sendLoginResponse($request);
+        // }
 
-        // If the login attempt was unsuccessful we will increment the number of attempts
-        // to login and redirect the user back to the login form. Of course, when this
-        // user surpasses their maximum number of attempts they will get locked out.
-        $this->incrementLoginAttempts($request);
+        // // If the login attempt was unsuccessful we will increment the number of attempts
+        // // to login and redirect the user back to the login form. Of course, when this
+        // // user surpasses their maximum number of attempts they will get locked out.
+        // $this->incrementLoginAttempts($request);
+        //dd($request->email);
+        if(Auth::guard('admin')->attempt($request->only('email','password'),$request->filled('remember'))){
+        //Authentication passed...
+            return redirect()
+            ->route('admin.dashboard')
+            ->with('status','You are Logged in as Admin!');
+        }
          
         return $this->sendFailedLoginResponse($request);
     }
