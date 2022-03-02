@@ -501,6 +501,73 @@ class ManualOrdersController extends Controller
     
     public function testing()
     {
+        // $url = "https://api.nexmo.com/beta/messages";
+
+        // $curl = curl_init($url);
+        // curl_setopt($curl, CURLOPT_URL, $url);
+        // curl_setopt($curl, CURLOPT_POST, true);
+        // curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        
+        // $headers = array(
+        //   "Content-Type: application/json",
+        //   "Authorization: Bearer 12555f46-e716-4b31-96cb-f3600f41874e"
+        // );
+        // curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        
+        // $data = '{"from": "923330139993","to": "923412199313","channel": "whatsapp","whatsapp": {"policy": "deterministic","locale": "en-GB"}, "message_type": "template","template":{"name":"whatsapp:hsm:technology:nexmo:verify","parameters":["Vonage Verification","c3142209", "10"]} }';
+        
+        // curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+        
+        // //for debug only!
+        // curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        // curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        
+        // $resp = curl_exec($curl);
+        // curl_close($curl);
+        // var_dump($resp);
+        
+//         curl -X POST \
+//   https://api.nexmo.com/beta/messages \
+//   -H 'Authorization: Bearer' $JWT \
+//   -H 'Content-Type: application/json' \
+//   -d '{
+//   "from": "WHATSAPP_NUMBER",
+//   "to": "TO_NUMBER",
+//   "channel": "whatsapp",
+//   "whatsapp": {
+//      "policy": "deterministic",
+//      "locale": "en-GB"
+//   }
+//   "message_type": "template",
+//   "template":{
+//       "name":"whatsapp:hsm:technology:nexmo:verify",
+//       "parameters":[
+//          "Vonage Verification",
+//          "64873",
+//          "10"
+//       ]
+//   }
+// }'
+        
+    //     $url = "https://messages-sandbox.nexmo.com/v0.1/messages";
+    // $params = ["to" => ["type" => "whatsapp", "number" => '923330139993'],
+    //     "from" => ["type" => "whatsapp", "number" => "923330139993"],
+    //     "message" => [
+    //         "content" => [
+    //             "type" => "text",
+    //             "text" => "Hello from Vonage and Laravel :) Please reply to this message with a number between 1 and 100"
+    //         ]
+    //     ]
+    // ];
+    // $headers = ["Authorization" => "Basic " . base64_encode(env('NEXMO_API_KEY') . ":" . env('NEXMO_API_SECRET'))];
+
+    // $client = new \GuzzleHttp\Client();
+    // $response = $client->request('POST', $url, ["headers" => $headers, "json" => $params]);
+    // $data = $response->getBody();
+    // dd($data);
+
+    // return view('thanks');
+    
         // $url = "http://mnpcourier.com/mycodapi/api/Booking/InsertBookingData";
 
         // $curl = curl_init($url);

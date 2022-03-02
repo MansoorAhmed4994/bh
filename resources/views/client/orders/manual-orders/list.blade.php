@@ -352,8 +352,8 @@ var dispatch_order_id =  '';
                 $reciever_number = substr($lists->receiver_number, 1);
                 $reciever_number = '+92'.$reciever_number
                 ?>
-                <th><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>"><?=$reciever_number?></a></th> 
-                <th><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$number?>"><?=$number?></a></th> 
+                <th><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Hi"><?=$reciever_number?></a></th> 
+                <th><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$number?>"&text=Hi><?=$number?></a></th> 
                 <th>{{$lists->description}}</th>
                 <!--<th>{{$lists->order_delivery_location}}</th>-->
                 <th>{{$lists->reciever_address}}</th>
