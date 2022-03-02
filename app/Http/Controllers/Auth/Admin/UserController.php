@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Role;
 
 class UserController extends Controller
 {
@@ -66,12 +67,16 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $id)
     {
         //dd();
-        $list = User::find($id);
+        $roles = Role::all();
         //return view('auth.admin.dashboard')->with('users',$list);
-        return view('auth.admin.users.edit')->with('users',$list);
+        return view('auth.admin.users.edit')->with([
+            'user' => $id,
+            'roles' => $roles,
+
+        ]);
         //
     }
 
@@ -85,6 +90,7 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         //
+        dd($request);
     }
 
     /**

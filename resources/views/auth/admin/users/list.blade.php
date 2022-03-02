@@ -12,6 +12,7 @@
                       <th scope="col">#</th>
                       <th scope="col">First</th>
                       <th scope="col">Last</th>
+                      <th scope="col">Roles</th>
                       <th scope="col">Handle</th>
                     </tr>
                 </thead>
@@ -19,9 +20,9 @@
                     @foreach($users as $user)
                         <tr>
                           <th scope="row">{{$user->id}}</th>
-                          <td>{{$user->id}}</td> 
                           <td>{{$user->first_name}}</td>
                           <td>{{$user->email}}</td> 
+                          <td>{{ implode('.',$user->roles()->get()->pluck('name')->toArray())}}</td> 
                           <td><a href="{{route('admin.user.edit',$user->id)}}" class="btn btn-warning">Edit</a></td> 
                           <td><a href="button" class="btn btn-danger">Delete</a></td>  
                         </tr>
