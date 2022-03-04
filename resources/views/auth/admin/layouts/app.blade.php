@@ -71,7 +71,7 @@
                     </ul>
                 @else
                     <ul class="navbar-nav">
-                        <li class="nav-item active"> <a class="nav-link" href="{{route('user.dashboard')}}">dashboard </a> </li>
+                        <li class="nav-item active"> <a class="nav-link" href="{{route('admin.dashboard')}}">dashboard </a> </li>
                         <li class="nav-item dropdown" id="myDropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Manual Orders</a>
                         <ul class="dropdown-menu">
@@ -84,15 +84,17 @@
                     <ul class="navbar-nav">
                         <li class="nav-item dropdown" id="myDropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Users</a>
+                        @can ('manage-users')
                         <ul class="dropdown-menu">
                             <li> <a class="dropdown-item" href="{{route('admin.user.index')}}"> List</a></li>
                         </ul>
+                        @endcan
                         
                         </li>
                     </ul>
                     <ul class="navbar-nav ms-auto"> 
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false"> Profile </a>
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false"> {{ Auth::user()->first_name }} </a>
                             <ul class="dropdown-menu dropdown-menu-right">
                             <li>
                                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();

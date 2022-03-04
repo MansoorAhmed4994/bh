@@ -27,7 +27,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Auth\Admin','as'=> 'admin.'],f
     Route::get('dashboard', 'DashboardController@index')->name('dashboard');
 });
 
-Route::group(['prefix' => 'admin/','namespace' => 'Auth\Admin','as'=> 'admin.'],function(){
+Route::group(['middleware' => 'can:manage-users' , 'prefix' => 'admin/','namespace' => 'Auth\Admin','as'=> 'admin.'],function(){
 
     // Route::resource('user/', 'UserController')->except('edit');
     Route::resource('user', 'UserController');

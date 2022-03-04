@@ -13,7 +13,9 @@
                       <th scope="col">First</th>
                       <th scope="col">Last</th>
                       <th scope="col">Roles</th>
+                      @can ('edit-users')
                       <th scope="col">Handle</th>
+                      @endcan
                     </tr>
                 </thead>
                 <tbody>
@@ -23,7 +25,14 @@
                           <td>{{$user->first_name}}</td>
                           <td>{{$user->email}}</td> 
                           <td>{{ implode(',',$user->roles()->get()->pluck('name')->toArray())}}</td> 
+
+                          @can ('edit-users')
+
                           <td><a href="{{route('admin.user.edit',$user->id)}}" class="btn btn-warning">Edit</a></td> 
+
+                          @endcan
+
+                          @can ('delete-users')
                           <td>
                             <form action="{{ route('admin.user.destroy',$user)}}" method="POST">
                                 @csrf 
@@ -32,6 +41,7 @@
                             </form>
                                 
                           </td>  
+                          @endcan
                         </tr>
                     @endforeach
                 </tbody>
