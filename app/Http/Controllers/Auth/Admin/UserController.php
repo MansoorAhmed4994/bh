@@ -67,14 +67,14 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit( $id)
+    public function edit( User $user)
     {
-        // dd($id);
+        // dd($user);
         $roles = Role::all();
-        $editusers = User::find($id);
+        // $editusers = User::find($user);
         //return view('auth.admin.dashboard')->with('users',$list);
-        return view('auth.admin.users.edit',compact('editusers'))->with([
-            'user' => $id,
+        return view('auth.admin.users.edit')->with([
+            'user' => $user,
             'roles' => $roles,
             
         ]);
@@ -88,10 +88,12 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
         //
-        // dd($request);
+        $user->roles()->sync($request->roles);
+
+        return redirect()->route('admin.user.index');
     }
 
     /**
@@ -100,8 +102,13 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
+        // dd($user);
         //
+        $user->roles()->detach();
+        $user->delete();
+
+        return redirect()->route('admin.user.index');
     }
 }

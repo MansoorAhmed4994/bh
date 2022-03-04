@@ -22,9 +22,16 @@
                           <th scope="row">{{$user->id}}</th>
                           <td>{{$user->first_name}}</td>
                           <td>{{$user->email}}</td> 
-                          <td>{{ implode('.',$user->roles()->get()->pluck('name')->toArray())}}</td> 
+                          <td>{{ implode(',',$user->roles()->get()->pluck('name')->toArray())}}</td> 
                           <td><a href="{{route('admin.user.edit',$user->id)}}" class="btn btn-warning">Edit</a></td> 
-                          <td><a href="button" class="btn btn-danger">Delete</a></td>  
+                          <td>
+                            <form action="{{ route('admin.user.destroy',$user)}}" method="POST">
+                                @csrf 
+                                @method('DELETE')
+                                <button type="submit" Class="btn btn-danger">Delete</button>
+                            </form>
+                                
+                          </td>  
                         </tr>
                     @endforeach
                 </tbody>
