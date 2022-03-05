@@ -110,9 +110,14 @@
                             <div class="col-md-6">
                                 @foreach($roles as $role)
                                 <div class="form-check">
-                                    <input type="checkbox" name="roles[]" value="{{$role->id}}">
+                                    @if($user->roles->pluck('id')->contains($role->id)) 
+                                        <input type="checkbox" name="roles[]" value="{{$role->id}}" checked>
+                                    
+                                    @else
+                                        <input type="checkbox" name="roles[]" value="{{ $role->id }}">
+                                    @endif
                                     <lable>{{ $role->name }}</lable>
-                                </div>
+                                </div>  
                                 @endforeach
                             </div>
                             <!-- <label for="role_id" class="col-md-4 col-form-label text-md-right">{{ __('Roll') }}</label>
