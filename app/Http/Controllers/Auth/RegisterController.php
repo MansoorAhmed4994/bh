@@ -9,6 +9,8 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
+use App\Models\Role;
+
 class RegisterController extends Controller
 {
     /*
@@ -29,7 +31,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = '/user/dashboard';
 
     /**
      * Create a new controller instance.
@@ -57,7 +59,6 @@ class RegisterController extends Controller
             'address' => ['required', 'string'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'role_id' => ['required', 'integer'],
             
         ]);
     }
@@ -71,14 +72,18 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         
-        return User::create([
+        $user = User::create([
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
             'phone' => $data['phone'],
             'address' => $data['address'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'role_id' => $data['role_id'],
         ]);
+
+        $role = Role::select('id')->where('name','user')->first();
+        $user->roles()->attach($role);
+
+        return $user;
     }
 }

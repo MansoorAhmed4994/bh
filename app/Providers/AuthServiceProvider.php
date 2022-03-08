@@ -16,6 +16,7 @@ class AuthServiceProvider extends ServiceProvider
         // 'App\Model' => 'App\Policies\ModelPolicy',
     ];
 
+    
     /**
      * Register any authentication / authorization services.
      *
@@ -38,6 +39,11 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('delete-users', function($user)
         {
             return $user->hasRole('admin');
+        });
+
+        Gate::define('users-pages', function($user)
+        {
+            return $user->hasRole('user');
         });
     }
 }

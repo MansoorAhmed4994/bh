@@ -24,13 +24,13 @@ Route::group(['prefix' => 'admin','namespace' => 'Auth\Admin','as'=> 'admin.'],f
     Route::get('/login', 'LoginController@showLoginForm')->name('login');
     Route::post('login', 'LoginController@login');
     Route::post('logout', 'LoginController@logout')->name('logout');
-    Route::get('dashboard', 'DashboardController@index')->name('dashboard');
 });
 
 Route::group(['middleware' => 'can:manage-users' , 'prefix' => 'admin/','namespace' => 'Auth\Admin','as'=> 'admin.'],function(){
 
     // Route::resource('user/', 'UserController')->except('edit');
     Route::resource('user', 'UserController');
+    Route::get('dashboard', 'DashboardController@index')->name('dashboard');
 });
 //Route::get('admin/user/{id}/edit/', 'Auth\Admin\UserController@edit')->name('admin.user.edit');
 
@@ -39,7 +39,7 @@ Route::group(['middleware' => 'can:manage-users' , 'prefix' => 'admin/','namespa
 //     Route::get('dashboard', 'DashboardController@index')->name('dashboard'); 
 // });
 
-Route::group(['prefix' => 'user', 'namespace' => 'Auth' ,'as'=> 'user.'],function(){
+Route::group(['middleware' => 'can:users-pages' , 'prefix' => 'user', 'namespace' => 'Auth' ,'as'=> 'user.'],function(){
 
     Route::get('dashboard', 'DashboardController@index')->name('dashboard');
 });
