@@ -60,7 +60,7 @@
                             <label for="address" class="col-md-4 col-form-label text-md-right">{{ __('Address') }}</label>
 
                             <div class="col-md-6">
-                                <input id="address" type="text" class="form-control @error('phone') is-invalid @enderror" name="address" value="{{$user->address}}" required autocomplete="address" autofocus>
+                                <input id="address" type="text" class="form-control @error('address') is-invalid @enderror" name="address" value="{{$user->address}}" required autocomplete="address" autofocus>
 
                                 @error('address')
                                     <span class="invalid-feedback" role="alert">
@@ -107,12 +107,18 @@
                         </div>
                         
                         <div class="form-group row">
+                            <label for="role_id" class="col-md-4 col-form-label text-md-right">{{ __('Roll') }}</label>
                             <div class="col-md-6">
                                 @foreach($roles as $role)
                                 <div class="form-check">
-                                    <input type="checkbox" name="roles[]" value="{{$role->id}}">
+                                    @if($user->roles->pluck('id')->contains($role->id)) 
+                                        <input type="checkbox" name="roles[]" value="{{$role->id}}" checked>
+                                    
+                                    @else
+                                        <input type="checkbox" name="roles[]" value="{{ $role->id }}">
+                                    @endif
                                     <lable>{{ $role->name }}</lable>
-                                </div>
+                                </div>  
                                 @endforeach
                             </div>
                             <!-- <label for="role_id" class="col-md-4 col-form-label text-md-right">{{ __('Roll') }}</label>

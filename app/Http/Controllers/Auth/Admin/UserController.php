@@ -97,6 +97,14 @@ class UserController extends Controller
         //
         $user->roles()->sync($request->roles);
 
+        $user->first_name = $request->first_name;
+        $user->last_name = $request->last_name;
+        $user->phone = $request->phone;
+        $user->address = $request->address;
+        $user->email = $request->email;
+        $user->save();
+
+
         return redirect()->route('admin.user.index');
     }
 

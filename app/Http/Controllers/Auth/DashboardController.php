@@ -13,19 +13,22 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Carbon\Carbon;
 use DB;
+use App\Models\Role;
 
 
 class DashboardController extends Controller
 { 
     public function __construct()
     {
-        $this->middleware('auth:user');
+        // $this->middleware('auth:user');
     }
+
    
     //
     public function index()
     { 
         // $list = ManualOrders::where('status', 'pending');
+
         $list = User::all();
         return view('auth.user.dashboard')->with('users',$list);
     }
