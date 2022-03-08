@@ -12,7 +12,7 @@ Auth::routes();
 | contains the "web" middleware group. Now create something great!
 |
 */ 
-Route::get('/', 'HomeController@index')->name('dashboard');
+
 
     //Route::get('/login', 'Auth\Admin\LoginController@showLoginForm')->name('admin.login');
     //Route::post('login', 'Auth\Admin\LoginController@login');
@@ -26,7 +26,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Auth\Admin','as'=> 'admin.'],f
     Route::post('logout', 'LoginController@logout')->name('logout');
 });
 
-Route::group(['middleware' => 'can:manage-users' , 'prefix' => 'admin/','namespace' => 'Auth\Admin','as'=> 'admin.'],function(){
+Route::group(['middleware' => 'can:admin-pages' , 'prefix' => 'admin/','namespace' => 'Auth\Admin','as'=> 'admin.'],function(){
 
     // Route::resource('user/', 'UserController')->except('edit');
     Route::resource('user', 'UserController');
@@ -38,10 +38,10 @@ Route::group(['middleware' => 'can:manage-users' , 'prefix' => 'admin/','namespa
 
 //     Route::get('dashboard', 'DashboardController@index')->name('dashboard'); 
 // });
+Route::group(['middleware' => 'can:users-pages'],function(){
 
-Route::group(['middleware' => 'can:users-pages' , 'prefix' => 'user', 'namespace' => 'Auth' ,'as'=> 'user.'],function(){
-
-    Route::get('dashboard', 'DashboardController@index')->name('dashboard');
+    Route::get('/', 'HomeController@index')->name('dashboard');
+    Route::get('user/dashboard', 'Auth\DashboardController@index')->name('user.dashboard');
 });
 
 Route::group(['prefix' => 'client/orders/', 'namespace' => 'Client\Orders', 'middleware' => 'auth:user'],function(){
