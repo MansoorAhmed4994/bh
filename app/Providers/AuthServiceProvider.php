@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -41,14 +42,18 @@ class AuthServiceProvider extends ServiceProvider
             return $user->hasRole('admin');
         });
 
-        Gate::define('users-pages', function($user)
-        {
-            return $user->hasRole('user');
+        
+
+        Gate::define('admin-pages', function ($user) {
+            
+                return $user->hasRole('admin');
+            
         });
 
-        Gate::define('admin-pages', function($user)
-        {
-            return $user->hasRole('admin');
+        Gate::define('users-pages', function ($user) {
+            
+                return $user->hasRole('user');
+            
         });
     }
 }

@@ -61,4 +61,9 @@ class User extends Authenticatable
 
         return false;
     }
+
+    public function connect()
+    {
+        return $this->belongsToMany('App\Models\Role');
+    }
 }

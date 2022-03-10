@@ -71,9 +71,7 @@ class UserController extends Controller
     public function edit( User $user)
     {
         // dd($user);
-        if(Gate::denies('edit-users')){
-            return redirect()->route('admin.user.index');
-        }
+        
         $roles = Role::all();
         // $editusers = User::find($user);
         //return view('auth.admin.dashboard')->with('users',$list);

@@ -14,6 +14,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Carbon\Carbon;
 use DB;
 use App\Models\Role;
+use Illuminate\Support\Facades\Gate;
 
 
 class DashboardController extends Controller
@@ -21,6 +22,8 @@ class DashboardController extends Controller
     public function __construct()
     {
         $this->middleware('auth:user');
+
+       
     }
 
    
@@ -28,7 +31,11 @@ class DashboardController extends Controller
     public function index()
     { 
         // $list = ManualOrders::where('status', 'pending');
-
+        if(Gate::denies('users-pages')) {
+            return redirect('login');
+            // somehow this seems te get ignored because the unaccessible view gets displayed anyway.
+        }
+        
         $list = User::all();
         return view('auth.user.dashboard')->with('users',$list);
     }

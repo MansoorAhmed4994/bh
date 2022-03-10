@@ -25,8 +25,7 @@ Route::group(['prefix' => 'admin','namespace' => 'Auth\Admin','as'=> 'admin.'],f
     Route::post('login', 'LoginController@login');
     Route::post('logout', 'LoginController@logout')->name('logout');
 });
-
-Route::group(['middleware' => 'can:admin-pages' , 'prefix' => 'admin/','namespace' => 'Auth\Admin','as'=> 'admin.'],function(){
+Route::group(['middleware' => ['auth' => 'admin'] , 'prefix' => 'admin/','namespace' => 'Auth\Admin','as'=> 'admin.'],function(){
 
     // Route::resource('user/', 'UserController')->except('edit');
     Route::resource('user', 'UserController');
@@ -38,7 +37,7 @@ Route::group(['middleware' => 'can:admin-pages' , 'prefix' => 'admin/','namespac
 
 //     Route::get('dashboard', 'DashboardController@index')->name('dashboard'); 
 // });
-Route::group(['middleware' => 'can:users-pages'],function(){
+Route::group(['middleware' => ['auth' => 'users'] ],function(){
 
     Route::get('/', 'HomeController@index')->name('dashboard');
     Route::get('user/dashboard', 'Auth\DashboardController@index')->name('user.dashboard');

@@ -11,6 +11,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Models\User;
+use App\Models\Role;
+use Illuminate\Support\Facades\Gate;
+
 
 class LoginController extends Controller
 {
@@ -32,6 +36,8 @@ class LoginController extends Controller
      * @var string
      */
     protected $redirectTo = '/user/dashboard';
+    
+    
 
     /**
      * Create a new controller instance.
@@ -41,6 +47,11 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+
+        if(Gate::denies('users-pages')) {
+            return redirect('login');
+            // somehow this seems te get ignored because the unaccessible view gets displayed anyway.
+        }
     }
 
     use RedirectsUsers, ThrottlesLogins;
@@ -52,13 +63,12 @@ class LoginController extends Controller
      */
     public function showLoginForm() 
     {
+
+        
         // if(Auth::guard('admin')->check()){
         //     return redirect()->route('admin.dashboard');
         // }
-        if(Auth::guard('user')->check())
-        {
-           return redirect()->route('user.dashboard');
-        }
+       
             return view('auth.user.login');
     }
 
@@ -77,6 +87,9 @@ class LoginController extends Controller
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
         // the login attempts for this application. We'll key this by the username and
         // the IP address of the client making these requests into this application.
+
+        
+
         if (method_exists($this, 'hasTooManyLoginAttempts') &&
             $this->hasTooManyLoginAttempts($request)) {
             $this->fireLockoutEvent($request);
@@ -93,6 +106,17 @@ class LoginController extends Controller
         // user surpasses their maximum number of attempts they will get locked out.
         $this->incrementLoginAttempts($request);
 
+        if(Auth::guard('admin')->attempt($request->only('email','password'),$request->filled('remember'))){
+            //Authentication passed...
+                return redirect()
+                ->route('admin.dashboard')
+                ->with('status','You are Logged in as Admin!');
+            }
+            else
+                {
+                    return redirect()->route('admin.login')->with('flash_message_error','Wrong Credientials');
+                }
+                
         return $this->sendFailedLoginResponse($request);
     }
 
@@ -148,6 +172,8 @@ class LoginController extends Controller
 
         $this->clearLoginAttempts($request);
 
+        
+
         if ($response = $this->authenticated($request, $this->guard()->user())) {
             return $response;
         }
@@ -155,7 +181,10 @@ class LoginController extends Controller
         return $request->wantsJson()
                     ? new JsonResponse([], 204)
                     : redirect()->intended($this->redirectPath());
+                    
     }
+
+    
 
     /**
      * The user has been authenticated.

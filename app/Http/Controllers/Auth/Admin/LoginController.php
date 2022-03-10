@@ -73,6 +73,10 @@ class LoginController extends Controller
             ->route('admin.dashboard')
             ->with('status','You are Logged in as Admin!');
         }
+        else
+            {
+                return redirect()->route('admin.login')->with('flash_message_error','Wrong Credientials');
+            }
          
         return $this->sendFailedLoginResponse($request);
     }
