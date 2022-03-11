@@ -80,9 +80,23 @@ Route::group(['prefix' => 'frontend/client/orders/', 'namespace' => 'Frontend\Cl
     Route::post('customer-order-confirmed/{ManualOrder}', 'Frontend\Client\Orders\ManualOrdersController@customer_order_confirmed')->name('ManualOrders.confirm.order.by.customer');
 
 
-Route::group(['prefix' => 'riders',  'middleware' => 'auth:user','as'=> 'Riders.'],function(){
+
+   
+    Route::group(['prefix' => 'riders','as'=> 'riders.'],function(){
+        Route::get('/login', 'RidersController@showLoginForm')->name('login');
+        Route::post('login', 'RidersController@login');
+        Route::post('logout', 'RidersController@logout')->name('logout');
+
+    });
+
+    Route::group(['prefix' => 'rider',  'middleware' => 'auth:rider','as'=> 'riders.'],function(){
 
     Route::resource('/', 'RidersController')->except('show');
+    
+    Route::get('dashboard', 'RidersController@dashboard')->name('dashboard');
+    
+    Route::get('list', 'RidersController@list')->name('list');
+
     Route::post('/generate-loadsheet', 'LoadSheetController@generate_load_sheet')->name('generate.load.sheet');
     //Route::get('ManualOrders/show/{id}', 'ManualOrdersController@show')->name('ManualOrders.show');
     
