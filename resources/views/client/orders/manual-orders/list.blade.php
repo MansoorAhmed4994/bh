@@ -5,6 +5,16 @@
 var base_url = '<?php echo e(url('/')); ?>';
 var dispatch_order_id =  '';
 var order_status = '';
+        
+    function checkAll(bx) {
+        var cbs = document.getElementsByTagName('input');
+            for(var i=0; i < cbs.length; i++) {
+            if(cbs[i].type == 'checkbox') {
+              cbs[i].checked = bx.checked;
+            }
+        }
+    }
+        
     $( document ).ready(function() { 
                 $('.pop').on('click', function() {
                     // alert($(this).attr('src'));
@@ -235,9 +245,6 @@ var order_status = '';
         <button class="form-control btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
     </div>
     
-    <div class="form-group">
-        <button class="form-control btn btn-outline-success my-2 my-sm-0" id="print_mnp_slips" type="button">Print M&P Slips</button>
-    </div>
     
     
   </form>
@@ -273,7 +280,7 @@ var order_status = '';
     <table class="table table-bordered" style="min-height: 500px;">
         <thead>
             <tr> 
-                <th scope="col"></th>
+                <th scope="col"  class="delete_btn_class"><input type="checkbox" onclick="checkAll(this)" ></th>
                 <th scope="col">#</th>
                 <!--<th scope="col">Edit</th>-->
                 <!--<th scope="col">view</th>-->
@@ -373,8 +380,8 @@ var order_status = '';
                 </th>
                 <!--<th>{{$lists->total_pieces}}</th>-->
                 <!--<th>{{$lists->date_order_paid}}</th>-->
-                <th>{{$lists->created_at}}</th>
-                <th>{{$lists->updated_at}}</th>
+                <th>{{date('d-M-y', strtotime($lists->created_at))}} <br> {{date('G:i a', strtotime($lists->created_at))}}</th>
+                <th>{{date('d-M-y', strtotime($lists->updated_at))}} <br> {{date('G:i a', strtotime($lists->updated_at))}}</th> 
                 <th>{{$lists->status}}</th>
             </tr>
             <?php $count++;?>
