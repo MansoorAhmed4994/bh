@@ -492,7 +492,7 @@ class ManualOrdersController extends Controller
         $ManualOrder->price = $request->price;
         $ManualOrder->cod_amount = $request->cod_amount;
         $ManualOrder->advance_payment = $request->advance_payment;
-        $ManualOrder->status = 'dispatched';
+        $ManualOrder->status = $request->status;
         $ManualOrder->updated_by = Auth::id();
         $status = $ManualOrder->save();
         

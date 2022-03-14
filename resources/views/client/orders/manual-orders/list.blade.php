@@ -4,6 +4,17 @@
 <script>
 var base_url = '<?php echo e(url('/')); ?>';
 var dispatch_order_id =  '';
+var order_status = '';
+        
+    function checkAll(bx) {
+        var cbs = document.getElementsByTagName('input');
+            for(var i=0; i < cbs.length; i++) {
+            if(cbs[i].type == 'checkbox') {
+              cbs[i].checked = bx.checked;
+            }
+        }
+    }
+        
     $( document ).ready(function() { 
                 $('.pop').on('click', function() {
                     // alert($(this).attr('src'));
@@ -13,7 +24,7 @@ var dispatch_order_id =  '';
                 
                 
             
-        $('#save_dispatch_order_edit').on('click',function(){
+        $('#save_order_status_and_price').on('click',function(){
         
     
         let name = $('#receiver_name').val();
@@ -33,6 +44,7 @@ var dispatch_order_id =  '';
             number:number,
             address:address,
             price:price,
+            status:order_status,
           },
           success:function(response){
             //$('#successMsg').show();
@@ -55,9 +67,11 @@ var dispatch_order_id =  '';
     });
     
     
-    function dispatch_order(val) 
+    function change_order_status_and_price(val,status) 
     {  
+        alert('working');
         dispatch_order_id = val;
+        order_status = status;
         //alert('working');
         $.ajax({
             headers: {
@@ -84,6 +98,7 @@ var dispatch_order_id =  '';
             }
         });
     }
+    
     
     function get_checked_values()
     {
@@ -176,11 +191,12 @@ var dispatch_order_id =  '';
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="save_dispatch_order_edit">Save changes</button>
+                <button type="button" class="btn btn-primary" id="save_order_status_and_price">Save changes</button>
             </div>
         </div>
     </div>
 </div>
+
 
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
@@ -229,9 +245,6 @@ var dispatch_order_id =  '';
         <button class="form-control btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
     </div>
     
-    <div class="form-group">
-        <button class="form-control btn btn-outline-success my-2 my-sm-0" id="print_mnp_slips" type="button">Print M&P Slips</button>
-    </div>
     
     
   </form>
@@ -264,10 +277,10 @@ var dispatch_order_id =  '';
 </nav>
 
 <div style="overflow-x:auto;"> 
-    <table class="table table-bordered">
+    <table class="table table-bordered" style="min-height: 500px;">
         <thead>
             <tr> 
-                <th scope="col"></th>
+                <th scope="col"  class="delete_btn_class"><input type="checkbox" onclick="checkAll(this)" ></th>
                 <th scope="col">#</th>
                 <!--<th scope="col">Edit</th>-->
                 <!--<th scope="col">view</th>-->
@@ -276,21 +289,21 @@ var dispatch_order_id =  '';
                 <!--<th scope="col">Confirmed</th>-->
                 <!--<th scope="col">Dispatched</th>-->
                 <!--<th scope="col">deleted</th>-->
-                <th scope="col">Actions</th>
-                <th scope="col">Order ID</th>
-                <th scope="col">First Name</th> 
-                <th scope="col">Reciever Number</th>
+                <th scope="col">Act</th>
+                <th scope="col">Ord. ID</th>
+                <th scope="col">F. Name</th> 
+                <th scope="col">Rec. Number</th>
                 <th scope="col">Number</th>
                 <th scope="col">Description</th>
                 <!--<th scope="col">Ord. Location</th>-->
                 <th scope="col">Address</th>
                 <th scope="col">Price</th>
-                <th scope="col">Images</th>
-                <th scope="col">Total Pieces</th>
-                <th scope="col">Ord.paid Date</th>
-                <th scope="col">created Date</th>
-                <th scope="col">Updated Date</th>
-                <th scope="col">Ord.status</th>
+                <th scope="col">Img.</th>
+                <!--<th scope="col">Total Pieces</th>-->
+                <!--<th scope="col">Ord.paid Date</th>-->
+                <th scope="col">cr. Date</th>
+                <th scope="col">Up. Date</th>
+                <th scope="col">status</th>
             </tr>
         </thead>
         <tbody>  
@@ -327,10 +340,10 @@ var dispatch_order_id =  '';
                             <a type="button" target="_blank" href="{{route('ManualOrders.edit',$lists->id)}}" class="dropdown-item">Edit</a>             
                             <a type="button" target="_blank" href="{{route('ManualOrders.show',$lists->id)}}" class="dropdown-item">view</a>
                             <a type="button" href="{{route('ManualOrders.print.order.slip',$lists->id)}}" class="dropdown-item">Print Slip</a>
-                            <a type="button" href="{{route('ManualOrders.order.status',['prepared',$lists->id])}}" class="dropdown-item">Prepare</a> 
-                            <a type="button" href="{{route('ManualOrders.order.status',['confirmed',$lists->id])}}" class="dropdown-item">Confirmed</a> 
+                            <a type="button" href="{{route('ManualOrders.order.status',['prepared',$lists->id])}}" class="dropdown-item">Prepare</a>   
                             <a type="button" href="{{route('ManualOrders.order.status',['complete',$lists->id])}}" class="dropdown-item">Complete</a> 
-                            <button type="button" id="dispatch-btn" onclick="dispatch_order({{$lists->id}})" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Dispatch</button>
+                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'confirmed')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Confirmed</button>
+                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'dispatched')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Dispatch</button>
                             <a type="button" href="{{route('ManualOrders.order.status',['hold',$lists->id])}}" class="dropdown-item">Hold</a> 
                             <a type="button" href="{{route('ManualOrders.order.status',['incomplete',$lists->id])}}" class="dropdown-item">Incomplete</a>
                             <a type="button" href="{{route('ManualOrders.order.status',['cancel',$lists->id])}}" class="dropdown-item">Cancel</a>
@@ -361,14 +374,14 @@ var dispatch_order_id =  '';
                 <th >
                     @if(!empty($lists->images))
                         @foreach(explode('|', $lists->images) as $image)   
-                        <img class="pop rounded " style="margin-right: 5px;" src="{{asset($image)}}" alt="Card image cap" width="50" height="50">
+                        <img class="pop rounded " style="margin-right: 5px;" src="{{asset($image)}}" alt="Card image cap" width="25" height="25">
                         @endforeach
                     @endif
                 </th>
-                <th>{{$lists->total_pieces}}</th>
-                <th>{{$lists->date_order_paid}}</th>
-                <th>{{$lists->created_at}}</th>
-                <th>{{$lists->updated_at}}</th>
+                <!--<th>{{$lists->total_pieces}}</th>-->
+                <!--<th>{{$lists->date_order_paid}}</th>-->
+                <th>{{date('d-M-y', strtotime($lists->created_at))}} <br> {{date('G:i a', strtotime($lists->created_at))}}</th>
+                <th>{{date('d-M-y', strtotime($lists->updated_at))}} <br> {{date('G:i a', strtotime($lists->updated_at))}}</th> 
                 <th>{{$lists->status}}</th>
             </tr>
             <?php $count++;?>
