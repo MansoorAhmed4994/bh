@@ -66,4 +66,10 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\Models\Role');
     }
+
+    public function isRiders()
+    {
+        return $this->belongTo(Role::class,'name');
+        
+    }
 }

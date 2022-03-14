@@ -6,7 +6,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Admin {{ __('Login') }}</div>
+                <div class="card-header">Rider {{ __('Login') }}</div>
 
                 <div class="card-body">
                 @if(Session::has('flash_message_error'))

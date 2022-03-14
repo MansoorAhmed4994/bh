@@ -2,7 +2,13 @@
 
 namespace App\Http\Middleware;
 
+
+use Auth;
 use Closure;
+use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\Role;
+
 
 class Rider
 {
@@ -15,6 +21,17 @@ class Rider
      */
     public function handle($request, Closure $next)
     {
-        return $next($request);
+        foreach (Auth::user()->connect as $role) 
+        {
+            if ($role->name == 'rider') 
+            {
+                return $next($request);        
+            }
+            else
+            {
+                return redirect()->route('riders.login')->with('flash_message_error','Please LogIn With Admin To Access');
+            }
+        
+        }
     }
 }

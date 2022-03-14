@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use App\Models\User;
 use App\Models\Client\ManualOrders;
+use DB;
+use App\Models\Client\Customers;
 
 class RidersController extends Controller
 {
@@ -23,6 +25,7 @@ class RidersController extends Controller
     public function showLoginForm()
     {
         //dd();
+        
         return view('riders.login');
     }
 
@@ -73,7 +76,7 @@ class RidersController extends Controller
         //Authentication passed...
             return redirect()
             ->route('riders.dashboard')
-            ->with('status','You are Logged in as Rider!');
+            ->with('status','You are Logged in as rider!');
         }
         else
             {
@@ -97,7 +100,7 @@ class RidersController extends Controller
 
         return $request->wantsJson()
             ? new JsonResponse([], 204)
-            : redirect('/admin/login');
+            : redirect('/riders/login');
     }
 
     public function dashboard()
@@ -106,6 +109,30 @@ class RidersController extends Controller
         $lists = ManualOrders::all();
 
         return view ('riders.dashboard',compact('lists'));
+
+        //dd('working');
+        $list =DB::table('manual_orders')
+        ->groupBy('status')
+        ->select('status', DB::raw('count(*) as total'), DB::raw('sum(price) as amount'))
+        ->get();
+        
+        
+        
+        // dd($list);
+        //if ($result->count()) { }
+        return view('riders.dashboard')->with('lists',$list);
+    }
+
+    public function list()
+    {
+        // $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'manual_orders.customers_id')->where('manual_orders.status','pending')->orderBy('manual_orders.created_at', 'DESC')->paginate(5);
+        $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')
+        ->where('manual_orders.status','pending')
+        ->orderBy('manual_orders.id', 'ASC')
+        ->select('manual_orders.id','manual_orders.customers_id','customers.first_name','manual_orders.receiver_number','manual_orders.description','manual_orders.reciever_address','customers.last_name','customers.number','customers.address','manual_orders.price','manual_orders.images','manual_orders.total_pieces','manual_orders.date_order_paid','manual_orders.status','manual_orders.created_at','manual_orders.updated_at')
+        ->paginate(20);
+        //dd($list);
+        return view('riders.list')->with('list',$list);
     }
 
     public function index()
@@ -217,5 +244,10 @@ class RidersController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    protected function guard()
+    {
+        return Auth::guard('rider');
     }
 }

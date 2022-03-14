@@ -103,13 +103,15 @@
                     </ul>
                 @else
                     <ul class="navbar-nav">
-                        <li class="nav-item active"> <a class="nav-link" href="{{route('dashboard')}}">dashboard </a> </li>
+                        <li class="nav-item active"> <a class="nav-link" href="{{route('riders.dashboard')}}">dashboard </a> </li>
                         <li class="nav-item dropdown" id="myDropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Manual Orders</a>
                         <ul class="dropdown-menu">
-                            <li> <a class="dropdown-item" href="{{route('ManualOrders.create')}}"> Add New order </a></li>
+                            <!-- <li> <a class="dropdown-item" href="{{route('ManualOrders.create')}}"> Add New order </a></li>
                             <li> <a class="dropdown-item" href="{{route('ManualOrders.index')}}"> List</a></li>
-                            <li> <a class="dropdown-item" href="{{route('ManualOrders.dipatch.bulk.orders')}}">Dispatch Bulk Orders</a></li>
+                            <li> <a class="dropdown-item" href="{{route('ManualOrders.dipatch.bulk.orders')}}">Dispatch Bulk Orders</a></li> -->
+                            
+                            <li> <a class="dropdown-item" href="{{route('riders.list')}}"> List</a></li>
                         </ul>
                         
                         </li>
