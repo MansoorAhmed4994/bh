@@ -89,7 +89,9 @@ Route::group(['prefix' => 'frontend/client/orders/', 'namespace' => 'Frontend\Cl
 
     });
 
-    Route::group([ 'middleware' => ['auth' => 'rider'], 'prefix' => 'riders', 'as'=> 'riders.'],function(){
+    
+
+    Route::group([ 'middleware' => ['auth' => 'riders'], 'prefix' => 'riders', 'as'=> 'riders.'],function(){
 
     Route::resource('/', 'RidersController')->except('show');
     

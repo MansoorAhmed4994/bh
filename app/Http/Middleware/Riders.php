@@ -2,15 +2,14 @@
 
 namespace App\Http\Middleware;
 
-
-use Auth;
 use Closure;
+use Auth;
+
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Role;
 
-
-class Rider
+class Riders
 {
     /**
      * Handle an incoming request.
@@ -19,8 +18,12 @@ class Rider
      * @param  \Closure  $next
      * @return mixed
      */
+
     public function handle($request, Closure $next)
     {
+
+        $login = User::all();
+        dd($request);
         foreach (Auth::user()->connect as $role) 
         {
             if ($role->name == 'rider') 
@@ -33,5 +36,7 @@ class Rider
             }
         
         }
+
+        
     }
 }

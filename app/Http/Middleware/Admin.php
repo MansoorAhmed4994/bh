@@ -18,6 +18,8 @@ class Admin
      */
     public function handle($request, Closure $next)
     {
+        dd(Auth::user());
+
         foreach (Auth::user()->connect as $role) 
         {
             if ($role->name == 'admin') 
