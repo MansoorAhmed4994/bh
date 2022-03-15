@@ -91,13 +91,13 @@ Route::group(['prefix' => 'frontend/client/orders/', 'namespace' => 'Frontend\Cl
 
     
 
-    Route::group([ 'middleware' => ['auth' => 'riders'], 'prefix' => 'riders', 'as'=> 'riders.'],function(){
+    Route::group(['prefix' => 'riders', 'as'=> 'riders.'],function(){
 
     Route::resource('/', 'RidersController')->except('show');
     
-    Route::get('dashboard', 'RidersController@dashboard')->name('dashboard');
+    Route::get('/dashboard', 'RidersController@dashboard')->name('dashboard');
     
-    Route::get('list', 'RidersController@list')->name('list');
+    Route::get('/list', 'RidersController@list')->name('list');
 
     Route::post('/generate-loadsheet', 'LoadSheetController@generate_load_sheet')->name('generate.load.sheet');
     //Route::get('ManualOrders/show/{id}', 'ManualOrdersController@show')->name('ManualOrders.show');

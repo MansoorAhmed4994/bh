@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Riders;
 use App\Models\Role;
+use Illuminate\Foundation\Auth\RedirectsUsers;
+use Illuminate\Foundation\Auth\ThrottlesLogins;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use App\Models\User;
@@ -20,6 +25,9 @@ class RidersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    use RedirectsUsers, ThrottlesLogins;
+
     protected $redirectTo = '/riders/dashboard';
 
     public function showLoginForm()
@@ -27,26 +35,6 @@ class RidersController extends Controller
         //dd();
         
         return view('riders.login');
-    }
-
-    protected function validateLogin(Request $request)
-    {
-        $request->validate([
-            $this->username() => 'required|string',
-            'password' => 'required|string',
-        ]);
-    }
-
-    protected function sendFailedLoginResponse(Request $request)
-    {
-        throw ValidationException::withMessages([
-            $this->username() => [trans('auth.failed')],
-        ]);
-    }
-
-    public function username()
-    {
-        return 'email';
     }
 
     public function login(Request $request)
@@ -76,7 +64,7 @@ class RidersController extends Controller
         //Authentication passed...
             return redirect()
             ->route('riders.dashboard')
-            ->with('status','You are Logged in as rider!');
+            ->with('status','You are Logged in as Admin!');
         }
         else
             {
@@ -85,6 +73,74 @@ class RidersController extends Controller
          
         return $this->sendFailedLoginResponse($request);
     }
+
+    protected function validateLogin(Request $request)
+    {
+        $request->validate([
+            $this->username() => 'required|string',
+            'password' => 'required|string',
+        ]);
+    }
+
+    /**
+     * Attempt to log the user into the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return bool
+     */
+    protected function attemptLogin(Request $request)
+    {
+        return $this->guard()->attempt(
+            $this->credentials($request), $request->filled('remember')
+        );
+    }
+
+    /**
+     * Get the needed authorization credentials from the request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    protected function credentials(Request $request)
+    {
+        return $request->only($this->username(), 'password');
+    }
+
+    /**
+     * Send the response after the user was authenticated.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
+     */
+    protected function sendLoginResponse(Request $request)
+    {
+        $request->session()->regenerate();
+
+        $this->clearLoginAttempts($request);
+
+        if ($response = $this->authenticated($request, $this->guard()->user())) {
+            return $response;
+        }
+
+        return $request->wantsJson()
+                    ? new JsonResponse([], 204)
+                    : redirect()->intended($this->redirectPath());
+    }
+
+
+    protected function sendFailedLoginResponse(Request $request)
+    {
+        throw ValidationException::withMessages([
+            $this->username() => [trans('auth.failed')],
+        ]);
+    }
+
+    public function username()
+    {
+        return 'email';
+    }
+
+  
 
     public function logout(Request $request)
     {
@@ -101,6 +157,11 @@ class RidersController extends Controller
         return $request->wantsJson()
             ? new JsonResponse([], 204)
             : redirect('/riders/login');
+    }
+
+    protected function guard()
+    {
+        return Auth::guard('rider');
     }
 
     public function dashboard()
@@ -246,8 +307,5 @@ class RidersController extends Controller
         //
     }
 
-    protected function guard()
-    {
-        return Auth::guard('rider');
-    }
+    
 }

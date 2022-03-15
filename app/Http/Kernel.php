@@ -68,7 +68,7 @@ class Kernel extends HttpKernel
         'author' => \App\Http\Middleware\Author::class,
         'rider' => \App\Http\Middleware\Rider::class,
         
-        'riders' => \App\Http\Middleware\Riders::class,
+        'ride' => \App\Http\Middleware\Riders::class,
 
         'riderroles' => \App\Http\Middleware\riderroles::class,
     ];

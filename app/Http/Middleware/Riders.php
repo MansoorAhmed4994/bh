@@ -1,10 +1,8 @@
 <?php
 
 namespace App\Http\Middleware;
-
+use Illuminate\Support\Facades\Auth; 
 use Closure;
-use Auth;
-
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Role;
@@ -21,21 +19,14 @@ class Riders
 
     public function handle($request, Closure $next)
     {
-
-        $login = User::all();
-        dd($request);
-        foreach (Auth::user()->connect as $role) 
-        {
-            if ($role->name == 'rider') 
-            {
-                return $next($request);        
-            }
-            else
-            {
-                return redirect()->route('riders.login')->with('flash_message_error','Please LogIn With Rider To Access');
-            }
-        
+        // dd($request);
+        if(Auth::check()){
+            return redirect('riders/dashboard');
         }
+        else{
+            return redirect('riders/login')->with('flash_message_error','Please LogIn With rider To Access');
+        }
+        
 
         
     }

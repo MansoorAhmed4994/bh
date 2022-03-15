@@ -22,6 +22,12 @@ class Users
                 return $next($request);
             
         }
+
+        else if ($role->name == 'rider') {
+            return redirect()->route('riders.dashboard');
+        
+        }
+        
         else
             {
                 return redirect()->route('login')->with('flash_message_error','Please LogIn To Access');
