@@ -73,7 +73,7 @@
         
         <div class="row">
             <div class="col-sm-6">
-                <form method="post" action="{{ route('Riders.store') }}" enctype="multipart/form-data" class="dropzone" id="dropzone">
+                <form method="post" action="{{ route('riders.store') }}" enctype="multipart/form-data" class="dropzone" id="dropzone">
                     @csrf
         
                     <div class="form-group">

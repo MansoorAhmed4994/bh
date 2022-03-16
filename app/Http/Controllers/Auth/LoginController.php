@@ -106,19 +106,12 @@ class LoginController extends Controller
         // user surpasses their maximum number of attempts they will get locked out.
         $this->incrementLoginAttempts($request);
 
-        if(Auth::guard('user')->attempt($request->only('email','password'),$request->filled('remember'))){
+        if(Auth::guard('admin')->attempt($request->only('email','password'),$request->filled('remember'))){
             //Authentication passed...
-                return redirect('/')
+                return redirect()
+                ->route('admin.dashboard')
                 ->with('status','You are Logged in as Admin!');
             }
-
-            else if(Auth::guard('rider')->attempt($request->only('email','password'),$request->filled('remember'))){
-                //Authentication passed...
-                    return redirect()
-                    ->route('riders.dashboard')
-                    ->with('status','You are Logged in as Admin!');
-                }
-
             else
                 {
                     return redirect()->route('login')->with('flash_message_error','Wrong Credientials');
@@ -250,7 +243,7 @@ class LoginController extends Controller
 
         return $request->wantsJson()
             ? new JsonResponse([], 204)
-            : redirect('/');
+            : redirect('/login');
     }
 
     /**

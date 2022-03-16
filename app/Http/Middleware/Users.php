@@ -17,16 +17,19 @@ class Users
      */
     public function handle($request, Closure $next)
     {
-        foreach (Auth::user()->connect as $role) {
-            if ($role->name == 'user') {
+        foreach (Auth::user()->connect as $role) 
+        {
+            if ($role->name == 'user') 
+            {
                 return $next($request);
             
-        }
+            }
 
-        else if ($role->name == 'rider') {
-            return redirect()->route('riders.dashboard');
-        
-        }
+            else if ($role->name == 'rider') 
+            {
+                return redirect()->route('riders.dashboard');
+            
+            }
         
         else
             {

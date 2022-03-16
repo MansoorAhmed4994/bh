@@ -12,7 +12,7 @@ class Riders extends Authenticatable
 {
     public function manual_orders()
     {
-        return $this->hasMany(ManualOrders::class);
+        return $this->belongsToMany(ManualOrders::class);
     }
     //
     public function users()

@@ -187,10 +187,13 @@ class RidersController extends Controller
     public function list()
     {
         // $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'manual_orders.customers_id')->where('manual_orders.status','pending')->orderBy('manual_orders.created_at', 'DESC')->paginate(5);
-        $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')
-        ->where('manual_orders.status','pending')
+
+        
+
+        $list = Riders::rightJoin('manual_orders', 'manual_orders.riders_id', '=', 'riders.id')
+        ->where('riders.users_id',Auth::user()->id)
         ->orderBy('manual_orders.id', 'ASC')
-        ->select('manual_orders.id','manual_orders.customers_id','customers.first_name','manual_orders.receiver_number','manual_orders.description','manual_orders.reciever_address','customers.last_name','customers.number','customers.address','manual_orders.price','manual_orders.images','manual_orders.total_pieces','manual_orders.date_order_paid','manual_orders.status','manual_orders.created_at','manual_orders.updated_at')
+        ->select('manual_orders.id','manual_orders.customers_id','manual_orders.receiver_number','manual_orders.description','manual_orders.reciever_address','manual_orders.price','manual_orders.images','manual_orders.total_pieces','manual_orders.date_order_paid','manual_orders.status','manual_orders.created_at','manual_orders.updated_at')
         ->paginate(20);
         //dd($list);
         return view('riders.list')->with('list',$list);
@@ -234,7 +237,7 @@ class RidersController extends Controller
             'remember_token' => $request->_token,
         ]);
         
-        $userRole = Role::where('name','user')->first();
+        $userRole = Role::where('name','rider')->first();
         $user->roles()->attach($userRole);
         
         //dd($data->id);
@@ -256,7 +259,7 @@ class RidersController extends Controller
         
         if($riders->save())
         {
-            return redirect()->route('Riders.create')->with('success', 'Successfully Register');
+            return redirect()->route('riders.create')->with('success', 'Successfully Register');
             //return 'Order Successfully Placed';
         }
         //

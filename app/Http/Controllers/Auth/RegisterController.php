@@ -31,7 +31,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/user/dashboard';
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
@@ -84,6 +84,8 @@ class RegisterController extends Controller
         $role = Role::select('id')->where('name','user')->first();
         $user->roles()->attach($role);
 
+    
+        // dd($role);
         return $user;
     }
 }
