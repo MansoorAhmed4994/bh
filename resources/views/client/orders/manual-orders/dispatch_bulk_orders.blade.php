@@ -127,6 +127,7 @@
                                 $("#row_data").prepend(row_data);
                                 row_id++;
                                 $("body").removeClass("loading");
+                                document.getElementById('order_id').value = '';
                                 
                             }
                             else

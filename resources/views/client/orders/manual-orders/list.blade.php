@@ -7,11 +7,15 @@ var dispatch_order_id =  '';
 var order_status = '';
         
     function checkAll(bx) {
+        // alert('work');
+        //document.getElementByClassName("order_checkbox_class").checked = true;
         var cbs = document.getElementsByTagName('input');
             for(var i=0; i < cbs.length; i++) {
             if(cbs[i].type == 'checkbox') {
-              cbs[i].checked = bx.checked;
+               cbs[i].checked = bx.checked;
+            //   cbs[i].checked = true;
             }
+            get_checked_values();
         }
     }
         
@@ -69,7 +73,7 @@ var order_status = '';
     
     function change_order_status_and_price(val,status) 
     {  
-        alert('working');
+        //alert('working');
         dispatch_order_id = val;
         order_status = status;
         //alert('working');
@@ -90,6 +94,19 @@ var order_status = '';
                 $('#receiver_number').val(e.messege.receiver_number);
                 $('#reciever_address').val(e.messege.reciever_address);
                 $('#Price').val(e.messege.Price);
+                
+                var images ='';
+                var str_array = e.messege.images.split(','); 
+                for(var i = 0; i < str_array.length; i++) {
+                   // Trim the excess whitespace.
+                //   str_array[i] = str_array[i].replace(/^\s*/, "").replace(/\s*$/, "");
+                     images = images+'<img class="pop rounded " style="margin-right: 5px;" src="{{asset("/")}}'+str_array[i]+'" alt="Card image cap" width="200">';
+                   // Add additional code here, such as:
+                   //alert(str_array[i]);
+                }
+                $('#images_pop').html(images);
+                
+                //alert(images);
                 
                 
             },
@@ -151,6 +168,12 @@ var order_status = '';
                     
                     <h4>Reciever Detail <hr></h4> 
                         <div class="alert alert-success" id="dispatch-succes-noti" style="display:none" role="alert">successfully dispatch and update</div>
+                    
+                        <div class="form-group col-sm">
+                            <div class="card" id="images_pop" style="max-width: 200px;"> 
+                            </div>
+                        </div>
+                        
                         <div class="form-group">
                             <label for="receiver_name">Reciever Name</label>
                             <input type="text" class="form-control" value="" id="receiver_name"  name="receiver_name" placeholder="Reciever Name" required>
@@ -337,7 +360,8 @@ var order_status = '';
                           Actions
                         </button>
                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">            
-                            <a type="button" target="_blank" href="{{route('ManualOrders.edit',$lists->id)}}" class="dropdown-item">Edit</a>             
+                            <a type="button" target="_blank" href="{{route('ManualOrders.edit',$lists->id)}}" class="dropdown-item">Edit</a>   
+                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'pending')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Quick Edit</button>          
                             <a type="button" target="_blank" href="{{route('ManualOrders.show',$lists->id)}}" class="dropdown-item">view</a>
                             <a type="button" href="{{route('ManualOrders.print.order.slip',$lists->id)}}" class="dropdown-item">Print Slip</a>
                             <a type="button" href="{{route('ManualOrders.order.status',['prepared',$lists->id])}}" class="dropdown-item">Prepare</a>   
