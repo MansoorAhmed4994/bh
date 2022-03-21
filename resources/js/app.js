@@ -8,7 +8,9 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 Vue.config.productionTip = false
-
+Vue.config.devtools = false
+Vue.config.debug = false
+Vue.config.silent = true
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue

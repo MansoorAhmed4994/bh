@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content') 
-<script>
+<script  type="application/javascript">
 var base_url = '<?php echo e(url('/')); ?>';
 var dispatch_order_id =  '';
 var order_status = '';
@@ -30,12 +30,24 @@ var order_status = '';
             
         $('#save_order_status_and_price').on('click',function(){
         
-    
-        let name = $('#receiver_name').val();
-        let number = $('#receiver_number').val();
-        let address = $('#reciever_address').val();
-        let price = $('#price').val();
         
+        let receiver_name = $('#receiver_name').val();
+        let receiver_number = $('#receiver_number').val();
+        let reciever_address = $('#reciever_address').val();
+        let price = $('#price').val();
+        let status_reason = $('#status_reason').val();
+        
+        
+        if(order_status == 'cancel' || order_status == 'hold' || order_status == 'incomplete')
+        {
+            if(status_reason == '')
+            {
+                alert("please give Reason to "+order_status);
+                return;
+            }
+            
+        }
+    
         $.ajax({
           url: base_url + '/client/orders/ManualOrders/dispatch-order-edit/'+dispatch_order_id,
           headers: {
@@ -44,11 +56,12 @@ var order_status = '';
           type:"POST",
           dataType: 'json',
           data:{
-            name:name,
-            number:number,
-            address:address,
+            receiver_name:receiver_name,
+            receiver_number:receiver_number,
+            reciever_address:reciever_address,
             price:price,
             status:order_status,
+            status_reason:status_reason,
           },
           success:function(response){
             //$('#successMsg').show();
@@ -65,7 +78,9 @@ var order_status = '';
             // $('#mobileErrorMsg').text(response.responseJSON.errors.mobile);
             // $('#messageErrorMsg').text(response.responseJSON.errors.message);
           },
-          });
+      });
+        
+    
         }); 
                 
     });
@@ -182,7 +197,7 @@ var order_status = '';
                         
                         <div class="form-group">
                             <label for="receiver_name">Reciever Number</label>
-                            <input type="text" class="form-control" value="" id="receiver_number"  name="receiver_number" placeholder="Reciever Number" required>
+                            <input type="text" class="form-control" id="receiver_number"  name="receiver_number" placeholder="Reciever Number" required>
                             <small id="receiver_name_error" class="form-text text-danger"></small>
                         </div> 
                         
@@ -194,7 +209,7 @@ var order_status = '';
             
                         <div class="form-group">
                             <label for="Number">price</label>
-                            <input type="text" class="form-control" value="" id="price"  name="price" placeholder="Price" required>
+                            <input type="text" class="form-control" value="0" id="price"  name="price" placeholder="Price" required>
                             <small id="price_error" class="form-text text-danger"></small>
                         </div>
             
@@ -209,6 +224,14 @@ var order_status = '';
                             <input type="text" class="form-control" value="" id="cod_amount"  name="cod_amount" placeholder="COD" required>
                             <small id="cod_amount_error" class="form-text text-danger"></small>
                         </div>
+            
+                        <div class="form-group">
+                            <label for="Number">status_reason</label>
+                            <textarea  class="form-control" value="" id="status_reason"  name="status_reason" placeholder="Reason for status" required></textarea>
+                            <small id="status_reason_error" class="form-text text-danger"></small>
+                        </div>
+                        
+                        
                     </div>
         
             </div>
@@ -368,9 +391,12 @@ var order_status = '';
                             <a type="button" href="{{route('ManualOrders.order.status',['complete',$lists->id])}}" class="dropdown-item">Complete</a> 
                             <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'confirmed')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Confirmed</button>
                             <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'dispatched')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Dispatch</button>
-                            <a type="button" href="{{route('ManualOrders.order.status',['hold',$lists->id])}}" class="dropdown-item">Hold</a> 
-                            <a type="button" href="{{route('ManualOrders.order.status',['incomplete',$lists->id])}}" class="dropdown-item">Incomplete</a>
-                            <a type="button" href="{{route('ManualOrders.order.status',['cancel',$lists->id])}}" class="dropdown-item">Cancel</a>
+                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'hold')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Hold</button>
+                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'incomplete')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Incomplete</button>
+                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'cancel')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Cancel</button>
+                            <!--<a type="button" href="{{route('ManualOrders.order.status',['hold',$lists->id])}}" class="dropdown-item">Hold</a> -->
+                            <!--<a type="button" href="{{route('ManualOrders.order.status',['incomplete',$lists->id])}}" class="dropdown-item">Incomplete</a>-->
+                            <!--<a type="button" href="{{route('ManualOrders.order.status',['cancel',$lists->id])}}" class="dropdown-item">Cancel</a>-->
                         </div>
                      </div>
                 </th>
@@ -416,7 +442,7 @@ var order_status = '';
 </div>
 {{ $list->links() }}
 
-<script>
+<script type="application/javascript">
 
 $( document ).ready(function() {
             

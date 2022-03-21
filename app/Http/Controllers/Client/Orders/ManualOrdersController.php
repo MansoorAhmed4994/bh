@@ -488,12 +488,15 @@ class ManualOrdersController extends Controller
         //dd($ManualOrder);
         $ManualOrder->receiver_name = $request->receiver_name;
         $ManualOrder->receiver_number = $request->receiver_number;
+        //dd($request->receiver_number);
         $ManualOrder->reciever_address = $request->reciever_address;  
         $ManualOrder->price = $request->price;
         $ManualOrder->cod_amount = $request->cod_amount;
         $ManualOrder->advance_payment = $request->advance_payment;
         $ManualOrder->status = $request->status;
         $ManualOrder->updated_by = Auth::id();
+        $ManualOrder->status_reason = $request->status_reason;
+        
         $status = $ManualOrder->save();
         
         return response()->json(['messege' => $status]);
