@@ -34,6 +34,7 @@ class ManualOrdersController extends Controller
     
     public function index()
     {
+        
         //Auth::shouldUse('admin');
         // $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'manual_orders.customers_id')->where('manual_orders.status','pending')->orderBy('manual_orders.created_at', 'DESC')->paginate(5);
         $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')

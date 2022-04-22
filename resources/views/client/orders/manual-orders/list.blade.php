@@ -1,4 +1,4 @@
-@dd(Auth::getDefaultDriver())
+
 @extends('layouts.'.Auth::getDefaultDriver())
 
 
