@@ -1,5 +1,5 @@
  
-@extends('layouts.app')
+@extends('layouts.'.Auth::getDefaultDriver())
 
 @section('content')
  
@@ -102,7 +102,10 @@
         function order_get_dispatch() {
             
                 $("body").addClass("loading"); 
+                
                     var id = document.getElementById('order_id').value;
+                    document.getElementById('total_parcels').value = total_parcels;
+                    document.getElementById('total_amount').value = total_amount;
                     $.ajax({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -242,6 +245,8 @@
             </div>
             
             <form id="load_sheet_form">
+            <input tye="hidden" name="total_parcels" id="total_parcels">
+            <input tye="hidden" name="total_amount" id="total_amount">
             <div class="d-flex justify-content-end">     
     
                 <div class="form-group col-sm-3">

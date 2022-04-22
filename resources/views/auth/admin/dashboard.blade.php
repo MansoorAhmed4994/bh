@@ -1,4 +1,4 @@
-@extends('auth.admin.layouts.app')
+@extends('layouts.'.Auth::getDefaultDriver())
 
 @section('content')
 <div class="container">

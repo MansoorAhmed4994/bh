@@ -1,5 +1,6 @@
- 
-@extends('riders.layouts.app')
+
+@extends('layouts.'.Auth::getDefaultDriver())
+
 
 @section('content')
     <style> 

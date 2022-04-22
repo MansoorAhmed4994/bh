@@ -17,22 +17,28 @@ class Users
      */
     public function handle($request, Closure $next)
     {
+        
+        
         foreach (Auth::user()->connect as $role) 
         {
+            //dd('user');
             if ($role->name == 'user') 
             {
+                
                 return $next($request);
             
             }
 
             else if ($role->name == 'rider') 
             {
+                //dd('rider');
                 return redirect()->route('riders.dashboard');
             
             }
         
         else
             {
+                //dd();
                 return redirect()->route('login')->with('flash_message_error','Please LogIn To Access');
             }
         

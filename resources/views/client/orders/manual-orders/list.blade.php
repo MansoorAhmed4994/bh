@@ -1,4 +1,7 @@
-@extends('layouts.app')
+@dd(Auth::getDefaultDriver())
+@extends('layouts.'.Auth::getDefaultDriver())
+
+
 
 @section('content') 
 <script  type="application/javascript">
@@ -68,6 +71,10 @@ var order_status = '';
             if(response.messege == true)
             {
                 $("#dispatch-succes-noti").css("display", "block");
+                // $('#exampleModalCenter').modal('hide'); 
+                // $('#exampleModalCenter').modal({
+                // show: 'false'
+                // }); 
                 
             }
             console.log(response);
@@ -111,11 +118,11 @@ var order_status = '';
                 $('#Price').val(e.messege.Price);
                 
                 var images ='';
-                var str_array = e.messege.images.split(','); 
+                var str_array = e.messege.images.split('|'); 
                 for(var i = 0; i < str_array.length; i++) {
                    // Trim the excess whitespace.
                 //   str_array[i] = str_array[i].replace(/^\s*/, "").replace(/\s*$/, "");
-                     images = images+'<img class="pop rounded " style="margin-right: 5px;" src="{{asset("/")}}'+str_array[i]+'" alt="Card image cap" width="200">';
+                     images = images+'<img class="pop rounded" style="margin-right: 5px;" src="{{asset("/")}}'+str_array[i]+'" alt="Card image cap" width="100">';
                    // Add additional code here, such as:
                    //alert(str_array[i]);
                 }

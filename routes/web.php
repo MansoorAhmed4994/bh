@@ -43,7 +43,7 @@ Route::group(['middleware' => ['auth' => 'users'] ],function(){
     Route::get('user/dashboard', 'Auth\DashboardController@index')->name('user.dashboard');
 });
 
-Route::group(['prefix' => 'client/orders/', 'namespace' => 'Client\Orders', 'middleware' => 'auth:user'],function(){
+Route::group(['prefix' => 'client/orders/', 'namespace' => 'Client\Orders', 'middleware' => 'auth:user,admin'],function(){
 
     Route::resource('ManualOrders', 'ManualOrdersController')->except('show');
     Route::get('ManualOrders/show/{id}', 'ManualOrdersController@show')->name('ManualOrders.show');
@@ -91,13 +91,13 @@ Route::group(['prefix' => 'frontend/client/orders/', 'namespace' => 'Frontend\Cl
 
     
 
-    Route::group(['prefix' => 'riders', 'as'=> 'riders.', 'middleware' => 'auth:user'],function(){
+    Route::group(['prefix' => 'riders', 'as'=> 'riders.'],function(){
 
-    Route::resource('/', 'RidersController')->except('show');
+    Route::resource('/', 'RidersController')->except('show')->middleware('auth:admin');
     
-    Route::get('/dashboard', 'RidersController@dashboard')->name('dashboard');
+    Route::get('/dashboard', 'RidersController@dashboard')->name('dashboard')->middleware('auth:rider');
     
-    Route::get('/list', 'RidersController@list')->name('list');
+    Route::get('/list', 'RidersController@list')->name('list')->middleware('auth:user,admin');
 
     Route::post('/generate-loadsheet', 'LoadSheetController@generate_load_sheet')->name('generate.load.sheet');
     //Route::get('ManualOrders/show/{id}', 'ManualOrdersController@show')->name('ManualOrders.show');

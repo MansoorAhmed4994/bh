@@ -34,6 +34,7 @@ class ManualOrdersController extends Controller
     
     public function index()
     {
+        //Auth::shouldUse('admin');
         // $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'manual_orders.customers_id')->where('manual_orders.status','pending')->orderBy('manual_orders.created_at', 'DESC')->paginate(5);
         $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')
         ->where('manual_orders.status','pending')
@@ -436,7 +437,7 @@ class ManualOrdersController extends Controller
         $list_order = 'ASC';
         if($status == 'pending' || $status == 'confirmed' || $status == 'dispatched'  )
         {
-            $list_order = 'DESC';
+            $list_order = 'ASC';
         }
         $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.status','like',$status.'%')
             ->orderBy('manual_orders.id', $list_order)
