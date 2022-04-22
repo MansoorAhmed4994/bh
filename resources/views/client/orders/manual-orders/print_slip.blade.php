@@ -106,7 +106,7 @@ padding: 0px;
                     
                 	<tr>
                 		<td colspan="2" rowspan="2" style="padding:5px; text-align:center;">
-                			<img src="https://brandhub.com.pk/wp-content/uploads/2021/09/ic_logo.png" alt="logo" width="125">
+                			<img src="{{ URL::to('/') }}/public/images/logo.png" alt="logo" width="125">
                 		</td>
                 		<td colspan="3" rowspan="2" style="text-align:center;padding:5px;font-size:12px;">
                 		    <img src="data:image/png;base64,<?php echo DNS1D::getBarcodePNG((string)$ManualOrder->id, 'C39') ?>" alt="barcode" width="200"  />
