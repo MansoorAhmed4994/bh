@@ -354,6 +354,7 @@ var order_status = '';
                 <th scope="col">Img.</th>
                 <!--<th scope="col">Total Pieces</th>-->
                 <!--<th scope="col">Ord.paid Date</th>-->
+                <th scope="col">OD Y/N</th>
                 <th scope="col">cr. Date</th>
                 <th scope="col">Up. Date</th>
                 <th scope="col">status</th>
@@ -437,6 +438,8 @@ var order_status = '';
                 </th>
                 <!--<th>{{$lists->total_pieces}}</th>-->
                 <!--<th>{{$lists->date_order_paid}}</th>-->
+                 
+                <th><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$number?>&text=Hi, {{$lists->first_name}}, Mam did you recieve your order, please click on link to see your last order {{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}">Get Status</a></th> 
                 <th>{{date('d-M-y', strtotime($lists->created_at))}} <br> {{date('G:i a', strtotime($lists->created_at))}}</th>
                 <th>{{date('d-M-y', strtotime($lists->updated_at))}} <br> {{date('G:i a', strtotime($lists->updated_at))}}</th> 
                 <th>{{$lists->status}}</th>
