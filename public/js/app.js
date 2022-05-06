@@ -86,37 +86,37 @@
 /************************************************************************/
 /******/ ({
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/index.js":
-/*!***********************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/index.js ***!
-  \***********************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/index.js":
+/*!******************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/index.js ***!
+  \******************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! ./lib/axios */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/axios.js");
+module.exports = __webpack_require__(/*! ./lib/axios */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/axios.js");
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/adapters/xhr.js":
-/*!**********************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/adapters/xhr.js ***!
-  \**********************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/adapters/xhr.js":
+/*!*****************************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/adapters/xhr.js ***!
+  \*****************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(/*! ./../utils */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/utils.js");
-var settle = __webpack_require__(/*! ./../core/settle */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/core/settle.js");
-var cookies = __webpack_require__(/*! ./../helpers/cookies */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/cookies.js");
-var buildURL = __webpack_require__(/*! ./../helpers/buildURL */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/buildURL.js");
-var buildFullPath = __webpack_require__(/*! ../core/buildFullPath */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/core/buildFullPath.js");
-var parseHeaders = __webpack_require__(/*! ./../helpers/parseHeaders */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/parseHeaders.js");
-var isURLSameOrigin = __webpack_require__(/*! ./../helpers/isURLSameOrigin */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/isURLSameOrigin.js");
-var createError = __webpack_require__(/*! ../core/createError */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/core/createError.js");
-var defaults = __webpack_require__(/*! ../defaults */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/defaults.js");
-var Cancel = __webpack_require__(/*! ../cancel/Cancel */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/cancel/Cancel.js");
+var utils = __webpack_require__(/*! ./../utils */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/utils.js");
+var settle = __webpack_require__(/*! ./../core/settle */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/core/settle.js");
+var cookies = __webpack_require__(/*! ./../helpers/cookies */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/cookies.js");
+var buildURL = __webpack_require__(/*! ./../helpers/buildURL */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/buildURL.js");
+var buildFullPath = __webpack_require__(/*! ../core/buildFullPath */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/core/buildFullPath.js");
+var parseHeaders = __webpack_require__(/*! ./../helpers/parseHeaders */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/parseHeaders.js");
+var isURLSameOrigin = __webpack_require__(/*! ./../helpers/isURLSameOrigin */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/isURLSameOrigin.js");
+var createError = __webpack_require__(/*! ../core/createError */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/core/createError.js");
+var defaults = __webpack_require__(/*! ../defaults */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/defaults.js");
+var Cancel = __webpack_require__(/*! ../cancel/Cancel */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/cancel/Cancel.js");
 
 module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -321,21 +321,21 @@ module.exports = function xhrAdapter(config) {
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/axios.js":
-/*!***************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/axios.js ***!
-  \***************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/axios.js":
+/*!**********************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/axios.js ***!
+  \**********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(/*! ./utils */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/utils.js");
-var bind = __webpack_require__(/*! ./helpers/bind */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/bind.js");
-var Axios = __webpack_require__(/*! ./core/Axios */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/core/Axios.js");
-var mergeConfig = __webpack_require__(/*! ./core/mergeConfig */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/core/mergeConfig.js");
-var defaults = __webpack_require__(/*! ./defaults */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/defaults.js");
+var utils = __webpack_require__(/*! ./utils */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/utils.js");
+var bind = __webpack_require__(/*! ./helpers/bind */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/bind.js");
+var Axios = __webpack_require__(/*! ./core/Axios */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/core/Axios.js");
+var mergeConfig = __webpack_require__(/*! ./core/mergeConfig */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/core/mergeConfig.js");
+var defaults = __webpack_require__(/*! ./defaults */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/defaults.js");
 
 /**
  * Create an instance of Axios
@@ -368,19 +368,19 @@ var axios = createInstance(defaults);
 axios.Axios = Axios;
 
 // Expose Cancel & CancelToken
-axios.Cancel = __webpack_require__(/*! ./cancel/Cancel */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/cancel/Cancel.js");
-axios.CancelToken = __webpack_require__(/*! ./cancel/CancelToken */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/cancel/CancelToken.js");
-axios.isCancel = __webpack_require__(/*! ./cancel/isCancel */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/cancel/isCancel.js");
-axios.VERSION = __webpack_require__(/*! ./env/data */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/env/data.js").version;
+axios.Cancel = __webpack_require__(/*! ./cancel/Cancel */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/cancel/Cancel.js");
+axios.CancelToken = __webpack_require__(/*! ./cancel/CancelToken */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/cancel/CancelToken.js");
+axios.isCancel = __webpack_require__(/*! ./cancel/isCancel */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/cancel/isCancel.js");
+axios.VERSION = __webpack_require__(/*! ./env/data */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/env/data.js").version;
 
 // Expose all/spread
 axios.all = function all(promises) {
   return Promise.all(promises);
 };
-axios.spread = __webpack_require__(/*! ./helpers/spread */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/spread.js");
+axios.spread = __webpack_require__(/*! ./helpers/spread */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/spread.js");
 
 // Expose isAxiosError
-axios.isAxiosError = __webpack_require__(/*! ./helpers/isAxiosError */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/isAxiosError.js");
+axios.isAxiosError = __webpack_require__(/*! ./helpers/isAxiosError */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/isAxiosError.js");
 
 module.exports = axios;
 
@@ -390,10 +390,10 @@ module.exports.default = axios;
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/cancel/Cancel.js":
-/*!***********************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/cancel/Cancel.js ***!
-  \***********************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/cancel/Cancel.js":
+/*!******************************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/cancel/Cancel.js ***!
+  \******************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -421,17 +421,17 @@ module.exports = Cancel;
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/cancel/CancelToken.js":
-/*!****************************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/cancel/CancelToken.js ***!
-  \****************************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/cancel/CancelToken.js":
+/*!***********************************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/cancel/CancelToken.js ***!
+  \***********************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var Cancel = __webpack_require__(/*! ./Cancel */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/cancel/Cancel.js");
+var Cancel = __webpack_require__(/*! ./Cancel */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/cancel/Cancel.js");
 
 /**
  * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -552,10 +552,10 @@ module.exports = CancelToken;
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/cancel/isCancel.js":
-/*!*************************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/cancel/isCancel.js ***!
-  \*************************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/cancel/isCancel.js":
+/*!********************************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/cancel/isCancel.js ***!
+  \********************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -569,22 +569,22 @@ module.exports = function isCancel(value) {
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/core/Axios.js":
-/*!********************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/core/Axios.js ***!
-  \********************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/core/Axios.js":
+/*!***************************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/core/Axios.js ***!
+  \***************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(/*! ./../utils */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/utils.js");
-var buildURL = __webpack_require__(/*! ../helpers/buildURL */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/buildURL.js");
-var InterceptorManager = __webpack_require__(/*! ./InterceptorManager */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/core/InterceptorManager.js");
-var dispatchRequest = __webpack_require__(/*! ./dispatchRequest */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/core/dispatchRequest.js");
-var mergeConfig = __webpack_require__(/*! ./mergeConfig */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/core/mergeConfig.js");
-var validator = __webpack_require__(/*! ../helpers/validator */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/validator.js");
+var utils = __webpack_require__(/*! ./../utils */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/utils.js");
+var buildURL = __webpack_require__(/*! ../helpers/buildURL */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/buildURL.js");
+var InterceptorManager = __webpack_require__(/*! ./InterceptorManager */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/core/InterceptorManager.js");
+var dispatchRequest = __webpack_require__(/*! ./dispatchRequest */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/core/dispatchRequest.js");
+var mergeConfig = __webpack_require__(/*! ./mergeConfig */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/core/mergeConfig.js");
+var validator = __webpack_require__(/*! ../helpers/validator */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/validator.js");
 
 var validators = validator.validators;
 /**
@@ -729,17 +729,17 @@ module.exports = Axios;
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/core/InterceptorManager.js":
-/*!*********************************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/core/InterceptorManager.js ***!
-  \*********************************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/core/InterceptorManager.js":
+/*!****************************************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/core/InterceptorManager.js ***!
+  \****************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(/*! ./../utils */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/utils.js");
+var utils = __webpack_require__(/*! ./../utils */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/utils.js");
 
 function InterceptorManager() {
   this.handlers = [];
@@ -795,18 +795,18 @@ module.exports = InterceptorManager;
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/core/buildFullPath.js":
-/*!****************************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/core/buildFullPath.js ***!
-  \****************************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/core/buildFullPath.js":
+/*!***********************************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/core/buildFullPath.js ***!
+  \***********************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var isAbsoluteURL = __webpack_require__(/*! ../helpers/isAbsoluteURL */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/isAbsoluteURL.js");
-var combineURLs = __webpack_require__(/*! ../helpers/combineURLs */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/combineURLs.js");
+var isAbsoluteURL = __webpack_require__(/*! ../helpers/isAbsoluteURL */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/isAbsoluteURL.js");
+var combineURLs = __webpack_require__(/*! ../helpers/combineURLs */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/combineURLs.js");
 
 /**
  * Creates a new URL by combining the baseURL with the requestedURL,
@@ -827,17 +827,17 @@ module.exports = function buildFullPath(baseURL, requestedURL) {
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/core/createError.js":
-/*!**************************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/core/createError.js ***!
-  \**************************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/core/createError.js":
+/*!*********************************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/core/createError.js ***!
+  \*********************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var enhanceError = __webpack_require__(/*! ./enhanceError */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/core/enhanceError.js");
+var enhanceError = __webpack_require__(/*! ./enhanceError */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/core/enhanceError.js");
 
 /**
  * Create an Error with the specified message, config, error code, request and response.
@@ -857,21 +857,21 @@ module.exports = function createError(message, config, code, request, response) 
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/core/dispatchRequest.js":
-/*!******************************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/core/dispatchRequest.js ***!
-  \******************************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/core/dispatchRequest.js":
+/*!*************************************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/core/dispatchRequest.js ***!
+  \*************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(/*! ./../utils */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/utils.js");
-var transformData = __webpack_require__(/*! ./transformData */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/core/transformData.js");
-var isCancel = __webpack_require__(/*! ../cancel/isCancel */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/cancel/isCancel.js");
-var defaults = __webpack_require__(/*! ../defaults */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/defaults.js");
-var Cancel = __webpack_require__(/*! ../cancel/Cancel */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/cancel/Cancel.js");
+var utils = __webpack_require__(/*! ./../utils */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/utils.js");
+var transformData = __webpack_require__(/*! ./transformData */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/core/transformData.js");
+var isCancel = __webpack_require__(/*! ../cancel/isCancel */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/cancel/isCancel.js");
+var defaults = __webpack_require__(/*! ../defaults */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/defaults.js");
+var Cancel = __webpack_require__(/*! ../cancel/Cancel */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/cancel/Cancel.js");
 
 /**
  * Throws a `Cancel` if cancellation has been requested.
@@ -956,10 +956,10 @@ module.exports = function dispatchRequest(config) {
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/core/enhanceError.js":
-/*!***************************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/core/enhanceError.js ***!
-  \***************************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/core/enhanceError.js":
+/*!**********************************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/core/enhanceError.js ***!
+  \**********************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1011,17 +1011,17 @@ module.exports = function enhanceError(error, config, code, request, response) {
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/core/mergeConfig.js":
-/*!**************************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/core/mergeConfig.js ***!
-  \**************************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/core/mergeConfig.js":
+/*!*********************************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/core/mergeConfig.js ***!
+  \*********************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(/*! ../utils */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/utils.js");
+var utils = __webpack_require__(/*! ../utils */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/utils.js");
 
 /**
  * Config-specific merge-function which creates a new config-object
@@ -1122,17 +1122,17 @@ module.exports = function mergeConfig(config1, config2) {
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/core/settle.js":
-/*!*********************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/core/settle.js ***!
-  \*********************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/core/settle.js":
+/*!****************************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/core/settle.js ***!
+  \****************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var createError = __webpack_require__(/*! ./createError */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/core/createError.js");
+var createError = __webpack_require__(/*! ./createError */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/core/createError.js");
 
 /**
  * Resolve or reject a Promise based on response status.
@@ -1159,18 +1159,18 @@ module.exports = function settle(resolve, reject, response) {
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/core/transformData.js":
-/*!****************************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/core/transformData.js ***!
-  \****************************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/core/transformData.js":
+/*!***********************************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/core/transformData.js ***!
+  \***********************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(/*! ./../utils */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/utils.js");
-var defaults = __webpack_require__(/*! ./../defaults */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/defaults.js");
+var utils = __webpack_require__(/*! ./../utils */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/utils.js");
+var defaults = __webpack_require__(/*! ./../defaults */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/defaults.js");
 
 /**
  * Transform the data for a request or a response
@@ -1193,19 +1193,19 @@ module.exports = function transformData(data, headers, fns) {
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/defaults.js":
-/*!******************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/defaults.js ***!
-  \******************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/defaults.js":
+/*!*************************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/defaults.js ***!
+  \*************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {
 
-var utils = __webpack_require__(/*! ./utils */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/utils.js");
-var normalizeHeaderName = __webpack_require__(/*! ./helpers/normalizeHeaderName */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/normalizeHeaderName.js");
-var enhanceError = __webpack_require__(/*! ./core/enhanceError */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/core/enhanceError.js");
+var utils = __webpack_require__(/*! ./utils */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/utils.js");
+var normalizeHeaderName = __webpack_require__(/*! ./helpers/normalizeHeaderName */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/normalizeHeaderName.js");
+var enhanceError = __webpack_require__(/*! ./core/enhanceError */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/core/enhanceError.js");
 
 var DEFAULT_CONTENT_TYPE = {
   'Content-Type': 'application/x-www-form-urlencoded'
@@ -1221,10 +1221,10 @@ function getDefaultAdapter() {
   var adapter;
   if (typeof XMLHttpRequest !== 'undefined') {
     // For browsers use XHR adapter
-    adapter = __webpack_require__(/*! ./adapters/xhr */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/adapters/xhr.js");
+    adapter = __webpack_require__(/*! ./adapters/xhr */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/adapters/xhr.js");
   } else if (typeof process !== 'undefined' && Object.prototype.toString.call(process) === '[object process]') {
     // For node use HTTP adapter
-    adapter = __webpack_require__(/*! ./adapters/http */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/adapters/xhr.js");
+    adapter = __webpack_require__(/*! ./adapters/http */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/adapters/xhr.js");
   }
   return adapter;
 }
@@ -1336,14 +1336,14 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = defaults;
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../process/browser.js */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/process/browser.js")))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../process/browser.js */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/process/browser.js")))
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/env/data.js":
-/*!******************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/env/data.js ***!
-  \******************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/env/data.js":
+/*!*************************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/env/data.js ***!
+  \*************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -1353,10 +1353,10 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/bind.js":
-/*!**********************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/bind.js ***!
-  \**********************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/bind.js":
+/*!*****************************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/bind.js ***!
+  \*****************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1376,17 +1376,17 @@ module.exports = function bind(fn, thisArg) {
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/buildURL.js":
-/*!**************************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/buildURL.js ***!
-  \**************************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/buildURL.js":
+/*!*********************************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/buildURL.js ***!
+  \*********************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(/*! ./../utils */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/utils.js");
+var utils = __webpack_require__(/*! ./../utils */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/utils.js");
 
 function encode(val) {
   return encodeURIComponent(val).
@@ -1458,10 +1458,10 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/combineURLs.js":
-/*!*****************************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/combineURLs.js ***!
-  \*****************************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/combineURLs.js":
+/*!************************************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/combineURLs.js ***!
+  \************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1484,17 +1484,17 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/cookies.js":
-/*!*************************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/cookies.js ***!
-  \*************************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/cookies.js":
+/*!********************************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/cookies.js ***!
+  \********************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(/*! ./../utils */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/utils.js");
+var utils = __webpack_require__(/*! ./../utils */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/utils.js");
 
 module.exports = (
   utils.isStandardBrowserEnv() ?
@@ -1549,10 +1549,10 @@ module.exports = (
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/isAbsoluteURL.js":
-/*!*******************************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/isAbsoluteURL.js ***!
-  \*******************************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/isAbsoluteURL.js":
+/*!**************************************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/isAbsoluteURL.js ***!
+  \**************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1575,10 +1575,10 @@ module.exports = function isAbsoluteURL(url) {
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/isAxiosError.js":
-/*!******************************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/isAxiosError.js ***!
-  \******************************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/isAxiosError.js":
+/*!*************************************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/isAxiosError.js ***!
+  \*************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1598,17 +1598,17 @@ module.exports = function isAxiosError(payload) {
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/isURLSameOrigin.js":
-/*!*********************************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/isURLSameOrigin.js ***!
-  \*********************************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/isURLSameOrigin.js":
+/*!****************************************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/isURLSameOrigin.js ***!
+  \****************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(/*! ./../utils */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/utils.js");
+var utils = __webpack_require__(/*! ./../utils */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/utils.js");
 
 module.exports = (
   utils.isStandardBrowserEnv() ?
@@ -1678,17 +1678,17 @@ module.exports = (
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/normalizeHeaderName.js":
-/*!*************************************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/normalizeHeaderName.js ***!
-  \*************************************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/normalizeHeaderName.js":
+/*!********************************************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/normalizeHeaderName.js ***!
+  \********************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(/*! ../utils */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/utils.js");
+var utils = __webpack_require__(/*! ../utils */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/utils.js");
 
 module.exports = function normalizeHeaderName(headers, normalizedName) {
   utils.forEach(headers, function processHeader(value, name) {
@@ -1702,17 +1702,17 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/parseHeaders.js":
-/*!******************************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/parseHeaders.js ***!
-  \******************************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/parseHeaders.js":
+/*!*************************************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/parseHeaders.js ***!
+  \*************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(/*! ./../utils */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/utils.js");
+var utils = __webpack_require__(/*! ./../utils */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/utils.js");
 
 // Headers whose duplicates are ignored by node
 // c.f. https://nodejs.org/api/http.html#http_message_headers
@@ -1767,10 +1767,10 @@ module.exports = function parseHeaders(headers) {
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/spread.js":
-/*!************************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/spread.js ***!
-  \************************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/spread.js":
+/*!*******************************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/spread.js ***!
+  \*******************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1806,17 +1806,17 @@ module.exports = function spread(callback) {
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/validator.js":
-/*!***************************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/validator.js ***!
-  \***************************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/validator.js":
+/*!**********************************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/validator.js ***!
+  \**********************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var VERSION = __webpack_require__(/*! ../env/data */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/env/data.js").version;
+var VERSION = __webpack_require__(/*! ../env/data */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/env/data.js").version;
 
 var validators = {};
 
@@ -1900,17 +1900,17 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/utils.js":
-/*!***************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/utils.js ***!
-  \***************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/utils.js":
+/*!**********************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/utils.js ***!
+  \**********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var bind = __webpack_require__(/*! ./helpers/bind */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/bind.js");
+var bind = __webpack_require__(/*! ./helpers/bind */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/lib/helpers/bind.js");
 
 // utils is a library of generic helper functions non-specific to axios
 
@@ -2261,10 +2261,10 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/babel-loader/lib/index.js?!../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/vue-loader/lib/index.js?!./resources/js/components/ExampleComponent.vue?vue&type=script&lang=js&":
-/*!***********************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/babel-loader/lib??ref--4-0!../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ExampleComponent.vue?vue&type=script&lang=js& ***!
-  \***********************************************************************************************************************************************************************************************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/babel-loader/lib/index.js?!../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/vue-loader/lib/index.js?!./resources/js/components/ExampleComponent.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/babel-loader/lib??ref--4-0!../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ExampleComponent.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************************************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -2294,10 +2294,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/bootstrap/dist/js/bootstrap.js":
-/*!***************************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/bootstrap/dist/js/bootstrap.js ***!
-  \***************************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/bootstrap/dist/js/bootstrap.js":
+/*!**********************************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/bootstrap/dist/js/bootstrap.js ***!
+  \**********************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2307,7 +2307,7 @@ __webpack_require__.r(__webpack_exports__);
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
 (function (global, factory) {
-   true ? factory(exports, __webpack_require__(/*! jquery */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/jquery/dist/jquery.js"), __webpack_require__(/*! popper.js */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/popper.js/dist/esm/popper.js")) :
+   true ? factory(exports, __webpack_require__(/*! jquery */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/jquery/dist/jquery.js"), __webpack_require__(/*! popper.js */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/popper.js/dist/esm/popper.js")) :
   undefined;
 })(this, (function (exports, $, Popper) { 'use strict';
 
@@ -6661,10 +6661,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/jquery/dist/jquery.js":
-/*!******************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/jquery/dist/jquery.js ***!
-  \******************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/jquery/dist/jquery.js":
+/*!*************************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/jquery/dist/jquery.js ***!
+  \*************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -17554,10 +17554,10 @@ return jQuery;
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/lodash/lodash.js":
-/*!*************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/lodash/lodash.js ***!
-  \*************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/lodash/lodash.js":
+/*!********************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/lodash/lodash.js ***!
+  \********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -34763,14 +34763,14 @@ return jQuery;
   else {}
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../webpack/buildin/global.js */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/webpack/buildin/global.js"), __webpack_require__(/*! ./../webpack/buildin/module.js */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/webpack/buildin/module.js")(module)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../webpack/buildin/global.js */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/webpack/buildin/global.js"), __webpack_require__(/*! ./../webpack/buildin/module.js */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/webpack/buildin/module.js")(module)))
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/popper.js/dist/esm/popper.js":
-/*!*************************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/popper.js/dist/esm/popper.js ***!
-  \*************************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/popper.js/dist/esm/popper.js":
+/*!********************************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/popper.js/dist/esm/popper.js ***!
+  \********************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -37393,14 +37393,14 @@ Popper.Defaults = Defaults;
 /* harmony default export */ __webpack_exports__["default"] = (Popper);
 //# sourceMappingURL=popper.js.map
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../webpack/buildin/global.js */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/webpack/buildin/global.js")))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../webpack/buildin/global.js */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/webpack/buildin/global.js")))
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/process/browser.js":
-/*!***************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/process/browser.js ***!
-  \***************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/process/browser.js":
+/*!**********************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/process/browser.js ***!
+  \**********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -37592,10 +37592,10 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/setimmediate/setImmediate.js":
-/*!*************************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/setimmediate/setImmediate.js ***!
-  \*************************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/setimmediate/setImmediate.js":
+/*!********************************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/setimmediate/setImmediate.js ***!
+  \********************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -37786,14 +37786,14 @@ process.umask = function() { return 0; };
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../webpack/buildin/global.js */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/webpack/buildin/global.js"), __webpack_require__(/*! ./../process/browser.js */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/process/browser.js")))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../webpack/buildin/global.js */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/webpack/buildin/global.js"), __webpack_require__(/*! ./../process/browser.js */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/process/browser.js")))
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/timers-browserify/main.js":
-/*!**********************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/timers-browserify/main.js ***!
-  \**********************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/timers-browserify/main.js":
+/*!*****************************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/timers-browserify/main.js ***!
+  \*****************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -37850,7 +37850,7 @@ exports._unrefActive = exports.active = function(item) {
 };
 
 // setimmediate attaches itself to the global object
-__webpack_require__(/*! setimmediate */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/setimmediate/setImmediate.js");
+__webpack_require__(/*! setimmediate */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/setimmediate/setImmediate.js");
 // On some exotic environments, it's not clear which object `setimmediate` was
 // able to install onto.  Search each possibility in the same order as the
 // `setimmediate` library.
@@ -37861,14 +37861,14 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
                          (typeof global !== "undefined" && global.clearImmediate) ||
                          (this && this.clearImmediate);
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../webpack/buildin/global.js */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/webpack/buildin/global.js")))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../webpack/buildin/global.js */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/webpack/buildin/global.js")))
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/vue-loader/lib/loaders/templateLoader.js?!../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/vue-loader/lib/index.js?!./resources/js/components/ExampleComponent.vue?vue&type=template&id=299e239e&":
-/*!***************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ExampleComponent.vue?vue&type=template&id=299e239e& ***!
-  \***************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/vue-loader/lib/loaders/templateLoader.js?!../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/vue-loader/lib/index.js?!./resources/js/components/ExampleComponent.vue?vue&type=template&id=299e239e&":
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ExampleComponent.vue?vue&type=template&id=299e239e& ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -37912,10 +37912,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/vue-loader/lib/runtime/componentNormalizer.js":
-/*!******************************************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/vue-loader/lib/runtime/componentNormalizer.js ***!
-  \******************************************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/vue-loader/lib/runtime/componentNormalizer.js":
+/*!*************************************************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/vue-loader/lib/runtime/componentNormalizer.js ***!
+  \*************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -38024,10 +38024,10 @@ function normalizeComponent (
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/vue/dist/vue.common.dev.js":
-/*!***********************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/vue/dist/vue.common.dev.js ***!
-  \***********************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/vue/dist/vue.common.dev.js":
+/*!******************************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/vue/dist/vue.common.dev.js ***!
+  \******************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -50041,28 +50041,28 @@ Vue.compile = compileToFunctions;
 
 module.exports = Vue;
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../webpack/buildin/global.js */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/webpack/buildin/global.js"), __webpack_require__(/*! ./../../timers-browserify/main.js */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/timers-browserify/main.js").setImmediate))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../webpack/buildin/global.js */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/webpack/buildin/global.js"), __webpack_require__(/*! ./../../timers-browserify/main.js */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/timers-browserify/main.js").setImmediate))
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/vue/dist/vue.common.js":
-/*!*******************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/vue/dist/vue.common.js ***!
-  \*******************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/vue/dist/vue.common.js":
+/*!**************************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/vue/dist/vue.common.js ***!
+  \**************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 if (false) {} else {
-  module.exports = __webpack_require__(/*! ./vue.common.dev.js */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/vue/dist/vue.common.dev.js")
+  module.exports = __webpack_require__(/*! ./vue.common.dev.js */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/vue/dist/vue.common.dev.js")
 }
 
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/webpack/buildin/global.js":
-/*!**********************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/webpack/buildin/global.js ***!
-  \**********************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/webpack/buildin/global.js":
+/*!*****************************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/webpack/buildin/global.js ***!
+  \*****************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -50090,10 +50090,10 @@ module.exports = g;
 
 /***/ }),
 
-/***/ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/webpack/buildin/module.js":
-/*!**********************************************************************************************!*\
-  !*** ../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/webpack/buildin/module.js ***!
-  \**********************************************************************************************/
+/***/ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/webpack/buildin/module.js":
+/*!*****************************************************************************************************!*\
+  !*** ../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/webpack/buildin/module.js ***!
+  \*****************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -50137,7 +50137,11 @@ module.exports = function(module) {
  */
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
-window.Vue = __webpack_require__(/*! vue */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/vue/dist/vue.common.js");
+window.Vue = __webpack_require__(/*! vue */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/vue/dist/vue.common.js");
+Vue.config.productionTip = false;
+Vue.config.devtools = false;
+Vue.config.debug = false;
+Vue.config.silent = true;
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -50168,7 +50172,7 @@ var app = new Vue({
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-window._ = __webpack_require__(/*! lodash */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/lodash/lodash.js");
+window._ = __webpack_require__(/*! lodash */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/lodash/lodash.js");
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
  * for JavaScript based Bootstrap features such as modals and tabs. This
@@ -50176,10 +50180,10 @@ window._ = __webpack_require__(/*! lodash */ "../nodevenv/manualorders.brandhub.
  */
 
 try {
-  window.Popper = __webpack_require__(/*! popper.js */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/popper.js/dist/esm/popper.js")["default"];
-  window.$ = window.jQuery = __webpack_require__(/*! jquery */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/jquery/dist/jquery.js");
+  window.Popper = __webpack_require__(/*! popper.js */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/popper.js/dist/esm/popper.js")["default"];
+  window.$ = window.jQuery = __webpack_require__(/*! jquery */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/jquery/dist/jquery.js");
 
-  __webpack_require__(/*! bootstrap */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/bootstrap/dist/js/bootstrap.js");
+  __webpack_require__(/*! bootstrap */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/bootstrap/dist/js/bootstrap.js");
 } catch (e) {}
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -50188,7 +50192,7 @@ try {
  */
 
 
-window.axios = __webpack_require__(/*! axios */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/axios/index.js");
+window.axios = __webpack_require__(/*! axios */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/axios/index.js");
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
@@ -50217,7 +50221,7 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ExampleComponent_vue_vue_type_template_id_299e239e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ExampleComponent.vue?vue&type=template&id=299e239e& */ "./resources/js/components/ExampleComponent.vue?vue&type=template&id=299e239e&");
 /* harmony import */ var _ExampleComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ExampleComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/ExampleComponent.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _nodevenv_manualorders_brandhub_com_pk_10_lib_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _nodevenv_manualordersstaging_brandhub_com_pk_10_lib_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -50225,7 +50229,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* normalize component */
 
-var component = Object(_nodevenv_manualorders_brandhub_com_pk_10_lib_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+var component = Object(_nodevenv_manualordersstaging_brandhub_com_pk_10_lib_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
   _ExampleComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
   _ExampleComponent_vue_vue_type_template_id_299e239e___WEBPACK_IMPORTED_MODULE_0__["render"],
   _ExampleComponent_vue_vue_type_template_id_299e239e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
@@ -50252,8 +50256,8 @@ component.options.__file = "resources/js/components/ExampleComponent.vue"
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _nodevenv_manualorders_brandhub_com_pk_10_lib_node_modules_babel_loader_lib_index_js_ref_4_0_nodevenv_manualorders_brandhub_com_pk_10_lib_node_modules_vue_loader_lib_index_js_vue_loader_options_ExampleComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/babel-loader/lib??ref--4-0!../../../../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/vue-loader/lib??vue-loader-options!./ExampleComponent.vue?vue&type=script&lang=js& */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/babel-loader/lib/index.js?!../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/vue-loader/lib/index.js?!./resources/js/components/ExampleComponent.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_nodevenv_manualorders_brandhub_com_pk_10_lib_node_modules_babel_loader_lib_index_js_ref_4_0_nodevenv_manualorders_brandhub_com_pk_10_lib_node_modules_vue_loader_lib_index_js_vue_loader_options_ExampleComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _nodevenv_manualordersstaging_brandhub_com_pk_10_lib_node_modules_babel_loader_lib_index_js_ref_4_0_nodevenv_manualordersstaging_brandhub_com_pk_10_lib_node_modules_vue_loader_lib_index_js_vue_loader_options_ExampleComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/babel-loader/lib??ref--4-0!../../../../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/vue-loader/lib??vue-loader-options!./ExampleComponent.vue?vue&type=script&lang=js& */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/babel-loader/lib/index.js?!../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/vue-loader/lib/index.js?!./resources/js/components/ExampleComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_nodevenv_manualordersstaging_brandhub_com_pk_10_lib_node_modules_babel_loader_lib_index_js_ref_4_0_nodevenv_manualordersstaging_brandhub_com_pk_10_lib_node_modules_vue_loader_lib_index_js_vue_loader_options_ExampleComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
@@ -50266,10 +50270,10 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _nodevenv_manualorders_brandhub_com_pk_10_lib_node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_nodevenv_manualorders_brandhub_com_pk_10_lib_node_modules_vue_loader_lib_index_js_vue_loader_options_ExampleComponent_vue_vue_type_template_id_299e239e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/vue-loader/lib??vue-loader-options!./ExampleComponent.vue?vue&type=template&id=299e239e& */ "../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/vue-loader/lib/loaders/templateLoader.js?!../nodevenv/manualorders.brandhub.com.pk/10/lib/node_modules/vue-loader/lib/index.js?!./resources/js/components/ExampleComponent.vue?vue&type=template&id=299e239e&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _nodevenv_manualorders_brandhub_com_pk_10_lib_node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_nodevenv_manualorders_brandhub_com_pk_10_lib_node_modules_vue_loader_lib_index_js_vue_loader_options_ExampleComponent_vue_vue_type_template_id_299e239e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _nodevenv_manualordersstaging_brandhub_com_pk_10_lib_node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_nodevenv_manualordersstaging_brandhub_com_pk_10_lib_node_modules_vue_loader_lib_index_js_vue_loader_options_ExampleComponent_vue_vue_type_template_id_299e239e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/vue-loader/lib??vue-loader-options!./ExampleComponent.vue?vue&type=template&id=299e239e& */ "../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/vue-loader/lib/loaders/templateLoader.js?!../nodevenv/manualordersstaging.brandhub.com.pk/10/lib/node_modules/vue-loader/lib/index.js?!./resources/js/components/ExampleComponent.vue?vue&type=template&id=299e239e&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _nodevenv_manualordersstaging_brandhub_com_pk_10_lib_node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_nodevenv_manualordersstaging_brandhub_com_pk_10_lib_node_modules_vue_loader_lib_index_js_vue_loader_options_ExampleComponent_vue_vue_type_template_id_299e239e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _nodevenv_manualorders_brandhub_com_pk_10_lib_node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_nodevenv_manualorders_brandhub_com_pk_10_lib_node_modules_vue_loader_lib_index_js_vue_loader_options_ExampleComponent_vue_vue_type_template_id_299e239e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _nodevenv_manualordersstaging_brandhub_com_pk_10_lib_node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_nodevenv_manualordersstaging_brandhub_com_pk_10_lib_node_modules_vue_loader_lib_index_js_vue_loader_options_ExampleComponent_vue_vue_type_template_id_299e239e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
@@ -50293,10 +50297,10 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/desenado/manualorders.brandhub.com.pk/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /home/desenado/manualorders.brandhub.com.pk/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /home/desenado/manualordersstaging.brandhub.com.pk/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /home/desenado/manualordersstaging.brandhub.com.pk/resources/sass/app.scss */"./resources/sass/app.scss");
 
-Vue.config.productionTip = false
+
 /***/ })
 
 /******/ });

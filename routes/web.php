@@ -63,8 +63,27 @@ Route::group(['prefix' => 'client/orders/', 'namespace' => 'Client\Orders', 'mid
     Route::get('ManualOrders/testing', 'ManualOrdersController@testing')->name('ManualOrders.testing');
     
     
+    
     //Route::get('create', 'ManualOrdersController@index')->name('client.manual.orders');
 });
+
+Route::group(['prefix' => 'mnp/', 'namespace' => 'Client\Orders', 'middleware' => 'auth:user,admin','as'=> 'mnp.'],function(){
+    
+    Route::post('create-booking', 'ManualOrdersController@mnp_bookings_store')->name('create.booking');
+
+    
+}); 
+
+Route::group(['prefix' => 'trax/', 'namespace' => 'Client\Orders', 'middleware' => 'auth:user,admin','as'=> 'trax.'],function(){
+    
+    Route::post('create-booking', 'ManualOrdersController@trax_create_booking_store')->name('create.booking');
+    
+
+    
+});  
+
+
+
 
 Route::group(['prefix' => 'frontend/client/orders/', 'namespace' => 'Frontend\Client\Orders','as'=> 'Frontend.'],function(){
 

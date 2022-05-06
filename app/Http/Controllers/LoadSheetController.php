@@ -87,7 +87,7 @@ class LoadSheetController extends Controller
     
     public function generate_load_sheet(Request $request)
     {
-        //dd($request->total_parcels);
+        dd($request->all());
         $action_status = ManualOrders::whereIn('id',$request->order_ids)->update(['status' => 'dispatched', 'riders_id'=> $request->riders]);
         if($action_status)
         {

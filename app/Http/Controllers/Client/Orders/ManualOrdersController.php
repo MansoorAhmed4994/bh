@@ -1,10 +1,10 @@
 <?php
-
+ 
 namespace App\Http\Controllers\Client\Orders;
 
 use App\Http\Controllers\Controller;
 
-use App\Traits\ManualOrderTraits;
+
 use Illuminate\Http\Request;
 use App\Models\Client\ManualOrders;
 use App\Models\Riders;
@@ -13,7 +13,11 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Pagination\LengthAwarePaginator;
+use App\Traits\MNPTraits;
+use App\Traits\TraxTraits;
+use App\Traits\ManualOrderTraits;
 use Carbon\Carbon;
+use DB;
 
 class ManualOrdersController extends Controller 
 { 
@@ -31,6 +35,8 @@ class ManualOrdersController extends Controller
     }
 
     use ManualOrderTraits;
+    use MNPTraits;
+    use TraxTraits;
     
     public function index()
     {
@@ -387,17 +393,37 @@ class ManualOrdersController extends Controller
             //return Redirect::back()->with('success', 'Order dispatched succussfully ');
 
         }
+        elseif($order_action == 'print_mnp_slips')
+        {
+            $explode_id = explode(',', $order_ids);
+            //dd($explode_id);
+            $ManualOrders = ManualOrders::whereIn('id',$explode_id)->update(['manual_orders.reference_number' => DB::raw("concat('(',`id`,')(',`updated_at`,')')")]);
+            $ManualOrders = ManualOrders::whereIn('id',$explode_id)->get();
+            $cities = $this->get_mnp_cities();
+            //$ManualOrder = ManualOrders::whereIn('id',$explode_id)->update(['status' => 'dispatched']);
+            return view('client.orders.manual-orders.mnp.create')->with(['ManualOrders'=>$ManualOrders, 'cities'=>$cities]);
+            
+            // $this->print_mnp_slips($ManualOrders);
+            // dd($ManualOrder);
+            
+        }
+        elseif($order_action == 'print_trax_slips')
+        {
+            $explode_id = explode(',', $order_ids);
+            //dd($explode_id);
+            $ManualOrders = ManualOrders::whereIn('id',$explode_id)->update(['manual_orders.reference_number' => DB::raw("concat('(',`id`,')(',`updated_at`,')')")]);
+            $ManualOrders = ManualOrders::whereIn('id',$explode_id)->get();
+            $cities = $this->get_trax_cities();
+            //dd($cities);
+            //$ManualOrder = ManualOrders::whereIn('id',$explode_id)->update(['status' => 'dispatched']);
+            return view('client.orders.manual-orders.trax.create')->with(['ManualOrders'=>$ManualOrders, 'cities'=>$cities]);
+            
+            // $this->print_mnp_slips($ManualOrders);
+            // dd($ManualOrder);
+            
+        }
         
         //dd($request->order_action);
-    }
-    
-    
-    
-    public function print_order_slip($ManualOrder_id)
-    {
-        $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.id',$ManualOrder_id)->get();
-        //dd($ManualOrder);
-        return view('client.orders.manual-orders.print_slip')->with('ManualOrders',$ManualOrder);
     }
     
     public function previouse_order_history(Request $request)
@@ -504,6 +530,250 @@ class ManualOrdersController extends Controller
         return response()->json(['messege' => $status]);
     }
     
+    
+    public function mnp_bookings_store(Request $request)
+    {
+        //$this->get_mnp_cities();
+        $mytime = Carbon::now();
+        $current_date_time = $mytime->toDateTimeString();
+        $id = array();
+
+        for ($x = 0; $x < sizeof($request->reference_number); $x++) 
+        {
+            array_push($id, $request->id[$x]);
+            $receiver_name= $request->receiver_name[$x];
+            $receiver_number= $request->receiver_number[$x];
+            $city = $request->city[$x];
+            $reciever_address= $request->reciever_address[$x];
+            $total_pieces= $request->total_pieces[$x];
+            $weight= $request->weight[$x];
+            $price= $request->price[$x];
+            $ManualOrder = ManualOrders::find($request->id[$x]);
+            $reference_number= '('.$ManualOrder->id.')('.$current_date_time.')';
+            $ManualOrder->receiver_name = $receiver_name;
+            $ManualOrder->receiver_number = $receiver_number;
+            $ManualOrder->city = $city;
+            $ManualOrder->reciever_address = $reciever_address;
+            $ManualOrder->total_pieces = $total_pieces;
+            $ManualOrder->weight = $weight;
+            $ManualOrder->price = $price;
+            $ManualOrder->reference_number = $reference_number;
+            $ManualOrder->updated_by = Auth::id();
+            $status = $ManualOrder->save();
+            if($status);
+            {
+                $data = '{"username": "'.env('MNP_API_USERNAME').'","password": "'.env('MNP_API_PASSWORD').'","consigneeName": "'.$receiver_name.'","consigneeAddress": "'.$reciever_address.'","consigneeMobNo": "'.$receiver_number.'","consigneeEmail": "string","destinationCityName": "'.$city.'","pieces": "'.$total_pieces.'","weight": "'.$weight.'","codAmount": '.$price.',"custRefNo": "'.$reference_number.'","productDetails": "string","fragile": "string","service": "overnight","remarks": "string","insuranceValue": "string","locationID": "string","AccountNo": "string","InsertType": "0"}';
+                //dd($status);
+                $resp = $this->create_booking($data);
+                
+                
+                //DD(env('MNP_API_USERNAME')); 
+                if(json_decode($resp)[0]->isSuccess)
+                {
+                    // echo '<pre>';
+                    // print_r(json_decode($resp)[0]);
+                    // echo $price;
+                    $ManualOrder = ManualOrders::find($request->id[$x]);
+                    //dd($ManualOrder);
+                    $ManualOrder->consignment_id = json_decode($resp)[0]->orderReferenceId;
+                    $status = $ManualOrder->save();
+                    
+                    if($status)
+                    {   
+                        return $this->print_mnp_slips($id);
+                    }
+                    else
+                    {
+                        //dd($status);
+                        //dd($ManualOrder);
+                    }
+                    //dd(json_decode($resp)[0]->orderReferenceId);
+                }
+                
+            }
+            
+        }
+        //
+    }
+    
+    public function print_order_slip($ManualOrder_id)
+    {
+        $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.id',$ManualOrder_id)->get();
+        //dd($ManualOrder);
+        return view('client.orders.manual-orders.print_slip')->with('ManualOrders',$ManualOrder);
+    }
+    
+    public function get_trax_pickup_address()
+    {
+        $response = $this->GetPickupAddresses();
+        if($response->status == 0)
+        {
+            return($response->pickup_addresses[0]->id);
+        }
+        // $baseUrl = "https://sonic.pk/"; 
+        // $apiUrl = $baseUrl."api/pickup_addresses";
+        // $headers = ['Authorization:'.env('TRAX_API_KEY'), 'Accepts:' . 'application/json',"real:json content"];
+        // $ch = curl_init();
+        // curl_setopt($ch,CURLOPT_URL, $apiUrl);
+        // curl_setopt($ch,CURLOPT_RETURNTRANSFER, true);
+        // curl_setopt($ch, CURLOPT_HTTPHEADER, $headers); 
+        // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); 
+        // $result = curl_exec($ch);
+        
+        dd($response); 
+    }
+    
+    
+    public function trax_create_booking_store(Request $request)
+    {
+        
+        //dd();
+        $pickup_address_id = $this->get_trax_pickup_address();
+        
+        //dd($request->item_product_type_id);
+        $mytime = Carbon::now();
+        $current_date_time = $mytime->toDateTimeString();
+        $id = array();
+
+        for ($x = 0; $x < sizeof($request->reference_number); $x++) 
+        {
+            //prepare parameter for create booking
+            //dd($request->shipping_mode_id);
+            $data = [];
+            
+            $receiver_name= $request->receiver_name[$x];
+            $receiver_number= $request->receiver_number[$x];
+            $reciever_address= $request->reciever_address[$x];
+            $city = $request->city[$x];
+            $total_pieces= $request->total_pieces[$x];
+            $weight= $request->weight[$x];
+            $price= $request->price[$x];
+            $data['order_id'] = $request->id[$x];
+            $data['service_type_id'] = 1;
+            $data['pickup_address_id'] = $pickup_address_id;
+            $data['information_display'] = 0;
+            $data['consignee_city_id'] = $city;
+            $data['consignee_name'] = trim($receiver_name);
+            $data['consignee_address'] = trim($reciever_address);
+            $data['consignee_phone_number_1'] = trim($receiver_number);
+            $data['consignee_email_address'] = trim('orderstesting@brandhub.com');
+            $data['item_product_type_id'] = 1;
+            $data['item_description'] = trim($request->item_description[$x]);
+            $data['item_quantity'] = (int)trim($total_pieces);
+            $data['item_insurance'] = 0;
+            $data['item_price'] = trim($request->price[$x]);
+            $data['pickup_date'] = $mytime;
+            $data['special_instructions'] = trim('Nothing');
+            $data['estimated_weight'] = trim($request->weight[$x]);
+            $data['shipping_mode_id'] = (int)trim($request->shipping_mode_id[$x]);
+            $data['amount'] = (int)trim($request->price[$x]);
+            $data['payment_mode_id'] = 1;
+            $data['charges_mode_id'] = 4;
+            
+            //update manualorders
+            $ManualOrder = ManualOrders::find($request->id[$x]);
+            $reference_number= '('.$ManualOrder->id.')('.$current_date_time.')';
+            $data['$shipper_reference_number_1'] = $reference_number;
+            $ManualOrder->receiver_name = $receiver_name;
+            $ManualOrder->receiver_number = $receiver_number;
+            $ManualOrder->city = $city;
+            $ManualOrder->reciever_address = $reciever_address;
+            $ManualOrder->total_pieces = $total_pieces;
+            $ManualOrder->weight = $weight;
+            $ManualOrder->price = $price;
+            $ManualOrder->description = trim($request->item_description[$x]);
+            $ManualOrder->reference_number = $reference_number;
+            $ManualOrder->updated_by = Auth::id();
+            $status = $ManualOrder->save();
+            
+            
+            
+        
+        //echo 'working';
+            if($status);
+            {
+                $ApiResponse = $this->CreateBooking($data);
+                //dd($ApiResponse);
+                
+                //DD(env('MNP_API_USERNAME')); 
+                if($ApiResponse->status == 0)
+                {
+                    // echo '<pre>';
+                    // print_r(json_decode($resp)[0]);
+                    // echo $price;
+                    $ManualOrder = ManualOrders::find($request->id[$x]);
+                    //dd($ManualOrder);
+                    $ManualOrder->consignment_id = $ApiResponse->tracking_number;
+                    $status = $ManualOrder->save();
+                    
+                    if($status)
+                    {   
+                        //echo $ApiResponse->tracking_number;
+                        array_push($id, $ApiResponse->tracking_number);
+                        //return $this->print_trax_slips($id);
+                    }
+                    else
+                    {
+                        //dd($status);
+                        //dd($ManualOrder);
+                    }
+                    //dd(json_decode($resp)[0]->orderReferenceId);
+                }
+                
+            }
+            
+        }
+            
+        $slips = $this->print_trax_slips($id);
+        return view('client.orders.manual-orders.trax.print_trax_slip')->with('slips',$slips);
+        
+        
+        //dd();
+    }
+    
+    public function get_trax_cities()
+    {
+        return $this->GetCities()->cities;
+        // $baseUrl = "https://sonic.pk/";
+ 
+        // $apiUrl = $baseUrl."api/cities";
+
+        // $headers = ['Authorization:'.env('TRAX_API_KEY'), 'Accepts:' . 'application/json'];
+        // $ch = curl_init();
+        // curl_setopt($ch,CURLOPT_URL, $apiUrl);
+        // curl_setopt($ch,CURLOPT_RETURNTRANSFER, true);
+        // curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); 
+        // $result = curl_exec($ch);
+        
+        // return $result;
+    }
+    
+    public function print_mnp_slips($id)
+    {
+        //dd($id);
+        $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->whereIn('manual_orders.id',$id)->get();
+        //dd($ManualOrder);
+        return view('client.orders.manual-orders.mnp.print_mnp_slip')->with('ManualOrders',$ManualOrder);
+        
+    }
+    
+    public function print_trax_slips($ids)
+    {
+        $data=array();
+        foreach($ids as $id)
+        {
+            $src = $this->PrintAirWayBill($id,'0');
+            array_push($data, $src);
+            
+        }
+        return $data;
+        
+        
+    }
+    
     public function testing()
     {
         // $url = "https://api.nexmo.com/beta/messages";
@@ -530,6 +800,8 @@ class ManualOrdersController extends Controller
         // $resp = curl_exec($curl);
         // curl_close($curl);
         // var_dump($resp);
+        
+        
         
 //         curl -X POST \
 //   https://api.nexmo.com/beta/messages \
@@ -572,30 +844,44 @@ class ManualOrdersController extends Controller
     // dd($data);
 
     // return view('thanks');
+        $ManualOrder = ManualOrders::find(1234);
+        //dd($ManualOrder);
+        if($ManualOrder != null)
+        {
+            dd($ManualOrder);
+            return response()->json(['messege' => $ManualOrder]);
+        }
+        else
+        {
+            return response()->json(['messege' => 'no order found']);
+        }
     
-        // $url = "http://mnpcourier.com/mycodapi/api/Booking/InsertBookingData";
+        
+    
+        $url = "http://mnpcourier.com/mycodapi/api/Booking/InsertBookingData";
 
-        // $curl = curl_init($url);
-        // curl_setopt($curl, CURLOPT_URL, $url);
-        // curl_setopt($curl, CURLOPT_POST, true);
-        // curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_POST, true);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         
-        // $headers = array(
-        //   "Content-Type: application/json",
-        // );
-        // curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        $headers = array(
+          "Content-Type: application/json",
+        );
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         
-        // $data = '{"username": "mansoor_4b459","password": "Mansoor1@3","consigneeName": "test","consigneeAddress": "test123","consigneeMobNo": "03330139993","consigneeEmail": "string","destinationCityName": "karachi","pieces": "2","weight": "1","codAmount": 1,"custRefNo": "12345689","productDetails": "string","fragile": "string","service": "overnight","remarks": "string","insuranceValue": "string","locationID": "string","AccountNo": "string","InsertType": "0"}';
+        $data = '{"username": "mansoor_4b459","password": "Mansoor1@3","consigneeName": "test","consigneeAddress": "test123","consigneeMobNo": "03330139993","consigneeEmail": "string","destinationCityName": "karachi","pieces": "2","weight": "1","codAmount": 1,"custRefNo": "12345689","productDetails": "string","fragile": "string","service": "overnight","remarks": "string","insuranceValue": "string","locationID": "string","AccountNo": "string","InsertType": "0"}';
         
-        // curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
         
-        // //for debug only!
-        // curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-        // curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        //for debug only!
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         
-        // $resp = curl_exec($curl);
-        // curl_close($curl);
-        // var_dump($resp);
+        $resp = curl_exec($curl);
+        curl_close($curl);
+        
+        dd($resp);
     }
     
  

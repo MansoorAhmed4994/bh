@@ -318,8 +318,9 @@ var order_status = '';
           <option value="hold">Hold</option>
           <option value="incomplete">incomplete</option> 
           <option value="cancel">cancel</option> 
-          <option value="print">Print</option>
+          <option value="print">Print </option>
           <option value="print_mnp_slips">Print M&P Slips</option>
+          <option value="print_trax_slips">Print Trax Slips</option>
         </select> 
     </div>
     

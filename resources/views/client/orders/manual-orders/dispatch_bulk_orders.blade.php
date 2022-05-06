@@ -18,6 +18,16 @@
           }
         }
         
+        function change_price(price)
+        {
+            //total_parcels--;
+            total_amount = total_amount-parseInt(price); 
+            $('#total_amount').html(total_amount);
+            $('#total_parcels').html(total_parcels);
+            $('#field_total_amount').val(total_amount);
+            $('#field_total_parcels').val(total_parcels);
+        }
+        
         function removeElementsByClass(className){
             const elements = document.getElementsByClassName(className);
             while(elements.length > 0){
@@ -53,6 +63,9 @@
             total_amount = total_amount-parseInt(price); 
             $('#total_amount').html(total_amount);
             $('#total_parcels').html(total_parcels);
+            $('#field_total_amount').val(total_amount);
+            $('#field_total_parcels').val(total_parcels);
+            
         }
 
         
@@ -126,7 +139,7 @@
                                 }
                                 total_parcels++;
                                 $('#total_parcels').html(total_parcels);
-                                var row_data = '<tr id="'+row_id+'"><td class="delete_btn_class"><button type="button" class="btn btn-danger " onclick="delete_row('+row_id+','+price+')">Delete</button></td><td class="delete_btn_class"><input type="checkbox" value="'+e.messege.id+'" name="order_ids[]" checked></td><td>'+e.messege.id+'</td><td>'+e.messege.receiver_name+'</td><td>'+e.messege.receiver_number+'</td><td>'+e.messege.reciever_address+'</td><td>'+price+'</td></td><td>'+e.messege.status+'</td><td style="border: 2px solid black;"></td></tr>';
+                                var row_data = '<tr id="'+row_id+'"><td class="delete_btn_class"><button type="button" class="btn btn-danger " onclick="delete_row('+row_id+','+price+')">Delete</button></td><td class="delete_btn_class"><input type="checkbox" value="'+e.messege.id+'" name="order_ids[]" checked></td><td>'+e.messege.id+'</td><td>'+e.messege.receiver_name+'</td><td>'+e.messege.receiver_number+'</td><td>'+e.messege.reciever_address+'</td><td><input tye="hidden" onkeyup="change_price(this.value)" value="'+price+'" name="price[]" id="total_amount"></td></td><td>'+e.messege.status+'</td><td style="border: 2px solid black;"></td></tr>';
                                 $("#row_data").prepend(row_data);
                                 row_id++;
                                 $("body").removeClass("loading");
@@ -229,24 +242,22 @@
             <div class="alert alert-success" role="alert">
                 {{session()->get('order_placed_message')}}
             </div> 
-        @endif
+        @endif 
+        <div class="d-flex justify-content-start">
+            <div class="form-group col-sm-3">
+                <input type="text" class="form-control" id="order_id" placeholder="Enter Id OR scan Barcode" name="order_id" >
+            </div>   
 
-        
+            <div class="form-group">
+                <button type="button" id="add_dispatch_order_btn" class="btn btn-primary" >Add Order</button>
             
-            <div class="d-flex justify-content-start">
-                <div class="form-group col-sm-3">
-                    <input type="text" class="form-control" id="order_id" placeholder="Enter Id OR scan Barcode" name="order_id" >
-                </div>   
-    
-                <div class="form-group">
-                    <button type="button" id="add_dispatch_order_btn" class="btn btn-primary" >Add Order</button>
-                
-                </div>
             </div>
+        </div>
+        
+        <form id="load_sheet_form">
             
-            <form id="load_sheet_form">
-            <input tye="hidden" name="total_parcels" id="total_parcels">
-            <input tye="hidden" name="total_amount" id="total_amount">
+            <input type="hidden" name="total_parcels" id="field_total_parcels">
+            <input type="hidden" name="total_amount" id="field_total_amount">
             <div class="d-flex justify-content-end">     
     
                 <div class="form-group col-sm-3">
@@ -266,47 +277,47 @@
             </div>
             
             
-                <div class="row" id="print_loadsheet">
+            <div class="row" id="print_loadsheet">
+                
+    
+                <!--<div class="col-sm-3"><h4><lable>Total Parcels: <span class="badge badge-secondary" id="total_parcels"></span></lable></h4></div>-->
+                <!--<div class="col-sm-3"><h4><lable>Total Amount: <span class="badge badge-secondary" id="total_amount"></span></lable></h4></div>-->
+                <table class="table table-bordered">
                     
-        
-                    <!--<div class="col-sm-3"><h4><lable>Total Parcels: <span class="badge badge-secondary" id="total_parcels"></span></lable></h4></div>-->
-                    <!--<div class="col-sm-3"><h4><lable>Total Amount: <span class="badge badge-secondary" id="total_amount"></span></lable></h4></div>-->
-                    <table class="table table-bordered">
-                        
-                        <thead>
-                            <tr>
-                                <th scope="col" colspan="4"><h4><lable>Total Parcels: <span class="badge badge-secondary" id="total_parcels"></span></lable></h4></th>
-                                <th scope="col" colspan="4"><h4><lable>Total Amount: <span class="badge badge-secondary" id="total_amount"></span></lable></h4></th>
-                            </tr>
-                            <tr>
-                                <th scope="col" class="delete_btn_class">#</th>
-                                <th scope="col"  class="delete_btn_class"><input type="checkbox" onclick="checkAll(this)" ></th>
-                                <th scope="col">id</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">number</th>
-                                <th scope="col">Address</th>
-                                <th scope="col">price</th>
-                                <th scope="col">status</th>
-                                <th scope="col">Cus. Sign</th>
-                            </tr>
-                        </thead>
-                        <tbody id="row_data">
-                              
-                        </tbody>
-                        <tbody id="row_data">
-                            <tr>
-                                <td colspan="3" style="height:100px;vertical-align: middle;border:1px solid black">Rider Signature</td>
-                                <td colspan="3" style="height:100px;vertical-align: middle;border:1px solid black"></td>
-                            </tr>
-                            <tr>
-                                <td colspan="3" style="height:100px;vertical-align: middle;border:1px solid black">Manager Signature</td>
-                                <td colspan="3" style="height:100px;vertical-align: middle;border:1px solid black"></td>
-                            </tr>
-                              
-                        </tbody>
-                    </table>
-                </div>
-            </form>
+                    <thead>
+                        <tr>
+                            <th scope="col" colspan="4"><h4><lable>Total Parcels: <span class="badge badge-secondary" id="total_parcels"></span></lable></h4></th>
+                            <th scope="col" colspan="4"><h4><lable>Total Amount: <span class="badge badge-secondary" id="total_amount"></span></lable></h4></th>
+                        </tr>
+                        <tr>
+                            <th scope="col" class="delete_btn_class">#</th>
+                            <th scope="col"  class="delete_btn_class"><input type="checkbox" onclick="checkAll(this)" ></th>
+                            <th scope="col">id</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">number</th>
+                            <th scope="col">Address</th>
+                            <th scope="col">price</th>
+                            <th scope="col">status</th>
+                            <th scope="col">Cus. Sign</th>
+                        </tr>
+                    </thead>
+                    <tbody id="row_data">
+                          
+                    </tbody>
+                    <tbody id="row_data">
+                        <tr>
+                            <td colspan="3" style="height:100px;vertical-align: middle;border:1px solid black">Rider Signature</td>
+                            <td colspan="3" style="height:100px;vertical-align: middle;border:1px solid black"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="height:100px;vertical-align: middle;border:1px solid black">Manager Signature</td>
+                            <td colspan="3" style="height:100px;vertical-align: middle;border:1px solid black"></td>
+                        </tr>
+                          
+                    </tbody>
+                </table>
+            </div>
+        </form>
 
             
                 
