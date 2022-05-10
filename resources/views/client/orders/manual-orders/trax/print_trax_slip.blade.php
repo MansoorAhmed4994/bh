@@ -1,5 +1,8 @@
 
-<html xmlns="http://www.w3.org/1999/xhtml"><head><style>
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+<script src="jquery.js"></script>
+<script src="dist/jquery.inputmask.js"></script>
+<style>
     table, td, th {
         border: 1px solid black;
 		font-family:Calibri;

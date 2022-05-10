@@ -79,7 +79,7 @@
                 else
                 {
                     $("body").addClass("loading"); 
-                    console.log($('#load_sheet_form').serialize());
+                    //console.log($('#load_sheet_form').serialize());
                     $.ajax({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -89,14 +89,22 @@
                         data: $('#load_sheet_form').serialize(),
                         dataType: 'json',
                         success: function(e)
-                        {
-                            if(e.status == '1')
+                        { 
+                            if(typeof(e.status) != 'undefined')
                             {
-                                PrintElem();
+                                if(e.status == '1')
+                                {
+                                    PrintElem();
+                                }
+                                else
+                                {
+                                    $("body").removeClass("loading");
+                                    alert(e.messege);
+                                }
                             }
                             else
                             {
-                                alert(e.messege);
+                                 alert('Some thing went wrong');
                             }
                             
                             $("body").removeClass("loading");
