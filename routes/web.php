@@ -45,8 +45,10 @@ Route::group(['middleware' => ['auth' => 'users'] ],function(){
 
 Route::group(['prefix' => 'client/orders/', 'namespace' => 'Client\Orders', 'middleware' => 'auth:user,admin'],function(){
 
+    
+    
     Route::resource('ManualOrders', 'ManualOrdersController')->except('show');
-    Route::get('ManualOrders/show/{id}', 'ManualOrdersController@show')->name('ManualOrders.show');
+    Route::get('ManualOrders/show/{id}', 'ManualOrdersController@show')->name('ManualOrders.show'); 
     Route::post('ManualOrders/delete-image', 'ManualOrdersController@delete_order_image')->name('ManualOrders.delete.order.image');
     Route::post('ManualOrders/add-image', 'ManualOrdersController@add_order_image')->name('ManualOrders.add.order.image');
     Route::post('ManualOrders/search-order', 'ManualOrdersController@search_order')->name('ManualOrders.search.order');
@@ -74,12 +76,11 @@ Route::group(['prefix' => 'mnp/', 'namespace' => 'Client\Orders', 'middleware' =
     
 }); 
 
-Route::group(['prefix' => 'trax/', 'namespace' => 'Client\Orders', 'middleware' => 'auth:user,admin','as'=> 'trax.'],function(){
+Route::group(['prefix' => 'trax/', 'namespace' => 'Shipment', 'middleware' => 'auth:user,admin','as'=> 'trax.'],function(){
     
-    Route::post('create-booking', 'ManualOrdersController@trax_create_booking_store')->name('create.booking');
-    
-
-    
+    Route::post('create-booking', 'TraxController@CreateBulkBookingStore')->name('create.booking');
+    Route::post('bookings', 'TraxController@CreateBulkBookingByOrderIds')->name('create.bulk.booking');
+    Route::get('shipment/', function () {return view('client.orders.manual-orders.trax.create-bulk-booking-by-scan');})->name('create.bulk.booking.by.scan');
 });  
 
 
@@ -90,7 +91,7 @@ Route::group(['prefix' => 'frontend/client/orders/', 'namespace' => 'Frontend\Cl
     Route::resource('ManualOrders', 'ManualOrdersController');
     Route::get('ManualOrders/client/authentication/', 'ManualOrdersController@authentication')->name('ManualOrders.authentication');
     Route::post('ManualOrders/client/authentication/', 'ManualOrdersController@verify_authentication')->name('ManualOrders.create.guest.cookie');
-    Route::post('ManualOrders/client/authentication/', 'ManualOrdersController@verify_authentication')->name('ManualOrders.create.guest.cookie');
+    //Route::post('ManualOrders/client/authentication/', 'ManualOrdersController@verify_authentication')->name('ManualOrders.create.guest.cookie');
     //Route::get('ManualOrders/show/{id}', 'ManualOrdersController@show')->name('ManualOrders.show');
     
 });

@@ -105,13 +105,19 @@
                     <ul class="navbar-nav">
                         <li class="nav-item active"> <a class="nav-link" href="{{route('dashboard')}}">dashboard </a> </li>
                         <li class="nav-item dropdown" id="myDropdown">
-                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Manual Orders</a>
-                        <ul class="dropdown-menu">
-                            <li> <a class="dropdown-item" href="{{route('ManualOrders.create')}}"> Add New order </a></li>
-                            <li> <a class="dropdown-item" href="{{route('ManualOrders.index')}}"> List</a></li>
-                            <li> <a class="dropdown-item" href="{{route('ManualOrders.dipatch.bulk.orders')}}">Dispatch Bulk Orders</a></li>
-                        </ul>
-                        
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Manual Orders</a>
+                            <ul class="dropdown-menu">
+                                <li> <a class="dropdown-item" href="{{route('ManualOrders.create')}}"> Add New order </a></li>
+                                <li> <a class="dropdown-item" href="{{route('ManualOrders.index')}}"> List</a></li>
+                                <li> <a class="dropdown-item" href="{{route('ManualOrders.dipatch.bulk.orders')}}">Dispatch Bulk Orders</a></li>
+                            </ul> 
+                        </li>
+                        <li class="nav-item dropdown" id="shipment">
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Shipment</a>
+                            <ul class="dropdown-menu">
+                                <li> <a class="dropdown-item" href="{{route('trax.create.bulk.booking.by.scan')}}"> Trax </a></li>
+                                <li> <a class="dropdown-item" href="{{route('trax.create.bulk.booking.by.scan')}}"> M&P</a></li> 
+                            </ul> 
                         </li>
                     </ul>
                     <ul class="navbar-nav ms-auto"> 

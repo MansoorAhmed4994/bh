@@ -114,81 +114,6 @@ class ManualOrdersController extends Controller
      */
     public function store(Request $request)
     { 
-        // $ifexist = ManualOrders::select('id')->where('receiver_number',$request->number)->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->get();
-        // if($ifexist->isEmpty())
-        // {
-        // //dd($ifexist);
-            
-        //     $validated = $request->validate([
-    
-        //         'images' => 'required',
-        //         'first_name' => 'required',
-        //         'number' => 'required',
-        //         'address' => 'required',
-    
-        //     ]); 
-             
-            
-            
-            
-        //     $images=array();
-        //     if($files=$request->file('images')){
-        //         foreach($files as $file){
-        //             $name=$file->getClientOriginalName();
-                    
-        //             $file->move($this->images_path,$name);
-        //             $images[]=$this->images_path.$name;
-        //         }
-        //     }
-    
-        //   // dd();
-        //     $customers = new Customers();
-        //     $customers->first_name = $request->first_name;
-        //     $customers->last_name = $request->last_name;
-        //     $customers->address = $request->address;
-        //     $customers->number = $request->number;
-        //     $customers->whatsapp_number = $request->number;
-        //     $customers->created_by = Auth::id();
-        //     $customers->updated_by = Auth::id();
-        //     $customers->status = 'active'; 
-        //     $customers->save();
-        //     ///$customers = $customers->save();
-        //     // dd($customers->id);
-            
-            
-    
-        //     $manual_orders = new ManualOrders();
-        //     //$manual_orders->customer_id = $customers->id;
-        //     $manual_orders->receiver_name = $request->first_name;
-        //     $manual_orders->receiver_number = $request->number;
-        //     $manual_orders->city = '';
-        //     $manual_orders->reciever_address = $request->address;
-        //     $manual_orders->images = implode("|",$images);
-        //     $manual_orders->total_pieces = '';
-        //     $manual_orders->weight = '';
-        //     $manual_orders->price = '';
-        //     $manual_orders->cod_amount = '';
-        //     $manual_orders->advance_payment = '';
-        //     $manual_orders->date_order_paid = '';
-        //     $manual_orders->description = $request->description;
-        //     $manual_orders->reference_number = '';
-        //     $manual_orders->service_type = '';
-        //     $manual_orders->created_by = Auth::id();
-        //     $manual_orders->updated_by = Auth::id();
-        //     $manual_orders->status = 'pending';
-        //     //$manual_orders = $manual_orders->save();
-            
-            
-            //$post->comments()->save($manual_orders);
-        //     if($this->CreateOrder($request))
-        //     {
-        //         return redirect()->route('ManualOrders.create')->with('success', 'Order Successfully placed');
-        //     }
-        // }
-        // else
-        // {
-        //     dd('duplicate order please check');
-        // }
         $status = $this->CreateOrder($request);
         return redirect()->route('ManualOrders.create')->with('success', $status);
     }
@@ -410,12 +335,10 @@ class ManualOrdersController extends Controller
         elseif($order_action == 'print_trax_slips')
         {
             $explode_id = explode(',', $order_ids);
-            //dd($explode_id);
-            $ManualOrders = ManualOrders::whereIn('id',$explode_id)->update(['manual_orders.reference_number' => DB::raw("concat('(',`id`,')(',`updated_at`,')')")]);
-            $ManualOrders = ManualOrders::whereIn('id',$explode_id)->get();
+            $this->UpdateReferenceNumberByOrderIds($explode_id);
+            $ManualOrders = $this->GetOrdersByIds($explode_id);
             $cities = $this->get_trax_cities();
-            //dd($cities);
-            //$ManualOrder = ManualOrders::whereIn('id',$explode_id)->update(['status' => 'dispatched']);
+            
             return view('client.orders.manual-orders.trax.create')->with(['ManualOrders'=>$ManualOrders, 'cities'=>$cities]);
             
             // $this->print_mnp_slips($ManualOrders);
@@ -497,7 +420,8 @@ class ManualOrdersController extends Controller
         {
             return response()->json(['messege' => 'no order found']);
         }
-        return view('client.orders.manual-orders.dispatch');
+        
+        //return view('client.orders.manual-orders.dispatch');
     }
     
     public function popup_dispatch_edit($ManualOrder)

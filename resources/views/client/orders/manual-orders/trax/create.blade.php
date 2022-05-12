@@ -113,9 +113,14 @@ function validateForm() {
                             @if($errors->get('receiver_name')) <small id="receiver_name_error[]" class="form-text text-danger">{{$errors->first('receiver_name')}} </small>@endif
                         </div> 
                         
+                        <?php 
+                            
+                            $reciever_number = substr($ManualOrder->receiver_number, 1);
+                            $reciever_number = '92'.$reciever_number
+                        ?>
                         <div class="form-group col-sm">
                             <label for="receiver_name">Reciever Number</label>
-                            <input type="tel" class="form-control custom-mainforminput  " value="" placeholder="(92) xxx xxxxxxx" name="phone_number" id="phone_number" data-inputmask="('9'2) 399-9999999" data-mask="" im-insert="true">
+                            <input type="tel" class="form-control custom-mainforminput  " value="<?=$reciever_number?>" placeholder="(92) xxx xxxxxxx"  id="receiver_number[]"  name="receiver_number[]" data-inputmask="('9'2) 399-9999999" data-mask="" im-insert="true">
                             <!--<input type="number"  data-inputmask="'mask': '99-9999999'"  class="form-control @if($errors->get('receiver_number')) is-invalid @endif receiver_number" value="{{old('receiver_number')}}@if(isset($ManualOrder)){{trim($ManualOrder->receiver_number)}}@endif" id="receiver_number[]"  name="receiver_number[]" placeholder="Reciever Number" required>-->
                             @if($errors->get('receiver_number')) <small id="receiver_name_error[]" class="form-text text-danger">{{$errors->first('receiver_name')}} </small>@endif
                         </div> 
