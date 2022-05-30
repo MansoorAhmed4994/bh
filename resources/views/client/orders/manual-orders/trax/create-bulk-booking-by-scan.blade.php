@@ -4,6 +4,20 @@
 @section('content')
  
 <script type="text/javascript">
+// window.addEventListener( "pageshow", function ( event ) {
+//   var historyTraversal = event.persisted || ( typeof window.performance != "undefined" && window.performance.navigation.type === 2 );
+//   if ( historyTraversal ) {
+//       $("body").addClass("loading");
+      
+//     // Handle page restore.
+//     //alert('refresh');
+//     window.location.reload();
+//     $("body").addClass("loading");
+//     //$("body").removeClass("loading");
+//   }
+// });
+
+
         var base_url = '<?php echo e(url('/')); ?>';
         var row_id="1";  
         var total_parcels=0;

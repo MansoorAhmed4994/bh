@@ -18,6 +18,8 @@
 
 <script type="text/javascript">
 
+
+
 $( document ).ready(function() {
     // var Inputmask = require('inputmask');
     var cities =@json($cities);

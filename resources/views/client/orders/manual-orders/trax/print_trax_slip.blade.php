@@ -77,7 +77,7 @@ padding: 0px;
             
             <?php $count++;?>
             
-            @if($count==5)
+            @if($count==4)
                 </div> 
                 <?php $count=1;?>
             @endif
@@ -135,6 +135,11 @@ padding: 0px;
             body {
                 padding-top: 10px;
                 padding-bottom: 72px;
+            }
+            
+            .sub-page img 
+            {
+                height: 344px;
             }
         </style>
         
