@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content') 
-    @if (Cookie::get('number') == null)
+    @if (session('number') == null)
         <script>window.location = "{{route('Frontend.ManualOrders.authentication')}}";</script>
     @endif
 <script>
@@ -235,38 +235,10 @@ var dispatch_order_id =  '';
         <button class="form-control btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
     </div>
     
-    <div class="form-group">
-        <button class="form-control btn btn-outline-success my-2 my-sm-0" id="print_mnp_slips" type="button">Print M&P Slips</button>
-    </div>
-    
     
   </form>
   <!--<button type="button" class="btn btn-primary" data-target="myModalLabel" class="dropdown-item">Dispatched</button> -->
   
-  
-    <form class="form-inline" method="post" action="{{ route('ManualOrders.order.action') }}">
-      @csrf
-    <input type="hidden" name="order_ids" id="order_ids">
-    <div class="form-group">
-        <select class="form-select" aria-label="Default select example" name="order_action" required>
-          <option selected >Select Action</option> 
-          <option value="pending">Pending</option>
-          <option value="prepared">Prepared</option>
-          <option value="confirmed">Confirmed</option>
-          <option value="cancel">complete</option> 
-          <option value="dispatched">Dispatched</option> 
-          <option value="hold">Hold</option>
-          <option value="incomplete">incomplete</option> 
-          <option value="cancel">cancel</option> 
-          <option value="print">Print</option>
-          <option value="print_mnp_slips">Print M&P Slips</option>
-        </select> 
-    </div>
-    
-    <div class="form-group">
-        <button class="form-control btn btn-outline-success my-2 my-sm-0" type="submit">Submit</button>
-    </div>
-   </form>   
 </nav>
 
 <div style="overflow-x:auto;"> 

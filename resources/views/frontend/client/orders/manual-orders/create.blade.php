@@ -50,7 +50,7 @@
 
             <div class="form-group">
                 <label class="custom-file-upload-button" style="border: 2px dashed black;padding: 50px;border-radius: 15px;">
-                    <input type="file" name="images[]" style="display:none;" multiple  required/>
+                    <input type="file" name="images[]" style="" multiple  required/>
                     <i class="bi bi-cloud-upload-fill"></i>Custom Uploadsss
                 </label>
                 

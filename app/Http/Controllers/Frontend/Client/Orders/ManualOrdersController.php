@@ -34,8 +34,9 @@ class ManualOrdersController extends Controller
     
     public function index(Request $request)
     {
-        $number = $request->cookie('number');
-        if($request->cookie('number') == null)
+        dd(session('number'));
+        $number = session('number');
+        if(session('number') == null)
         {
             return view('frontend.client.orders.manual-orders.authentication');
         }
@@ -56,10 +57,33 @@ class ManualOrdersController extends Controller
     public function verify_authentication(Request $request)
     {
         //dd($request->number);
-        $response = new Response();
-        $response->withCookie(cookie('number',$request->number,10));
-        return $response;
+        // $minutes = 100;
+        // $response = new Response('Cookie set Successfully.');
+        // $response->withCookie(cookie('number',$request->number, $minutes));
+        //$value = session('number', $request->number);
+        $value = $request->session()->put('number', $request->number);
+        //dd(session('number'));
+        //$response= $this->setCookie($request);
+        //dd($response);
+        // $response = new Response();
+        // $response->withCookie(cookie('number',$request->number,100));
+        //dd($request->cookie('number'));
+        $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')
+        ->where('manual_orders.receiver_number',$request->number)
+        ->orderBy('manual_orders.id', 'ASC')
+        ->select('manual_orders.id','manual_orders.customers_id','customers.first_name','manual_orders.description','manual_orders.reciever_address','customers.last_name','customers.number','customers.address','manual_orders.price','manual_orders.images','manual_orders.total_pieces','manual_orders.date_order_paid','manual_orders.status','manual_orders.created_at','manual_orders.updated_at')
+        ->paginate(200);
+        //dd($list);
+        return view('frontend.client.orders.manual-orders.list')->with('list',$list);
+        //return $response;
     }
+    
+    public function setCookie( $request) {
+        $minutes = 1;
+        $response = new Response('Cookie set Successfully.');
+        $response->withCookie(cookie()->forever('number',$request->number, $minutes));
+        return $response;
+     }
     
     
     public function store(Request $request)
@@ -79,8 +103,28 @@ class ManualOrdersController extends Controller
         //
     }
     
-    public function authentication()
+    public function authentication(Request $request)
     { 
+         
+        
+        if(session('number') == null)
+        {
+            return view('frontend.client.orders.manual-orders.authentication');
+        }
+        else
+        {
+            //dd(session('number'));
+        //dd($response);
+            $number=session('number');
+            // $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'manual_orders.customers_id')->where('manual_orders.status','pending')->orderBy('manual_orders.created_at', 'DESC')->paginate(5);
+            $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')
+            ->where('manual_orders.receiver_number',$number)
+            ->orderBy('manual_orders.id', 'ASC')
+            ->select('manual_orders.id','manual_orders.customers_id','customers.first_name','manual_orders.description','manual_orders.reciever_address','customers.last_name','customers.number','customers.address','manual_orders.price','manual_orders.images','manual_orders.total_pieces','manual_orders.date_order_paid','manual_orders.status','manual_orders.created_at','manual_orders.updated_at')
+            ->paginate(200);
+            //dd($list);
+            return view('frontend.client.orders.manual-orders.list')->with('list',$list);
+        }
         return view('frontend.client.orders.manual-orders.authentication');
     }
     
