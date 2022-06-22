@@ -116,12 +116,13 @@ trait ManualOrderTraits {
             $manual_orders->updated_by = '1';
             $manual_orders->status = 'pending';
             //$manual_orders = $manual_orders->save();
+            $status = $customer_id->first()->manual_orders()->save($manual_orders);
+             //dd();
              
-             
-            if($customer_id->first()->manual_orders()->save($manual_orders))
+            if($status->id)
             {
                 //dd();
-                return 'Order id:  '.$manual_orders->first()->id.'  Successfully Placed';
+                return 'Order id:  '.$status->id.'  Successfully Placed';
             }
         }
     }
