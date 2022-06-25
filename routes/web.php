@@ -98,7 +98,7 @@ Route::group(['prefix' => 'frontend/client/orders/', 'namespace' => 'Frontend\Cl
 });
 
     Route::get('click-here-to-confirm-your-order/{id}', 'Frontend\Client\Orders\ManualOrdersController@customer_order_confirmation')->name('ManualOrders.confirm.order.by.customer.show');
-    Route::get('ManualOrders/create', 'Frontend\Client\Orders\ManualOrdersController@create')->name('ManualOrders.confirm.order.by.customer');
+    Route::get('ManualOrders/order-confirmed/{ManualOrder}', 'Frontend\Client\Orders\ManualOrdersController@customer_order_confirmed')->name('ManualOrders.confirm.order.by.customer');
 
 
 

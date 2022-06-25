@@ -172,11 +172,14 @@ class ManualOrdersController extends Controller
         //dd('eoub');
     }
     
-    public function customer_order_confirmed(Request $request, ManualOrders $ManualOrder)
-    {
-        //dd($ManualOrder); 
-        $ManualOrder->status = 'confirmed';
-        dd($ManualOrder->save());
+    public function customer_order_confirmed(ManualOrders $ManualOrder)
+    { 
+        $ManualOrder->status = 'confirmed'; 
+        if($ManualOrder->save())
+        {
+            //$ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'manual_orders.customers_id')->where('manual_orders.id',$id)->first();
+            return view('frontend.client.orders.manual-orders.view')->with(['ManualOrder'=>$ManualOrder, 'success'=> 'Order Successfully Confirmed']);
+        }
     //     $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'manual_orders.customers_id')->where('manual_orders.id',$id)->first();
     //     //dd(ManualOrders::leftJoin('customers', 'customers.id', '=', 'manual_orders.customers_id')->where('manual_orders.status','pending')); 
     //   // dd($ManualOrder) ;

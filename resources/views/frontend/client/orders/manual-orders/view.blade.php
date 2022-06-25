@@ -125,13 +125,13 @@
     
     <div class="container"> 
          
-        @if(Session::has('order_placed_message'))
+        @if($success)
             <div class="alert alert-success" role="alert">
-                {{session()->get('order_placed_message')}}
+                {{$success}}
             </div> 
         @endif
 
-        <form action="{{route('ManualOrders.confirm.order.by.customer',$ManualOrder->id)}}" method="post">
+        <form action="{{route('ManualOrders.confirm.order.by.customer',$ManualOrder->id)}}" method="get">
              @csrf
             <div class="form-group">
                 <?php $count=1;?>
