@@ -82,7 +82,7 @@ class LoginController extends Controller
      */
     public function login(Request $request)
     {
-       
+        
         $this->validateLogin($request);
         //dd($request->password);
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
@@ -91,13 +91,28 @@ class LoginController extends Controller
 
         
 
-        if (method_exists($this, 'hasTooManyLoginAttempts') &&
-            $this->hasTooManyLoginAttempts($request)) {
-            $this->fireLockoutEvent($request);
+        // if (method_exists($this, 'hasTooManyLoginAttempts') &&
+        //     $this->hasTooManyLoginAttempts($request)) {
+        //         dd();
+        //     $this->fireLockoutEvent($request);
 
-            return $this->sendLockoutResponse($request);
-        }
+        //     return $this->sendLockoutResponse($request);
+        // }
         if ($this->attemptLogin($request)) {
+             
+             
+             
+            if(Auth::guard('user')->attempt($request->only('email','password'),$request->filled('remember'))){
+        //Authentication passed...
+        //dd('done');
+            return redirect()
+            ->route('user.dashboard')
+            ->with('status','You are Logged in as Admin!');
+        }
+        else
+            {
+                return redirect()->route('admin.login')->with('flash_message_error','Wrong Credientials');
+            }
              
             return $this->sendLoginResponse($request);
         }
@@ -164,9 +179,9 @@ class LoginController extends Controller
         $this->clearLoginAttempts($request);
 
         //dd($this->authenticated($request, $this->guard()->user()));
-
+//dd();
         if ($response = $this->authenticated($request, $this->guard()->user())) {
-            return $response;
+            dd( $response);
         }
         //dd($this->authenticated($request, $this->guard()->user()));
         return $request->wantsJson()

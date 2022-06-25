@@ -37,7 +37,7 @@ Route::group(['middleware' => ['auth' => 'admin'] , 'prefix' => 'admin/','namesp
 
 //     Route::get('dashboard', 'DashboardController@index')->name('dashboard'); 
 // });
-Route::group(['middleware' => ['auth' => 'users'] ],function(){
+Route::group(['middleware' => 'auth:user' ],function(){
 
     Route::get('/', 'HomeController@index')->name('dashboard');
     Route::get('user/dashboard', 'Auth\DashboardController@index')->name('user.dashboard');
