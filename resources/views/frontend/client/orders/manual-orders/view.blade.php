@@ -124,12 +124,13 @@
     </div>
     
     <div class="container"> 
-         
-        @if($success)
+       @isset($success)
+
+
             <div class="alert alert-success" role="alert">
                 {{$success}}
             </div> 
-        @endif
+        @endisset
 
         <form action="{{route('ManualOrders.confirm.order.by.customer',$ManualOrder->id)}}" method="get">
              @csrf
