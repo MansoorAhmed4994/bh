@@ -120,6 +120,7 @@
                                 <li> <a class="dropdown-item" href="{{route('mnp.create.bulk.booking.by.scan')}}"> M&P</a></li> 
                             </ul> 
                         </li>
+                        <li class="nav-item active"> <a class="nav-link" href="{{route('ManualOrders.track.order')}}">Track Order </a> </li>
                     </ul>
                     <ul class="navbar-nav ms-auto"> 
                         <li class="nav-item dropdown">
