@@ -113,6 +113,7 @@ class TraxController extends Controller
                     $ManualOrder = ManualOrders::find($request->id[$x]);
                     //dd($ManualOrder);
                     $ManualOrder->consignment_id = $ApiResponse->tracking_number;
+                    $ManualOrder->status = 'dispatched';
                     $status = $ManualOrder->save();
                     
                     if($status)

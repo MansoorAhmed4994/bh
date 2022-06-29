@@ -271,7 +271,7 @@ class ManualOrdersController extends Controller
         }
         else
         {
-            return view('frontend.client.orders.manual-orders.track-order')->with(['Order_details'=>$mnp_order_details, 'shipment'=>'']);
+            return view('frontend.client.orders.manual-orders.track-order')->with(['Order_details'=>$mnp_order_details, 'shipment'=>'', 'error'=> 'MNP order Not found, it was not booked OR not Dispatched']);
             
         }
         
