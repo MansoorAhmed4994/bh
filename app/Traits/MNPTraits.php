@@ -48,12 +48,23 @@ trait MNPTraits {
     
     public function get_mnp_cities()
     {
-        
         $headers = array("Content-Type: application/json");
         $cities = $this->CurlGetRequest('http://mnpcourier.com/mycodapi/api/Branches/Get_Cities?username='.env('MNP_API_USERNAME').'&password='.env('MNP_API_PASSWORD').'&AccountNo=11',$headers);
         //echo '<br>';
         $cities = json_decode($cities)[0]->City;
         return $cities;
+        //dd($cities);
+    }
+    
+    public function TrackMnpOrder($id)
+    {
+        $url = 'http://mnpcourier.com/mycodapi/api/Tracking/Consignment_Tracking_Location?username='.env('MNP_API_USERNAME').'&password='.env('MNP_API_PASSWORD').'&locationID=8103&consignment='.$id;
+        // 'http://mnpcourier.com/mycodapi/api/Branches/Get_Cities?username='.env('MNP_API_USERNAME').'&password='.env('MNP_API_PASSWORD').'&AccountNo=11'
+        $headers = array("Content-Type: application/json");
+        $tracking_details = $this->CurlGetRequest($url,$headers);
+        //echo '<br>';
+        $tracking_details = json_decode($tracking_details)[0];
+        return $tracking_details;
         //dd($cities);
     }
     

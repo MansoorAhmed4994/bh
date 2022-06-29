@@ -65,26 +65,24 @@ class ManualOrdersController extends Controller
     
     public function search_order( Request $request)
     {
-        $search_test = $request->search_text;
-        //$list = ManualOders::where('first_name','like',$request->search_text.'%')->orwhere('number','like',$request->search_text.'%')->where('status','pending')->orderBy('created_at', 'DESC')->paginate(5);
-        // $list = ManualOders::where(function ($query) use ($search_test) {
-        //     $query->where('first_name','like',$search_test.'%')
-        //           ->orWhere('number','like',$search_test.'%');
-        //     })->where('status','pending')->orderBy('created_at', 'DESC')->paginate(5);
-
+        $order_id = $request->search_order_id;
+        if($order_id != '')
+        {
+            $search_test = $request->search_text;
         $order_status = $request->order_status;
-        // if($request->order_status == 'all')
-        // {
-        //     $order_status='';
-        // }
-        // else
-        // {
-            
-        // }
-        //dd($order_status);
+        $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.id',$order_id)
+            ->select('manual_orders.id','manual_orders.customers_id','manual_orders.description','manual_orders.receiver_number','customers.first_name','manual_orders.reciever_address','customers.last_name','customers.number','customers.address','manual_orders.price','manual_orders.images','manual_orders.total_pieces','manual_orders.date_order_paid','manual_orders.status','manual_orders.created_at','manual_orders.updated_at')
+            ->paginate(20);
+        }
+        else
+        {
+        $search_test = $request->search_text;
+        $order_status = $request->order_status;
         $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->
         where(function ($query) use ($search_test) {
             $query->where('customers.first_name','like',$search_test.'%')
+                    ->orWhere('manual_orders.id','like','%'.$search_test.'%')
+                    ->orWhere('manual_orders.consignment_id','like','%'.$search_test.'%')
                     ->orWhere('customers.first_name','like','%'.$search_test.'%')
                     ->orWhere('customers.last_name','like',$search_test.'%')
                     ->orWhere('customers.last_name','like','%'.$search_test.'%')
@@ -94,14 +92,10 @@ class ManualOrdersController extends Controller
             ->orderBy('manual_orders.id', 'ASC')
             ->select('manual_orders.id','manual_orders.customers_id','manual_orders.description','manual_orders.receiver_number','customers.first_name','manual_orders.reciever_address','customers.last_name','customers.number','customers.address','manual_orders.price','manual_orders.images','manual_orders.total_pieces','manual_orders.date_order_paid','manual_orders.status','manual_orders.created_at','manual_orders.updated_at')
             ->paginate(20);
-//dd($list);
-        // $list = $list->all();
-        // dd($list->all());
+            
+        }
+        dd($list);
         return view('client.orders.manual-orders.list')->with('list',$list);
-        //
-    
-        
-        
     }
     
     
@@ -454,72 +448,6 @@ class ManualOrdersController extends Controller
         return response()->json(['messege' => $status]);
     }
     
-    
-    public function mnp_bookings_store(Request $request)
-    {
-        //$this->get_mnp_cities();
-        $mytime = Carbon::now();
-        $current_date_time = $mytime->toDateTimeString();
-        $id = array();
-
-        for ($x = 0; $x < sizeof($request->reference_number); $x++) 
-        {
-            array_push($id, $request->id[$x]);
-            $receiver_name= $request->receiver_name[$x];
-            $receiver_number= $request->receiver_number[$x];
-            $city = $request->city[$x];
-            $reciever_address= $request->reciever_address[$x];
-            $total_pieces= $request->total_pieces[$x];
-            $weight= $request->weight[$x];
-            $price= $request->price[$x];
-            $ManualOrder = ManualOrders::find($request->id[$x]);
-            $reference_number= '('.$ManualOrder->id.')('.$current_date_time.')';
-            $ManualOrder->receiver_name = $receiver_name;
-            $ManualOrder->receiver_number = $receiver_number;
-            $ManualOrder->city = $city;
-            $ManualOrder->reciever_address = $reciever_address;
-            $ManualOrder->total_pieces = $total_pieces;
-            $ManualOrder->weight = $weight;
-            $ManualOrder->price = $price;
-            $ManualOrder->reference_number = $reference_number;
-            $ManualOrder->updated_by = Auth::id();
-            $status = $ManualOrder->save();
-            if($status);
-            {
-                $data = '{"username": "'.env('MNP_API_USERNAME').'","password": "'.env('MNP_API_PASSWORD').'","consigneeName": "'.$receiver_name.'","consigneeAddress": "'.$reciever_address.'","consigneeMobNo": "'.$receiver_number.'","consigneeEmail": "string","destinationCityName": "'.$city.'","pieces": "'.$total_pieces.'","weight": "'.$weight.'","codAmount": '.$price.',"custRefNo": "'.$reference_number.'","productDetails": "string","fragile": "string","service": "overnight","remarks": "string","insuranceValue": "string","locationID": "string","AccountNo": "string","InsertType": "0"}';
-                //dd($status);
-                $resp = $this->create_booking($data);
-                
-                
-                //DD(env('MNP_API_USERNAME')); 
-                if(json_decode($resp)[0]->isSuccess)
-                {
-                    // echo '<pre>';
-                    // print_r(json_decode($resp)[0]);
-                    // echo $price;
-                    $ManualOrder = ManualOrders::find($request->id[$x]);
-                    //dd($ManualOrder);
-                    $ManualOrder->consignment_id = json_decode($resp)[0]->orderReferenceId;
-                    $status = $ManualOrder->save();
-                    
-                    if($status)
-                    {   
-                        return $this->print_mnp_slips($id);
-                    }
-                    else
-                    {
-                        //dd($status);
-                        //dd($ManualOrder);
-                    }
-                    //dd(json_decode($resp)[0]->orderReferenceId);
-                }
-                
-            }
-            
-        }
-        //
-    }
-    
     public function print_order_slip($ManualOrder_id)
     {
         $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.id',$ManualOrder_id)->get();
@@ -673,15 +601,6 @@ class ManualOrdersController extends Controller
         // $result = curl_exec($ch);
         
         // return $result;
-    }
-    
-    public function print_mnp_slips($id)
-    {
-        //dd($id);
-        $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->whereIn('manual_orders.id',$id)->get();
-        //dd($ManualOrder);
-        return view('client.orders.manual-orders.mnp.print_mnp_slip')->with('ManualOrders',$ManualOrder);
-        
     }
     
     public function print_trax_slips($ids)

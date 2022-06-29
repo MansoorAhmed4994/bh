@@ -74,7 +74,7 @@ function validateForm() {
             </div> 
         @endif
 
-        <form action="{{ route('mnp.create.booking') }}"  onsubmit="return validateForm()" name="mnp_create_booking" method="post">
+        <form action="{{ route('mnp.create.booking') }}"  name="mnp_create_booking" method="post">
             @csrf
             <div class="container"> 
                 <?php $count=0;?>
@@ -153,7 +153,7 @@ function validateForm() {
                  
             
                 <div class="form-group">
-                    <button type="button" onclick="validateForm()" class="btn btn-primary">Save</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
                 </div>
             </div>
                 

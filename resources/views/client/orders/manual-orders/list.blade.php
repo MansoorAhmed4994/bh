@@ -275,7 +275,11 @@ var order_status = '';
   <form class="form-inline" method="post" action="{{ route('ManualOrders.search.order') }}">
       @csrf
     <div class="form-group">
-        <input class="form-control mr-sm-2" type="search" name="search_text" placeholder="Search" aria-label="Search">
+        <input class="form-control mr-sm-2" type="search" name="search_order_id" placeholder="Search by Order id #" aria-label="Search">
+    </div>
+    
+    <div class="form-group">
+        <input class="form-control mr-sm-2" type="search" name="search_text" placeholder="Name OR Number" aria-label="Search">
     </div>
     
     <div class="form-group">

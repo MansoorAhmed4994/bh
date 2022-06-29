@@ -110,15 +110,17 @@
                                 <li> <a class="dropdown-item" href="{{route('ManualOrders.create')}}"> Add New order </a></li>
                                 <li> <a class="dropdown-item" href="{{route('ManualOrders.index')}}"> List</a></li>
                                 <li> <a class="dropdown-item" href="{{route('ManualOrders.dipatch.bulk.orders')}}">Dispatch Bulk Orders</a></li>
+                                <li> <a class="dropdown-item" href="{{route('ManualOrders.track.order')}}">Track</a></li>
                             </ul> 
                         </li>
                         <li class="nav-item dropdown" id="shipment">
                             <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Shipment</a>
                             <ul class="dropdown-menu">
                                 <li> <a class="dropdown-item" href="{{route('trax.create.bulk.booking.by.scan')}}"> Trax </a></li>
-                                <li> <a class="dropdown-item" href="{{route('trax.create.bulk.booking.by.scan')}}"> M&P</a></li> 
+                                <li> <a class="dropdown-item" href="{{route('mnp.create.bulk.booking.by.scan')}}"> M&P</a></li> 
                             </ul> 
                         </li>
+                        <li class="nav-item active"> <a class="nav-link" href="{{route('ManualOrders.track.order')}}">Track Order </a> </li>
                     </ul>
                     <ul class="navbar-nav ms-auto"> 
                         <li class="nav-item dropdown">
