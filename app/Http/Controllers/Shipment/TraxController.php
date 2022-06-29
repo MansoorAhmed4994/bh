@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers\Shipment;
-
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Client\ManualOrders;
@@ -160,7 +158,7 @@ class TraxController extends Controller
         // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); 
         // $result = curl_exec($ch);
         
-        dd($response); 
+        //dd($response); 
     }
     
     public function print_trax_slips($ids)
@@ -174,5 +172,6 @@ class TraxController extends Controller
         }
         return $data;
     }
+    
     //
 }

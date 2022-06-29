@@ -82,10 +82,23 @@ trait TraxTraits {
         $imageData = base64_encode($response);
         $src = 'data:image/png;base64,'.$imageData;
         return $src;
-        //$path = '<img src="' . $src . '" >';
-        //echo $path;
-        //dd();
     }
+    
+    
+    public function TrackTraxOrder($tracking_number,$print_type)
+    {
+        $apiUrl = "https://sonic.pk/api/shipment/track?tracking_number=".$tracking_number.'&type='.$print_type;
+        $headers = ['Authorization:'.env('TRAX_API_KEY'), 'Accepts:' . 'application/json',"real:json content"];
+        $response = $this->CurlGetRequest($apiUrl,$headers);
+        return $response = json_decode($response);
+    }
+    // public function TestGetPickupAddresses($tracking_number,$print_type)
+    // { 
+    //     $apiUrl = "https://sonic.pk/api/shipment/track?tracking_number=".$tracking_number.'&type='.$print_type;
+    //     $headers = ['Authorization:'.env('TRAX_API_KEY'), 'Accepts:' . 'application/json',"real:json content"];
+    //     $response = $this->CurlGetRequest($apiUrl,$headers);
+    //     return $response = json_decode($response);
+    // }
      
     
     

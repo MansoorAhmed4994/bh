@@ -23,6 +23,7 @@
     <link href="{{ asset('public/css/app.css') }}" rel="stylesheet">
     
     <style>
+    
         @media all and (min-width: 992px) {
             .dropdown-menu li{ position: relative; 	}
             .nav-item .submenu{ 

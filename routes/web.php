@@ -69,9 +69,11 @@ Route::group(['prefix' => 'client/orders/', 'namespace' => 'Client\Orders', 'mid
     //Route::get('create', 'ManualOrdersController@index')->name('client.manual.orders');
 });
 
-Route::group(['prefix' => 'mnp/', 'namespace' => 'Client\Orders', 'middleware' => 'auth:user,admin','as'=> 'mnp.'],function(){
+Route::group(['prefix' => 'mnp/', 'namespace' => 'Shipment', 'middleware' => 'auth:user,admin','as'=> 'mnp.'],function(){
     
-    Route::post('create-booking', 'ManualOrdersController@mnp_bookings_store')->name('create.booking');
+    Route::post('create-booking', 'MnpController@mnp_bookings_store')->name('create.booking');
+    Route::get('shipment/', function () {return view('client.orders.manual-orders.mnp.create-bulk-booking-by-scan');})->name('create.bulk.booking.by.scan');
+    Route::post('bookings', 'MnpController@MnpCreateBulkBookingByOrderIds')->name('create.bulk.booking');
 
     
 }); 
@@ -96,10 +98,15 @@ Route::group(['prefix' => 'frontend/client/orders/', 'namespace' => 'Frontend\Cl
     //Route::get('ManualOrders/show/{id}', 'ManualOrdersController@show')->name('ManualOrders.show');
     
 });
-
+    //Public Route access
+    Route::get('ManualOrders/create', 'Frontend\Client\Orders\ManualOrdersController@create')->name('publlic.manualorders.create');
     Route::get('click-here-to-confirm-your-order/{id}', 'Frontend\Client\Orders\ManualOrdersController@customer_order_confirmation')->name('ManualOrders.confirm.order.by.customer.show');
     Route::get('ManualOrders/order-confirmed/{ManualOrder}', 'Frontend\Client\Orders\ManualOrdersController@customer_order_confirmed')->name('ManualOrders.confirm.order.by.customer');
-
+    Route::get('trackorder/', 'Frontend\Client\Orders\ManualOrdersController@TrackOrder')->name('ManualOrders.track.order');
+    Route::get('trackorder/{id}', 'Frontend\Client\Orders\ManualOrdersController@TrackOrderDetails')->name('ManualOrders.track.order.details');
+    Route::post('trackorder/list', 'Frontend\Client\Orders\ManualOrdersController@GetOrdersByNumber')->name('ManualOrders.get.order.list');
+    Route::get('trackorder/list', 'Frontend\Client\Orders\ManualOrdersController@TrackOrder')->name('ManualOrders.get.order.list.all');
+    
 
 
    
