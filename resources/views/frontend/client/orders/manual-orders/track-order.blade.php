@@ -4,10 +4,7 @@
 
  
   
-<div class="container">
-    <style>
-
-</style>
+<div class="container"> 
     <div class="d-flex justify-content-center">
         <nav class="navbar navbar-light bg-light">
         
@@ -40,6 +37,11 @@
         </nav>
     </div>
     
+       @isset($error)
+            <div class="alert alert-warning" role="alert">
+                {{$error}}
+            </div> 
+        @endisset
      
     @if(isset($shipment))
     	@if($shipment == 'mnp')

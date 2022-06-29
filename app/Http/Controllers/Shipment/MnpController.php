@@ -80,6 +80,7 @@ class MnpController extends Controller
                     $ManualOrder = ManualOrders::find($request->id[$x]);
                     //dd($ManualOrder);
                     $ManualOrder->consignment_id = json_decode($resp)[0]->orderReferenceId;
+                    $ManualOrder->status = 'dispatched';
                     $status = $ManualOrder->save();
                     
                     if($status)

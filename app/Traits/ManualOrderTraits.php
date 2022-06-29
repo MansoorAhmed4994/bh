@@ -137,6 +137,12 @@ trait ManualOrderTraits {
         return $ManualOrders;
     }
         
+    public function UpdateStatusByIdIds($explode_id,$status)
+    { 
+        $ManualOrder = ManualOrders::whereIn('id',$explode_id)->update(['status' => $status]);
+            return redirect()->route('ManualOrders.index')->with('success', 'Order dispatched succussfully ');
+    }
+        
     public function UpdateReferenceNumberByOrderIds($order_ids)
     {
         $ManualOrders = ManualOrders::whereIn('id',$order_ids)->update(['manual_orders.reference_number' => DB::raw("concat('(',`id`,')(',`updated_at`,')')")]); 
