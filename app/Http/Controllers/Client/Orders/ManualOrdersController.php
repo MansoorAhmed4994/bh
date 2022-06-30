@@ -69,8 +69,8 @@ class ManualOrdersController extends Controller
         if($order_id != '')
         {
             $search_test = $request->search_text;
-        $order_status = $request->order_status;
-        $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.id',$order_id)
+            $order_status = $request->order_status;
+            $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.id',$order_id)
             ->select('manual_orders.id','manual_orders.customers_id','manual_orders.description','manual_orders.receiver_number','customers.first_name','manual_orders.reciever_address','customers.last_name','customers.number','customers.address','manual_orders.price','manual_orders.images','manual_orders.total_pieces','manual_orders.date_order_paid','manual_orders.status','manual_orders.created_at','manual_orders.updated_at')
             ->paginate(20);
         }
@@ -94,7 +94,7 @@ class ManualOrdersController extends Controller
             ->paginate(20);
             
         }
-        dd($list);
+        //dd($list);
         return view('client.orders.manual-orders.list')->with('list',$list);
     }
     
