@@ -92,6 +92,17 @@ trait TraxTraits {
         $response = $this->CurlGetRequest($apiUrl,$headers);
         return $response = json_decode($response);
     }
+    
+    
+    
+    
+    public function CalculateDestinationRates($data)
+    {
+        $url = "https://sonic.pk/api/charges_calculate";
+        $headers = ['Authorization:'.env('TRAX_API_KEY'), 'Accepts:' . 'application/json',"real:json content"];
+        $response = $this->CurlPostRequest($url,$headers,$data);
+        return $response = json_decode($response);
+    }
     // public function TestGetPickupAddresses($tracking_number,$print_type)
     // { 
     //     $apiUrl = "https://sonic.pk/api/shipment/track?tracking_number=".$tracking_number.'&type='.$print_type;

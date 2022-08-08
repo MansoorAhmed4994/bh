@@ -50,7 +50,7 @@ var order_status = '';
             }
             
         }
-    
+    //console.log(status_reason);
         $.ajax({
           url: base_url + '/client/orders/ManualOrders/dispatch-order-edit/'+dispatch_order_id,
           headers: {
@@ -77,7 +77,7 @@ var order_status = '';
                 // }); 
                 
             }
-            console.log(response);
+            //console.log(response);
           },
           error: function(response) {
             // $('#nameErrorMsg').text(response.responseJSON.errors.name);
@@ -233,7 +233,7 @@ var order_status = '';
                         </div>
             
                         <div class="form-group">
-                            <label for="Number">status_reason</label>
+                            <label for="Number">Reason</label>
                             <textarea  class="form-control" value="" id="status_reason"  name="status_reason" placeholder="Reason for status" required></textarea>
                             <small id="status_reason_error" class="form-text text-danger"></small>
                         </div>
@@ -362,7 +362,8 @@ var order_status = '';
                 <th scope="col">OD Y/N</th>
                 <th scope="col">cr. Date</th>
                 <th scope="col">Up. Date</th>
-                <th scope="col">status</th>
+                <th scope="col">Status</th>
+                <th scope="col">Status Reason</th>
             </tr>
         </thead>
         <tbody>  
@@ -448,6 +449,7 @@ var order_status = '';
                 <th>{{date('d-M-y', strtotime($lists->created_at))}} <br> {{date('G:i a', strtotime($lists->created_at))}}</th>
                 <th>{{date('d-M-y', strtotime($lists->updated_at))}} <br> {{date('G:i a', strtotime($lists->updated_at))}}</th> 
                 <th>{{$lists->status}}</th>
+                <th>{{$lists->status_reason}}</th>
             </tr>
             <?php $count++;?>
             @endforeach

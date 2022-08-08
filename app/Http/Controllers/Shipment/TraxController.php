@@ -174,5 +174,131 @@ class TraxController extends Controller
         return $data;
     }
     
-    //
+    public function calculate_charges(Request $request)
+    {
+        $best_fare = array();
+        $data['service_type_id'] = 1;
+        $data['origin_city_id'] = 202;
+        $data['destination_city_id'] = $request->destination_city_id;
+        $data['estimated_weight'] = $request->estimated_weight;
+        $data['shipping_mode_id'] = $request->shipping_mode_id;
+        $data['amount'] = $request->amount;
+        $calculation =  $this->CalculateDestinationRates($data);
+        // dd($data,$calculation);
+        return response()->json(['data' => $calculation]);
+    }
+    
+    public function get_fare_list(Request $request)
+    {
+        $best_fare_result=0;
+        $best_fare=[];
+        $data['service_type_id'] = 1;
+        $data['origin_city_id'] = 202;
+        $data['destination_city_id'] = $request->destination_city_id;
+        $data['estimated_weight'] = $request->estimated_weight;
+        $data['shipping_mode_id'] = 1;
+        $data['amount'] = $request->amount;
+        $calculation =  $this->CalculateDestinationRates($data);
+        
+        if($calculation->status == 0)
+        {
+            //dd();
+            // dd($best_fare[0]['fare']);
+            $charges = $calculation->information->charges;
+            $total_charges = $charges->total_charges;
+            $gst = $charges->gst;
+            //$best_fare[0]['fare']=($total_charges+$gst);
+            $best_fare_result=1; 
+            array_push($best_fare,array(
+                
+            'shipping_mode_id' => '1',
+            'shippment' => 'Rush',
+            'fare'=>$total_charges+$gst,
+            ));
+            //echo '<pre>';print_r($calculation);
+            
+        }
+        
+        $data['shipping_mode_id'] = 2;
+        $calculation =  $this->CalculateDestinationRates($data);
+        if($calculation->status == 0)
+        {
+            $charges = $calculation->information->charges; 
+            $total_charges = $charges->total_charges;
+            $gst = $charges->gst;
+            // $best_fare[1]['fare'] =($total_charges+$gst);
+            $best_fare_result=1; 
+            array_push($best_fare,array(
+                
+            'shipping_mode_id' => '2',
+            'shippment' => 'Saver Plus',
+            'fare'=>$total_charges+$gst,
+            ));
+            // echo '<pre>';print_r($data);
+            // echo '<pre>';print_r($calculation);
+            // echo '<pre>';print_r($best_fare);
+        }
+        
+        $data['shipping_mode_id'] = 3;
+        $calculation =  $this->CalculateDestinationRates($data);
+        if($calculation->status == 0)
+        { 
+            $charges = $calculation->information->charges;
+            $total_charges = $charges->total_charges;
+            $gst = $charges->gst;
+            // $best_fare[2]['fare'] =($total_charges+$gst);
+            $best_fare_result=1;
+             
+            array_push($best_fare,array(
+                
+            'shipping_mode_id' => '3',
+            'shippment' => 'Swift',
+            'fare'=>$total_charges+$gst,
+            )); 
+        }
+        //dd($best_fare);
+        if($best_fare_result == 1)
+        {
+            return response()->json(['data' => $calculation,'best_fare'=>$best_fare]);
+        }
+        
+        // if($calculation->status != 1)
+        // {
+        //     // dd($calculation);
+        //     $charges = $calculation->information->charges;
+        //     $total_charges = $charges->total_charges;
+        //     $gst = $charges->gst;
+        //     $best_fare[] =($total_charges+$gst);
+            
+        //     $data['shipping_mode_id'] = 3;
+        //     $calculation =  $this->CalculateDestinationRates($data);
+        //     $charges = $calculation->information->charges;
+        //     $total_charges = $charges->total_charges;
+        //     $gst = $charges->gst;
+        //     $best_fare[] =($total_charges+$gst);
+            
+        //     $data['shipping_mode_id'] = 2;
+        //     $calculation =  $this->CalculateDestinationRates($data);
+        //     $charges = $calculation->information->charges;
+        //     $total_charges = $charges->total_charges;
+        //     $gst = $charges->gst;
+        //     $best_fare[] =($total_charges+$gst);
+            
+        //     $final_fare=[];
+        //     sort($best_fare); 
+        //     $arrlength = count($best_fare);
+        //     for($x = 0; $x < $arrlength; $x++) {
+        //       $final_fare[] = $best_fare[$x]; 
+        //     }
+            
+        //     //sort($best_fare);
+        //     //dd($best_fare);
+        //     $charges->total_charges = $final_fare[0];
+        //     return response()->json(['data' => $calculation]);
+            
+        // }
+        return response()->json(['data' => $calculation]);
+        
+    }
+     
 }
