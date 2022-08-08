@@ -18,6 +18,12 @@
 
 <script type="text/javascript">
 
+function get_index(index)
+{
+    let elements = document.getElementsByClassName("city");
+    // document.getElementById("demo").innerHTML = elements[0].value;
+   alert(elements[0].value);
+}
 
 
 $( document ).ready(function() {
@@ -135,13 +141,13 @@ function validateForm() {
             
                         <div class="form-group col-sm">
                             <label for="Number">weight</label>
-                            <input type="number" class="form-control @if($errors->get('weight')) is-invalid @endif" value="{{old('weight')}}@if(isset($ManualOrder)){{trim($ManualOrder->weight)}}@endif" id="weight[]"  name="weight[]" placeholder="Weight (in kg)" required>
+                            <input type="number" class="form-control @if($errors->get('weight')) is-invalid @endif weight" onfocusout="get_fare_list(<?=$count?>)" value="{{old('weight')}}@if(isset($ManualOrder)){{trim($ManualOrder->weight)}}@endif" id="weight[]"  name="weight[]" placeholder="Weight (in kg)" required>
                             @if($errors->get('weight')) <small id="weight_error[]" class="form-text text-danger">{{$errors->first('weight')}} </small>@endif
                         </div>
             
                         <div class="form-group col-sm">
                             <label for="address">city</label>
-                            <select class="form-control @if($errors->get('city')) is-invalid @endif cities_dropdown" id="city[]"   name="city[]" required>
+                            <select class="form-control @if($errors->get('city')) is-invalid @endif cities_dropdown city" id="city[]"  onchange="get_fare_list(<?=$count?>)" name="city[]" required>
                                 <option value="">Select City</option>
                                 @for($i=0 ; $i < sizeof($cities); $i++)
                                  
@@ -170,8 +176,14 @@ function validateForm() {
             
                         <div class="form-group col-sm">
                             <label for="price">price</label>
-                            <input type="number" onkeyup="limit(this);" class="form-control @if($errors->get('price')) is-invalid @endif" value="{{old('price')}}@if(isset($ManualOrder)){{trim($ManualOrder->price)}}@endif" id="price[]"  name="price[]" placeholder="Price" required>
+                            <input type="number" onkeyup="limit(this);" class="form-control @if($errors->get('price')) is-invalid @endif price" onfocusout="get_fare_list(<?=$count?>)" value="{{old('price')}}@if(isset($ManualOrder)){{trim($ManualOrder->price)}}@endif" id="price[]"  name="price[]" placeholder="Price" required>
                             @if($errors->get('price')) <small id="price_error[]" class="form-text text-danger price_error[]">{{$errors->first('price')}} </small>@endif
+                        </div> 
+            
+                        <div class="form-group col-sm">
+                            <label for="fare">Fare</label>
+                            <input type="text" onkeyup="limit(this);" class="form-control @if($errors->get('fare')) is-invalid @endif fare" value="{{old('fare')}}@if(isset($ManualOrder)){{trim($ManualOrder->fare)}}@endif" id="fare[]" autocomplete="off" name="fare[]" placeholder="fare"  required>
+                            @if($errors->get('fare')) <small id="fare_error[]" class="form-text text-danger fare_error[]">{{$errors->first('fare')}} </small>@endif
                         </div> 
                         
                         <div class="form-group col-sm">
@@ -182,7 +194,7 @@ function validateForm() {
                         
                         <div class="form-group col-sm"> 
                             <label for="receiver_name">Shipment Method</label>
-                            <select class="form-control @if($errors->get('shipping_mode_id')) is-invalid @endif shipping_mode_id_dropdown" name="shipping_mode_id[]" id="shipping_mode_id[]" required>
+                            <select class="form-control @if($errors->get('shipping_mode_id')) is-invalid @endif shipping_mode_id_dropdown shipping_mode_id" name="shipping_mode_id[]" id="shipping_mode_id[]" onchange="calculate_charges(<?=$count?>)" required>
                                 <option value="" selected="selected">Select Shipment Method</option> 
                                 <option value="1">Rush</option>
                                 <option value="2">Saver Plus</option>
@@ -191,6 +203,9 @@ function validateForm() {
                         </div>
                         
                         
+                        <!--<div class="form-group">-->
+                        <!--    <button type="button" onclick="calculate_charges(<?=$count?>)">Calculate Fare</button>-->
+                        <!--</div>-->
                     <?php $count++;?>
                 @endforeach
                  
@@ -206,7 +221,172 @@ function validateForm() {
     
  
     <script type="text/javascript">
+    
+    
+function calculate_charges(index)
+{  
+    $("body").addClass("loading"); 
+    let destination_city_id = document.getElementsByClassName("city")[index].value;
+    let estimated_weight = document.getElementsByClassName("weight")[index].value;
+    let shipping_mode_id = document.getElementsByClassName("shipping_mode_id")[index].value;
+    let price = document.getElementsByClassName("price")[index].value;
+    $.ajax({
+          url: base_url + '/trax/calculate-charges',
+          headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+          type:"POST",
+          dataType: 'json',
+          data:{
+            // $data['service_type_id'] = 1;
+            // $data['origin_city_id'] = 202;
+            // $data['destination_city_id'] = 172;
+            // $data['estimated_weight'] = 0.53;
+            // $data['shipping_mode_id'] = 1;
+            // $data['amount'] = 300;
+            service_type_id:1,
+            origin_city_id:202,
+            destination_city_id:destination_city_id,
+            estimated_weight:estimated_weight,
+            shipping_mode_id:shipping_mode_id,
+            amount:price,
+          },
+          success:function(response){
+              
+              //console.log(response.data.status);
+            //$('#successMsg').show();
+            if(response.data.status == 0)
+            {
+                let data_fare = response.data.information.charges;
+                var tota_fare =data_fare.total_charges+data_fare.gst;
+                //console.log(tota_fare);
+                // $("#fare[0]").val(tota_fare);
+                document.getElementsByClassName("fare")[index].value = (tota_fare.toFixed(2));
+                
+                
+                // $('#exampleModalCenter').modal('hide'); 
+                // $('#exampleModalCenter').modal({
+                // show: 'false'
+                // }); 
+                
+            }
+            else
+            { 
+                var errors='';
+                Object.keys(response.data.errors).forEach(function(key) {
+                    const obj = {
+                        key: response.data.errors[key]
+                    }
+                    errors += response.data.errors[key]+'\n'; 
+                });
+                alert(errors); 
+            }
+            
+            //console.log(response);
+            $("body").removeClass("loading"); 
+          },
+          error: function(response) {
+              
+            // $('#nameErrorMsg').text(response.responseJSON.errors.name);
+            // $('#emailErrorMsg').text(response.responseJSON.errors.email);
+            // $('#mobileErrorMsg').text(response.responseJSON.errors.mobile);
+            // $('#messageErrorMsg').text(response.responseJSON.errors.message);
+          },
+      });
+}
+
+function get_fare_list(index)
+{  
+    $("body").addClass("loading"); 
+    let destination_city_id = document.getElementsByClassName("city")[index].value;
+    let estimated_weight = document.getElementsByClassName("weight")[index].value;
+    let shipping_mode_id = document.getElementsByClassName("shipping_mode_id")[index].value;
+    let price = document.getElementsByClassName("price")[index].value;
+    $.ajax({
+          url: base_url + '/trax/get-fare-list',
+          headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+          type:"POST",
+          dataType: 'json',
+          data:{
+            // $data['service_type_id'] = 1;
+            // $data['origin_city_id'] = 202;
+            // $data['destination_city_id'] = 172;
+            // $data['estimated_weight'] = 0.53;
+            // $data['shipping_mode_id'] = 1;
+            // $data['amount'] = 300;
+            service_type_id:1,
+            origin_city_id:202,
+            destination_city_id:destination_city_id,
+            estimated_weight:estimated_weight,
+            shipping_mode_id:shipping_mode_id,
+            amount:price,
+          },
+          success:function(response){
+              
+              //console.log(response);
+            //$('#successMsg').show();
+            if(response.data.status == 0)
+            {
+                text ='';
+                //console.log(response.best_fare);
+                (response.best_fare).forEach(element => text+='<option value="'+(element.shipping_mode_id)+'">'+(element.shippment)+'  fare:('+(element.fare.toFixed(2))+')</option>' );
+                //console.log(text);
+                text = '<option>Select Shipment Mode</option>'+text;
+                document.getElementsByClassName("shipping_mode_id")[index].innerHTML = text;
+                // text+='<option value="'+(element.shipping_mode_id)+'">'+(element.shippment)+' fare:'+(element.fare)+'</option>'
+                // let text = "";
+                // const fruits = ["apple", "orange", "cherry"];
+                // fruits.forEach(ShipmentHtml);
+                
+                // document.getElementById("demo").innerHTML = text;
+                 
+                
+                
+                // let data_fare = response.data.information.charges;
+                // var tota_fare =data_fare.total_charges+data_fare.total_charges;
+                // console.log(tota_fare);
+                // document.getElementsByClassName("fare")[index].value = tota_fare
+                
+                
+                // $('#exampleModalCenter').modal('hide'); 
+                // $('#exampleModalCenter').modal({
+                // show: 'false'
+                // }); 
+                
+            }
+            else
+            { 
+                alert(response.data.message)
+            }
+            
+            //console.log(response);
+            $("body").removeClass("loading"); 
+          },
+          error: function(response) {
+              
+            // $('#nameErrorMsg').text(response.responseJSON.errors.name);
+            // $('#emailErrorMsg').text(response.responseJSON.errors.email);
+            // $('#mobileErrorMsg').text(response.responseJSON.errors.mobile);
+            // $('#messageErrorMsg').text(response.responseJSON.errors.message);
+          },
+      });
+}
+
+    function ShipmentHtml(item, index) 
+    {
+        // text += "<option>"+index + ": " + item + "<br>"; 
+        text += '<option value="'+index+'">'+item+'</option>';
+    }
+
     $( document ).ready(function() { 
+        
+        $(".fare").on('keydown paste focus mousedown', function(e){
+        if(e.keyCode != 9) // ignore tab
+            e.preventDefault();
+            //alert('dont type, click on Calculate Fare');
+    });
      
   //$('.receiver_number').inputmask("99-9999999");  //static mask
 });

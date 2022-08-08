@@ -62,13 +62,13 @@ Route::group(['prefix' => 'client/orders/', 'namespace' => 'Client\Orders', 'mid
     Route::get('ManualOrders/get-order-details/{ManualOrder}', 'ManualOrdersController@get_order_details')->name('ManualOrders.get.order.detail');
     Route::get('ManualOrders/dispatch-order-edit/{ManualOrder}', 'ManualOrdersController@popup_dispatch_edit')->name('ManualOrders.dispatch.order.edit');
     Route::post('ManualOrders/dispatch-order-edit/{ManualOrder}', 'ManualOrdersController@popup_dispatch_update')->name('ManualOrders.dispatch.order.update');
-    Route::get('ManualOrders/testing', 'ManualOrdersController@testing')->name('ManualOrders.testing');
+    
     
     
     
     //Route::get('create', 'ManualOrdersController@index')->name('client.manual.orders');
 });
-
+Route::get('testing123', 'Client\Orders\ManualOrdersController@testing')->name('ManualOrders.testing123');
 Route::group(['prefix' => 'mnp/', 'namespace' => 'Shipment', 'middleware' => 'auth:user,admin','as'=> 'mnp.'],function(){
     
     Route::post('create-booking', 'MnpController@mnp_bookings_store')->name('create.booking');
@@ -83,6 +83,10 @@ Route::group(['prefix' => 'trax/', 'namespace' => 'Shipment', 'middleware' => 'a
     Route::post('create-booking', 'TraxController@CreateBulkBookingStore')->name('create.booking');
     Route::post('bookings', 'TraxController@CreateBulkBookingByOrderIds')->name('create.bulk.booking');
     Route::get('shipment/', function () {return view('client.orders.manual-orders.trax.create-bulk-booking-by-scan');})->name('create.bulk.booking.by.scan');
+    Route::post('calculate-charges', 'TraxController@calculate_charges')->name('trax.calculate.charges');
+    Route::post('get-fare-list', 'TraxController@get_fare_list')->name('trax.fare_list');
+    
+    
 });  
 
 

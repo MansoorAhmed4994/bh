@@ -71,7 +71,7 @@ class ManualOrdersController extends Controller
             $search_test = $request->search_text;
             $order_status = $request->order_status;
             $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.id',$order_id)
-            ->select('manual_orders.id','manual_orders.customers_id','manual_orders.description','manual_orders.receiver_number','customers.first_name','manual_orders.reciever_address','customers.last_name','customers.number','customers.address','manual_orders.price','manual_orders.images','manual_orders.total_pieces','manual_orders.date_order_paid','manual_orders.status','manual_orders.created_at','manual_orders.updated_at')
+            ->select('manual_orders.id','manual_orders.customers_id','manual_orders.description','manual_orders.receiver_number','customers.first_name','manual_orders.reciever_address','customers.last_name','customers.number','customers.address','manual_orders.price','manual_orders.images','manual_orders.total_pieces','manual_orders.date_order_paid','manual_orders.status','manual_orders.created_at','manual_orders.updated_at','manual_orders.status_reason')
             ->paginate(20);
         }
         else
@@ -90,7 +90,7 @@ class ManualOrdersController extends Controller
                     ->orWhere('customers.number','like',$search_test.'%');
             })->where('manual_orders.status','like',$order_status.'%')
             ->orderBy('manual_orders.id', 'ASC')
-            ->select('manual_orders.id','manual_orders.customers_id','manual_orders.description','manual_orders.receiver_number','customers.first_name','manual_orders.reciever_address','customers.last_name','customers.number','customers.address','manual_orders.price','manual_orders.images','manual_orders.total_pieces','manual_orders.date_order_paid','manual_orders.status','manual_orders.created_at','manual_orders.updated_at')
+            ->select('manual_orders.id','manual_orders.customers_id','manual_orders.description','manual_orders.receiver_number','customers.first_name','manual_orders.reciever_address','customers.last_name','customers.number','customers.address','manual_orders.price','manual_orders.images','manual_orders.total_pieces','manual_orders.date_order_paid','manual_orders.status','manual_orders.created_at','manual_orders.updated_at','manual_orders.status_reason')
             ->paginate(20);
             
         }
@@ -385,7 +385,7 @@ class ManualOrdersController extends Controller
         }
         $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.status','like',$status.'%')
             ->orderBy('manual_orders.id', $list_order)
-            ->select('manual_orders.id','manual_orders.customers_id','manual_orders.description','customers.first_name','customers.last_name','customers.number','manual_orders.receiver_number','manual_orders.reciever_address','manual_orders.price','manual_orders.images','manual_orders.total_pieces','manual_orders.date_order_paid','manual_orders.status','manual_orders.created_at','manual_orders.updated_at')
+            ->select('manual_orders.id','manual_orders.customers_id','manual_orders.description','customers.first_name','customers.last_name','customers.number','manual_orders.receiver_number','manual_orders.reciever_address','manual_orders.price','manual_orders.images','manual_orders.total_pieces','manual_orders.date_order_paid','manual_orders.status','manual_orders.created_at','manual_orders.updated_at','manual_orders.status_reason')
             ->paginate(20);
             //dd($list);
 //dd($list);
@@ -501,6 +501,7 @@ class ManualOrdersController extends Controller
             $total_pieces= $request->total_pieces[$x];
             $weight= $request->weight[$x];
             $price= $request->price[$x];
+            $fare = $request->fare[$x];
             $data['order_id'] = $request->id[$x];
             $data['service_type_id'] = 1;
             $data['pickup_address_id'] = $pickup_address_id;
@@ -534,6 +535,7 @@ class ManualOrdersController extends Controller
             $ManualOrder->total_pieces = $total_pieces;
             $ManualOrder->weight = $weight;
             $ManualOrder->price = $price;
+            $ManualOrder->price = $fare;
             $ManualOrder->description = trim($request->item_description[$x]);
             $ManualOrder->reference_number = $reference_number;
             $ManualOrder->updated_by = Auth::id();
@@ -619,6 +621,13 @@ class ManualOrdersController extends Controller
     
     public function testing()
     {
+        $data['service_type_id'] = 1;
+        $data['origin_city_id'] = 202;
+        $data['destination_city_id'] = 172;
+        $data['estimated_weight'] = 0.53;
+        $data['shipping_mode_id'] = 1;
+        $data['amount'] = 300;
+        dd($this->CalculateDestinationRates($data));
         // $url = "https://api.nexmo.com/beta/messages";
 
         // $curl = curl_init($url);
