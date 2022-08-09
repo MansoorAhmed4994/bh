@@ -10,10 +10,10 @@
                 <div class="card" style="width: 18rem;">
                   <!--<img class="card-img-top" src="..." alt="Card image cap">-->
                   <div class="card-body">
-                    <h5 class="card-title">{{$list->total}}</h5>
-                    <p class="card-text">Status: {{$list->status}}</p>
+                    <h3>{{$list->status}}</h3>
+                    <h5 class="card-title">{{$list->total}}</h5> 
                     
-                    <p class="card-text">Amount: {{$list->amount}}</p>
+                    <!--<p class="card-text">Amount: {{$list->amount}}</p>-->
                     <a href="{{route('ManualOrders.status.order.list',$list->status)}}" class="btn btn-primary">Go</a>
                   </div> 
                 </div>
@@ -25,8 +25,10 @@
             <div class="card" style="width: 18rem;">
               <!--<img class="card-img-top" src="..." alt="Card image cap">-->
               <div class="card-body">
+                  
+                    <h3>Total Order</h3>
                 <h5 class="card-title"><?php echo $total_orders;?></h5>
-                <p class="card-text">Total Orders</p>
+                
                 <!--<a href="{{route('ManualOrders.status.order.list','')}}" class="btn btn-primary">Go</a>-->
               </div> 
             </div>
