@@ -10,10 +10,11 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
-    <script type="application/javascript" src="{{ asset('public/js/app.js') }}" defer></script>
+   <script type="application/javascript" src="{{ asset('public/js/app.js') }}" ></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -149,8 +150,8 @@
             @yield('content')
         </main>
     </div>
-    <script src="https://code.jquery.com/jquery-3.6.0.js">
-    
+     
+    <script>
         document.addEventListener("DOMContentLoaded", function(){
         // make it as accordion for smaller screens
         if (window.innerWidth < 992) {

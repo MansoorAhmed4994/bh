@@ -18,44 +18,41 @@
 
 <script type="text/javascript">
 
-function get_index(index)
-{
-    let elements = document.getElementsByClassName("city");
-    // document.getElementById("demo").innerHTML = elements[0].value;
-   alert(elements[0].value);
-}
-
-
-$( document ).ready(function() {
-    // var Inputmask = require('inputmask');
-    var cities =@json($cities);
-    $('.cities_dropdown').select2();
-    
-    var cities =@json($cities);
-    $('.information_display_dropdown').select2();
-    
-    var cities =@json($cities);
-    $('.payment_mode_id_dropdown').select2();
-        //static mask
-});
-
-function validateForm() {
-    var size = document.getElementsByName("price[]").length;
-    //console.log(size);
-    for(var i=0; i< size;  i++)
+    function get_index(index)
     {
-        
-        var price = document.getElementsByName("price[]")[i].value;
-        //console.log(price);
-        if(price <= 0 )
-        {
-            //console.log(size);
-            document.getElementsByClassName("price_error[]")[i].innerHTML = 'error';
-        }
+        let elements = document.getElementsByClassName("city");
+        // document.getElementById("demo").innerHTML = elements[0].value;
+       alert(elements[0].value);
     }
-    
-   
-}
+
+    $( document ).ready(function() {
+        // var Inputmask = require('inputmask');
+        var cities =@json($cities);
+        $('.cities_dropdown').select2();
+        
+        var cities =@json($cities);
+        $('.information_display_dropdown').select2();
+        
+        var cities =@json($cities);
+        $('.payment_mode_id_dropdown').select2();
+            //static mask
+    });
+
+    function validateForm() {
+        var size = document.getElementsByName("price[]").length;
+        //console.log(size);
+        for(var i=0; i< size;  i++)
+        {
+            
+            var price = document.getElementsByName("price[]")[i].value;
+            //console.log(price);
+            if(price <= 0 )
+            {
+                //console.log(size);
+                document.getElementsByClassName("price_error[]")[i].innerHTML = 'error';
+            }
+        } 
+    }
 
 
 
@@ -219,8 +216,7 @@ function validateForm() {
 
     </div>
     
- 
-    <script type="text/javascript">
+ <script type="text/javascript">
     
     
 function calculate_charges(index)
@@ -296,12 +292,29 @@ function calculate_charges(index)
 }
 
 function get_fare_list(index)
-{  
+{   
     $("body").addClass("loading"); 
     let destination_city_id = document.getElementsByClassName("city")[index].value;
     let estimated_weight = document.getElementsByClassName("weight")[index].value;
     let shipping_mode_id = document.getElementsByClassName("shipping_mode_id")[index].value;
     let price = document.getElementsByClassName("price")[index].value;
+    if (destination_city_id == '')
+    {
+        return;
+        //console.log(destination_city_id+"\n"+estimated_weight+"\n"+shipping_mode_id+"\n"+price)
+    }
+    else if ( estimated_weight <=0  )
+    {
+        return;
+    }
+    else if ( shipping_mode_id == '' )
+    {
+        return;
+    }
+    else if (price == '')
+    {
+        return;
+    }
     $.ajax({
           url: base_url + '/trax/get-fare-list',
           headers: {
@@ -387,15 +400,14 @@ function get_fare_list(index)
             e.preventDefault();
             //alert('dont type, click on Calculate Fare');
     });
-     
-  //$('.receiver_number').inputmask("99-9999999");  //static mask
+      
 });
     //   $(".cities_dropdown").select2();
     </script>
     
 
 
-<script src="{{ asset('public/js/inputmask/jquery.inputmask.js') }}"></script>
-<script src="{{ asset('public/js/inputmask/bindings/inputmask.binding.js') }}"></script>
+<!--<script src="{{ asset('public/js/inputmask/jquery.inputmask.js') }}"></script>-->
+<!--<script src="{{ asset('public/js/inputmask/bindings/inputmask.binding.js') }}"></script>-->
      
   @endsection

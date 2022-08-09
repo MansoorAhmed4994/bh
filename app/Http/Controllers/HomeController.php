@@ -5,6 +5,7 @@ use CountryState;
 use Illuminate\Http\Request;
 use PragmaRX\Countries\Package\Countries;
 use DB;
+use Carbon\Carbon;
 
 class HomeController extends Controller
 {
@@ -26,8 +27,13 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $from_date = Carbon::now()->subDays(60)->toDateTimeString();
+        $to_date = Carbon::now()->addDays(5)->toDateTimeString();
+  
+// Add days to date and display it 
+//echo date('Y-m-d', strtotime($date. ' + 10 days'));
         //dd('working');
-         $list =DB::table('manual_orders')
+         $list =DB::table('manual_orders')->orderBy('id', 'DESC')->whereBetween('created_at', [$from_date, $to_date])
           ->groupBy('status')
           ->select('status', DB::raw('count(*) as total'), DB::raw('sum(price) as amount'))
           ->get();
