@@ -22,7 +22,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('public/css/app.css') }}" rel="stylesheet">
-    
+    <link href="{{ asset('public/css/style.css') }}" rel="stylesheet">
     <style>
         @media all and (min-width: 992px) {
             .dropdown-menu li{ position: relative; 	}

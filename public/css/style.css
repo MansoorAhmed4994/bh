@@ -1,0 +1,4 @@
+input[pattern]:invalid
+{                        
+    color:red; 
+}

@@ -178,12 +178,16 @@ class ManualOrdersController extends Controller
     
     public function customer_order_confirmed(ManualOrders $ManualOrder)
     { 
-        $ManualOrder->status = 'confirmed'; 
-        if($ManualOrder->save())
+        if($ManualOrder->status != 'dispatched')
         {
-            //$ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'manual_orders.customers_id')->where('manual_orders.id',$id)->first();
-            return view('frontend.client.orders.manual-orders.view')->with(['ManualOrder'=>$ManualOrder, 'success'=> 'Order Successfully Confirmed']);
+            $ManualOrder->status = 'confirmed'; 
+            if($ManualOrder->save())
+            {
+                //$ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'manual_orders.customers_id')->where('manual_orders.id',$id)->first();
+                return view('frontend.client.orders.manual-orders.view')->with(['ManualOrder'=>$ManualOrder, 'success'=> 'Order Successfully Confirmed']);
+            }
         }
+        return view('frontend.client.orders.manual-orders.view')->with(['ManualOrder'=>$ManualOrder, 'success'=> 'Order Successfully Confirmed']);
     //     $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'manual_orders.customers_id')->where('manual_orders.id',$id)->first();
     //     //dd(ManualOrders::leftJoin('customers', 'customers.id', '=', 'manual_orders.customers_id')->where('manual_orders.status','pending')); 
     //   // dd($ManualOrder) ;

@@ -125,7 +125,7 @@
                         ?>
                         <div class="form-group col-sm">
                             <label for="receiver_name">Reciever Number</label>
-                            <input type="tel" class="form-control custom-mainforminput  " value="<?=$reciever_number?>" placeholder="(92) xxx xxxxxxx"  id="receiver_number[]"  name="receiver_number[]" data-inputmask="('9'2) 399-9999999" data-mask="" im-insert="true">
+                            <input type="tel" class="form-control custom-mainforminput" pattern="92[0-9]{2}(?!1234567)(?!1111111)(?!7654321)[0-9]{8}" value="<?=$reciever_number?>" placeholder="(92) xxx xxxxxxx"  id="receiver_number[]"  name="receiver_number[]" data-inputmask="('9'2) 399-9999999" data-mask="" im-insert="true">
                             <!--<input type="number"  data-inputmask="'mask': '99-9999999'"  class="form-control @if($errors->get('receiver_number')) is-invalid @endif receiver_number" value="{{old('receiver_number')}}@if(isset($ManualOrder)){{trim($ManualOrder->receiver_number)}}@endif" id="receiver_number[]"  name="receiver_number[]" placeholder="Reciever Number" required>-->
                             @if($errors->get('receiver_number')) <small id="receiver_name_error[]" class="form-text text-danger">{{$errors->first('receiver_name')}} </small>@endif
                         </div> 
@@ -138,7 +138,7 @@
             
                         <div class="form-group col-sm">
                             <label for="Number">weight</label>
-                            <input type="number" class="form-control @if($errors->get('weight')) is-invalid @endif weight" onfocusout="get_fare_list(<?=$count?>)" value="{{old('weight')}}@if(isset($ManualOrder)){{trim($ManualOrder->weight)}}@endif" id="weight[]"  name="weight[]" placeholder="Weight (in kg)" required>
+                            <input type="number" step='0.01' class="form-control @if($errors->get('weight')) is-invalid @endif weight" onfocusout="get_fare_list(<?=$count?>)" value="{{old('weight')}}@if(isset($ManualOrder)){{trim($ManualOrder->weight)}}@endif" id="weight[]"  name="weight[]" placeholder="Weight (in kg)" required>
                             @if($errors->get('weight')) <small id="weight_error[]" class="form-text text-danger">{{$errors->first('weight')}} </small>@endif
                         </div>
             
@@ -293,7 +293,7 @@ function calculate_charges(index)
 
 function get_fare_list(index)
 {   
-    $("body").addClass("loading"); 
+     
     let destination_city_id = document.getElementsByClassName("city")[index].value;
     let estimated_weight = document.getElementsByClassName("weight")[index].value;
     let shipping_mode_id = document.getElementsByClassName("shipping_mode_id")[index].value;
@@ -303,18 +303,11 @@ function get_fare_list(index)
         return;
         //console.log(destination_city_id+"\n"+estimated_weight+"\n"+shipping_mode_id+"\n"+price)
     }
-    else if ( estimated_weight <=0  )
+    else if ( estimated_weight <=0  ||  estimated_weight == "")
     {
         return;
     }
-    else if ( shipping_mode_id == '' )
-    {
-        return;
-    }
-    else if (price == '')
-    {
-        return;
-    }
+    $("body").addClass("loading");
     $.ajax({
           url: base_url + '/trax/get-fare-list',
           headers: {
