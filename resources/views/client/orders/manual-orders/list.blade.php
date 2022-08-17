@@ -70,7 +70,10 @@ var order_status = '';
             //$('#successMsg').show();
             if(response.messege == true)
             {
+                
+                var link = "https://api.whatsapp.com/send?phone="+receiver_number+"&text=Hi, "+receiver_name+", I am from Brandhub, i just want you to inform you that your parcel has been cancelled due to unavailable of iterm, please contact here for more details 03362240865";
                 $("#dispatch-succes-noti").css("display", "block");
+                window.open(link, '_blank');
                 // $('#exampleModalCenter').modal('hide'); 
                 // $('#exampleModalCenter').modal({
                 // show: 'false'
@@ -321,7 +324,6 @@ var order_status = '';
           <option value="dispatched">Dispatched</option> 
           <option value="hold">Hold</option>
           <option value="incomplete">incomplete</option> 
-          <option value="cancel">cancel</option> 
           <option value="print">Print </option>
           <option value="print_mnp_slips">Print M&P Slips</option>
           <option value="print_trax_slips">Print Trax Slips</option>
@@ -352,6 +354,7 @@ var order_status = '';
                 <th scope="col">F. Name</th> 
                 <th scope="col">Rec. Number</th>
                 <th scope="col">Number</th>
+                <th scope="col">Cancel Order</th>
                 <th scope="col">Description</th>
                 <!--<th scope="col">Ord. Location</th>-->
                 <th scope="col">Address</th>

@@ -1,21 +1,7 @@
 @extends('layouts.'.Auth::getDefaultDriver())
-@section('content')
- <head>
+@section('content') 
 <link  href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.css" rel="stylesheet"/> 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js" defer></script>
-
-<!--<script src="https://code.jquery.com/jquery-1.10.0.min.js"></script>-->
-<!--<script src="https://rawgit.com/RobinHerbots/Inputmask/5.x/dist/jquery.inputmask.js"></script>-->
-<!--<script src="{{ asset('public/js/inputmask/jquery.inputmask.js') }}"></script>-->
-<!--<script src="{{ asset('public/js/inputmask/inputmask.binding.js') }}"></script>-->
- 
-<!--<script src="https://robinherbots.github.io/Inputmask/javascripts/scale.fix.js"></script>-->
-<!--<script src="https://code.jquery.com/jquery-1.10.0.min.js"></script>-->
-<!--<script src="https://rawgit.com/RobinHerbots/Inputmask/5.x/dist/jquery.inputmask.js"></script>-->
-
-
-
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js" ></script>
 <script type="text/javascript">
 
     function get_index(index)
@@ -81,7 +67,6 @@
         }
 
     </style>  
-</head>
     <div class="row mb-3">
         <div class="col-lg-12 margin-tb">
             <div class="text-center">

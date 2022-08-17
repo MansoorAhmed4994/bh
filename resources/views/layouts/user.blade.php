@@ -1,4 +1,3 @@
-<!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
 
@@ -11,7 +10,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Brandhub') }}</title>
 
     <!-- Scripts -->
    <script type="application/javascript" src="{{ asset('public/js/app.js') }}" ></script>
@@ -98,8 +97,9 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false"> Profile </a>
                             <ul class="dropdown-menu dropdown-menu-right">
-                            <li><a class="dropdown-item" href="{{ route('login') }}"> Login </a>
-                            <li><a class="dropdown-item" href="{{ route('register') }}"> Register </a>
+                            <li><a class="dropdown-item" href="{{ route('login') }}"> Login </a></li>
+                            <li><a class="dropdown-item" href="{{ route('register') }}"> Register </a></li>
+                            </ul>
                         </li>
                     </ul>
                 @else
@@ -135,14 +135,13 @@
                                 <form class="dropdown-item" id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf
                                 </form> 
-                            </li> 
+                            </li>
+                            </ul>
                         </li>
                     </ul>
                 @endguest
-                </div>
-            <!-- navbar-collapse.// -->
-            </div>
-            <!-- container-fluid.// -->
+                </div> 
+            </div> 
         </nav>
 
         <main class="py-4">
