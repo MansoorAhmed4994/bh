@@ -70,10 +70,18 @@ var order_status = '';
             //$('#successMsg').show();
             if(response.messege == true)
             {
-                
-                var link = "https://api.whatsapp.com/send?phone="+receiver_number+"&text=Hi, "+receiver_name+", I am from Brandhub, i just want you to inform you that your parcel has been cancelled due to unavailable of iterm, please contact here for more details 03362240865";
-                $("#dispatch-succes-noti").css("display", "block");
-                window.open(link, '_blank');
+                if(order_status == "cancel")
+                {
+                    
+                    var get_char_rec_num = receiver_number.substring(0,1);
+                    if(get_char_rec_num == 0)
+                    {
+                        receiver_number = "+92"+receiver_number;
+                    }
+                    var link = "https://api.whatsapp.com/send?phone="+receiver_number+"&text=Hi, "+receiver_name+", I am from Brandhub, i just want you to inform you that your parcel has been cancelled due to unavailable of iterm, please contact here for more details 03362240865";
+                    $("#dispatch-succes-noti").css("display", "block");
+                    window.open(link, '_blank');
+                }
                 // $('#exampleModalCenter').modal('hide'); 
                 // $('#exampleModalCenter').modal({
                 // show: 'false'
@@ -426,11 +434,26 @@ var order_status = '';
                 <th>{{$lists->first_name}}</th>  
                 <!--<th>{{$lists->number}}</th>-->
                 <?php 
-                $number = substr($lists->number, 1);
-                $number = '+92'.$number;
+                $number = $lists->number;
+                $reciever_number = $lists->receiver_number;
                 
-                $reciever_number = substr($lists->receiver_number, 1);
-                $reciever_number = '+92'.$reciever_number
+                $get_char_num = substr($lists->number,0,1);
+                if($get_char_num == 0)
+                {
+                    $number = substr($lists->number, 1);
+                    $number = '+92'.$number;
+                    
+                }
+                
+                $get_char_rec_num = substr($lists->receiver_number,0,1);
+                if($get_char_rec_num == 0)
+                {
+                    $reciever_number = substr($lists->receiver_number, 1);
+                    $reciever_number = '+92'.$reciever_number;
+                    
+                }
+                
+                
                 ?>
                 <th><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Hi {{$lists->first_name}}, I am from Brandhub, i just want you to confirm your order, please click on the link to and check your articles and press confirmed button {{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}"><?=$reciever_number?></a></th> 
                 <th><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$number?>&text=Hi, {{$lists->first_name}}, I am from Brandhub, i just want you to confirm your order, please click on the link to and check your articles and press confirmed button {{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}"><?=$number?></a></th> 
