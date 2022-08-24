@@ -203,7 +203,7 @@ var dispatch_order_id =  '';
 </div>
 
 <nav class="navbar navbar-light bg-light">
-  <form class="form-inline" method="post" action="{{ route('ManualOrders.search.order') }}">
+  <form class="form-inline" method="post" action="{{ route('ManualOrders.index') }}">
       @csrf
     <div class="form-group">
         <input class="form-control mr-sm-2" type="search" name="search_text" placeholder="Search" aria-label="Search">

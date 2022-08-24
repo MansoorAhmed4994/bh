@@ -53,11 +53,7 @@
         }
   
     </script>
-    <style> 
-        div {
-        position: relative;
-        overflow: hidden;
-        }
+    <style>  
         input[type=file] {
         position: absolute;
         font-size: 50px;

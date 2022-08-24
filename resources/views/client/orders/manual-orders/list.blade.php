@@ -283,7 +283,7 @@ var order_status = '';
 </div>
 
 <nav class="navbar navbar-light bg-light">
-  <form class="form-inline" method="post" action="{{ route('ManualOrders.search.order') }}">
+  <form class="form-inline" method="post" action="{{ route('ManualOrders.index') }}">
       @csrf
     <div class="form-group">
         <input class="form-control mr-sm-2" type="search" name="search_order_id" placeholder="Search by Order id #" aria-label="Search">
@@ -349,30 +349,20 @@ var order_status = '';
         <thead>
             <tr> 
                 <th scope="col"  class="delete_btn_class"><input type="checkbox" onclick="checkAll(this)" ></th>
-                <th scope="col">#</th>
-                <!--<th scope="col">Edit</th>-->
-                <!--<th scope="col">view</th>-->
-                <!--<th scope="col">Print</th>-->
-                <!--<th scope="col">Prepared</th>-->
-                <!--<th scope="col">Confirmed</th>-->
-                <!--<th scope="col">Dispatched</th>-->
-                <!--<th scope="col">deleted</th>-->
+                <th scope="col">#</th> 
                 <th scope="col">Act</th>
-                <th scope="col">Ord. ID</th>
-                <th scope="col">F. Name</th> 
-                <th scope="col">Rec. Number</th>
-                <th scope="col">Number</th>
-                <th scope="col">Cancel Order</th>
+                <th scope="col">Consignment.Id</th>
+                <th scope="col">Ord.ID</th>
+                <th scope="col">F.Name</th> 
+                <th scope="col">Rec.Number</th>
+                <th scope="col">Number</th> 
                 <th scope="col">Description</th>
-                <!--<th scope="col">Ord. Location</th>-->
                 <th scope="col">Address</th>
                 <th scope="col">Price</th>
                 <th scope="col">Img.</th>
-                <!--<th scope="col">Total Pieces</th>-->
-                <!--<th scope="col">Ord.paid Date</th>-->
                 <th scope="col">OD Y/N</th>
-                <th scope="col">cr. Date</th>
-                <th scope="col">Up. Date</th>
+                <th scope="col">cr.Date</th>
+                <th scope="col">Up.Date</th>
                 <th scope="col">Status</th>
                 <th scope="col">Status Reason</th>
             </tr>
@@ -383,24 +373,8 @@ var order_status = '';
             
             <tr style="background-color:@if($lists->status == 'deleted')#f99c9c @elseif($lists->status == 'prepaired') #b7b8b9 @elseif($lists->status == 'confirmed') #91c6ff @elseif($lists->status == 'dispatched') #84f39c @elseif($lists->status == 'deleted') #e77272 @else #f9df90 @endif">
                 <th ><input type="checkbox" id="order_checkbox" class="order_checkbox_class" name="order_checkbox" onclick="get_checked_values()" value="{{$lists->id}}"></th>
-                <th scope="row"><?=$count?></th>            
-                <!--<th><a type="button" href="{{route('ManualOrders.edit',$lists->id)}}" class="btn btn-warning">Edit</a></th>             -->
-                <!--<th><a type="button" href="{{route('ManualOrders.show',$lists->id)}}" class="btn btn-warning">view</a></th> -->
-                <!--<th><a type="button" href="{{route('ManualOrders.print.order.slip',$lists->id)}}" class="btn btn-info">Print Slip</a></th>  -->
-                <!--<th><a type="button" href="{{route('ManualOrders.order.status',['prepared',$lists->id])}}" class="btn btn-secondary">Prepare</a></th> -->
-                <!--<th><a type="button" href="{{route('ManualOrders.order.status',['confirmed',$lists->id])}}" class="btn btn-primary">Confirmed</a></th> -->
-                <!--<th><a type="button" href="{{route('ManualOrders.order.status',['dispatched',$lists->id])}}" class="btn btn-success">Dispatch</a></th> -->
                 
-                <!--<th>-->
-                <!--    <div class="btn-group mr-2" role="group" aria-label="First group">            -->
-                <!--        <a type="button" href="{{route('ManualOrders.edit',$lists->id)}}" class="btn btn-warning">Edit</a>             -->
-                <!--        <a type="button" href="{{route('ManualOrders.show',$lists->id)}}" class="btn btn-dark">view</a>-->
-                <!--        <a type="button" href="{{route('ManualOrders.print.order.slip',$lists->id)}}" class="btn btn-info">Print Slip</a>-->
-                <!--        <a type="button" href="{{route('ManualOrders.order.status',['prepared',$lists->id])}}" class="btn btn-secondary">Prepare</a> -->
-                <!--        <a type="button" href="{{route('ManualOrders.order.status',['confirmed',$lists->id])}}" class="btn btn-primary">Confirmed</a> -->
-                <!--        <a type="button" href="{{route('ManualOrders.order.status',['dispatched',$lists->id])}}" class="btn btn-success">Dispatch</a>-->
-                <!--    </div>    -->
-                <!--</th>-->
+                <th scope="row"><?=$count?></th> 
                 
                 <th>
                     <div class="btn-group" role="group">
@@ -425,11 +399,7 @@ var order_status = '';
                         </div>
                      </div>
                 </th>
-                <!--<th><form method="post" class="delete_form" action="{{route('ManualOrders.destroy',$lists->id)}}">-->
-                <!--    @method('DELETE')-->
-                <!--    @csrf-->
-                <!--    <button type="submit" class="btn btn-danger">Delete</button>-->
-                <!--</form></th>-->
+                <th>{{$lists->consignment_id}}</th> 
                 <th>{{$lists->id}}</th>
                 <th>{{$lists->first_name}}</th>  
                 <!--<th>{{$lists->number}}</th>-->

@@ -21,15 +21,17 @@ use DB;
 
 class ManualOrdersController extends Controller 
 { 
-
     private $images_path =  'storage/images/orders/manual-orders/';
+
     /**
      * Display a listing of the resource.
      
      * @return \Illuminate\Http\Response
      */
+
     public function __construct()
     {
+
         //dd();
         //$this->middleware('auth');
     }
@@ -38,18 +40,59 @@ class ManualOrdersController extends Controller
     use MNPTraits;
     use TraxTraits;
     
-    public function index()
+    public function OrderFieldList()
     {
-        
-        //Auth::shouldUse('admin');
-        // $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'manual_orders.customers_id')->where('manual_orders.status','pending')->orderBy('manual_orders.created_at', 'DESC')->paginate(5);
-        $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')
+        return array('manual_orders.consignment_id','manual_orders.id','manual_orders.customers_id','manual_orders.description','manual_orders.receiver_number','customers.first_name','manual_orders.reciever_address','customers.last_name','customers.number','customers.address','manual_orders.price','manual_orders.images','manual_orders.total_pieces','manual_orders.date_order_paid','manual_orders.status','manual_orders.created_at','manual_orders.updated_at','manual_orders.status_reason'); 
+
+    }
+    
+    public function index(Request $request)
+    {
+
+        $order_id = $request->search_order_id;
+        $search_text = $request->search_text;
+        //dd($request);
+        if($order_id != '')
+        {
+            $search_test = $request->search_text;
+            $order_status = $request->order_status;
+            $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.id',$order_id)
+            ->select($this->OrderFieldList())
+            ->paginate(20);
+        }
+        else if($search_text != '')
+        {
+        $search_test = $request->search_text;
+        $order_status = $request->order_status;
+        $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->
+        where(function ($query) use ($search_test) {
+            $query->where('customers.first_name','like',$search_test.'%')
+                    ->orWhere('customers.first_name','like','%'.$search_test.'%')
+                    ->orWhere('customers.first_name','like','%'.$search_test)
+                    ->orWhere('customers.last_name','like',$search_test.'%')
+                    ->orWhere('customers.last_name','like','%'.$search_test.'%')
+                    ->orWhere('customers.last_name','like','%'.$search_test)
+                    ->orWhere('customers.number','like','%'.$search_test) 
+                    ->orWhere('customers.number','like',$search_test.'%')
+                    ->orWhere('customers.number','like','%'.$search_test.'%')
+                    ->orWhere('manual_orders.id','like','%'.$search_test.'%')
+                    ->orWhere('manual_orders.consignment_id','like','%'.$search_test.'%');
+            })->where('manual_orders.status','like',$order_status.'%')
+            ->orderBy('manual_orders.id', 'ASC')
+            ->select($this->OrderFieldList())
+            ->paginate(20);
+            
+        }
+        else
+        {
+            $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')
         ->where('manual_orders.status','pending')
         ->orderBy('manual_orders.id', 'ASC')
-        ->select('manual_orders.id','manual_orders.customers_id','customers.first_name','manual_orders.receiver_number','manual_orders.description','manual_orders.reciever_address','customers.last_name','customers.number','customers.address','manual_orders.price','manual_orders.images','manual_orders.total_pieces','manual_orders.date_order_paid','manual_orders.status','manual_orders.created_at','manual_orders.updated_at')
+        ->select($this->OrderFieldList())
         ->paginate(20);
+        }
         //dd($list);
-        return view('client.orders.manual-orders.list')->with('list',$list);
+        return view('client.orders.manual-orders.list')->with('list',$list); 
     }
 
     /**
@@ -71,7 +114,7 @@ class ManualOrdersController extends Controller
             $search_test = $request->search_text;
             $order_status = $request->order_status;
             $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.id',$order_id)
-            ->select('manual_orders.id','manual_orders.customers_id','manual_orders.description','manual_orders.receiver_number','customers.first_name','manual_orders.reciever_address','customers.last_name','customers.number','customers.address','manual_orders.price','manual_orders.images','manual_orders.total_pieces','manual_orders.date_order_paid','manual_orders.status','manual_orders.created_at','manual_orders.updated_at','manual_orders.status_reason')
+            ->select($this->OrderFieldList())
             ->paginate(20);
         }
         else
@@ -81,16 +124,19 @@ class ManualOrdersController extends Controller
         $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->
         where(function ($query) use ($search_test) {
             $query->where('customers.first_name','like',$search_test.'%')
-                    ->orWhere('manual_orders.id','like','%'.$search_test.'%')
-                    ->orWhere('manual_orders.consignment_id','like','%'.$search_test.'%')
                     ->orWhere('customers.first_name','like','%'.$search_test.'%')
+                    ->orWhere('customers.first_name','like','%'.$search_test)
                     ->orWhere('customers.last_name','like',$search_test.'%')
                     ->orWhere('customers.last_name','like','%'.$search_test.'%')
+                    ->orWhere('customers.last_name','like','%'.$search_test)
                     ->orWhere('customers.number','like','%'.$search_test) 
-                    ->orWhere('customers.number','like',$search_test.'%');
+                    ->orWhere('customers.number','like',$search_test.'%')
+                    ->orWhere('customers.number','like','%'.$search_test.'%')
+                    ->orWhere('manual_orders.id','like','%'.$search_test.'%')
+                    ->orWhere('manual_orders.consignment_id','like','%'.$search_test.'%');
             })->where('manual_orders.status','like',$order_status.'%')
             ->orderBy('manual_orders.id', 'ASC')
-            ->select('manual_orders.id','manual_orders.customers_id','manual_orders.description','manual_orders.receiver_number','customers.first_name','manual_orders.reciever_address','customers.last_name','customers.number','customers.address','manual_orders.price','manual_orders.images','manual_orders.total_pieces','manual_orders.date_order_paid','manual_orders.status','manual_orders.created_at','manual_orders.updated_at','manual_orders.status_reason')
+            ->select($this->OrderFieldList())
             ->paginate(20);
             
         }
@@ -346,15 +392,17 @@ class ManualOrdersController extends Controller
     public function previouse_order_history(Request $request)
     {
         $data='';
-        $ManualOrders = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->select('manual_orders.id','manual_orders.customers_id','manual_orders.receiver_number','customers.first_name','manual_orders.created_at','manual_orders.status')->where('customers.number',$request->number)->get();
-        
+        $ManualOrders = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->select('manual_orders.id','manual_orders.customers_id','manual_orders.receiver_number','customers.first_name','manual_orders.created_at','manual_orders.status','manual_orders.reciever_address')->where('customers.number',$request->number)->get();
+        //dd($ManualOrders->first());
         $data =  '
          <thead>
                 <tr>
+                  <th scope="col"></th>
                   <th scope="col">order_id</th>
                   <th scope="col">First</th>
                   <th scope="col">number</th>
                   <th scope="col">date</th>
+                  <th scope="col">Address</th>
                   <th scope="col">status</th>
                 </tr>
                 </thead>
@@ -362,22 +410,28 @@ class ManualOrdersController extends Controller
                 foreach($ManualOrders as $ManualOrder)
                 {
                     // dd($ManualOrder);
+                    $onclick = "'".$ManualOrder->first_name."','".$ManualOrder->reciever_address."'";
                     $data .= '<tr>
+                      <th><button class="btn btn-primary" onclick="fetch_data('.$onclick.')">Fetch Data</button></th>
                       <th>'.$ManualOrder->id.'</th>
                       <td>'.$ManualOrder->first_name.'</td>
                       <td>'.$ManualOrder->receiver_number.'</td>
                       <td>'.$ManualOrder->created_at.'</td>
+                      <td>'.$ManualOrder->reciever_address.'</td>
                       <td>'.$ManualOrder->status.'</td>';
                 }
             $data .= '</tbody>';
         //dd($data);
         
-        return response()->json(['messege' => $data]); 
+        return response()->json(['messege' => $data,'field_values'=> $ManualOrders->first()]); 
         // return view('client.orders.manual-orders.view')->with('ManualOrder',$ManualOrder);
     }
     
-    public function status_order_list($status)
+    public function status_order_list( Request $request)
     {
+        //dd($request->status);
+        $status = $request->status;
+        
         $list_order = 'ASC';
         if($status == 'pending' || $status == 'confirmed' || $status == 'dispatched'  )
         {
@@ -385,7 +439,7 @@ class ManualOrdersController extends Controller
         }
         $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.status','like',$status.'%')
             ->orderBy('manual_orders.id', $list_order)
-            ->select('manual_orders.id','manual_orders.customers_id','manual_orders.description','customers.first_name','customers.last_name','customers.number','manual_orders.receiver_number','manual_orders.reciever_address','manual_orders.price','manual_orders.images','manual_orders.total_pieces','manual_orders.date_order_paid','manual_orders.status','manual_orders.created_at','manual_orders.updated_at','manual_orders.status_reason')
+            ->select($this->OrderFieldList())
             ->paginate(20);
             //dd($list);
 //dd($list);

@@ -44,10 +44,9 @@ Route::group(['middleware' => 'auth:user' ],function(){
 });
 
 Route::group(['prefix' => 'client/orders/', 'namespace' => 'Client\Orders', 'middleware' => 'auth:user,admin'],function(){
-
     
-    
-    Route::resource('ManualOrders', 'ManualOrdersController')->except('show');
+    Route::resource('ManualOrders', 'ManualOrdersController')->except('show','index');
+    Route::any('ManualOrders/', 'ManualOrdersController@index')->name('ManualOrders.index');
     Route::get('ManualOrders/show/{id}', 'ManualOrdersController@show')->name('ManualOrders.show'); 
     Route::post('ManualOrders/delete-image', 'ManualOrdersController@delete_order_image')->name('ManualOrders.delete.order.image');
     Route::post('ManualOrders/add-image', 'ManualOrdersController@add_order_image')->name('ManualOrders.add.order.image');
@@ -62,10 +61,6 @@ Route::group(['prefix' => 'client/orders/', 'namespace' => 'Client\Orders', 'mid
     Route::get('ManualOrders/get-order-details/{ManualOrder}', 'ManualOrdersController@get_order_details')->name('ManualOrders.get.order.detail');
     Route::get('ManualOrders/dispatch-order-edit/{ManualOrder}', 'ManualOrdersController@popup_dispatch_edit')->name('ManualOrders.dispatch.order.edit');
     Route::post('ManualOrders/dispatch-order-edit/{ManualOrder}', 'ManualOrdersController@popup_dispatch_update')->name('ManualOrders.dispatch.order.update');
-    
-    
-    
-    
     //Route::get('create', 'ManualOrdersController@index')->name('client.manual.orders');
 });
 Route::get('testing123', 'Client\Orders\ManualOrdersController@testing')->name('ManualOrders.testing123');

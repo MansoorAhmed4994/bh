@@ -1,23 +1,16 @@
  
 @extends('layouts.'.Auth::getDefaultDriver())
 
-@section('content')
-    <style> 
-        div {
-        position: relative;
-        overflow: hidden;
+@section('content') 
+<script type="application/javascript">
+        function fetch_data(name,address)
+        {
+            $( document ).ready(function() {
+                $('#first_name').val(name);
+                $('#address').val(address);
+            // alert(name+address);
+             });
         }
-        input[type=file] {
-        position: absolute;
-        font-size: 50px;
-        opacity: 0; 
-        right: 0;
-        top: 0;
-        }
-
-    </style>
-    
-    <script>
         
         function limit(element)
         {
@@ -47,6 +40,8 @@
                     dataType: 'json',
                     success: function(e)
                     {
+                        $('#first_name').val(e.field_values.first_name);
+                        $('#address').val(e.field_values.reciever_address);
                         $('#previouse_order_detail').html(e.messege),  
                         console.log(e.messege);
                         
@@ -59,7 +54,22 @@
             });
         });
     </script>
+    
+    <style> 
+        
+        input[type=file] 
+        {
+        position: absolute;
+        font-size: 50px;
+        opacity: 0; 
+        right: 0;
+        top: 0;
+        }
 
+    </style>
+    
+    
+    
     <div class="row mb-3">
         <div class="col-lg-12 margin-tb">
             <div class="text-center">
@@ -72,7 +82,7 @@
          
         
         <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-4">
                 <form method="post" action="{{ route('ManualOrders.store') }}" enctype="multipart/form-data" class="dropzone" id="dropzone">
                     @csrf
         
@@ -86,7 +96,7 @@
         
                     <div class="form-group">
                         <label for="Number">Number</label>
-                        <input type="number"  class="form-control" onkeydown="limit(this);" onkeyup="limit(this);" pattern="[0-9]{11}" id="number"  name="number" placeholder="number Number" required>
+                        <input type="tel"  class="form-control"   pattern="0[0-9]{2}(?!1234567)(?!1111111)(?!7654321)[0-9]{8}" id="number"  name="number" placeholder="number Number" required>
                         @if($errors->get('number')) <small id="number_error" class="form-text text-danger">{{$errors->first('number')}} </small>@endif
                     </div> 
         
@@ -114,7 +124,7 @@
                         
                 </form> 
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-8">
                 
             <table class="table" id="previouse_order_detail">
                
