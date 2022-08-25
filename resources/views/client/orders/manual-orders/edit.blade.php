@@ -78,13 +78,13 @@
 
     </script>
     <style>  
-        input[type=file] {
-        position: absolute;
-        font-size: 50px;
-        opacity: 0; 
-        right: 0;
-        top: 0;
-        }
+        /*input[type=file] {*/
+        /*position: absolute;*/
+        /*font-size: 50px;*/
+        /*opacity: 0; */
+        /*right: 0;*/
+        /*top: 0;*/
+        /*}*/
 
     </style>  
 </head>
@@ -134,11 +134,12 @@
                     </div>   
                     
                     <div class="form-group">
-                        <div class="file btn btn-lg btn-secondary">Add new
-                            <input type="file" name="images[]" id="images" multiple/>
-                            <input type="text" name="images_path" id="images_path"/>
+                        <input type="file" name="images[]" id="images" multiple/>
+                        <!--<div class="file btn btn-lg btn-secondary">Add new-->
                             
-                        </div>
+                            <input type="hidden" name="images_path" id="images_path" />
+                            
+                        <!--</div>-->
                         @if($errors->get('images'))<small id="images_error" class="form-text text-danger"> {{$errors->first('images')}} </small>@endif
                     </div>
                     
