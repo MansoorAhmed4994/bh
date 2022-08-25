@@ -46,7 +46,8 @@ Route::group(['middleware' => 'auth:user' ],function(){
 Route::group(['prefix' => 'client/orders/', 'namespace' => 'Client\Orders', 'middleware' => 'auth:user,admin'],function(){
     
     Route::resource('ManualOrders', 'ManualOrdersController')->except('show','index');
-    Route::any('ManualOrders/', 'ManualOrdersController@index')->name('ManualOrders.index');
+    
+    Route::any('ManualOrders/list', 'ManualOrdersController@index')->name('ManualOrders.index');
     Route::get('ManualOrders/show/{id}', 'ManualOrdersController@show')->name('ManualOrders.show'); 
     Route::post('ManualOrders/delete-image', 'ManualOrdersController@delete_order_image')->name('ManualOrders.delete.order.image');
     Route::post('ManualOrders/add-image', 'ManualOrdersController@add_order_image')->name('ManualOrders.add.order.image');
