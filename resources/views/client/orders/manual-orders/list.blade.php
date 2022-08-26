@@ -5,12 +5,18 @@
 
 @section('content') 
 <style>
-.td{
+.td-div {
     float: left;
     width: 100%;
     position: relative;
+    background: white;
+    margin-top: 7px;
+    border-radius: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ccc7c7;
+    padding: 5px 0;
 }
-.tr{
+.tr-div{
     float: left;
     border: 1px solid black;
     border-radius: 15px;
@@ -18,15 +24,16 @@
     padding: 13px;
     
 } 
-.parcel-img {
-    width: 100%;
-}
-.img-scroll-box
-{
-    height: 150px;
+.img-scroll-box {
+    height: auto;
     float: left;
     overflow: auto;
     white-space: nowrap;
+}
+.parcel-img {
+    border: 8px solid red;
+    width: 80%;
+}   white-space: nowrap;
 }
 </style>
 <script  type="application/javascript">
@@ -42,6 +49,9 @@ var order_status = '';
         var tbody = document.getElementsByTagName('tbody');
         var tr = document.getElementsByTagName('tr');
         var img = document.getElementsByTagName('img');
+        var td_data = "";
+        var tr_data = "";
+        var table_data = ""; 
         
         for(var i=0; i<img.length;i++)
         {
@@ -49,25 +59,24 @@ var order_status = '';
             // img[i].classList.add("row");
         }
         
-        
-        for(var i=0; i<table.length;i++)
+        for(var i=0; i<td.length;i++)
         {
-            table[i].classList.add("col-sm-12");
-            table[i].classList.add("row");
-        }
-         
-        
-        for(var i=0; i<tbody.length;i++)
-        {
-            tbody[i].classList.add("col-sm-12");
-            tbody[i].classList.add("justify-content-around");
-        }
-        
-        for(var i=0; i<tr.length;i++)
-        { 
-            
-            tr[i].classList.add("col-sm-3");
-            tr[i].classList.add("tr");
+            if(td[i].querySelector("img") != null)
+            {
+                td[i].innerHTML = "<div class='img-scroll-box td-div'>"+td[i].innerHTML+"</div>";
+            }
+            else
+            {
+                if(td[i].innerHTML == "" || td[i].innerHTML == " ")
+                {
+                    
+                }
+                else
+                {
+                    td[i].innerHTML = "<div class='td-div'>"+td[i].innerHTML+"</div>";
+                }
+            }
+            // td[i].classList.add("td");
         }
         
         for(var i=0; i<thead.length;i++)
@@ -75,14 +84,50 @@ var order_status = '';
             thead[i].remove();
         }
         
-        for(var i=0; i<td.length;i++)
-        {
-            if(td[i].querySelector("img") != null)
-            {
-                td[i].innerHTML = "<div class='img-scroll-box'>"+td[i].innerHTML+"</div>";
-            }
-            td[i].classList.add("td");
+        for(var i=0; i<tr.length;i++)
+        { 
+            tr_data  += "<div class='col-sm-12 tr-div'>"+tr[i].innerHTML+"</div>"; 
         }
+        
+        tbody_data = "<div class='col-sm-12 tbody-div '>"+tr_data+"</div>"
+        table_data =  "<div class='table-div'>"+tbody_data+"</div>"; 
+        document.getElementsByClassName('table-container')[0].innerHTML = table_data;
+        
+        // for(var i=0; i<tr.length;i++)
+        // {
+        //     tr[i].remove();
+        // }
+        
+        // for(var i=0; i<table.length;i++)
+        // {
+            
+        //     document.getElementsByClassName('table-container')[0].innerHTML =  "<div class='col-sm-12 row table-div'>"+table[i].innerHTML+"</div>";
+        //     // table[i].classList.add("col-sm-12");
+        //     // table[i].classList.add("row");
+        // }
+         
+        
+        // for(var i=0; i<tbody.length;i++)
+        // {
+            
+        //     document.getElementsByClassName('table-div')[0].innerHTML = "<div class='col-sm-12 tbody-div justify-content-around'>"+tbody[i].innerHTML+"</div>";
+        //     tbody[i].remove();
+        //     // tbody[i].classList.add("col-sm-12");
+        //     // tbody[i].classList.add("justify-content-around");
+        // }
+        
+        // f
+        
+        // 
+        
+        // for(var i=0; i<td.length;i++)
+        // {
+        //     if(td[i].querySelector("img") != null)
+        //     {
+        //         td[i].innerHTML = "<div class='img-scroll-box tr-div'>"+td[i].innerHTML+"</div>";
+        //     }
+        //     td[i].classList.add("td");
+        // }
         //td.classList.add("td");
     }
     
@@ -428,7 +473,7 @@ var order_status = '';
    </form>   
 </nav>
 
-<div style="overflow-x:auto;"> 
+<div class="table-container" style="overflow-x:auto;"> 
     <table class="table table-bordered" style="min-height: 500px;">
         <thead>
             <tr> 
@@ -492,8 +537,7 @@ var order_status = '';
                 </td>
                 <td>{{$lists->consignment_id}}</td> 
                 <td>{{$lists->id}}</td>
-                <td>{{$lists->first_name}}</td>  
-                <!--<th>{{$lists->number}}</th>-->
+                <td>{{$lists->first_name}}</td>   
                 <?php 
                 $number = $lists->number;
                 $reciever_number = $lists->receiver_number;
@@ -518,13 +562,9 @@ var order_status = '';
                 ?>
                 <td><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Hi {{$lists->first_name}}, I am from Brandhub, i just want you to confirm your order, please click on the link to and check your articles and press confirmed button {{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}"><?=$reciever_number?></a></td> 
                 <td><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$number?>&text=Hi, {{$lists->first_name}}, I am from Brandhub, i just want you to confirm your order, please click on the link to and check your articles and press confirmed button {{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}"><?=$number?></a></td> 
-                <td>{{$lists->description}}</td>
-                <!--<th>{{$lists->order_delivery_location}}</th>-->
+                <td>{{$lists->description}}</td> 
                 <td>{{$lists->reciever_address}}</td>
-                <td>{{$lists->price}}</td>
-                <!--<th>{{$lists->total_pieces}}</th>-->
-                <!--<th>{{$lists->date_order_paid}}</th>-->
-                 
+                <td>{{$lists->price}}</td>  
                 <td><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$number?>&text=Hi, {{$lists->first_name}}, Mam did you recieve your order, please click on link to see your last order {{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}">Get Status</a></td> 
                 <td>{{date('d-M-y', strtotime($lists->created_at))}} <br> {{date('G:i a', strtotime($lists->created_at))}}</td>
                 <td>{{date('d-M-y', strtotime($lists->updated_at))}} <br> {{date('G:i a', strtotime($lists->updated_at))}}</td> 
