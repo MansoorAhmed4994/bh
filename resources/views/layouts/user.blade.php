@@ -146,7 +146,7 @@
         </nav>
 
         <main class="py-4">
-        @include('frontend.layouts.alerts')
+        @include('layouts.alerts')
             @yield('content')
         </main>
     </div>

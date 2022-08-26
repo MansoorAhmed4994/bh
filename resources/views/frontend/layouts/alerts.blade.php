@@ -6,3 +6,12 @@
   <center><h3>{{ session()->get('success') }}</h3></center>
 </div>
 @endif
+
+@if(session()->has('errors'))
+<script>
+    alert("{{ session()->get('errors') }}")
+</script>
+<div class="alert alert-warning" role="alert">
+  <center><h3>{{ session()->get('errors') }}</h3></center>
+</div>
+@endif

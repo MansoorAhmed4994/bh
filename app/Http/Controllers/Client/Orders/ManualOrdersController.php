@@ -51,6 +51,7 @@ class ManualOrdersController extends Controller
 
         $order_id = $request->search_order_id;
         $search_text = $request->search_text;
+        $order_status = $request->order_status;
         //dd($request);
         if($order_id != '')
         {
@@ -63,6 +64,7 @@ class ManualOrdersController extends Controller
         else if($search_text != '')
         {
         $search_test = $request->search_text;
+        
         $order_status = $request->order_status;
         $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->
         where(function ($query) use ($search_test) {
@@ -83,13 +85,26 @@ class ManualOrdersController extends Controller
             ->paginate(20);
             
         }
+        else if($order_status != '')
+        {
+            $query = Customers::query();
+            
+            $query = $query->rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id');
+            if($order_status != 'all')
+            {
+                $query = $query->where('manual_orders.status',$order_status);
+            } 
+            $list = $query->orderBy('manual_orders.id', 'ASC')
+            ->select($this->OrderFieldList())
+            ->paginate(20); 
+        }
         else
         {
             $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')
-        ->where('manual_orders.status','pending')
-        ->orderBy('manual_orders.id', 'ASC')
-        ->select($this->OrderFieldList())
-        ->paginate(20);
+            ->where('manual_orders.status','pending')
+            ->orderBy('manual_orders.id', 'ASC')
+            ->select($this->OrderFieldList())
+            ->paginate(20);
         }
         //dd($list);
         return view('client.orders.manual-orders.list')->with('list',$list); 
@@ -385,6 +400,50 @@ class ManualOrdersController extends Controller
             // dd($ManualOrder);
             
         }
+        elseif($order_action == 'duplicate_orders')
+        {
+            $explode_id = explode(',', $order_ids); 
+            $ManualOrders = $this->GetOrdersByIds($explode_id);
+            
+            //dd($ManualOrders->first()->id);
+            $ManualOrdersMaster = ManualOrders::find($ManualOrders->first()->id);
+            $images = [];
+            $price=0;
+            $duplicate_ids=[];
+            $ids_match = $ManualOrders->first()->receiver_number;
+            foreach($ManualOrders as $ManualOrder)
+            {
+                if($ids_match != $ManualOrder->receiver_number)
+                {
+                    return  redirect()->route('ManualOrders.index')->with('errors', 'Reciever Number not Match, edit the reciever Number to merge!');
+                }
+                
+                $duplicate_ids[] = $ManualOrder->id;
+                $timages = (explode("|",$ManualOrder->images));
+                foreach($timages as $image)
+                {
+                    $images[] = $image;
+                }
+                
+                // $images .= '|'.$ManualOrder->images;
+                $price = $price+(int)($ManualOrder->price);
+                // $ManualOrder->
+                // $man
+            }
+            $images = implode("|",$images);
+            $success_msg = 'Order Merged Successfully Order IDs: '.implode(",",$duplicate_ids);
+            array_shift($duplicate_ids);
+            //dd($duplicate_ids);
+            $ManualOrdersMaster->images = $images;
+            $ManualOrdersMaster->price = $price; 
+            $ManualOrdersMaster->status = 'pending';
+            $ManualOrdersMaster->save();
+            $ids_update = ManualOrders::whereIn('id',$duplicate_ids)->update(['status' => 'duplicate']);
+            return redirect()->route('ManualOrders.index')->with('success', $success_msg);
+            dd($ManualOrdersMaster,$ids_update);
+            dd($images,$price,implode(",",$duplicate_ids));
+        }
+        
         
         //dd($request->order_action);
     }

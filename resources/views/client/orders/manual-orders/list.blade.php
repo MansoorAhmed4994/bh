@@ -4,11 +4,88 @@
 
 
 @section('content') 
+<style>
+.td{
+    float: left;
+    width: 100%;
+    position: relative;
+}
+.tr{
+    float: left;
+    border: 1px solid black;
+    border-radius: 15px;
+    box-shadow: 1px 1px 10px 1px;
+    padding: 13px;
+    
+} 
+.parcel-img {
+    width: 100%;
+}
+.img-scroll-box
+{
+    height: 150px;
+    float: left;
+    overflow: auto;
+    white-space: nowrap;
+}
+</style>
 <script  type="application/javascript">
 var base_url = '<?php echo e(url('/')); ?>';
 var dispatch_order_id =  '';
 var order_status = '';
         
+    function mobile_view()
+    {
+        var table = document.getElementsByTagName('table');
+        var td = document.getElementsByTagName('td');
+        var thead = document.getElementsByTagName('thead');
+        var tbody = document.getElementsByTagName('tbody');
+        var tr = document.getElementsByTagName('tr');
+        var img = document.getElementsByTagName('img');
+        
+        for(var i=0; i<img.length;i++)
+        {
+            img[i].classList.add("parcel-img");
+            // img[i].classList.add("row");
+        }
+        
+        
+        for(var i=0; i<table.length;i++)
+        {
+            table[i].classList.add("col-sm-12");
+            table[i].classList.add("row");
+        }
+         
+        
+        for(var i=0; i<tbody.length;i++)
+        {
+            tbody[i].classList.add("col-sm-12");
+            tbody[i].classList.add("justify-content-around");
+        }
+        
+        for(var i=0; i<tr.length;i++)
+        { 
+            
+            tr[i].classList.add("col-sm-3");
+            tr[i].classList.add("tr");
+        }
+        
+        for(var i=0; i<thead.length;i++)
+        {
+            thead[i].remove();
+        }
+        
+        for(var i=0; i<td.length;i++)
+        {
+            if(td[i].querySelector("img") != null)
+            {
+                td[i].innerHTML = "<div class='img-scroll-box'>"+td[i].innerHTML+"</div>";
+            }
+            td[i].classList.add("td");
+        }
+        //td.classList.add("td");
+    }
+    
     function checkAll(bx) {
         // alert('work');
         //document.getElementByClassName("order_checkbox_class").checked = true;
@@ -296,8 +373,9 @@ var order_status = '';
     <div class="form-group">
         <select class="form-select" aria-label="Default select example" name="order_status">
           <option selected value ="">Select Order Status</option>
-          <option value="">All</option>
+          <option value="all">All</option>
           <option value="pending">Pending</option>
+          <option value="duplicate">Dulicate</option>
           <option value="prepared">Prepared</option>
           <option value="confirmed">Confirmed</option>
           <option value="cancel">complete</option> 
@@ -312,6 +390,11 @@ var order_status = '';
     <div class="form-group">
         <button class="form-control btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
     </div>
+    
+    <div class="form-group">
+        <input onclick="mobile_view()" type="checkbox">Mobile View
+    </div>
+    
     
     
     
@@ -334,6 +417,7 @@ var order_status = '';
           <option value="incomplete">incomplete</option> 
           <option value="print">Print </option>
           <option value="print_mnp_slips">Print M&P Slips</option>
+          <option value="duplicate_orders">Duplicate Orders</option>
           <option value="print_trax_slips">Print Trax Slips</option>
         </select> 
     </div>
@@ -348,9 +432,10 @@ var order_status = '';
     <table class="table table-bordered" style="min-height: 500px;">
         <thead>
             <tr> 
-                <th scope="col"  class="delete_btn_class"><input type="checkbox" onclick="checkAll(this)" ></th>
+                <th scope="col" class="delete_btn_class"><input type="checkbox" onclick="checkAll(this)" ></th>
                 <th scope="col">#</th> 
                 <th scope="col">Act</th>
+                <th scope="col">Img.</th>
                 <th scope="col">Consignment.Id</th>
                 <th scope="col">Ord.ID</th>
                 <th scope="col">F.Name</th> 
@@ -359,7 +444,6 @@ var order_status = '';
                 <th scope="col">Description</th>
                 <th scope="col">Address</th>
                 <th scope="col">Price</th>
-                <th scope="col">Img.</th>
                 <th scope="col">OD Y/N</th>
                 <th scope="col">cr.Date</th>
                 <th scope="col">Up.Date</th>
@@ -372,11 +456,11 @@ var order_status = '';
             @foreach($list as $lists)
             
             <tr style="background-color:@if($lists->status == 'deleted')#f99c9c @elseif($lists->status == 'prepaired') #b7b8b9 @elseif($lists->status == 'confirmed') #91c6ff @elseif($lists->status == 'dispatched') #84f39c @elseif($lists->status == 'deleted') #e77272 @else #f9df90 @endif">
-                <th ><input type="checkbox" id="order_checkbox" class="order_checkbox_class" name="order_checkbox" onclick="get_checked_values()" value="{{$lists->id}}"></th>
+                <td ><input type="checkbox" id="order_checkbox" class="order_checkbox_class" name="order_checkbox" onclick="get_checked_values()" value="{{$lists->id}}"></td>
                 
-                <th scope="row"><?=$count?></th> 
+                <td scope="row"><?=$count?></td> 
                 
-                <th>
+                <td>
                     <div class="btn-group" role="group">
                         <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                           Actions
@@ -398,10 +482,17 @@ var order_status = '';
                             <!--<a type="button" href="{{route('ManualOrders.order.status',['cancel',$lists->id])}}" class="dropdown-item">Cancel</a>-->
                         </div>
                      </div>
-                </th>
-                <th>{{$lists->consignment_id}}</th> 
-                <th>{{$lists->id}}</th>
-                <th>{{$lists->first_name}}</th>  
+                </td>
+                <td >
+                    @if(!empty($lists->images))
+                        @foreach(explode('|', $lists->images) as $image)   
+                        <img class="pop rounded " style="margin-right: 5px;" src="{{asset($image)}}" alt="Card image cap" width="25" >
+                        @endforeach
+                    @endif
+                </td>
+                <td>{{$lists->consignment_id}}</td> 
+                <td>{{$lists->id}}</td>
+                <td>{{$lists->first_name}}</td>  
                 <!--<th>{{$lists->number}}</th>-->
                 <?php 
                 $number = $lists->number;
@@ -425,27 +516,20 @@ var order_status = '';
                 
                 
                 ?>
-                <th><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Hi {{$lists->first_name}}, I am from Brandhub, i just want you to confirm your order, please click on the link to and check your articles and press confirmed button {{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}"><?=$reciever_number?></a></th> 
-                <th><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$number?>&text=Hi, {{$lists->first_name}}, I am from Brandhub, i just want you to confirm your order, please click on the link to and check your articles and press confirmed button {{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}"><?=$number?></a></th> 
-                <th>{{$lists->description}}</th>
+                <td><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Hi {{$lists->first_name}}, I am from Brandhub, i just want you to confirm your order, please click on the link to and check your articles and press confirmed button {{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}"><?=$reciever_number?></a></td> 
+                <td><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$number?>&text=Hi, {{$lists->first_name}}, I am from Brandhub, i just want you to confirm your order, please click on the link to and check your articles and press confirmed button {{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}"><?=$number?></a></td> 
+                <td>{{$lists->description}}</td>
                 <!--<th>{{$lists->order_delivery_location}}</th>-->
-                <th>{{$lists->reciever_address}}</th>
-                <th>{{$lists->price}}</th>
-                <th >
-                    @if(!empty($lists->images))
-                        @foreach(explode('|', $lists->images) as $image)   
-                        <img class="pop rounded " style="margin-right: 5px;" src="{{asset($image)}}" alt="Card image cap" width="25" height="25">
-                        @endforeach
-                    @endif
-                </th>
+                <td>{{$lists->reciever_address}}</td>
+                <td>{{$lists->price}}</td>
                 <!--<th>{{$lists->total_pieces}}</th>-->
                 <!--<th>{{$lists->date_order_paid}}</th>-->
                  
-                <th><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$number?>&text=Hi, {{$lists->first_name}}, Mam did you recieve your order, please click on link to see your last order {{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}">Get Status</a></th> 
-                <th>{{date('d-M-y', strtotime($lists->created_at))}} <br> {{date('G:i a', strtotime($lists->created_at))}}</th>
-                <th>{{date('d-M-y', strtotime($lists->updated_at))}} <br> {{date('G:i a', strtotime($lists->updated_at))}}</th> 
-                <th>{{$lists->status}}</th>
-                <th>{{$lists->status_reason}}</th>
+                <td><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$number?>&text=Hi, {{$lists->first_name}}, Mam did you recieve your order, please click on link to see your last order {{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}">Get Status</a></td> 
+                <td>{{date('d-M-y', strtotime($lists->created_at))}} <br> {{date('G:i a', strtotime($lists->created_at))}}</td>
+                <td>{{date('d-M-y', strtotime($lists->updated_at))}} <br> {{date('G:i a', strtotime($lists->updated_at))}}</td> 
+                <td>{{$lists->status}}</td>
+                <td>{{$lists->status_reason}}</td>
             </tr>
             <?php $count++;?>
             @endforeach
@@ -483,53 +567,5 @@ $( document ).ready(function() {
             });
         });
          
-
-        // $( document ).ready(function() {
-            
-        //     $('#print_mnp_slips').on('click',function(e)
-        //     {  
-        //         alert('working');
-        //         $.ajax({
-        //             headers: {
-                        
-                        
-        //                 "Content-Type": "application/json"
-        //             },
-        //             //url: base_url + '/client/orders/ManualOrders/delete-image',
-        //             url: 'http://mnpcourier.com/mycodapi/api/Booking/InsertBookingData',
-        //             data: {
-        //                     "username": "mansoor_4b459",
-        //                     "password": "Mansoor1@3",
-        //                     "consigneeName": "test",
-        //                     "consigneeAddress": "test123",
-        //                     "consigneeMobNo": "03330139993",
-        //                     "consigneeEmail": "string",
-        //                     "destinationCityName": "karachi",
-        //                     "pieces": 0,
-        //                     "weight": 0,
-        //                     "codAmount": 0,
-        //                     "custRefNo": "12345689",
-        //                     "productDetails": "string",
-        //                     "fragile": "string",
-        //                     "service": "overnight",
-        //                     "remarks": "string",
-        //                     "insuranceValue": "string",
-        //                     "locationID": "string",
-        //                     "AccountNo": "string",
-        //                     "InsertType": 0
-        //             },
-        //             type: 'POST',
-        //             dataType: 'json',
-        //             success: function(e)
-        //             {
-        //                 console.log(e.messege);   
-                        
-        //             },
-        //             error: function(e) {
-        //                 console.log(e.responseText);
-        //             }
-        //         });
-        //     });
-        // });
 </script>
 @endsection
