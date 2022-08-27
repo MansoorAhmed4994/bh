@@ -40,6 +40,9 @@
 var base_url = '<?php echo e(url('/')); ?>';
 var dispatch_order_id =  '';
 var order_status = '';
+var order_link='';
+         
+    
         
     function mobile_view()
     {
@@ -145,11 +148,11 @@ var order_status = '';
     }
         
     $( document ).ready(function() { 
-                $('.pop').on('click', function() {
-                    // alert($(this).attr('src'));
-                    $('.imagepreview').attr('src', $(this).attr('src'));
-                    $('#imagemodal').modal('show');   
-                });   
+    $('.pop').on('click', function() {
+        // alert($(this).attr('src'));
+        $('.imagepreview').attr('src', $(this).attr('src'));
+        $('#imagemodal').modal('show');   
+    });   
                 
                 
             
@@ -200,14 +203,22 @@ var order_status = '';
                     {
                         receiver_number = "+92"+receiver_number;
                     }
-                    var link = "https://api.whatsapp.com/send?phone="+receiver_number+"&text=Hi, "+receiver_name+", I am from Brandhub, i just want you to inform you that your parcel has been cancelled due to unavailable of iterm, please contact here for more details 03362240865";
+                    var link = "https://api.whatsapp.com/send?phone="+receiver_number+"&text=Assalamualaikum, "+receiver_name+", I am from Brandhub, i just want to inform you that your parcel has been cancelled due to unavailable of iterm, please contact here for more details 03362240865";
                     $("#dispatch-succes-noti").css("display", "block");
                     window.open(link, '_blank');
                 }
-                // $('#exampleModalCenter').modal('hide'); 
-                // $('#exampleModalCenter').modal({
-                // show: 'false'
-                // }); 
+                else if(order_status == "prepared")
+                { 
+                    var get_char_rec_num = receiver_number.substring(0,1);
+                    if(get_char_rec_num == 0)
+                    {
+                        receiver_number = "+92"+receiver_number;
+                    }
+                    var link = "https://api.whatsapp.com/send?phone="+receiver_number+"&text=Assalamualaikum "+receiver_name+", your order has been Prepared, Our representative will contact you ASAP, Kindly active on your Phone, You can also confirm your order by  clicking on the given link, and press confirmed button "+order_link+" Thank You";
+                    $("#dispatch-succes-noti").css("display", "block");
+                    window.open(link, '_blank');
+                     
+                } 
                 
             }
             //console.log(response);
@@ -226,8 +237,9 @@ var order_status = '';
     });
     
     
+    
     function change_order_status_and_price(val,status) 
-    {  
+    {   
         //alert('working');
         dispatch_order_id = val;
         order_status = status;
@@ -242,7 +254,7 @@ var order_status = '';
             dataType: 'json',
             success: function(e)
             {
-                console.log(e.messege.id);
+                //console.log(e.messege.id);
                 //alert(e.messege.id);
                 $('#receiver_name').val(e.messege.receiver_name);
                 // $('#imagemodal').val(e.messege.id);
@@ -299,7 +311,7 @@ var order_status = '';
   <div class="modal-dialog" data-dismiss="modal">
     <div class="modal-content"  >              
       <div class="modal-body">
-         <button type="button" class="close" data-dismiss="modal">Close</button> 
+         <button type="button" id="closeimagemodal" class="close" data-dismiss="imagemodal">Close</button> 
         <img src="" class="imagepreview" style="width: 100%;" >
       </div>  
 
@@ -428,7 +440,9 @@ var order_status = '';
           <option value="hold">Hold</option>
           <option value="incomplete">incomplete</option> 
           <option value="cancel">cancel</option> 
+          <option value="return">return</option> 
           <option value="deleted">delete</option> 
+          <option value="not responding"></option>  
         </select> 
     </div>
     
@@ -515,13 +529,16 @@ var order_status = '';
                             <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'pending')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Quick Edit</button>          
                             <a type="button" target="_blank" href="{{route('ManualOrders.show',$lists->id)}}" class="dropdown-item">view</a>
                             <a type="button" href="{{route('ManualOrders.print.order.slip',$lists->id)}}" class="dropdown-item">Print Slip</a>
-                            <a type="button" href="{{route('ManualOrders.order.status',['prepared',$lists->id])}}" class="dropdown-item">Prepare</a>   
+                            <!--<a type="button" href="{{route('ManualOrders.order.status',['prepared',$lists->id])}}" class="dropdown-item">prepared</a>   -->
+                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'prepared');order_link ='{{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}';" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Prepared</button>
                             <a type="button" href="{{route('ManualOrders.order.status',['complete',$lists->id])}}" class="dropdown-item">Complete</a> 
                             <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'confirmed')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Confirmed</button>
                             <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'dispatched')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Dispatch</button>
                             <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'hold')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Hold</button>
                             <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'incomplete')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Incomplete</button>
+                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'not responding')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">not responding</button>
                             <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'cancel')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Cancel</button>
+                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'return')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Return</button>
                             <!--<a type="button" href="{{route('ManualOrders.order.status',['hold',$lists->id])}}" class="dropdown-item">Hold</a> -->
                             <!--<a type="button" href="{{route('ManualOrders.order.status',['incomplete',$lists->id])}}" class="dropdown-item">Incomplete</a>-->
                             <!--<a type="button" href="{{route('ManualOrders.order.status',['cancel',$lists->id])}}" class="dropdown-item">Cancel</a>-->
@@ -560,12 +577,12 @@ var order_status = '';
                 
                 
                 ?>
-                <td><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Hi {{$lists->first_name}}, I am from Brandhub, i just want you to confirm your order, please click on the link to and check your articles and press confirmed button {{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}"><?=$reciever_number?></a></td> 
-                <td><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$number?>&text=Hi, {{$lists->first_name}}, I am from Brandhub, i just want you to confirm your order, please click on the link to and check your articles and press confirmed button {{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}"><?=$number?></a></td> 
+                <td><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualikum {{$lists->first_name}}, I am from Brandhub, Please confirm your order, click on the link to and check your articles and press confirmed button {{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}"><?=$reciever_number?></a></td> 
+                <td><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$number?>&text=Assalamualaikum, {{$lists->first_name}}, I am from Brandhub, Please confirm your order, click on the link to and check your articles and press confirmed button {{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}"><?=$number?></a></td> 
                 <td>{{$lists->description}}</td> 
                 <td>{{$lists->reciever_address}}</td>
                 <td>{{$lists->price}}</td>  
-                <td><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$number?>&text=Hi, {{$lists->first_name}}, Mam did you recieve your order, please click on link to see your last order {{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}">Get Status</a></td> 
+                <td><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$number?>&text=Assalamualaikum, {{$lists->first_name}}, Mam did you recieve your order, please click on link to Track your Order {{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}">Get Status</a></td> 
                 <td>{{date('d-M-y', strtotime($lists->created_at))}} <br> {{date('G:i a', strtotime($lists->created_at))}}</td>
                 <td>{{date('d-M-y', strtotime($lists->updated_at))}} <br> {{date('G:i a', strtotime($lists->updated_at))}}</td> 
                 <td>{{$lists->status}}</td>
@@ -581,7 +598,7 @@ var order_status = '';
 
 <script type="application/javascript">
 
-$( document ).ready(function() {
+    $( document ).ready(function() {
             
             $('#print_mnp_slips').on('click',function(e)
             {  
@@ -604,8 +621,13 @@ $( document ).ready(function() {
                 
                 xhr.send(data);
          
-            });
         });
+        
+        $('#closeimagemodal').click(function() {
+            $('#imagemodal').modal('hide');
+        });
+        
+    });
          
 </script>
 @endsection
