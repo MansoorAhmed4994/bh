@@ -475,9 +475,10 @@ var order_link='';
           <option value="hold">Hold</option>
           <option value="incomplete">incomplete</option> 
           <option value="print">Print </option>
-          <option value="print_mnp_slips">Print M&P Slips</option>
           <option value="duplicate_orders">Duplicate Orders</option>
+          <option value="print_mnp_slips">Print M&P Slips</option>
           <option value="print_trax_slips">Print Trax Slips</option>
+          <option value="print_pos_slips">Print Pos Slips</option>
         </select> 
     </div>
     

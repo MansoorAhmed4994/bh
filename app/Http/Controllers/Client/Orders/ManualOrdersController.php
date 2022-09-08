@@ -400,6 +400,16 @@ class ManualOrdersController extends Controller
             // dd($ManualOrder);
             
         }
+        elseif($order_action == 'print_pos_slips')
+        {
+             
+            $explode_id = explode(',', $order_ids); 
+            $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->whereIn('manual_orders.id',$explode_id)->get();
+            //dd($ManualOrder);
+            return view('client.orders.manual-orders.print_pos_slips')->with('ManualOrders',$ManualOrder);
+                //dd($order_ids);
+        }
+        
         elseif($order_action == 'duplicate_orders')
         {
             $explode_id = explode(',', $order_ids); 
