@@ -113,7 +113,8 @@ class InventoryController extends Controller
             'created_by' => '1',
             'updated_by' => '1',
             'status' => 'active' 
-            ]); 
+            ]);
+            // dd($products);
         // $product_save = $products->save();
         // $user = User::create($user_inputs);
 

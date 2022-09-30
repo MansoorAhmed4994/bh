@@ -116,6 +116,12 @@
                                 <li> <a class="dropdown-item" href="{{route('ManualOrders.print.slip.by.scan')}}">Prict Slip By Scan</a></li>
                             </ul> 
                         </li>
+                        <li class="nav-item dropdown" id="myDropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Inventory</a>
+                            <ul class="dropdown-menu">
+                                <li> <a class="dropdown-item" href="{{route('inventory.index')}}"> Manage Inventory </a></li> 
+                            </ul> 
+                        </li>
                         <li class="nav-item dropdown" id="shipment">
                             <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Shipment</a>
                             <ul class="dropdown-menu">
