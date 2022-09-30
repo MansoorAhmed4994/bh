@@ -81,7 +81,7 @@ class ManualOrdersController extends Controller
                     ->orWhere('manual_orders.id','like','%'.$search_test.'%')
                     ->orWhere('manual_orders.consignment_id','like','%'.$search_test.'%');
             })->where('manual_orders.status','like',$order_status.'%')
-            ->orderBy('manual_orders.id', 'ASC')
+            ->orderBy('manual_orders.id', 'DESC')
             ->select($this->OrderFieldList())
             ->paginate(20);
             
@@ -95,7 +95,7 @@ class ManualOrdersController extends Controller
             {
                 $query = $query->where('manual_orders.status',$order_status);
             } 
-            $list = $query->orderBy('manual_orders.id', 'ASC')
+            $list = $query->orderBy('manual_orders.id', 'DESC')
             ->select($this->OrderFieldList())
             ->paginate(20); 
         }
@@ -103,7 +103,7 @@ class ManualOrdersController extends Controller
         {
             $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')
             ->where('manual_orders.status','pending')
-            ->orderBy('manual_orders.id', 'ASC')
+            ->orderBy('manual_orders.id', 'DESC')
             ->select($this->OrderFieldList())
             ->paginate(20);
         }
@@ -151,7 +151,7 @@ class ManualOrdersController extends Controller
                     ->orWhere('manual_orders.id','like','%'.$search_test.'%')
                     ->orWhere('manual_orders.consignment_id','like','%'.$search_test.'%');
             })->where('manual_orders.status','like',$order_status.'%')
-            ->orderBy('manual_orders.id', 'ASC')
+            ->orderBy('manual_orders.id', 'DESC')
             ->select($this->OrderFieldList())
             ->paginate(20);
             
@@ -502,8 +502,8 @@ class ManualOrdersController extends Controller
         //dd($request->status);
         $status = $request->status;
         
-        $list_order = 'ASC';
-        if($status == 'pending' || $status == 'confirmed' || $status == 'dispatched'  )
+        $list_order = 'DESC';
+        if($status == 'pending'  )
         {
             $list_order = 'ASC';
         }
@@ -512,9 +512,9 @@ class ManualOrdersController extends Controller
             ->select($this->OrderFieldList())
             ->paginate(20);
             //dd($list);
-//dd($list);
-        // $list = $list->all();
-        // dd($list->all());
+            //dd($list);
+            //$list = $list->all();
+            //dd($list->all());
         return view('client.orders.manual-orders.list')->with('list',$list);
         
     }
