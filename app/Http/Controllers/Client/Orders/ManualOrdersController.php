@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Client\ManualOrders;
 use App\Models\Riders;
+use App\Models\Inventory;
 use App\Models\Client\Customers;
 use Illuminate\Support\Facades\File; 
 use Illuminate\Support\Facades\Auth;
@@ -739,6 +740,33 @@ class ManualOrdersController extends Controller
         }
         return $data;
         
+        
+    }
+    
+    public function print_slip_by_scan()
+    { 
+        return view('client.orders.manual-orders.print_slip_by_scan');
+        
+    }
+    
+    public function get_product_details($Sku)
+    {
+        $product = Inventory::select('products.id', 'products.name')->where('products.Sku', '=', $Sku)->join('products', 'products.id', '=', 'inventories.products_id')->firstOrFail();
+        dd($product->id);
+        if($product != null)
+        {
+            return response()->json(['messege' => $product]);
+        }
+        else
+        {
+            return response()->json(['messege' => 'no order found']);
+        }
+    }
+    
+    public function print_slip_by_scan_store()
+    { 
+        
+        return view('client.orders.manual-orders.print_slip_by_scan');
         
     }
     

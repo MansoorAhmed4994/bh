@@ -32,7 +32,7 @@ class HomeController extends Controller
          
         $list = DB::table('manual_orders')
                  ->select('status', DB::raw('count(*) as total'), DB::raw('sum(price) as amount'))
-                 ->whereBetween('updated_at', [$from_date, '2022-09-27 23:59:59'])
+                 ->whereBetween('updated_at', [$from_date, $to_date])
                  ->groupBy('status')
                  ->get();
         
