@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Client\ManualOrders;
 use App\Models\Riders;
+use App\Models\Inventory;
 use App\Models\Client\Customers;
 use Illuminate\Support\Facades\File; 
 use Illuminate\Support\Facades\Auth;
@@ -80,7 +81,7 @@ class ManualOrdersController extends Controller
                     ->orWhere('manual_orders.id','like','%'.$search_test.'%')
                     ->orWhere('manual_orders.consignment_id','like','%'.$search_test.'%');
             })->where('manual_orders.status','like',$order_status.'%')
-            ->orderBy('manual_orders.id', 'ASC')
+            ->orderBy('manual_orders.id', 'DESC')
             ->select($this->OrderFieldList())
             ->paginate(20);
             
@@ -94,7 +95,7 @@ class ManualOrdersController extends Controller
             {
                 $query = $query->where('manual_orders.status',$order_status);
             } 
-            $list = $query->orderBy('manual_orders.id', 'ASC')
+            $list = $query->orderBy('manual_orders.id', 'DESC')
             ->select($this->OrderFieldList())
             ->paginate(20); 
         }
@@ -102,7 +103,7 @@ class ManualOrdersController extends Controller
         {
             $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')
             ->where('manual_orders.status','pending')
-            ->orderBy('manual_orders.id', 'ASC')
+            ->orderBy('manual_orders.id', 'DESC')
             ->select($this->OrderFieldList())
             ->paginate(20);
         }
@@ -150,7 +151,7 @@ class ManualOrdersController extends Controller
                     ->orWhere('manual_orders.id','like','%'.$search_test.'%')
                     ->orWhere('manual_orders.consignment_id','like','%'.$search_test.'%');
             })->where('manual_orders.status','like',$order_status.'%')
-            ->orderBy('manual_orders.id', 'ASC')
+            ->orderBy('manual_orders.id', 'DESC')
             ->select($this->OrderFieldList())
             ->paginate(20);
             
@@ -400,6 +401,16 @@ class ManualOrdersController extends Controller
             // dd($ManualOrder);
             
         }
+        elseif($order_action == 'print_pos_slips')
+        {
+             
+            $explode_id = explode(',', $order_ids); 
+            $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->whereIn('manual_orders.id',$explode_id)->get();
+            //dd($ManualOrder);
+            return view('client.orders.manual-orders.print_pos_slips')->with('ManualOrders',$ManualOrder);
+                //dd($order_ids);
+        }
+        
         elseif($order_action == 'duplicate_orders')
         {
             $explode_id = explode(',', $order_ids); 
@@ -491,8 +502,8 @@ class ManualOrdersController extends Controller
         //dd($request->status);
         $status = $request->status;
         
-        $list_order = 'ASC';
-        if($status == 'pending' || $status == 'confirmed' || $status == 'dispatched'  )
+        $list_order = 'DESC';
+        if($status == 'pending'  )
         {
             $list_order = 'ASC';
         }
@@ -501,9 +512,9 @@ class ManualOrdersController extends Controller
             ->select($this->OrderFieldList())
             ->paginate(20);
             //dd($list);
-//dd($list);
-        // $list = $list->all();
-        // dd($list->all());
+            //dd($list);
+            //$list = $list->all();
+            //dd($list->all());
         return view('client.orders.manual-orders.list')->with('list',$list);
         
     }
@@ -729,6 +740,33 @@ class ManualOrdersController extends Controller
         }
         return $data;
         
+        
+    }
+    
+    public function print_slip_by_scan()
+    { 
+        return view('client.orders.manual-orders.print_slip_by_scan');
+        
+    }
+    
+    public function get_product_details($Sku)
+    {
+        $product = Inventory::select('products.id', 'products.name')->where('products.Sku', '=', $Sku)->join('products', 'products.id', '=', 'inventories.products_id')->firstOrFail();
+        dd($product->id);
+        if($product != null)
+        {
+            return response()->json(['messege' => $product]);
+        }
+        else
+        {
+            return response()->json(['messege' => 'no order found']);
+        }
+    }
+    
+    public function print_slip_by_scan_store()
+    { 
+        
+        return view('client.orders.manual-orders.print_slip_by_scan');
         
     }
     

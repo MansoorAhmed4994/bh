@@ -148,89 +148,62 @@ var order_link='';
     }
         
     $( document ).ready(function() { 
-    $('.pop').on('click', function() {
-        // alert($(this).attr('src'));
-        $('.imagepreview').attr('src', $(this).attr('src'));
-        $('#imagemodal').modal('show');   
-    });   
-                
-                
+        $('.pop').on('click', function() {
+            // alert($(this).attr('src'));
+            $('.imagepreview').attr('src', $(this).attr('src'));
+            $('#imagemodal').modal('show');   
+        });   
+                 
+                 
+        $('#add_new_inventory').on('click',function(){ 
+            $('#createinventorymodal').modal('hide');
+            var sku = $('#sku').val();
+            var units = $('#units').val();
+            var unit_type = $('#unit_type').val();
+            var sale = $('#sale').val();
+            var cost = $('#cost').val(); 
+            var name = $('#name').val();
             
-        $('#save_order_status_and_price').on('click',function(){
-        
-        
-        let receiver_name = $('#receiver_name').val();
-        let receiver_number = $('#receiver_number').val();
-        let reciever_address = $('#reciever_address').val();
-        let price = $('#price').val();
-        let status_reason = $('#status_reason').val();
-        
-        
-        if(order_status == 'cancel' || order_status == 'hold' || order_status == 'incomplete')
-        {
-            if(status_reason == '')
+            console.log(sku+'\n'+units+'\n'+unit_type+'\n'+sale+'\n'+cost+'\n');
+            if(sku !='' && units !='' && unit_type !='' && sale > 0 && cost > 0)
             {
-                alert("please give Reason to "+order_status);
-                return;
+                $.ajax({
+                    url: base_url + '/admin/inventory', 
+                  headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                  type:"POST",
+                  dataType: 'json',
+                  data:{
+                    sku:sku,
+                    units:units,
+                    unit_type:unit_type,
+                    sale:sale,
+                    cost:cost, 
+                    name:name, 
+                  },
+                  success:function(response){
+                    //$('#successMsg').show();
+                        if(response.messege)
+                        {
+                           alert(response.messege);
+                            
+                        }
+                    console.log(response);
+                    },
+                    error: function(response) {
+                        
+                    // $('#nameErrorMsg').text(response.responseJSON.errors.name);
+                    // $('#emailErrorMsg').text(response.responseJSON.errors.email);
+                    // $('#mobileErrorMsg').text(response.responseJSON.errors.mobile);
+                    // $('#messageErrorMsg').text(response.responseJSON.errors.message);
+                    },
+                });
             }
-            
-        }
-    //console.log(status_reason);
-        $.ajax({
-          url: base_url + '/client/orders/ManualOrders/dispatch-order-edit/'+dispatch_order_id,
-          headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-          type:"POST",
-          dataType: 'json',
-          data:{
-            receiver_name:receiver_name,
-            receiver_number:receiver_number,
-            reciever_address:reciever_address,
-            price:price,
-            status:order_status,
-            status_reason:status_reason,
-          },
-          success:function(response){
-            //$('#successMsg').show();
-            if(response.messege == true)
+            else
             {
-                if(order_status == "cancel")
-                {
-                    
-                    var get_char_rec_num = receiver_number.substring(0,1);
-                    if(get_char_rec_num == 0)
-                    {
-                        receiver_number = "+92"+receiver_number;
-                    }
-                    var link = "https://api.whatsapp.com/send?phone="+receiver_number+"&text=Assalamualaikum, "+receiver_name+", I am from Brandhub, i just want to inform you that your parcel has been cancelled due to unavailable of iterm, please contact here for more details 03362240865";
-                    $("#dispatch-succes-noti").css("display", "block");
-                    window.open(link, '_blank');
-                }
-                else if(order_status == "prepared")
-                { 
-                    var get_char_rec_num = receiver_number.substring(0,1);
-                    if(get_char_rec_num == 0)
-                    {
-                        receiver_number = "+92"+receiver_number;
-                    }
-                    var link = "https://api.whatsapp.com/send?phone="+receiver_number+"&text=Assalamualaikum "+receiver_name+", your order has been Prepared, Our representative will contact you ASAP, Kindly active on your Phone, You can also confirm your order by  clicking on the given link, and press confirmed button "+order_link+" Thank You";
-                    $("#dispatch-succes-noti").css("display", "block");
-                    window.open(link, '_blank');
-                     
-                } 
-                
+                alert('please fill all the fields');
             }
-            //console.log(response);
-          },
-          error: function(response) {
-            // $('#nameErrorMsg').text(response.responseJSON.errors.name);
-            // $('#emailErrorMsg').text(response.responseJSON.errors.email);
-            // $('#mobileErrorMsg').text(response.responseJSON.errors.mobile);
-            // $('#messageErrorMsg').text(response.responseJSON.errors.message);
-          },
-      });
-        
     
         }); 
                 
@@ -319,9 +292,10 @@ var order_link='';
     </div>
   </div>
 </div>
+ 
 
 
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="createinventorymodal" tabindex="-1" role="dialog"  aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
             <div class="modal-header">
@@ -333,63 +307,57 @@ var order_link='';
             <div class="modal-body">
                 <div class="col-sm-12">
                     
-                    <h4>Reciever Detail <hr></h4> 
+                    <h4>Add New Inventory <hr></h4> 
                         <div class="alert alert-success" id="dispatch-succes-noti" style="display:none" role="alert">successfully dispatch and update</div>
-                    
-                        <div class="form-group col-sm">
-                            <div class="card" id="images_pop" style="max-width: 200px;"> 
-                            </div>
+                     
+                        
+                        <div class="form-group">
+                            <label for="SKU">SKU</label>
+                            <input type="text" class="form-control" value="" id="sku"  name="sku" placeholder="SKU" required>
+                            <small id="sku_error" class="form-text text-danger"></small>
+                        </div> 
+                     
+                        
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" value="" id="name"  name="name" placeholder="Product Name" required>
+                            <small id="name_error" class="form-text text-danger"></small>
                         </div>
                         
                         <div class="form-group">
-                            <label for="receiver_name">Reciever Name</label>
-                            <input type="text" class="form-control" value="" id="receiver_name"  name="receiver_name" placeholder="Reciever Name" required>
-                            <small id="receiver_name_error" class="form-text text-danger"></small>
+                            <label for="units">Units</label>
+                            <input type="text" class="form-control" id="units"  name="units" placeholder="Reciever Number" required>
+                            <small id="units_error" class="form-text text-danger"></small>
                         </div> 
                         
                         <div class="form-group">
-                            <label for="receiver_name">Reciever Number</label>
-                            <input type="text" class="form-control" id="receiver_number"  name="receiver_number" placeholder="Reciever Number" required>
-                            <small id="receiver_name_error" class="form-text text-danger"></small>
+                            <label for="Type">Type</label>
+                            <select class="form-select" aria-label="Default select example" id ="unit_type" name="unit_type">
+                              <option selected value ="">Select Type</option> 
+                              <option value="ml">ml</option>
+                              <option value="mg">mg</option>
+                              <option value="pc">pc</option>  
+                            </select> 
+                            <small id="unit_type_error" class="form-text text-danger"></small>
                         </div> 
-                        
+            
                         <div class="form-group">
-                            <label for="receiver_name">Reciever address</label>
-                            <textarea class="form-control" id="reciever_address"   name="reciever_address" placeholder="reciever_address" required></textarea>
-                            <small id="reciever_address_error" class="form-text text-danger"></small>
+                            <label for="cost">cost</label>
+                            <input type="text" class="form-control" value="0" id="cost"  name="cost" placeholder="cost" required>
+                            <small id="cost_error" class="form-text text-danger"></small>
                         </div> 
             
                         <div class="form-group">
-                            <label for="Number">price</label>
-                            <input type="text" class="form-control" value="0" id="price"  name="price" placeholder="Price" required>
-                            <small id="price_error" class="form-text text-danger"></small>
-                        </div>
-            
-                        <div class="form-group">
-                            <label for="Number">Advance Payment</label>
-                            <input type="text" class="form-control" value="" id="advance_payment"  name="advance_payment" placeholder="Advance Payment" required>
-                            <small id="advance_payment_error" class="form-text text-danger"></small>
-                        </div>
-            
-                        <div class="form-group">
-                            <label for="Number">COD Amount</label>
-                            <input type="text" class="form-control" value="" id="cod_amount"  name="cod_amount" placeholder="COD" required>
-                            <small id="cod_amount_error" class="form-text text-danger"></small>
-                        </div>
-            
-                        <div class="form-group">
-                            <label for="Number">Reason</label>
-                            <textarea  class="form-control" value="" id="status_reason"  name="status_reason" placeholder="Reason for status" required></textarea>
-                            <small id="status_reason_error" class="form-text text-danger"></small>
-                        </div>
-                        
-                        
+                            <label for="sale">sale</label>
+                            <input type="text" class="form-control" value="0" id="sale"  name="sale" placeholder="sale" required>
+                            <small id="sale_error" class="form-text text-danger"></small>
+                        </div>   
                     </div>
         
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="save_order_status_and_price">Save changes</button>
+                <button type="button" class="btn btn-primary" id="add_new_inventory">Save changes</button>
             </div>
         </div>
     </div>
@@ -452,6 +420,10 @@ var order_link='';
     
     <div class="form-group">
         <input onclick="mobile_view()" type="checkbox">Mobile View
+    </div>
+    
+    <div class="form-group">
+        <button class="form-control btn btn-outline-success my-2 my-sm-0" data-toggle="modal" data-target="#createinventorymodal" type="button">Add New inventory</button>
     </div>
     
     

@@ -62,17 +62,28 @@ Route::group(['prefix' => 'client/orders/', 'namespace' => 'Client\Orders', 'mid
     Route::get('ManualOrders/get-order-details/{ManualOrder}', 'ManualOrdersController@get_order_details')->name('ManualOrders.get.order.detail');
     Route::get('ManualOrders/dispatch-order-edit/{ManualOrder}', 'ManualOrdersController@popup_dispatch_edit')->name('ManualOrders.dispatch.order.edit');
     Route::post('ManualOrders/dispatch-order-edit/{ManualOrder}', 'ManualOrdersController@popup_dispatch_update')->name('ManualOrders.dispatch.order.update');
+    Route::get('ManualOrders/print_slip_by_scan/', 'ManualOrdersController@print_slip_by_scan')->name('ManualOrders.print.slip.by.scan');
+    Route::get('get_product_details/{Sku}', 'ManualOrdersController@get_product_details')->name('get.product.details');
+    
     //Route::get('create', 'ManualOrdersController@index')->name('client.manual.orders');
 });
-Route::get('testing123', 'Client\Orders\ManualOrdersController@testing')->name('ManualOrders.testing123');
+
+    Route::get('testing123', 'Client\Orders\ManualOrdersController@testing')->name('ManualOrders.testing123');
+
 Route::group(['prefix' => 'mnp/', 'namespace' => 'Shipment', 'middleware' => 'auth:user,admin','as'=> 'mnp.'],function(){
     
-    Route::post('create-booking', 'MnpController@mnp_bookings_store')->name('create.booking');
-    Route::get('shipment/', function () {return view('client.orders.manual-orders.mnp.create-bulk-booking-by-scan');})->name('create.bulk.booking.by.scan');
-    Route::post('bookings', 'MnpController@MnpCreateBulkBookingByOrderIds')->name('create.bulk.booking');
+        Route::post('create-booking', 'MnpController@mnp_bookings_store')->name('create.booking');
+        Route::get('shipment/', function () {return view('client.orders.manual-orders.mnp.create-bulk-booking-by-scan');})->name('create.bulk.booking.by.scan');
+        Route::post('bookings', 'MnpController@MnpCreateBulkBookingByOrderIds')->name('create.bulk.booking');
 
     
 }); 
+
+Route::group(['prefix' => 'admin/', 'namespace' => 'Admin', 'middleware' => 'auth:user,admin' ],function(){
+    
+    Route::resource('inventory', 'InventoryController');
+    
+});
 
 Route::group(['prefix' => 'trax/', 'namespace' => 'Shipment', 'middleware' => 'auth:user,admin','as'=> 'trax.'],function(){
     
@@ -80,24 +91,17 @@ Route::group(['prefix' => 'trax/', 'namespace' => 'Shipment', 'middleware' => 'a
     Route::post('bookings', 'TraxController@CreateBulkBookingByOrderIds')->name('create.bulk.booking');
     Route::get('shipment/', function () {return view('client.orders.manual-orders.trax.create-bulk-booking-by-scan');})->name('create.bulk.booking.by.scan');
     Route::post('calculate-charges', 'TraxController@calculate_charges')->name('trax.calculate.charges');
-    Route::post('get-fare-list', 'TraxController@get_fare_list')->name('trax.fare_list');
-    
-    
+    Route::post('get-fare-list', 'TraxController@get_fare_list')->name('trax.fare_list'); 
 });  
+ 
 
-
-
-
-Route::group(['prefix' => 'frontend/client/orders/', 'namespace' => 'Frontend\Client\Orders','as'=> 'Frontend.'],function(){
-
+Route::group(['prefix' => 'frontend/client/orders/', 'namespace' => 'Frontend\Client\Orders','as'=> 'Frontend.'],function(){ 
     Route::resource('ManualOrders', 'ManualOrdersController');
     Route::get('ManualOrders/client/authentication/', 'ManualOrdersController@authentication')->name('ManualOrders.authentication');
     Route::post('ManualOrders/client/authentication/', 'ManualOrdersController@verify_authentication')->name('ManualOrders.create.guest.cookie');
-    Route::post('ManualOrders/client/authentication/', 'ManualOrdersController@verify_authentication')->name('Frontend.create.order');
-    //Route::post('ManualOrders/client/authentication/', 'ManualOrdersController@verify_authentication')->name('ManualOrders.create.guest.cookie');
-    //Route::get('ManualOrders/show/{id}', 'ManualOrdersController@show')->name('ManualOrders.show');
-    
+    Route::post('ManualOrders/client/authentication/', 'ManualOrdersController@verify_authentication')->name('Frontend.create.order'); 
 });
+
     //Public Route access
     Route::get('ManualOrders/create', 'Frontend\Client\Orders\ManualOrdersController@create')->name('publlic.manualorders.create');
     Route::get('click-here-to-confirm-your-order/{id}', 'Frontend\Client\Orders\ManualOrdersController@customer_order_confirmation')->name('ManualOrders.confirm.order.by.customer.show');
