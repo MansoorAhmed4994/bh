@@ -16,6 +16,7 @@ class CreateOrderDetailsTable extends Migration
         Schema::create('order_details', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('inventory_id')->unsigned();
+            $table->string('sku')->nullable();
             $table->string('order_id')->nullable();
             $table->integer('discount')->nullable();
             $table->string('quanity')->nullable();

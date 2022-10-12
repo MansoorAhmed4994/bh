@@ -64,6 +64,7 @@ Route::group(['prefix' => 'client/orders/', 'namespace' => 'Client\Orders', 'mid
     Route::post('ManualOrders/dispatch-order-edit/{ManualOrder}', 'ManualOrdersController@popup_dispatch_update')->name('ManualOrders.dispatch.order.update');
     Route::get('ManualOrders/print_slip_by_scan/', 'ManualOrdersController@print_slip_by_scan')->name('ManualOrders.print.slip.by.scan');
     Route::get('get_product_details/{Sku}', 'ManualOrdersController@get_product_details')->name('get.product.details');
+    Route::post('generate/scan/slip', 'ManualOrdersController@print_slip_by_scan_store')->name('generate.scan.slip');
     
     //Route::get('create', 'ManualOrdersController@index')->name('client.manual.orders');
 });
@@ -83,6 +84,13 @@ Route::group(['prefix' => 'admin/', 'namespace' => 'Admin', 'middleware' => 'aut
     
     Route::resource('inventory', 'InventoryController');
     
+    
+});
+
+Route::group(['prefix' => 'admin/', 'namespace' => 'Admin', 'middleware' => 'auth:user,admin' ],function(){
+    
+    Route::resource('accounts', 'AccountsController');
+    Route::any('accounts/update_shipment_payments/{id}/{order_id}', 'AccountsController@UpdateShipmentPaymentStatus')->name('update.shipment.status');
 });
 
 Route::group(['prefix' => 'trax/', 'namespace' => 'Shipment', 'middleware' => 'auth:user,admin','as'=> 'trax.'],function(){

@@ -91,9 +91,7 @@ trait TraxTraits {
         $headers = ['Authorization:'.env('TRAX_API_KEY'), 'Accepts:' . 'application/json',"real:json content"];
         $response = $this->CurlGetRequest($apiUrl,$headers);
         return $response = json_decode($response);
-    }
-    
-    
+    } 
     
     
     public function CalculateDestinationRates($data)
@@ -101,6 +99,15 @@ trait TraxTraits {
         $url = "https://sonic.pk/api/charges_calculate";
         $headers = ['Authorization:'.env('TRAX_API_KEY'), 'Accepts:' . 'application/json',"real:json content"];
         $response = $this->CurlPostRequest($url,$headers,$data);
+        return $response = json_decode($response);
+    }
+    
+    
+    public function GetShipmentPaymentStatus($data)
+    {
+        $apiUrl = "https://sonic.pk/api/shipment/payments?tracking_number=".$data;
+        $headers = ['Authorization:'.env('TRAX_API_KEY'), 'Accepts:' . 'application/json',"real:json content"];
+        $response = $this->CurlGetRequest($apiUrl,$headers);
         return $response = json_decode($response);
     }
     // public function TestGetPickupAddresses($tracking_number,$print_type)

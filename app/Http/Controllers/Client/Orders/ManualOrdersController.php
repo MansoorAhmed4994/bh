@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\Client\ManualOrders;
 use App\Models\Riders;
 use App\Models\Inventory;
+use App\Models\Order_details;
 use App\Models\Client\Customers;
 use Illuminate\Support\Facades\File; 
 use Illuminate\Support\Facades\Auth;
@@ -751,8 +752,8 @@ class ManualOrdersController extends Controller
     
     public function get_product_details($Sku)
     {
-        $product = Inventory::select('products.id', 'products.name')->where('products.Sku', '=', $Sku)->join('products', 'products.id', '=', 'inventories.products_id')->firstOrFail();
-        dd($product->id);
+        $product = Inventory::select('products.id','inventories.id as inventory_id','products.sku', 'products.name', 'inventories.sale')->where('products.Sku', '=', $Sku)->join('products', 'products.id', '=', 'inventories.products_id')->firstOrFail();
+        //dd($product->id);
         if($product != null)
         {
             return response()->json(['messege' => $product]);
@@ -763,22 +764,54 @@ class ManualOrdersController extends Controller
         }
     }
     
-    public function print_slip_by_scan_store()
+    public function print_slip_by_scan_store(Request $request)
     { 
+        $count_products = count($request->product_ids);
+        $products_insert_data=[];
         
-        return view('client.orders.manual-orders.print_slip_by_scan');
+        // $products = Products::create([
+        //     'sku' => $request->sku,
+        //     'name' => $request->name,
+        //     'created_by' => '1',
+        //     'updated_by' => '1',
+        //     'status' => 'active' 
+        //     ]);
+            
+        for($i=0; $i<$count_products; $i++)
+        {
+            $d= Order_details::create([
+                'inventory_id' => $request->inventory_ids[$i],
+                'sku' => $request->product_skus[$i],
+                'order_id' => $request->order_id,
+                'discount' => $request->discounts[$i],
+                'quanity' => $request->qty[$i],
+                'created_by' => Auth::id(),
+                'updated_by' => Auth::id(), 
+                'status' => 'active', 
+                
+                ]);
+                
+                $inventory = Inventory::find($d->inventory_id);
+                $inventory->onhand = $inventory->onhand-$request->qty[$i];
+                $status = $inventory->save();
+                    //dd($status);
+                //array_push($products_insert_data,$d);
+        } 
+        dd($products_insert_data);
+        //return view('client.orders.manual-orders.print_slip_by_scan');
         
     }
     
     public function testing()
     {
-        $data['service_type_id'] = 1;
-        $data['origin_city_id'] = 202;
-        $data['destination_city_id'] = 172;
-        $data['estimated_weight'] = 0.53;
-        $data['shipping_mode_id'] = 1;
-        $data['amount'] = 300;
-        dd($this->CalculateDestinationRates($data));
+        $data= '20222319352805'; 
+        // $url = "https://sonic.pk/api/shipment/payments?tracking_number=20217219406041";
+        // $headers = ['Authorization:'.env('TRAX_API_KEY'), 'Accepts:' . 'application/json',"real:json content"];
+        // $response = $this->CurlGetRequest($apiUrl,$headers);
+        
+        
+        dd($this->GetShipmentPaymentStatus($data));
+        
         // $url = "https://api.nexmo.com/beta/messages";
 
         // $curl = curl_init($url);
