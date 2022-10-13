@@ -557,6 +557,19 @@ var order_link='';
                 <th scope="col">Up.Date</th>
                 <th scope="col">Status</th>
                 <th scope="col">Status Reason</th>
+                <th scope="col">price</th>
+                <th scope="col">advance</th>
+                <th scope="col">cod</th>
+                <th scope="col">fare</th>
+                
+                <th scope="col">T.Payment Status</th>
+                <th scope="col">T.Amount</th>
+                <th scope="col">T.charges</th>
+                <th scope="col">T.gst</th>
+                <th scope="col">T.payble</th>
+                <th scope="col">T.Net</th>
+                <th scope="col">Gross Net</th>
+                <th scope="col">T.payment_id</th>
             </tr>
         </thead>
         <tbody>  
@@ -661,12 +674,38 @@ var order_link='';
                     <div class="card card-body">{{$lists->reciever_address}}</div>
                     </div>
                 </td>
+                
+                <?php  
+                    $price = $lists->price;
+                    $charges = ($lists->charges == null) ? 0 : $lists->charges;
+                    $amount = ($lists->amount == null) ? 0 : $lists->amount;
+                    $gst = ($lists->gst == null) ? 0 : $lists->gst;
+                    $payable = ($lists->payable == null) ? 0 : $lists->payable;
+                    $tnet = $amount - ($gst+$charges);
+                    $grossnet = $price - ($gst+$charges);
+                
+                ?>
+                
                 <td>{{$lists->price}}</td>  
                 <td><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$number?>&text=Assalamualaikum, {{$lists->first_name}}, Mam did you recieve your order, please click on link to Track your Order {{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}">Get Status</a></td> 
                 <td>{{date('d-M', strtotime($lists->created_at))}} </td>
                 <td>{{date('d-M', strtotime($lists->updated_at))}}</td> 
                 <td>{{$lists->status}}</td>
                 <td>{{$lists->status_reason}}</td>
+                <td>{{$lists->price}}</td>
+                <td>{{$lists->advance_payment}}</td>
+                <td>{{$lists->cod_amount}}</td>
+                <td>{{$lists->fare}}</td>
+                
+                
+                <td>{{$lists->payment_status}}</td>
+                <td><?=$amount;?></td>
+                <td><?=$charges;?></td> 
+                <td><?= $gst;?></td> 
+                <td><?=$payable;?></td> 
+                <td><?=$tnet;?></td>  
+                <td><?=$grossnet;?></td>    
+                <td>{{$lists->payment_id}}</td>
             </tr>
             <?php $count++;?>
             @endforeach

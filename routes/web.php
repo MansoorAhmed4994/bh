@@ -91,6 +91,7 @@ Route::group(['prefix' => 'admin/', 'namespace' => 'Admin', 'middleware' => 'aut
     
     Route::resource('accounts', 'AccountsController');
     Route::any('accounts/update_shipment_payments/{id}/{order_id}', 'AccountsController@UpdateShipmentPaymentStatus')->name('update.shipment.status');
+    Route::get('crone_update_shipment_payments/', 'AccountsController@CroneUpdateShipmentPaymentStatuss')->name('crone.update.shipment.status');
 });
 
 Route::group(['prefix' => 'trax/', 'namespace' => 'Shipment', 'middleware' => 'auth:user,admin','as'=> 'trax.'],function(){

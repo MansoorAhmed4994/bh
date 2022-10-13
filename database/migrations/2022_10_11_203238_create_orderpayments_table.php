@@ -15,8 +15,8 @@ class CreateOrderpaymentsTable extends Migration
     {
         Schema::create('orderpayments', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('consignment_id')->unsigned();
-            $table->integer('order_id')->nullable();
+            $table->bigIncrements('consignment_id');
+            $table->integer('order_id');
             $table->float('cash_handling_charges',8,2)->nullable();
             $table->float('fuel_surcharge',8,2)->nullable();
             $table->float('weight_charges',8,2)->nullable();
@@ -30,8 +30,8 @@ class CreateOrderpaymentsTable extends Migration
             $table->float('payable',8,2)->nullable();
             $table->string('type')->nullable();
             $table->timestamps();
-            $table->bigInteger('created_by');
-            $table->bigInteger('updated_by');
+            $table->int('created_by');
+            $table->int('updated_by');
             $table->string('status');
         });
     }
