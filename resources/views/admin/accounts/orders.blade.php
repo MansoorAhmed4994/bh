@@ -251,7 +251,7 @@ var order_link='';
           },
           success:function(response){
             //$('#successMsg').show();
-            alert(response.messege.message); 
+            //alert(response.messege.message); 
             //console.log(response);
           },
           error: function(response) {
@@ -718,7 +718,7 @@ var order_link='';
 <script type="application/javascript">
     function set_order_image(id)
     {
-        alert($('#order_images'+id).html());    
+        //alert($('#order_images'+id).html());    
         var dt =$('#order_images'+id).html();
         $('#inner_carousel_images').html(dt);
         

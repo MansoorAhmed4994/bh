@@ -504,6 +504,8 @@ var order_link='';
                 <th scope="col">Description</th>
                 <th scope="col">Address</th>
                 <th scope="col">Price</th>
+                <th scope="col">Advance Payment</th>
+                <th scope="col">COD</th>
                 <th scope="col">OD Y/N</th>
                 <th scope="col">cr.Date</th>
                 <th scope="col">Up.Date</th>
@@ -583,6 +585,8 @@ var order_link='';
                 <td>{{$lists->description}}</td> 
                 <td>{{$lists->reciever_address}}</td>
                 <td>{{$lists->price}}</td>  
+                <td>{{$lists->advance_payment}}</td> 
+                <td>{{$lists->cod_amount}}</td> 
                 <td><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$number?>&text=Assalamualaikum, {{$lists->first_name}}, Mam did you recieve your order, please click on link to Track your Order {{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}">Get Status</a></td> 
                 <td>{{date('d-M-y', strtotime($lists->created_at))}} <br> {{date('G:i a', strtotime($lists->created_at))}}</td>
                 <td>{{date('d-M-y', strtotime($lists->updated_at))}} <br> {{date('G:i a', strtotime($lists->updated_at))}}</td> 

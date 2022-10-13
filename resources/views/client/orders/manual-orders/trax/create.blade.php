@@ -181,6 +181,22 @@
                         </div>
                         
                         
+                        <div class="row">
+                            
+                            <div class="form-group col-sm-3">
+                                <label for="advance_payment">Advance Payment</label>
+                                <input type="number" class="form-control @if($errors->get('advance_payment')) is-invalid @endif advance_payment" onchange="advacne_payment()" value="{{old('advance_payment')}}@if(isset($ManualOrder)){{trim($ManualOrder->advance_payment)}}@endif" id="advance_payment[]"  name="advance_payment[]" placeholder="Price" required>
+                                @if($errors->get('advance_payment')) <small id="advance_payment_error[]" class="form-text text-danger advance_payment_error[]">{{$errors->first('advance_payment')}} </small>@endif
+                            </div>
+                            
+                            <div class="form-group col-sm-3">
+                                <label for="cod_amount">COD Amount</label>
+                                <input type="number" class="form-control @if($errors->get('cod_amount')) is-invalid @endif cod_amount"  value="{{old('cod_amount')}}@if(isset($ManualOrder)){{trim($ManualOrder->cod_amount)}}@endif" id="cod_amount[]"  name="cod_amount[]" placeholder="Price" required >
+                                @if($errors->get('cod_amount')) <small id="cod_amount_error[]" class="form-text text-danger cod_amount_error[]">{{$errors->first('cod_amount')}} </small>@endif
+                            </div>
+                        </div>
+                        
+                        
                         <!--<div class="form-group">-->
                         <!--    <button type="button" onclick="calculate_charges(<?=$count?>)">Calculate Fare</button>-->
                         <!--</div>-->
