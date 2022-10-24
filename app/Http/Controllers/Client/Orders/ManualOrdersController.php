@@ -34,7 +34,7 @@ class ManualOrdersController extends Controller
     public function __construct()
     {
 
-        //dd();
+        // dd(Auth::guard('admin')->check());
         //$this->middleware('auth');
     }
 

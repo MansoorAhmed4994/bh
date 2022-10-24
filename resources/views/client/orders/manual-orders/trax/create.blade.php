@@ -101,8 +101,19 @@
                         
                         <?php 
                             
-                            $reciever_number = substr($ManualOrder->receiver_number, 1);
-                            $reciever_number = '92'.$reciever_number
+                            $get_char_num = substr($ManualOrder->receiver_number,0,1);
+                            if($get_char_num == 0)
+                            {
+                                $reciever_number = substr($ManualOrder->receiver_number, 1);
+                                $reciever_number = '92'.$reciever_number;
+                                
+                            }
+                            elseif($get_char_num == 9)
+                            { 
+                                $reciever_number = substr($ManualOrder->receiver_number, 2);
+                                $reciever_number = '92'.$reciever_number;
+                            }
+                            
                         ?>
                         <div class="form-group col-sm">
                             <label for="receiver_name">Reciever Number</label>
@@ -154,7 +165,7 @@
             
                         <div class="form-group col-sm">
                             <label for="price">price</label>
-                            <input type="number" onkeyup="limit(this);" class="form-control @if($errors->get('price')) is-invalid @endif price" onfocusout="get_fare_list(<?=$count?>)" value="{{old('price')}}@if(isset($ManualOrder)){{trim($ManualOrder->price)}}@endif" id="price[]"  name="price[]" placeholder="Price" required>
+                            <input type="text"  pattern="[1-9][0-9]{0,4}" class="form-control @if($errors->get('price')) is-invalid @endif price" onchange="onchangePrice(<?=$count?>)" onfocusout="get_fare_list(<?=$count?>);checkprice(<?=$count?>)" value="{{old('price')}}@if(isset($ManualOrder)){{trim($ManualOrder->price)}}@endif" id="price[]"  name="price[]" placeholder="Price" required>
                             @if($errors->get('price')) <small id="price_error[]" class="form-text text-danger price_error[]">{{$errors->first('price')}} </small>@endif
                         </div> 
             
@@ -185,13 +196,13 @@
                             
                             <div class="form-group col-sm-3">
                                 <label for="advance_payment">Advance Payment</label>
-                                <input type="number" class="form-control @if($errors->get('advance_payment')) is-invalid @endif advance_payment" onchange="advacne_payment()" value="{{old('advance_payment')}}@if(isset($ManualOrder)){{trim($ManualOrder->advance_payment)}}@endif" id="advance_payment[]"  name="advance_payment[]" placeholder="Price" required>
+                                <input type="number" class="form-control @if($errors->get('advance_payment')) is-invalid @endif advance_payment"  onchange="onchangePrice(<?=$count?>)" value="{{old('advance_payment')}}@if(isset($ManualOrder)){{trim($ManualOrder->advance_payment)}}@endif" id="advance_payment[]"  name="advance_payment[]" placeholder="Price" required>
                                 @if($errors->get('advance_payment')) <small id="advance_payment_error[]" class="form-text text-danger advance_payment_error[]">{{$errors->first('advance_payment')}} </small>@endif
                             </div>
                             
                             <div class="form-group col-sm-3">
                                 <label for="cod_amount">COD Amount</label>
-                                <input type="number" class="form-control @if($errors->get('cod_amount')) is-invalid @endif cod_amount"  value="{{old('cod_amount')}}@if(isset($ManualOrder)){{trim($ManualOrder->cod_amount)}}@endif" id="cod_amount[]"  name="cod_amount[]" placeholder="Price" required >
+                                <input type="number" class="form-control @if($errors->get('cod_amount')) is-invalid @endif cod_amount"  value="{{old('cod_amount')}}@if(isset($ManualOrder)){{trim($ManualOrder->cod_amount)}}@endif" id="cod_amount[]"  name="cod_amount[]" placeholder="COD" required >
                                 @if($errors->get('cod_amount')) <small id="cod_amount_error[]" class="form-text text-danger cod_amount_error[]">{{$errors->first('cod_amount')}} </small>@endif
                             </div>
                         </div>
@@ -215,6 +226,23 @@
     
  <script type="text/javascript">
     
+    function onchangePrice(index)
+    {
+        let price = document.getElementsByClassName("price")[index].value; 
+        let advance_payment = document.getElementsByClassName("advance_payment")[index].value;
+        let cod_amount = (price-advance_payment);
+        document.getElementsByClassName("cod_amount")[index].value = cod_amount;
+        
+    }
+    function checkprice(index)
+    {
+        let cod_amount = document.getElementsByClassName("cod_amount")[index].value;
+        if(cod_amount < 0)
+        {
+            alert('Cod price is less then 0');
+            document.getElementsByClassName("advance_payment")[index].value = "";
+        }
+    }
     
 function calculate_charges(index)
 {  
@@ -290,7 +318,7 @@ function calculate_charges(index)
 
 function get_fare_list(index)
 {   
-     
+     $("body").addClass("loading"); 
     let destination_city_id = document.getElementsByClassName("city")[index].value;
     let estimated_weight = document.getElementsByClassName("weight")[index].value;
     let shipping_mode_id = document.getElementsByClassName("shipping_mode_id")[index].value;
@@ -303,8 +331,7 @@ function get_fare_list(index)
     else if ( estimated_weight <=0  ||  estimated_weight == "")
     {
         return;
-    }
-    $("body").addClass("loading");
+    } 
     $.ajax({
           url: base_url + '/trax/get-fare-list',
           headers: {

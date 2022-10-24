@@ -29,7 +29,7 @@ Route::group(['middleware' => ['auth' => 'admin'] , 'prefix' => 'admin/','namesp
 
     // Route::resource('user/', 'UserController')->except('edit');
     Route::resource('user', 'UserController');
-    Route::get('dashboard', 'DashboardController@index')->name('dashboard');
+    // Route::get('dashboard', 'DashboardController@index')->name('dashboard');
 });
 //Route::get('admin/user/{id}/edit/', 'Auth\Admin\UserController@edit')->name('admin.user.edit');
 
@@ -89,9 +89,24 @@ Route::group(['prefix' => 'admin/', 'namespace' => 'Admin', 'middleware' => 'aut
 
 Route::group(['prefix' => 'admin/', 'namespace' => 'Admin', 'middleware' => 'auth:user,admin' ],function(){
     
-    Route::resource('accounts', 'AccountsController');
+    // Route::resource('accounts', 'AccountsController');
+    Route::get('accounts/', 'AccountsController@index')->name('accounts.index');  
     Route::any('accounts/update_shipment_payments/{id}/{order_id}', 'AccountsController@UpdateShipmentPaymentStatus')->name('update.shipment.status');
-    Route::get('crone_update_shipment_payments/', 'AccountsController@CroneUpdateShipmentPaymentStatuss')->name('crone.update.shipment.status');
+    Route::get('crone_update_shipment_payments/', 'AccountsController@CroneUpdateShipmentPaymentStatuss')->name('crone.update.shipment.payment.status');
+    Route::get('crone_update_shipment_tracking/', 'AccountsController@CroneUpdateShipmentTrackingStatus')->name('crone.update.shipment.tracking.status');
+    Route::get('crone_update_fare/', 'AccountsController@CroneUpdateFare')->name('crone.update.fare');
+    
+    
+    
+    Route::post('update_bulk_shipment_payments/', 'AccountsController@UpdateBulkShipmentPaymentStatus')->name('update.bulk.shipment.status');
+    
+    Route::get('accounts/shipment/status/list/{status}/{date_from}/{date_to}', 'AccountsController@ShipmentStatusList')->name('admin.accounts.shipment.status.list');
+    Route::get('accounts/tracking/status/list/{status}/{date_from}/{date_to}', 'AccountsController@TrackingStatusList')->name('admin.accounts.tracking.status.list');
+    Route::get('dashboard/', 'DashboardController@index')->name('admin.dashboard');
+    Route::post('dashboard/', 'DashboardController@index')->name('admin.dashboard.monthly');
+    
+    
+     
 });
 
 Route::group(['prefix' => 'trax/', 'namespace' => 'Shipment', 'middleware' => 'auth:user,admin','as'=> 'trax.'],function(){

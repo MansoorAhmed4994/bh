@@ -10,13 +10,15 @@ use App\Models\Inventory;
 use App\Models\Orderpayments;
 use App\Models\Order_details;
 use App\Models\Client\Customers;
-use Illuminate\Support\Facades\File; 
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Traits\MNPTraits;
 use App\Traits\TraxTraits;
 use App\Traits\ManualOrderTraits;
+
 use Carbon\Carbon;
 use DB;
 
@@ -32,7 +34,15 @@ class AccountsController extends Controller
     use ManualOrderTraits;
     use MNPTraits;
     use TraxTraits;
-     public function OrderFieldList()
+    
+    protected $pagination;
+     
+
+    public function __construct() 
+    {
+        $this->pagination = '20';
+    }
+    public function OrderFieldList()
     {
         return array(
             'manual_orders.consignment_id',
@@ -59,6 +69,8 @@ class AccountsController extends Controller
             'manual_orders.advance_payment',
             'manual_orders.cod_amount',
             'manual_orders.payment_status',
+            'manual_orders.shipment_tracking_status',
+            
             
             
             'orderpayments.amount',
@@ -68,72 +80,64 @@ class AccountsController extends Controller
             'orderpayments.payable'); 
 
     }
+    public function list_query()
+    {
+        $query = ManualOrders::query();
+        $list = $query->leftJoin('orderpayments', 'orderpayments.order_id', '=', 'manual_orders.id')->
+        leftJoin('customers', 'customers.id', '=', 'manual_orders.customers_id')->
+        select($this->OrderFieldList());
+        return $query;
+    }
+    
     public function index(Request $request)
     {
-        //  $order_id = $request->search_order_id;
-        // $search_text = $request->search_text;
-        // $order_status = 'dispatched';
-        // //dd($request);
-        // if($order_id != '')
-        // {
-        //     $search_test = $request->search_text;
-        //     $order_status = $request->order_status;
-        //     $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.id',$order_id)
-        //     ->select($this->OrderFieldList())
-        //     ->paginate(20);
-        // }
-        // else if($search_text != '')
-        // {
-        // $search_test = $request->search_text;
+        $list = $this->list_query();
+        if($request->date_from)
+        {
+            // dd($request->date_from);
+            $from_date = $request->date_from;
+            $to_date = $request->date_to;  
+            $list->whereBetween('manual_orders.created_at', [$from_date, $to_date]); 
+        }
+        if($request->shipment_tracking_status)
+        {
+            // dd($request->date_from);
+            $shipment_tracking_status = $request->shipment_tracking_status; 
+            $list->where('manual_orders.shipment_tracking_status','=',$shipment_tracking_status); 
+        }
+        if($request->payment_status)
+        {
+            // dd($request->date_from);
+            $payment_status = $request->payment_status; 
+            $list->where('manual_orders.payment_status','=',$payment_status); 
+        }
+        if($request->order_by)
+        { 
+            $order_by = $request->order_by;  
+            $list->orderBy($order_by,'ASC');
+        }
+        if(!$request->order_by)
+        {  
+            $list->orderBy('manual_orders.id','Desc');
+        }
+        if($request->search_order_id)
+        {  
+            $list->where('manual_orders.id','=',$request->search_order_id);
+        }
         
-        // $order_status = $request->order_status;
-        // $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->
-        // where(function ($query) use ($search_test) {
-        //     $query->where('customers.first_name','like',$search_test.'%')
-        //             ->orWhere('customers.first_name','like','%'.$search_test.'%')
-        //             ->orWhere('customers.first_name','like','%'.$search_test)
-        //             ->orWhere('customers.last_name','like',$search_test.'%')
-        //             ->orWhere('customers.last_name','like','%'.$search_test.'%')
-        //             ->orWhere('customers.last_name','like','%'.$search_test)
-        //             ->orWhere('customers.number','like','%'.$search_test) 
-        //             ->orWhere('customers.number','like',$search_test.'%')
-        //             ->orWhere('customers.number','like','%'.$search_test.'%')
-        //             ->orWhere('manual_orders.id','like','%'.$search_test.'%')
-        //             ->orWhere('manual_orders.consignment_id','like','%'.$search_test.'%');
-        //     })->where('manual_orders.status','like',$order_status.'%')
-        //     ->orderBy('manual_orders.id', 'DESC')
-        //     ->select($this->OrderFieldList())
-        //     ->paginate(20);
-            
-        // }
-        // else if($order_status != '')
-        // {
-        //     $query = Customers::query();
-            
-        //     $query = $query->rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id');
-        //     if($order_status != 'all')
-        //     {
-        //         $query = $query->where('manual_orders.status',$order_status);
-        //     } 
-        //     $list = $query->orderBy('manual_orders.id', 'DESC')
-        //     ->select($this->OrderFieldList())
-        //     ->paginate(20); 
-        // }
-        // else
-        // {
-        //     $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')
-        //     ->where('manual_orders.status','pending')
-        //     ->orderBy('manual_orders.id', 'DESC')
-        //     ->select($this->OrderFieldList())
-        //     ->paginate(20);
-        // }
-        //dd(Customers::select('*')->manual_orders()->first()->id);
-        // dd(ManualOrders::leftJoin('orderpayments', 'orderpayments.order_id', '=', 'manual_orders.id')->leftJoin('customers', 'customers.id', '=', 'manual_orders.customers_id')->select($this->OrderFieldList())->where('manual_orders.consignment_id','>','0')->paginate(20));
-        $list = ManualOrders::leftJoin('orderpayments', 'orderpayments.order_id', '=', 'manual_orders.id')->leftJoin('customers', 'customers.id', '=', 'manual_orders.customers_id')->select($this->OrderFieldList())->where([['manual_orders.consignment_id','>','0'],['manual_orders.status','=','dispatched']])->paginate(20);
+        
+        
+        
+        $list = $list->where([['manual_orders.consignment_id','>','0']])
+        ->paginate($this->pagination);
+        
+        
         // dd($list);
         return view('admin.accounts.orders')->with('list',$list);  
         //
     }
+     
+     
 
     /**
      * Show the form for creating a new resource.
@@ -164,10 +168,10 @@ class AccountsController extends Controller
                     $Orderpayments = Orderpayments::create([
                     'order_id' => $order_id,
                     'consignment_id' => $id,
-                    'cash_handling_charges' => (isset($data->charges->cash_handling_charges) ? $data->charges->cash_handling_charges : ''),  
+                    'cash_handling_charges' => (isset($data->charges->cash_handling_charges) ? $data->charges->cash_handling_charges : '0'),  
                     'fuel_surcharge' => $data->charges->fuel_surcharge,  
-                    'weight_charges' => (isset($data->charges->weight_charges) ? $data->charges->weight_charges : '') ,  
-                    'current_payment_status' => (isset($data->current_payment_status) ? $data->current_payment_status  : ''),  
+                    'weight_charges' => (isset($data->charges->weight_charges) ? $data->charges->weight_charges : '0') ,  
+                    'current_payment_status' => (isset($data->current_payment_status) ? $data->current_payment_status  : '0'),  
                     'message' => $data->message,  
                     'amount' => $data->payments[0]->amount,  
                     'charges' => $data->payments[0]->charges,  
@@ -192,28 +196,32 @@ class AccountsController extends Controller
             
             return response()->json(['messege' => $data]);
         }
+        if($data->status == 1 && $data->message == "No Payments")
+        {
+            $ManualOrders = ManualOrders::find($order_id);
+
+            $ManualOrders->payment_status = "No Payments";
+             
+            $ManualOrders->save();
+        }
         return response()->json(['messege' => $data]);
         
     } 
+     
     
-    
-    public function CroneUpdateShipmentPaymentStatuss()
+    public function UpdateBulkShipmentPaymentStatus(Request $request)
     {
-        // dd('w');
-        //dd($request->consignment_id);
-        $ManualOrdersLists = ManualOrders::select('consignment_id','id')->where([['consignment_id','>','0'],['payment_status','!=' ,'Payment - Paid']])->paginate(10);
-        // dd($ManualOrdersLists);
-        // foreach($ManualOrdersLists as $ManualOrdersList)
-        // {
-        //     echo $ManualOrdersList->consignment_id;
-        //     $data = $this->GetShipmentPaymentStatus($ManualOrdersList->consignment_id);
-        //     echo "<pre>"; print_r($data);
-        // }
-        // dd();
         
-        //dd($data = $this->GetShipmentPaymentStatus(20222316864998));
-        foreach($ManualOrdersLists as $ManualOrdersList)
+        // $order_action = $request->order_action;
+        $order_action = $request->order_action;
+        $order_ids = $request->order_ids;
+       
+        if($order_action == 'updateshipmentspayment')
         {
+            $explode_id = explode(',', $order_ids);
+            $ManualOrdersLists = ManualOrders::select('consignment_id','id')->whereIn('id',$explode_id)->get();
+            foreach($ManualOrdersLists as $ManualOrdersList)
+            {
             
             $id = $ManualOrdersList->consignment_id;
             $order_id = $ManualOrdersList->id;
@@ -267,10 +275,328 @@ class AccountsController extends Controller
                 
                 // }
                 //return response()->json(['messege' => $data]);
+                }
+                
+                if($data->status == 1 && $data->message == "No Payments")
+                {
+                    $ManualOrders = ManualOrders::find($order_id);
+     
+                    $ManualOrders->payment_status = "No Payments";
+                     
+                    $ManualOrders->save();
+                }
+                
+            }
+        }
+        elseif($order_action == 'dispatched')
+        {
+            $explode_id = explode(',', $order_ids);
+            //dd($explode_id);
+            $ManualOrder = ManualOrders::whereIn('id',$explode_id)->update(['status' => 'dispatched']);
+            //dd($ManualOrder);
+        }
+        if($order_action == 'updateshipmentstracking')
+        {
+            // dd('working');
+            $explode_id = explode(',', $order_ids);
+            $ManualOrdersLists = ManualOrders::select('consignment_id','id')->whereIn('id',$explode_id)->get();
+            // dd($trax_order_details);
+            foreach($ManualOrdersLists as $ManualOrdersList)
+            {
+                $data = $this->TrackTraxOrder($ManualOrdersList->consignment_id,0);
+                // dd($data);
+                $order_id = $ManualOrdersList->id;
+                if($data->status == 0)
+                {
+                    // dd($data->details->tracking_history);
+                    if(isset($data->details->tracking_history))
+                    { 
+                        $tracking_status = $data->details->tracking_history[0]->status;
+                        
+                        
+                        
+                        $ManualOrders = ManualOrders::find($order_id);
+         
+                        $ManualOrders->shipment_tracking_status = $tracking_status;
+                         
+                        $status_save = $ManualOrders->save();
+                        //print_r($status_save)."<br>";
+                    }
+                
+                
+                // }
+                //return response()->json(['messege' => $data]);
+                } 
+                
+            }
+        }
+        
+        
+        return back()->withInput();
+        //dd($ManualOrdersLists);
+    }
+    
+    
+    public function CroneUpdateShipmentPaymentStatuss()
+    { 
+        $from_date= date('Y-m-01');
+        $to_date = date('Y-m-t');
+        $ManualOrdersLists = ManualOrders::select('consignment_id','id','payment_status','shipment_tracking_status')
+        ->where([
+            ['consignment_id','>','0'],
+            ['payment_status','!=' ,'Payment - Paid'],
+            ['payment_status','!=' ,'Charges - Deducted']
+        ])
+        ->paginate(200);
+        
+        
+        foreach($ManualOrdersLists as $ManualOrdersList)
+        {
+            
+            $id = $ManualOrdersList->consignment_id;
+            $order_id = $ManualOrdersList->id;
+            // echo $ManualOrdersList->id."<br>";
+        
+            $data = $this->GetShipmentPaymentStatus($id);
+            //return response()->json(['messege' => $data]);
+            //dd($id);
+            // echo $order_id.'<br>';
+            if($data->status == 0)
+            {
+                
+                        echo $order_id.', ts: '.$ManualOrdersList->shipment_tracking_status.'<br>';
+                 
+                    $payment_id = $data->payments[0]->id;
+                    $matchThese = ['consignment_id' => $id, 'order_id' => $order_id, 'payment_id' =>$payment_id];
+                    $orderpayment = Orderpayments::where($matchThese)
+                    ->where(function ($query) use ($payment_id) {
+                        $query->where('payment_id','=',$payment_id)
+                        ->orWhere('payment_id','=','0');
+                    })
+                    ->get();
+                    
+                    if($orderpayment->count() == 0)
+                    { 
+                        
+                        // dd($data);
+                        $Orderpayments = Orderpayments::create([
+                        'order_id' => $order_id,
+                        'consignment_id' => $id,
+                        'cash_handling_charges' => (isset($data->charges->cash_handling_charges) ? $data->charges->cash_handling_charges : '0'),  
+                        'fuel_surcharge' => $data->charges->fuel_surcharge,  
+                        'weight_charges' => (isset($data->charges->weight_charges) ? $data->charges->weight_charges : '0') ,  
+                        'current_payment_status' => (isset($data->current_payment_status) ? $data->current_payment_status  : '0'),  
+                        'message' => $data->message,  
+                        'amount' => $data->payments[0]->amount,  
+                        'charges' => $data->payments[0]->charges,  
+                        'datetime' => (string)$data->payments[0]->datetime,  
+                        'gst' => $data->payments[0]->gst,  
+                        'payment_id' => $data->payments[0]->id,  
+                        'payable' => $data->payments[0]->payable,  
+                        'type' => $data->payments[0]->type,      
+                        'created_by' => Auth::id(),  
+                        'updated_by' => Auth::id(),  
+                        'status' => 'active',
+                        ]);
+                        
+                        $ManualOrders = ManualOrders::find($order_id);
+         
+                        $ManualOrders->payment_status = $data->current_payment_status;
+                         
+                        $status_save = $ManualOrders->save();
+                        
+                        //print_r($status_save)."<br>";
+                    }
+                    else
+                    {
+                        foreach($orderpayment as $orderpaymentlist)
+                        {
+                            // dd($orderpaymentlist);
+                            if($orderpaymentlist->payment_id == '0')
+                            {
+                                Orderpayments::where('id',$orderpaymentlist->id)
+                                ->update([
+                                    'order_id' => $order_id,
+                                    'consignment_id' => $id,
+                                    'cash_handling_charges' => (isset($data->charges->cash_handling_charges) ? $data->charges->cash_handling_charges : '0'),  
+                                    'fuel_surcharge' => $data->charges->fuel_surcharge,  
+                                    'weight_charges' => (isset($data->charges->weight_charges) ? $data->charges->weight_charges : '0') ,  
+                                    'current_payment_status' => (isset($data->current_payment_status) ? $data->current_payment_status  : '0'),  
+                                    'message' => $data->message,  
+                                    'amount' => $data->payments[0]->amount,  
+                                    'charges' => $data->payments[0]->charges,  
+                                    'datetime' => (string)$data->payments[0]->datetime,  
+                                    'gst' => $data->payments[0]->gst,  
+                                    'payment_id' => $data->payments[0]->id,  
+                                    'payable' => $data->payments[0]->payable,  
+                                    'type' => $data->payments[0]->type,   
+                                    'updated_by' => Auth::id(),  
+                                    'status' => 'active',
+                                    ]);
+                                    // dd('entry done');
+                            }
+                            else
+                            {
+                                // dd('not intery');
+                            }
+                        }
+                        
+                    }
+                
+                
+                // }
+                //return response()->json(['messege' => $data]);
+            }
+            elseif($data->status == 1)
+            {
+                if($data->message == "No Payments")
+                {
+                    $matchThese = ['consignment_id' => $id, 'order_id' => $order_id];
+                    $orderpayment = Orderpayments::where($matchThese)->first();
+                    //  dd()/
+                    if(!$orderpayment)
+                    { 
+                        $mytime = Carbon::now();
+                        $current_time =  $mytime->toDateTimeString();
+                        dd($current_time);
+                        $Orderpayments = Orderpayments::create([
+                        'order_id' => $order_id,
+                        'consignment_id' => $id,
+                        'cash_handling_charges' => 0,  
+                        'fuel_surcharge' => "",  
+                        'weight_charges' => 0,  
+                        'current_payment_status' => 0,  
+                        'message' => $data->message,  
+                        'amount' => 0,  
+                        'charges' => 0,  
+                        'datetime' => $current_time,  
+                        'gst' => 0,  
+                        'payment_id' => 0,  
+                        'payable' => 0,  
+                        'type' => 0,      
+                        'created_by' => Auth::id(),  
+                        'updated_by' => Auth::id(),  
+                        'status' => 'active',
+                        ]); 
+                        
+                        //print_r($status_save)."<br>";
+                    }
+                }
+            }
+            
+            if($data->status == 1 )
+            {
+                $ManualOrders = ManualOrders::find($order_id);
+ 
+                $ManualOrders->payment_status = "No Payments";
+                // echo '<pre>';
+                // print_r($data);
+                 echo $order_id.', ts: '.$ManualOrdersList->current_payment_status.'<br>';
+                $ManualOrders->save();
             }
             
         }
         dd('work');
+        // return response()->json(['messege' => $data]);
+        
+    }
+    
+    public function CroneUpdateFare()
+    { 
+        $from_date= date('Y-m-01');
+        $to_date = date('Y-m-t');
+        $ManualOrdersLists = ManualOrders::leftJoin('orderpayments', 'orderpayments.order_id', '=', 'manual_orders.id')->
+        leftJoin('customers', 'customers.id', '=', 'manual_orders.customers_id')
+        ->select(
+            'shipment_tracking_status',
+            'manual_orders.consignment_id',
+            'manual_orders.id',
+            'manual_orders.payment_status',
+            'manual_orders.fare',
+            'manual_orders.city',
+            'manual_orders.weight',
+            'manual_orders.city'
+            )
+        ->where([
+            ['manual_orders.city','>','0'],
+            ['manual_orders.fare','=',null]
+        ])
+        ->whereBetween('manual_orders.created_at', [$from_date, $to_date])
+        ->paginate(20);
+        
+        foreach($ManualOrdersLists as $ManualOrdersList)
+        {
+        
+            $best_fare = array();
+            $data['service_type_id'] = 1;
+            $data['origin_city_id'] = 202;
+            $data['destination_city_id'] = $request->destination_city_id;
+            $data['estimated_weight'] = $request->estimated_weight;
+            $data['shipping_mode_id'] = $request->shipping_mode_id;
+            $data['amount'] = $request->amount;
+            $calculation =  $this->CalculateDestinationRates($data);
+            // dd($data,$calculation);
+            return response()->json(['data' => $calculation]);
+            
+        }
+        dd($ManualOrdersLists);
+    }
+    
+    public function CroneUpdateShipmentTrackingStatus()
+    { 
+        $ManualOrdersLists = ManualOrders::leftJoin('orderpayments', 'orderpayments.order_id', '=', 'manual_orders.id')->
+        leftJoin('customers', 'customers.id', '=', 'manual_orders.customers_id')
+        ->select('shipment_tracking_status','manual_orders.consignment_id','manual_orders.id','manual_orders.payment_status')
+        ->where([
+            ['manual_orders.consignment_id','>','0'],
+            ['shipment_tracking_status','!=' ,'Return - Delivered to Shipper'],
+            ['shipment_tracking_status','!=' ,'Shipment - Delivered']
+        ])
+        ->paginate(200);
+        
+        // dd($ManualOrdersLists);
+        foreach($ManualOrdersLists as $ManualOrdersList)
+        {
+            
+            $id = $ManualOrdersList->consignment_id;
+            $order_id = $ManualOrdersList->id;
+            // echo $ManualOrdersList->id."<br>";
+         
+            $data = $this->TrackTraxOrder($ManualOrdersList->consignment_id,0);
+            $order_id = $ManualOrdersList->id;
+            if($data->status == 0)
+            {
+                // dd($data->details->tracking_history);
+                if(isset($data->details->tracking_history))
+                { 
+                    $tracking_status = $data->details->tracking_history[0]->status;
+                    
+                    
+                    
+                    $ManualOrders = ManualOrders::find($order_id);
+     
+                    $ManualOrders->shipment_tracking_status = $tracking_status;
+                     
+                    $status_save = $ManualOrders->save();
+                    // echo $order_id.': '.$tracking_status.' <br>';
+                    // dd($data);
+                    // if(!$data->current_payment_status)
+                    // {
+                        
+                    // }
+                    
+                    echo $order_id.': '.$ManualOrdersList->current_payment_status.', ts: '.$tracking_status.'<br>';
+                }
+            
+            
+            // }
+            //return response()->json(['messege' => $data]);
+            } 
+                
+            
+            
+        }
+        dd('');
         // return response()->json(['messege' => $data]);
         
     }
@@ -336,4 +662,61 @@ class AccountsController extends Controller
     {
         //
     }
+    
+    public function ShipmentStatusList($status,$date_from,$date_to)
+    {
+         
+        $list=$this->list_query()->where([['manual_orders.payment_status','=',$status]])
+        ->whereBetween('manual_orders.created_at', [$date_from, $date_to])
+        ->orderBy('manual_orders.id','Desc')
+        ->paginate($this->pagination);
+        // dd($list);
+        return view('admin.accounts.orders')->with('list',$list); 
+        // $list_order = 'DESC';
+        // if($status == 'pending'  )
+        // {
+        //     $list_order = 'ASC';
+        // }
+        // $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.payment_status','=',$status.'%')
+        //     ->orderBy('manual_orders.id', $list_order)
+        //     ->select($this->OrderFieldList())
+        //     ->paginate(20);
+        //     //dd($list);
+        //     //dd($list);
+        //     //$list = $list->all();
+        //     //dd($list->all());
+        // return view('client.orders.manual-orders.list')->with('list',$list);
+        // dd($status); 
+    }
+    
+    public function TrackingStatusList($status,$date_from,$date_to)
+    {
+         
+        $list=$this->list_query()->where([['manual_orders.shipment_tracking_status','=',$status]])
+        ->whereBetween('manual_orders.created_at', [$date_from, $date_to])
+        ->orderBy('manual_orders.id','Desc')
+        ->paginate($this->pagination);
+        // dd($list);
+        return view('admin.accounts.orders')->with('list',$list); 
+        // $list_order = 'DESC';
+        // if($status == 'pending'  )
+        // {
+        //     $list_order = 'ASC';
+        // }
+        // $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.payment_status','=',$status.'%')
+        //     ->orderBy('manual_orders.id', $list_order)
+        //     ->select($this->OrderFieldList())
+        //     ->paginate(20);
+        //     //dd($list);
+        //     //dd($list);
+        //     //$list = $list->all();
+        //     //dd($list->all());
+        // return view('client.orders.manual-orders.list')->with('list',$list);
+        // dd($status);
+    }
+    
+    
+    
+    
+    
 }

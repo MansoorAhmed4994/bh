@@ -137,7 +137,9 @@ var order_link='';
     function checkAll(bx) {
         // alert('work');
         //document.getElementByClassName("order_checkbox_class").checked = true;
-        var cbs = document.getElementsByTagName('input');
+        var cbs = $("tr td input[type='checkbox']");
+        // var cbs = document.getElementsByTagName('input["type=checkbox"]');
+        // alert(cbs.length);
             for(var i=0; i < cbs.length; i++) {
             if(cbs[i].type == 'checkbox') {
                cbs[i].checked = bx.checked;
@@ -445,75 +447,99 @@ var order_link='';
 </div>
 
 <nav class="navbar navbar-light bg-light">
-  <form class="form-inline" method="post" action="{{ route('ManualOrders.index') }}">
-      @csrf
-    <div class="form-group">
-        <input class="form-control mr-sm-2" type="search" name="search_order_id" placeholder="Search by Order id #" aria-label="Search">
+    <div class="row col-sm-12">
+        <form  method="get" action="{{ route('accounts.index') }}">
+          
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-text"> 
+                        <input onclick="mobile_view()" type="checkbox">
+                    </div> 
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-sm">Mobile View</span>
+                    </div>
+                    
+                    <input class="input-group-text" type="search" name="search_order_id" placeholder="Search by Order id #" aria-label="Search">
+                    <input class="input-group-text" type="search" name="search_text" placeholder="Name OR Number" aria-label="Search">
+                    <select class="custom-select" aria-label="Default select example" name="order_by">
+                        <option selected value ="">Order By</option>
+                        <option value="all">All</option> 
+                        <option value="order_id">Order ID</option>
+                        <option value="manual_orders.receiver_number">Reciever Name</option>
+                        <option value="orderpayments.payment_id">Payment ID</option>
+                        <option value="customers.first_name">Customer</option> 
+                        <option value="manual_orders.created_at">Created Order</option> 
+                        <option value="manual_orders.payment_status">Payment Status</option>
+                        <option value="manual_orders.shipment_tracking_status">Tracking Status</option>
+                    </select>
+                    <select class="custom-select" aria-label="Default select example" name="order_status">
+                        <option selected value ="">Order Status</option>
+                        <option value="all">All</option>
+                        <option value="pending">Pending</option>
+                        <option value="duplicate">Dulicate</option>
+                        <option value="prepared">Prepared</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="cancel">complete</option> 
+                        <option value="dispatched">Dispatched</option> 
+                        <option value="hold">Hold</option>
+                        <option value="incomplete">incomplete</option> 
+                        <option value="cancel">cancel</option> 
+                        <option value="return">return</option> 
+                        <option value="deleted">delete</option> 
+                        <option value="not responding"></option>  
+                    </select>
+                    <select class="custom-select" aria-label="Default select example" name="shipment_tracking_status">
+                        <option selected value ="">Tracking Status</option>
+                        <option value="">All</option>
+                        <option value="Shipment - Booked">Shipment - Booked</option>
+                        <option value="Arrived at Origin">Arrived at Origin</option>
+                        <option value="Shipment - In Transit">Shipment - In Transit</option>
+                        <option value="Arrived at Destination">Arrived at Destination</option>
+                        <option value="Out for Delivery">Out for Delivery</option>
+                        <option value="Shipment - Delivered">Shipment - Delivered</option> 
+                        
+                    </select>
+                    <select class="custom-select" aria-label="Default select example" name="payment_status">
+                        <option selected value ="">Payment Status</option>
+                        <option value="all">All</option>
+                        <option value="Charges - Deducted">Charges - Deducted</option>
+                        <option value="Charges - Processed">Charges - Processed</option>
+                        <option value="No Payments">No Payments</option>
+                        <option value="Payment - Paid">Payment - Paid</option>
+                        <option value="Payment - Processed"> </option> 
+                        
+                    </select> 
+                    <input class="input-group-text" type="date" name="date_from" id="date_from">
+                    <input class="input-group-text" type="date" name="date_to" id="date_to">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="submit">Button</button>
+                    </div>
+                </div>
+            </div>  
+        
+        </form>
     </div>
-    
-    <div class="form-group">
-        <input class="form-control mr-sm-2" type="search" name="search_text" placeholder="Name OR Number" aria-label="Search">
-    </div>
-    
-    <div class="form-group">
-        <select class="form-select" aria-label="Default select example" name="order_status">
-          <option selected value ="">Select Order Status</option>
-          <option value="all">All</option>
-          <option value="pending">Pending</option>
-          <option value="duplicate">Dulicate</option>
-          <option value="prepared">Prepared</option>
-          <option value="confirmed">Confirmed</option>
-          <option value="cancel">complete</option> 
-          <option value="dispatched">Dispatched</option> 
-          <option value="hold">Hold</option>
-          <option value="incomplete">incomplete</option> 
-          <option value="cancel">cancel</option> 
-          <option value="return">return</option> 
-          <option value="deleted">delete</option> 
-          <option value="not responding"></option>  
-        </select> 
-    </div>
-    
-    <div class="form-group">
-        <button class="form-control btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </div>
-    
-    <div class="form-group">
-        <input onclick="mobile_view()" type="checkbox">Mobile View
-    </div>
-    
-    
-    
-    
-  </form>
   <!--<button type="button" class="btn btn-primary" data-target="myModalLabel" class="dropdown-item">Dispatched</button> -->
-  
-  
-    <form class="form-inline" method="post" action="{{ route('ManualOrders.order.action') }}">
-      @csrf
-    <input type="hidden" name="order_ids" id="order_ids">
-    <div class="form-group">
-        <select class="form-select" aria-label="Default select example" name="order_action" required>
-          <option selected >Select Action</option> 
-          <option value="pending">Pending</option>
-          <option value="prepared">Prepared</option>
-          <option value="confirmed">Confirmed</option>
-          <option value="cancel">complete</option> 
-          <option value="dispatched">Dispatched</option> 
-          <option value="hold">Hold</option>
-          <option value="incomplete">incomplete</option> 
-          <option value="print">Print </option>
-          <option value="duplicate_orders">Duplicate Orders</option>
-          <option value="print_mnp_slips">Print M&P Slips</option>
-          <option value="print_trax_slips">Print Trax Slips</option>
-          <option value="print_pos_slips">Print Pos Slips</option>
-        </select> 
+   
+    <div class="row col-sm-3">
+        <form class="form-inline" method="post" action="{{ route('update.bulk.shipment.status') }}">
+            @csrf
+            <div class="input-group">
+                <select class="custom-select" aria-label="Default select example" name="order_action" required>
+                    <option selected >Select Action</option> 
+                    <option value="updateshipmentspayment">Update Shipment Payments</option>
+                    <option value="prepared">Prepared</option>
+                    <option value="dispatched">Dispatched</option>
+                    <option value="updateshipmentstracking">Update Shipment Tracking</option>
+                </select> 
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="submit">Submit</button> 
+                </div>
+            </div>
+            
+            <input type="hidden" name="order_ids" id="order_ids"> 
+        </form>  
     </div>
-    
-    <div class="form-group">
-        <button class="form-control btn btn-outline-success my-2 my-sm-0" type="submit">Submit</button>
-    </div>
-   </form>   
 </nav>
 
     <div class="modal fade" id="images" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -540,7 +566,9 @@ var order_link='';
     <table class="table table-bordered" style="min-height: 500px;">
         <thead>
             <tr> 
-                <th scope="col" class="delete_btn_class"><input type="checkbox" onclick="checkAll(this)" ></th>
+                <th scope="col" class="delete_btn_class">
+                
+                <input type="checkbox" onclick="checkAll(this)" ></th>
                 <th scope="col">#</th> 
                 <th scope="col">Act</th>
                 <th scope="col">Img.</th>
@@ -561,6 +589,8 @@ var order_link='';
                 <th scope="col">advance</th>
                 <th scope="col">cod</th>
                 <th scope="col">fare</th>
+                <th scope="col">shipment_tracking_status</th>
+                
                 
                 <th scope="col">T.Payment Status</th>
                 <th scope="col">T.Amount</th>
@@ -677,10 +707,10 @@ var order_link='';
                 
                 <?php  
                     $price = $lists->price;
-                    $charges = ($lists->charges == null) ? 0 : $lists->charges;
-                    $amount = ($lists->amount == null) ? 0 : $lists->amount;
-                    $gst = ($lists->gst == null) ? 0 : $lists->gst;
-                    $payable = ($lists->payable == null) ? 0 : $lists->payable;
+                    $charges = ($lists->charges == null || $lists->charges == "") ? 0 : $lists->charges;
+                    $amount = ($lists->amount == null || $lists->amount == "") ? 0 : $lists->amount;
+                    $gst = ($lists->gst == null || $lists->gst == "") ? 0 : $lists->gst;
+                    $payable = ($lists->payable == null || $lists->payable == "") ? 0 : $lists->payable;
                     $tnet = $amount - ($gst+$charges);
                     $grossnet = $price - ($gst+$charges);
                 
@@ -696,10 +726,12 @@ var order_link='';
                 <td>{{$lists->advance_payment}}</td>
                 <td>{{$lists->cod_amount}}</td>
                 <td>{{$lists->fare}}</td>
+                <td>{{$lists->shipment_tracking_status}}</td>
+                
                 
                 
                 <td>{{$lists->payment_status}}</td>
-                <td><?=$amount;?></td>
+                <td style="background:<?=($amount == 0) ? 'red':'';?>"><?=$amount?></td>
                 <td><?=$charges;?></td> 
                 <td><?= $gst;?></td> 
                 <td><?=$payable;?></td> 
@@ -713,7 +745,7 @@ var order_link='';
         
     </table>
 </div>
-{{ $list->links() }}
+{!! $list->appends(Request::all())->links() !!} 
 
 <script type="application/javascript">
     function set_order_image(id)

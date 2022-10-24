@@ -47,7 +47,7 @@ class TraxController extends Controller
         for ($x = 0; $x < sizeof($request->reference_number); $x++) 
         {
             //prepare parameter for create booking
-            //dd($request->shipping_mode_id);
+            // dd($request->id[$x]);
             $data = [];
             
             $receiver_name= $request->receiver_name[$x];
@@ -56,7 +56,12 @@ class TraxController extends Controller
             $city = $request->city[$x];
             $total_pieces= $request->total_pieces[$x];
             $weight= $request->weight[$x];
+            $cod_amount = $request->cod_amount[$x];
+            $advance_payment = $request->advance_payment[$x]; 
             $price= $request->price[$x];
+            $fare = $request->fare[$x];
+            
+            
             $data['order_id'] = $request->id[$x];
             $data['service_type_id'] = 1;
             $data['pickup_address_id'] = $pickup_address_id;
@@ -75,7 +80,7 @@ class TraxController extends Controller
             $data['special_instructions'] = trim('Nothing');
             $data['estimated_weight'] = trim($request->weight[$x]);
             $data['shipping_mode_id'] = (int)trim($request->shipping_mode_id[$x]);
-            $data['amount'] = (int)trim($request->price[$x]);
+            $data['amount'] = (int)trim($cod_amount);
             $data['payment_mode_id'] = 1;
             $data['charges_mode_id'] = 4;
             
@@ -90,6 +95,10 @@ class TraxController extends Controller
             $ManualOrder->total_pieces = $total_pieces;
             $ManualOrder->weight = $weight;
             $ManualOrder->price = $price;
+            $ManualOrder->advance_payment = $advance_payment;
+            $ManualOrder->cod_amount = $cod_amount;
+            
+            $ManualOrder->fare = $fare;
             $ManualOrder->description = trim($request->item_description[$x]);
             $ManualOrder->reference_number = $reference_number;
             $ManualOrder->updated_by = Auth::id();
@@ -97,7 +106,7 @@ class TraxController extends Controller
             
             
             
-        
+            $error_creating = '';
         //echo 'working';
             if($status);
             {
@@ -128,6 +137,12 @@ class TraxController extends Controller
                         //dd($ManualOrder);
                     }
                     //dd(json_decode($resp)[0]->orderReferenceId);
+                }
+                else
+                {
+                    $error_creating = 'These shipments not created';
+                    
+                    dd($ApiResponse);die;
                 }
                 
             }

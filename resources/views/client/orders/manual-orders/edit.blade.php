@@ -1,4 +1,4 @@
- 
+
 @extends('layouts.'.Auth::getDefaultDriver())
 
 @section('content')

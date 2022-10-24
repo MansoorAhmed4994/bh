@@ -4999,7 +4999,7 @@ input[type=button].btn-block {
   word-wrap: break-word;
   background-color: #fff;
   background-clip: border-box;
-  border: 1px solid rgba(0, 0, 0, 0.125);
+  border: 0px solid rgba(0, 0, 0, 0.125);
   border-radius: 0.25rem;
 }
 
@@ -5031,9 +5031,14 @@ input[type=button].btn-block {
 }
 
 .card-body {
-  flex: 1 1 auto;
-  min-height: 1px;
-  padding: 1.25rem;
+    flex: 1 1 auto;
+    min-height: 1px;
+    padding: 1.25rem;
+    box-shadow: 4px 3px 8px 6px;
+    border-radius: 10px;
+    background: linear-gradient(45deg, #c82e2efa, #3d4fc9);
+    border: 1px solid #ece0e0;
+    color: white;
 }
 
 .card-title {

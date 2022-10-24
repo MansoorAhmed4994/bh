@@ -7,13 +7,15 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"crossorigin="anonymous"></script>
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <link rel="icon" href="https://scontent.fkhi6-2.fna.fbcdn.net/v/t39.30808-6/271851970_797859254942923_8384634057214477174_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=T_JF1ooZlfIAX8VAMOF&tn=qbJWCDzG88tDUCIH&_nc_ht=scontent.fkhi6-2.fna&oh=00_AT-PmcdiG8euvrHKf0u_aI6qtr6g2VjhlGuWaI8Ks1I_fA&oe=630B15D5">
+    <title>{{ config('app.name', 'Brandhub') }}</title>
 
     <!-- Scripts -->
-    <script type="application/javascript" src="{{ asset('public/js/app.js') }}" defer></script>
+   <script  src="{{ asset('public/js/app.js') }}" ></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -21,6 +23,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('public/css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('public/css/style.css') }}" rel="stylesheet">
     
     <style>
         @media all and (min-width: 992px) {
@@ -73,13 +76,30 @@
                     <ul class="navbar-nav">
                         <li class="nav-item active"> <a class="nav-link" href="{{route('admin.dashboard')}}">dashboard </a> </li>
                         <li class="nav-item dropdown" id="myDropdown">
-                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Manual Orders</a>
-                        <ul class="dropdown-menu">
-                            <li> <a class="dropdown-item" href="{{route('ManualOrders.create')}}"> Add New order </a></li>
-                            <li> <a class="dropdown-item" href="{{route('ManualOrders.index')}}"> List</a></li>
-                        </ul>
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Manual Orders</a>
+                            <ul class="dropdown-menu">
+                                <li> <a class="dropdown-item" href="{{route('ManualOrders.create')}}"> Add New order </a></li>
+                                <li> <a class="dropdown-item" href="{{route('ManualOrders.index')}}"> List</a></li>
+                
+                            </ul>
                         
                         
+                        </li>
+                        <li class="nav-item dropdown" id="myDropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Inventory</a>
+                            <ul class="dropdown-menu">
+                                <li> <a class="dropdown-item" href="{{route('inventory.index')}}"> Manage Inventory </a></li> 
+                            </ul> 
+                        </li>
+                        <li class="nav-item dropdown" id="shipment">
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Shipment</a>
+                            <ul class="dropdown-menu">
+                                <li> <a class="dropdown-item" href="{{route('trax.create.bulk.booking.by.scan')}}"> Trax </a></li>
+                                <li> <a class="dropdown-item" href="{{route('mnp.create.bulk.booking.by.scan')}}"> M&P</a></li> 
+                            </ul> 
+                        </li>
+                        <li class="nav-item active"> 
+                            <a class="nav-link" target="_blank" href="{{route('ManualOrders.track.order')}}">Track Order </a> 
                         </li>
                     </ul>
                     <ul class="navbar-nav">
@@ -99,6 +119,16 @@
                         
                         <ul class="dropdown-menu">
                             <li> <a class="dropdown-item" href="{{route('riders.create')}}"> List</a></li>
+                        </ul>
+                        
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        <li class="nav-item dropdown" id="riders_dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Accounts</a>
+                        
+                        <ul class="dropdown-menu">
+                            <li> <a class="dropdown-item" href="{{route('accounts.index')}}"> List</a></li>
                         </ul>
                         
                         </li>
