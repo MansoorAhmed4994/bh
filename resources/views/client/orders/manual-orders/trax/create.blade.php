@@ -273,7 +273,7 @@ function calculate_charges(index)
             amount:price,
           },
           success:function(response){
-              
+              $("body").removeClass("loading"); 
               //console.log(response.data.status);
             //$('#successMsg').show();
             if(response.data.status == 0)
@@ -304,10 +304,11 @@ function calculate_charges(index)
             }
             
             //console.log(response);
-            $("body").removeClass("loading"); 
+            
           },
           error: function(response) {
-              
+              alert(response)
+              $("body").removeClass("loading"); 
             // $('#nameErrorMsg').text(response.responseJSON.errors.name);
             // $('#emailErrorMsg').text(response.responseJSON.errors.email);
             // $('#mobileErrorMsg').text(response.responseJSON.errors.mobile);
@@ -318,7 +319,7 @@ function calculate_charges(index)
 
 function get_fare_list(index)
 {   
-     $("body").addClass("loading"); 
+     
     let destination_city_id = document.getElementsByClassName("city")[index].value;
     let estimated_weight = document.getElementsByClassName("weight")[index].value;
     let shipping_mode_id = document.getElementsByClassName("shipping_mode_id")[index].value;
@@ -332,6 +333,7 @@ function get_fare_list(index)
     {
         return;
     } 
+    $("body").addClass("loading"); 
     $.ajax({
           url: base_url + '/trax/get-fare-list',
           headers: {
@@ -365,36 +367,22 @@ function get_fare_list(index)
                 //console.log(text);
                 text = '<option>Select Shipment Mode</option>'+text;
                 document.getElementsByClassName("shipping_mode_id")[index].innerHTML = text;
-                // text+='<option value="'+(element.shipping_mode_id)+'">'+(element.shippment)+' fare:'+(element.fare)+'</option>'
-                // let text = "";
-                // const fruits = ["apple", "orange", "cherry"];
-                // fruits.forEach(ShipmentHtml);
                 
-                // document.getElementById("demo").innerHTML = text;
-                 
-                
-                
-                // let data_fare = response.data.information.charges;
-                // var tota_fare =data_fare.total_charges+data_fare.total_charges;
-                // console.log(tota_fare);
-                // document.getElementsByClassName("fare")[index].value = tota_fare
-                
-                
-                // $('#exampleModalCenter').modal('hide'); 
-                // $('#exampleModalCenter').modal({
-                // show: 'false'
-                // }); 
+              $("body").removeClass("loading");
                 
             }
             else
             { 
+                
+              $("body").removeClass("loading");
                 alert(response.data.message)
             }
             
-            //console.log(response);
-            $("body").removeClass("loading"); 
+            //console.log(response); 
           },
           error: function(response) {
+              alert(response)
+              $("body").removeClass("loading");
               
             // $('#nameErrorMsg').text(response.responseJSON.errors.name);
             // $('#emailErrorMsg').text(response.responseJSON.errors.email);
