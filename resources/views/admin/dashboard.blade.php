@@ -64,6 +64,8 @@
         </div>
     <?php 
     $total_trax_orders=0;
+    $total_fare=0;
+    $total_trax_amount=0;
     $tnet = 0;
     $tgross = 0;
     ?>
@@ -78,12 +80,18 @@
                   <div class="card-body" style="background:linear-gradient(45deg, <?=$color1?>, <?=$color2?>)">
                     <h3>{{$list->payment_status}}</h3>
                     <h5 class="card-title">{{$list->total}}</h5> 
-                    <h5 class="card-title">{{$list->amount}}</h5>  
+                    <h6 class="card-title">Amount: {{$list->amount}}</h6> 
+                    <h6 class="card-title">Fare: {{$list->fare}}</h6> 
+                    <h5 class="card-title">Net Amount: {{($list->amount)-($list->fare)}}</h5>
+                    
                     <a href="{{route('admin.accounts.shipment.status.list',[$list->payment_status,$date_from,$date_to])}}" class="btn btn-primary">Go</a>
                   </div> 
                 </div>
             </div>
-            <?php $total_trax_orders +=$list->total; ?>
+            
+            <?php $total_fare += $list->fare; ?>
+            <?php $total_trax_orders += $list->total; ?>
+            <?php $total_trax_amount += $list->amount; ?>
         @endforeach 
         
         <div class="col-sm-4 form-group">  
@@ -92,6 +100,8 @@
                   
                     <h3>Total Order</h3>
                 <h5 class="card-title"><?php echo $total_trax_orders;?></h5>
+                <h5 class="card-title"><?php echo $total_trax_amount;?></h5>
+                <h5 class="card-title"><?php echo $total_fare;?></h5>
                  
               </div> 
             </div>

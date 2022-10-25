@@ -344,6 +344,7 @@ class AccountsController extends Controller
         $ManualOrdersLists = ManualOrders::select('consignment_id','id','payment_status','shipment_tracking_status')
         ->where([
             ['consignment_id','>','0'],
+            // ['payment_status','=' ,'Payment - Processed'],
             ['payment_status','!=' ,'Payment - Paid'],
             ['payment_status','!=' ,'Charges - Deducted']
         ])
@@ -362,9 +363,7 @@ class AccountsController extends Controller
             //dd($id);
             // echo $order_id.'<br>';
             if($data->status == 0)
-            {
-                
-                        echo $order_id.', ts: '.$ManualOrdersList->shipment_tracking_status.'<br>';
+            { 
                  
                     $payment_id = $data->payments[0]->id;
                     $matchThese = ['consignment_id' => $id, 'order_id' => $order_id, 'payment_id' =>$payment_id];
@@ -404,14 +403,17 @@ class AccountsController extends Controller
                         $ManualOrders->payment_status = $data->current_payment_status;
                          
                         $status_save = $ManualOrders->save();
+                        echo 'First Created order payment id:'.$order_id.', Payment Status: '.$ManualOrdersList->current_payment_status.'<br>';
                         
                         //print_r($status_save)."<br>";
                     }
                     else
                     {
+                        
                         foreach($orderpayment as $orderpaymentlist)
                         {
                             // dd($orderpaymentlist);
+                            //dd($orderpaymentlist);
                             if($orderpaymentlist->payment_id == '0')
                             {
                                 Orderpayments::where('id',$orderpaymentlist->id)
@@ -433,10 +435,21 @@ class AccountsController extends Controller
                                     'updated_by' => Auth::id(),  
                                     'status' => 'active',
                                     ]);
+                                    
+                                    $ManualOrders = ManualOrders::find($order_id); 
+                                    $ManualOrders->payment_status = $data->current_payment_status; 
+                                    $ManualOrders->save();
+                                    echo 'Updated order payment id:'.$order_id.', Payment Status: '.$data->current_payment_status.'<br>';
+                                    
                                     // dd('entry done');
                             }
                             else
                             {
+                                    
+                                    $ManualOrders = ManualOrders::find($order_id); 
+                                    $ManualOrders->payment_status = $data->current_payment_status; 
+                                    $ManualOrders->save();
+                                    echo 'Updated order payment id:'.$order_id.', Payment Status: '.$data->current_payment_status.'<br>';
                                 // dd('not intery');
                             }
                         }
@@ -458,18 +471,18 @@ class AccountsController extends Controller
                     { 
                         $mytime = Carbon::now();
                         $current_time =  $mytime->toDateTimeString();
-                        dd($current_time);
+                        // dd($current_time);
                         $Orderpayments = Orderpayments::create([
                         'order_id' => $order_id,
                         'consignment_id' => $id,
                         'cash_handling_charges' => 0,  
-                        'fuel_surcharge' => "",  
+                        'fuel_surcharge' => 0,  
                         'weight_charges' => 0,  
                         'current_payment_status' => 0,  
                         'message' => $data->message,  
                         'amount' => 0,  
                         'charges' => 0,  
-                        'datetime' => $current_time,  
+                        'datetime' => (string)$current_time,  
                         'gst' => 0,  
                         'payment_id' => 0,  
                         'payable' => 0,  
@@ -479,6 +492,11 @@ class AccountsController extends Controller
                         'status' => 'active',
                         ]); 
                         
+                        $ManualOrders = ManualOrders::find($order_id);
+         
+                        $ManualOrders->payment_status = "No Payments";
+                         
+                        $status_save = $ManualOrders->save();
                         //print_r($status_save)."<br>";
                     }
                 }
@@ -491,7 +509,7 @@ class AccountsController extends Controller
                 $ManualOrders->payment_status = "No Payments";
                 // echo '<pre>';
                 // print_r($data);
-                 echo $order_id.', ts: '.$ManualOrdersList->current_payment_status.'<br>';
+                 echo 'Created order payment id:'.$order_id.', Payment Status: '.$ManualOrdersList->current_payment_status.'<br>';
                 $ManualOrders->save();
             }
             
@@ -517,28 +535,64 @@ class AccountsController extends Controller
             'manual_orders.weight',
             'manual_orders.city'
             )
-        ->where([
-            ['manual_orders.city','>','0'],
-            ['manual_orders.fare','=',null]
+        ->where([ 
+            ['manual_orders.consignment_id','>','0'],
+            ['manual_orders.fare','=',null],
         ])
         ->whereBetween('manual_orders.created_at', [$from_date, $to_date])
-        ->paginate(20);
-        
+        ->paginate(50);
+        $fare=0;
         foreach($ManualOrdersLists as $ManualOrdersList)
         {
-        
-            $best_fare = array();
-            $data['service_type_id'] = 1;
-            $data['origin_city_id'] = 202;
-            $data['destination_city_id'] = $request->destination_city_id;
-            $data['estimated_weight'] = $request->estimated_weight;
-            $data['shipping_mode_id'] = $request->shipping_mode_id;
-            $data['amount'] = $request->amount;
-            $calculation =  $this->CalculateDestinationRates($data);
-            // dd($data,$calculation);
-            return response()->json(['data' => $calculation]);
+            
+            $order_id = $ManualOrdersList->id;
+            $data = $this->TrackTraxOrder($ManualOrdersList->consignment_id,0);
+            // dd($data);
+            $shipment_mode = $data->details->order_information->shipping_mode;
+            $weight = $data->details->order_information->weight;
+            $amount = $data->details->order_information->amount;
+            if($shipment_mode == 'Rush')
+            {
+                $shipment_mode = 1;
+            }
+            elseif($shipment_mode == 'Saver Plus')
+            {
+                $shipment_mode = 2;
+                
+            }
+            elseif($shipment_mode == 'Swift')
+            {
+                $shipment_mode = 3;
+                
+            }
+             
+            $datacalculate['service_type_id'] = 1;
+            $datacalculate['origin_city_id'] = 202;
+            $datacalculate['destination_city_id'] = $ManualOrdersList->city;
+            $datacalculate['estimated_weight'] = $weight;
+            $datacalculate['shipping_mode_id'] = $shipment_mode;
+            $datacalculate['amount'] = $amount;
+            $calculation =  $this->CalculateDestinationRates($datacalculate);
+            
+            // dd($calculation->status == 0);
+            if($calculation->status == 0)
+            {
+                $gst = $calculation->information->charges->gst;
+                $total_charges = $calculation->information->charges->total_charges;
+                $fare = $total_charges+$gst;
+                $ManualOrders = ManualOrders::find($order_id);
+     
+                $ManualOrders->fare = $fare;
+                 
+                $status_save = $ManualOrders->save();
+                echo 'id:'.$order_id.' fare: '.$fare.'<br>';
+            }
             
         }
+            
+            
+            dd($fare);
+            return response()->json(['data' => $calculation]);
         dd($ManualOrdersLists);
     }
     

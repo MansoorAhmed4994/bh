@@ -588,7 +588,6 @@ var order_link='';
                 <th scope="col">price</th>
                 <th scope="col">advance</th>
                 <th scope="col">cod</th>
-                <th scope="col">fare</th>
                 <th scope="col">shipment_tracking_status</th>
                 
                 
@@ -596,6 +595,8 @@ var order_link='';
                 <th scope="col">T.Amount</th>
                 <th scope="col">T.charges</th>
                 <th scope="col">T.gst</th>
+                <th scope="col">T.Charges</th>
+                <th scope="col">fare</th>
                 <th scope="col">T.payble</th>
                 <th scope="col">T.Net</th>
                 <th scope="col">Gross Net</th>
@@ -710,6 +711,7 @@ var order_link='';
                     $charges = ($lists->charges == null || $lists->charges == "") ? 0 : $lists->charges;
                     $amount = ($lists->amount == null || $lists->amount == "") ? 0 : $lists->amount;
                     $gst = ($lists->gst == null || $lists->gst == "") ? 0 : $lists->gst;
+                    $total_charges = $gst+$charges;
                     $payable = ($lists->payable == null || $lists->payable == "") ? 0 : $lists->payable;
                     $tnet = $amount - ($gst+$charges);
                     $grossnet = $price - ($gst+$charges);
@@ -725,7 +727,6 @@ var order_link='';
                 <td>{{$lists->price}}</td>
                 <td>{{$lists->advance_payment}}</td>
                 <td>{{$lists->cod_amount}}</td>
-                <td>{{$lists->fare}}</td>
                 <td>{{$lists->shipment_tracking_status}}</td>
                 
                 
@@ -734,6 +735,8 @@ var order_link='';
                 <td style="background:<?=($amount == 0) ? 'red':'';?>"><?=$amount?></td>
                 <td><?=$charges;?></td> 
                 <td><?= $gst;?></td> 
+                <td style="background:<?=(trim($total_charges) != trim($lists->fare)) ? 'red':'';?>"><?= $total_charges;?></td> 
+                <td style="background:<?=(trim($total_charges) != trim($lists->fare)) ? 'red':'';?>">{{$lists->fare}}</td>
                 <td><?=$payable;?></td> 
                 <td><?=$tnet;?></td>  
                 <td><?=$grossnet;?></td>    

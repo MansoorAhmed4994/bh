@@ -44,7 +44,7 @@ class DashboardController extends Controller
                  ->get(); 
         
             $shipment = DB::table('manual_orders')
-            ->select('manual_orders.payment_status', DB::raw('count(*) as total' ), DB::raw('sum(price) as amount'), DB::raw('sum(orderpayments.amount) as t_amount'))
+            ->select('manual_orders.payment_status', DB::raw('count(*) as total' ), DB::raw('sum(price) as amount'), DB::raw('sum(orderpayments.amount) as t_amount'), DB::raw('sum(fare) as fare'))
             ->leftJoin('orderpayments', 'orderpayments.order_id', '=', 'manual_orders.id')
             ->leftJoin('customers', 'customers.id', '=', 'manual_orders.customers_id')
             ->whereBetween('manual_orders.created_at', [$from_date, $to_date]) 
