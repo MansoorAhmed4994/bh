@@ -75,7 +75,7 @@ class TraxController extends Controller
             $data['item_description'] = trim($request->item_description[$x]);
             $data['item_quantity'] = (int)trim($total_pieces);
             $data['item_insurance'] = 0;
-            $data['item_price'] = trim($request->price[$x]);
+            $data['item_price'] = trim($price);
             $data['pickup_date'] = $mytime;
             $data['special_instructions'] = trim('Nothing');
             $data['estimated_weight'] = trim($request->weight[$x]);
@@ -142,7 +142,7 @@ class TraxController extends Controller
                 {
                     $error_creating = 'These shipments not created';
                     
-                    dd($ApiResponse);die;
+                    //dd($ApiResponse);die;
                 }
                 
             }

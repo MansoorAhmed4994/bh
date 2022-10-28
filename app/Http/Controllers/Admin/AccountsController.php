@@ -359,14 +359,18 @@ class AccountsController extends Controller
             // echo $ManualOrdersList->id."<br>";
         
             $data = $this->GetShipmentPaymentStatus($id);
+            
             //return response()->json(['messege' => $data]);
             //dd($id);
             // echo $order_id.'<br>';
             if($data->status == 0)
             { 
-                 
-                    $payment_id = $data->payments[0]->id;
-                    $matchThese = ['consignment_id' => $id, 'order_id' => $order_id, 'payment_id' =>$payment_id];
+                
+                foreach($data->payments as $paymentlist)
+                {
+                    // dd($paymentlist);
+                    $payment_id = $paymentlist->id;
+                    $matchThese = ['consignment_id' => $id, 'order_id' => $order_id];
                     $orderpayment = Orderpayments::where($matchThese)
                     ->where(function ($query) use ($payment_id) {
                         $query->where('payment_id','=',$payment_id)
@@ -414,8 +418,10 @@ class AccountsController extends Controller
                         {
                             // dd($orderpaymentlist);
                             //dd($orderpaymentlist);
+                            $payment_status_avalable = 'no';
                             if($orderpaymentlist->payment_id == '0')
                             {
+                                
                                 Orderpayments::where('id',$orderpaymentlist->id)
                                 ->update([
                                     'order_id' => $order_id,
@@ -456,7 +462,7 @@ class AccountsController extends Controller
                         
                     }
                 
-                
+                }
                 // }
                 //return response()->json(['messege' => $data]);
             }
@@ -540,7 +546,7 @@ class AccountsController extends Controller
             ['manual_orders.fare','=',null],
         ])
         ->whereBetween('manual_orders.created_at', [$from_date, $to_date])
-        ->paginate(50);
+        ->paginate(500);
         $fare=0;
         foreach($ManualOrdersLists as $ManualOrdersList)
         {
@@ -598,6 +604,8 @@ class AccountsController extends Controller
     
     public function CroneUpdateShipmentTrackingStatus()
     { 
+        $from_date= date('Y-m-01');
+        $to_date = date('Y-m-t');
         $ManualOrdersLists = ManualOrders::leftJoin('orderpayments', 'orderpayments.order_id', '=', 'manual_orders.id')->
         leftJoin('customers', 'customers.id', '=', 'manual_orders.customers_id')
         ->select('shipment_tracking_status','manual_orders.consignment_id','manual_orders.id','manual_orders.payment_status')
@@ -606,6 +614,7 @@ class AccountsController extends Controller
             ['shipment_tracking_status','!=' ,'Return - Delivered to Shipper'],
             ['shipment_tracking_status','!=' ,'Shipment - Delivered']
         ])
+        ->whereBetween('manual_orders.created_at', [$from_date, $to_date])
         ->paginate(200);
         
         // dd($ManualOrdersLists);
