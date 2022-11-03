@@ -116,25 +116,33 @@
     $total_trax_orders=0;
     $tnet = 0;
     $tgross = 0;
-    ?>
-        @foreach($shipmenttracking as $list)
-        <?php
-            $color1 = '#'.$rand[rand(0,15)].$rand[rand(0,15)].$rand[rand(0,15)].$rand[rand(0,15)].$rand[rand(0,15)].$rand[rand(0,15)];
-            $color2 = '#'.$rand[rand(0,15)].$rand[rand(0,15)].$rand[rand(0,15)].$rand[rand(0,15)].$rand[rand(0,15)].$rand[rand(0,15)];
-        ?>
+    ?> 
+        @foreach($shipmenttracking as $key => $shipmenttrackings) 
         
-            <div class="col-sm-4 form-group">  
-                <div class="card" style="width: 18rem;"> 
-                  <div class="card-body" style="background:linear-gradient(45deg, <?=$color1?>, <?=$color2?>)">
-                    <h3>{{$list->shipment_tracking_status}}</h3>
-                    <h5 class="card-title">{{$list->total}}</h5> 
-                    <h5 class="card-title">{{$list->amount}}</h5>  
-                    <a href="{{route('admin.accounts.tracking.status.list',[$list->shipment_tracking_status,$date_from,$date_to])}}" class="btn btn-primary">Go</a>
-                  </div> 
+             
+            
+            <?php
+                $color1 = '#'.$rand[rand(0,15)].$rand[rand(0,15)].$rand[rand(0,15)].$rand[rand(0,15)].$rand[rand(0,15)].$rand[rand(0,15)];
+                $color2 = '#'.$rand[rand(0,15)].$rand[rand(0,15)].$rand[rand(0,15)].$rand[rand(0,15)].$rand[rand(0,15)].$rand[rand(0,15)];
+            ?>
+            
+                <div class="col-sm-4 form-group">  
+                    <div class="card" style="width: 18rem;"> 
+                      <div class="card-body" style="background:linear-gradient(45deg, <?=$color1?>, <?=$color2?>)">
+                        @for ($i = 0; $i < count($shipmenttrackings); $i++)
+                            <h3>{{$key}}</h3>
+                            <h5>Status: {{$shipmenttrackings[$i]->payment_status}}</h6>
+                            <h6 class="card-title">Orders: {{$shipmenttrackings[$i]->total}}</h6> 
+                            <h6 class="card-title">Amount: {{$shipmenttrackings[$i]->amount}}</h6> 
+                            <?php $total_trax_orders +=$shipmenttrackings[$i]->total; ?>
+                        @endfor
+                        <a href="{{route('admin.accounts.tracking.status.list',[$key,$date_from,$date_to])}}" class="btn btn-primary">Go</a>
+                      </div> 
+                    </div>
                 </div>
-            </div>
-            <?php $total_trax_orders +=$list->total; ?>
-        @endforeach 
+                
+            
+         @endforeach    
         
         <div class="col-sm-4 form-group">  
             <div class="card" style="width: 18rem;"> 

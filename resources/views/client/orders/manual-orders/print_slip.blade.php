@@ -117,7 +117,7 @@ padding: 0px;
                 	
                 	<tr>
                 		<td style="text-align:center; font-size:20px;font-weight:bold;">
-                            <!--{{$ManualOrder->cod}}-->
+                            {{$ManualOrder->cod_amount}}
                         </td>
                 	</tr>
                     <tr>

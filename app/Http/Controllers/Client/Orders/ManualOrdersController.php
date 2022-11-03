@@ -111,6 +111,24 @@ class ManualOrdersController extends Controller
         //dd($list);
         return view('client.orders.manual-orders.list')->with('list',$list); 
     }
+    
+    public function InActiveCustomers(Request $request)
+    {
+        $from_date = Carbon::now()->subDays(60)->toDateTimeString();
+        $views_customer_data = DB::table('manual_orders')
+            ->select('customers.id', DB::raw('count(*) as total_purchase' ),  'customers.first_name', 'customers.status','customers.number as receiver_number','customers.whatsapp_number as number','customers.created_at','customers.description','customers.address as reciever_address','customers.remarks')
+            // ->leftJoin('orderpayments', 'orderpayments.order_id', '=', 'manual_orders.id')
+            ->leftJoin('customers', 'customers.id', '=', 'manual_orders.customers_id')
+            ->where('manual_orders.created_at', '<',$from_date) 
+            
+            ->groupBy('customers.id','customers.first_name','customers.status','customers.number','customers.whatsapp_number','customers.created_at','customers.description','customers.address','customers.remarks')
+            ->orderBy('total_purchase', 'ASC')
+            ->paginate(100);
+            // dd($views_customer_data);
+        return view('client.orders.manual-orders.inactive_customers')->with('list',$views_customer_data); 
+            
+        // dd($views_customer_data);
+    }
 
     /**
      * Show the form for creating a new resource.

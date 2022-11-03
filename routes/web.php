@@ -45,9 +45,12 @@ Route::group(['middleware' => 'auth:user' ],function(){
 
 Route::group(['prefix' => 'client/orders/', 'namespace' => 'Client\Orders', 'middleware' => 'auth:user,admin'],function(){
     
-    Route::resource('ManualOrders', 'ManualOrdersController')->except('show','index');
+    // Route::resource('ManualOrders', 'ManualOrdersController')->except('show','index');
     
     Route::any('ManualOrders/list', 'ManualOrdersController@index')->name('ManualOrders.index');
+    Route::any('ManualOrders/{Manualorders}/edit', 'ManualOrdersController@edit')->name('ManualOrders.edit');
+    Route::any('ManualOrders/create', 'ManualOrdersController@store')->name('ManualOrders.create');
+    Route::any('ManualOrders/{Manualorders}/update', 'ManualOrdersController@update')->name('ManualOrders.update');
     Route::get('ManualOrders/show/{id}', 'ManualOrdersController@show')->name('ManualOrders.show'); 
     Route::post('ManualOrders/delete-image', 'ManualOrdersController@delete_order_image')->name('ManualOrders.delete.order.image');
     Route::post('ManualOrders/add-image', 'ManualOrdersController@add_order_image')->name('ManualOrders.add.order.image');
@@ -65,6 +68,7 @@ Route::group(['prefix' => 'client/orders/', 'namespace' => 'Client\Orders', 'mid
     Route::get('ManualOrders/print_slip_by_scan/', 'ManualOrdersController@print_slip_by_scan')->name('ManualOrders.print.slip.by.scan');
     Route::get('get_product_details/{Sku}', 'ManualOrdersController@get_product_details')->name('get.product.details');
     Route::post('generate/scan/slip', 'ManualOrdersController@print_slip_by_scan_store')->name('generate.scan.slip');
+    Route::get('inactivecustomers', 'ManualOrdersController@InActiveCustomers')->name('inactive.customers');
     
     //Route::get('create', 'ManualOrdersController@index')->name('client.manual.orders');
 });

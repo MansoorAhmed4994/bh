@@ -45,3 +45,5 @@
 [25-Sep-2022 20:13:32 UTC] PHP Fatal error:  Cannot declare class UpdateManualOrders, because the name is already in use in /home/desenado/manualordersstaging.brandhub.com.pk/database/migrations/2022_02_23_212209_update_manual_orders.php on line 7
 [01-Oct-2022 13:11:16 UTC] PHP Fatal error:  Cannot use [] for reading in /home/desenado/manualordersstaging.brandhub.com.pk/app/Http/Controllers/Client/Orders/ManualOrdersController.php on line 769
 [01-Oct-2022 13:11:42 UTC] PHP Fatal error:  Cannot use [] for reading in /home/desenado/manualordersstaging.brandhub.com.pk/app/Http/Controllers/Client/Orders/ManualOrdersController.php on line 769
+[28-Oct-2022 20:12:30 UTC] PHP Fatal error:  Cannot use [] for reading in /home/desenado/manualordersstaging.brandhub.com.pk/app/Http/Controllers/Admin/DashboardController.php on line 61
+[28-Oct-2022 20:12:40 UTC] PHP Fatal error:  Cannot use [] for reading in /home/desenado/manualordersstaging.brandhub.com.pk/app/Http/Controllers/Admin/DashboardController.php on line 61

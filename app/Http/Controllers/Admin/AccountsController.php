@@ -339,8 +339,10 @@ class AccountsController extends Controller
     
     public function CroneUpdateShipmentPaymentStatuss()
     { 
-        $from_date= date('Y-m-01');
-        $to_date = date('Y-m-t');
+        // $from_date= date('Y-m-01');
+        // $to_date = date('Y-m-t');
+        $from_date = Carbon::now()->subDays(30)->toDateTimeString();
+        $to_date = Carbon::now()->addDays(5)->toDateTimeString();
         $ManualOrdersLists = ManualOrders::select('consignment_id','id','payment_status','shipment_tracking_status')
         ->where([
             ['consignment_id','>','0'],
@@ -604,8 +606,11 @@ class AccountsController extends Controller
     
     public function CroneUpdateShipmentTrackingStatus()
     { 
-        $from_date= date('Y-m-01');
-        $to_date = date('Y-m-t');
+        $from_date = Carbon::now()->subDays(30)->toDateTimeString();
+        $to_date = Carbon::now()->addDays(5)->toDateTimeString(); 
+        
+        // $from_date= date('Y-m-01');
+        // $to_date = date('Y-m-t');
         $ManualOrdersLists = ManualOrders::leftJoin('orderpayments', 'orderpayments.order_id', '=', 'manual_orders.id')->
         leftJoin('customers', 'customers.id', '=', 'manual_orders.customers_id')
         ->select('shipment_tracking_status','manual_orders.consignment_id','manual_orders.id','manual_orders.payment_status')

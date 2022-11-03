@@ -132,6 +132,9 @@
                         <li class="nav-item active"> 
                             <a class="nav-link" target="_blank" href="{{route('ManualOrders.track.order')}}">Track Order </a> 
                         </li>
+                        <li class="nav-item active"> 
+                            <a class="nav-link" target="_blank" href="{{route('inactive.customers')}}">Inactive Customers </a> 
+                        </li>
                     </ul>
                     <ul class="navbar-nav ms-auto"> 
                         <li class="nav-item dropdown">

@@ -163,8 +163,6 @@ var order_link='';
         let receiver_number = $('#receiver_number').val();
         let reciever_address = $('#reciever_address').val();
         let price = $('#price').val();
-        let advance_payment = $('#advance_payment').val();
-        let cod_amount = $('#cod_amount').val();
         let status_reason = $('#status_reason').val();
         
         
@@ -190,8 +188,6 @@ var order_link='';
             receiver_number:receiver_number,
             reciever_address:reciever_address,
             price:price,
-            advance_payment:advance_payment,
-            cod_amount:cod_amount,
             status:order_status,
             status_reason:status_reason,
           },
@@ -264,9 +260,7 @@ var order_link='';
                 // $('#imagemodal').val(e.messege.id);
                 $('#receiver_number').val(e.messege.receiver_number);
                 $('#reciever_address').val(e.messege.reciever_address);
-                $('#price').val(e.messege.price);
-                $('#cod_amount').val(e.messege.cod_amount);
-                $('#advance_payment').val(e.messege.advance_payment);
+                $('#Price').val(e.messege.Price);
                 
                 var images ='';
                 var str_array = e.messege.images.split('|'); 
@@ -502,21 +496,17 @@ var order_link='';
                 <th scope="col">#</th> 
                 <th scope="col">Act</th>
                 <th scope="col">Img.</th>
-                <th scope="col">Consignment.Id</th>
                 <th scope="col">Ord.ID</th>
                 <th scope="col">F.Name</th> 
                 <th scope="col">Rec.Number</th>
                 <th scope="col">Number</th> 
+                <th scope="col">total Purchase</th> 
+                
                 <th scope="col">Description</th>
-                <th scope="col">Address</th>
-                <th scope="col">Price</th>
-                <th scope="col">Advance Payment</th>
-                <th scope="col">COD</th>
-                <th scope="col">OD Y/N</th>
-                <th scope="col">cr.Date</th>
-                <th scope="col">Up.Date</th>
+                <th scope="col">Address</th>  
+                <th scope="col">cr.Date</th> 
                 <th scope="col">Status</th>
-                <th scope="col">Status Reason</th>
+                <th scope="col">remarks</th> 
             </tr>
         </thead>
         <tbody>  
@@ -534,23 +524,7 @@ var order_link='';
                           Actions
                         </button>
                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">            
-                            <a type="button" target="_blank" href="{{route('ManualOrders.edit',$lists->id)}}" class="dropdown-item">Edit</a>   
-                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'pending')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Quick Edit</button>          
-                            <a type="button" target="_blank" href="{{route('ManualOrders.show',$lists->id)}}" class="dropdown-item">view</a>
-                            <a type="button" href="{{route('ManualOrders.print.order.slip',$lists->id)}}" class="dropdown-item">Print Slip</a>
-                            <!--<a type="button" href="{{route('ManualOrders.order.status',['prepared',$lists->id])}}" class="dropdown-item">prepared</a>   -->
-                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'prepared');order_link ='{{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}';" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Prepared</button>
-                            <a type="button" href="{{route('ManualOrders.order.status',['complete',$lists->id])}}" class="dropdown-item">Complete</a> 
-                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'confirmed')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Confirmed</button>
-                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'dispatched')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Dispatch</button>
-                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'hold')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Hold</button>
-                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'incomplete')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Incomplete</button>
-                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'not responding')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">not responding</button>
-                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'cancel')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Cancel</button>
-                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'return')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Return</button>
-                            <!--<a type="button" href="{{route('ManualOrders.order.status',['hold',$lists->id])}}" class="dropdown-item">Hold</a> -->
-                            <!--<a type="button" href="{{route('ManualOrders.order.status',['incomplete',$lists->id])}}" class="dropdown-item">Incomplete</a>-->
-                            <!--<a type="button" href="{{route('ManualOrders.order.status',['cancel',$lists->id])}}" class="dropdown-item">Cancel</a>-->
+                            <a type="button" target="_blank" href="{{route('ManualOrders.edit',$lists->id)}}" class="dropdown-item">Edit</a> 
                         </div>
                      </div>
                 </td>
@@ -561,7 +535,6 @@ var order_link='';
                         @endforeach
                     @endif
                 </td>
-                <td>{{$lists->consignment_id}}</td> 
                 <td>{{$lists->id}}</td>
                 <td>{{$lists->first_name}}</td>   
                 <?php 
@@ -586,18 +559,16 @@ var order_link='';
                 
                 
                 ?>
-                <td><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualikum {{$lists->first_name}}, I am from Brandhub, Please confirm your order, click on the link to and check your articles and press confirmed button {{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}"><?=$reciever_number?></a></td> 
-                <td><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$number?>&text=Assalamualaikum, {{$lists->first_name}}, I am from Brandhub, Please confirm your order, click on the link to and check your articles and press confirmed button {{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}"><?=$number?></a></td> 
+                <td><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualikum {{$lists->first_name}}, I am from Brandhub, Mam you are our loyal customers, Mam you purchase some articles on {{date('d-M-y', strtotime($lists->created_at))}}, please let me know if you have issue with our product Thank you"><?=$reciever_number?></a></td> 
+                <td><a ><?=$number?></a></td> 
+                
+                <td>{{$lists->total_purchase}}</td>
+                
                 <td>{{$lists->description}}</td> 
                 <td>{{$lists->reciever_address}}</td>
-                <td>{{$lists->price}}</td>  
-                <td>{{$lists->advance_payment}}</td> 
-                <td>{{$lists->cod_amount}}</td> 
-                <td><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$number?>&text=Assalamualaikum, {{$lists->first_name}}, Mam did you recieve your order, please click on link to Track your Order {{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}">Get Status</a></td> 
-                <td>{{date('d-M-y', strtotime($lists->created_at))}} <br> {{date('G:i a', strtotime($lists->created_at))}}</td>
-                <td>{{date('d-M-y', strtotime($lists->updated_at))}} <br> {{date('G:i a', strtotime($lists->updated_at))}}</td> 
+                <td>{{date('d-M-y', strtotime($lists->created_at))}} <br> {{date('G:i a', strtotime($lists->created_at))}}</td> 
                 <td>{{$lists->status}}</td>
-                <td>{{$lists->status_reason}}</td>
+                <td>{{$lists->remarks}}</td>
             </tr>
             <?php $count++;?>
             @endforeach
@@ -605,7 +576,8 @@ var order_link='';
         
     </table>
 </div>
-{!! $list->appends(Request::all())->links() !!} 
+{{ $list->links() }}
+
 <script type="application/javascript">
 
     $( document ).ready(function() {
