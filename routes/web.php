@@ -49,7 +49,8 @@ Route::group(['prefix' => 'client/orders/', 'namespace' => 'Client\Orders', 'mid
     
     Route::any('ManualOrders/list', 'ManualOrdersController@index')->name('ManualOrders.index');
     Route::any('ManualOrders/{Manualorders}/edit', 'ManualOrdersController@edit')->name('ManualOrders.edit');
-    Route::any('ManualOrders/create', 'ManualOrdersController@store')->name('ManualOrders.create');
+    Route::post('ManualOrders/store', 'ManualOrdersController@store')->name('ManualOrders.store');
+    Route::get('ManualOrders/create', 'ManualOrdersController@create')->name('ManualOrders.create');
     Route::any('ManualOrders/{Manualorders}/update', 'ManualOrdersController@update')->name('ManualOrders.update');
     Route::get('ManualOrders/show/{id}', 'ManualOrdersController@show')->name('ManualOrders.show'); 
     Route::post('ManualOrders/delete-image', 'ManualOrdersController@delete_order_image')->name('ManualOrders.delete.order.image');
