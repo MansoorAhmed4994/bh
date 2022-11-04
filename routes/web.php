@@ -48,10 +48,10 @@ Route::group(['prefix' => 'client/orders/', 'namespace' => 'Client\Orders', 'mid
     // Route::resource('ManualOrders', 'ManualOrdersController')->except('show','index');
     
     Route::any('ManualOrders/list', 'ManualOrdersController@index')->name('ManualOrders.index');
-    Route::any('ManualOrders/{Manualorders}/edit', 'ManualOrdersController@edit')->name('ManualOrders.edit');
+    Route::get('ManualOrders/{Manualorders}/edit', 'ManualOrdersController@edit')->name('ManualOrders.edit');
     Route::post('ManualOrders/store', 'ManualOrdersController@store')->name('ManualOrders.store');
     Route::get('ManualOrders/create', 'ManualOrdersController@create')->name('ManualOrders.create');
-    Route::any('ManualOrders/{Manualorders}/update', 'ManualOrdersController@update')->name('ManualOrders.update');
+    Route::any('ManualOrders/update/{ManualOrder}', 'ManualOrdersController@update')->name('ManualOrders.update');
     Route::get('ManualOrders/show/{id}', 'ManualOrdersController@show')->name('ManualOrders.show'); 
     Route::post('ManualOrders/delete-image', 'ManualOrdersController@delete_order_image')->name('ManualOrders.delete.order.image');
     Route::post('ManualOrders/add-image', 'ManualOrdersController@add_order_image')->name('ManualOrders.add.order.image');

@@ -235,7 +235,7 @@ class ManualOrdersController extends Controller
      */
     public function update(Request $request, ManualOrders $ManualOrder)
     {
-        
+        // dd($ManualOrder);
         $validated = $request->validate([
  
             'first_name' => 'required',

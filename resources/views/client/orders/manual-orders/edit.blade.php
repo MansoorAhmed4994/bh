@@ -111,8 +111,7 @@
         @endif
 
         <form action="{{ route('ManualOrders.update',$ManualOrder->id) }}" id="update_form" name="update_form" enctype="multipart/form-data"method="post">
-            <input type="hidden" name="_method" value="PUT">
-            <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
+            @csrf
             <div class="container">
                 <div class="row"> 
                     <div class="row">
