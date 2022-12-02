@@ -4,6 +4,131 @@
 @section('content')
  <head>
 <script type="text/javascript">
+
+        var row_id="1";
+        
+        
+        
+    $( document ).ready(function() {
+        
+        $('#add_product_btn').on('click',function(e)
+        {  
+            // alert('wo');
+                get_products_by_sku();
+        });
+        
+      
+        
+        $('#sku_number').on('keypress',function(e)
+        {  
+            
+            if (e.which == 13) {
+                get_products_by_sku();
+            }
+        });
+        });
+        
+    function delete_row(id,inventory_id)
+    {
+        $("body").addClass("loading");
+        var row = document.getElementById(id);
+        row.parentNode.removeChild(row);
+        
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: base_url + '/admin/inventory/deletcustomerproduct/'+inventory_id,
+            type: 'GET', 
+            dataType: 'json',
+            success: function(e)
+            { 
+                $('#price').val(e.price);
+                
+                $("#total_amount").html(e.price);
+                
+                $("body").removeClass("loading");
+            },
+            error: function(e) {alert(e); 
+                $("body").removeClass("loading");
+            }
+        });
+        
+    }
+    function get_products_by_sku() 
+    {
+        $("body").addClass("loading"); 
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: base_url + '/admin/inventory/getproduct',
+            type: 'post',
+            data: $('#update_form').serialize(),
+            dataType: 'json',
+            success: function(e)
+            { 
+                if(e.error == 0)
+                {
+                    var row_data='';
+                    // console.log(e.inventory);
+                    var total_amount = 0;
+                    var total_products = 0;
+                    $('#price').val(e.price);
+                    for(var i=0; i< e.inventory.length; i++)
+                    {
+                        total_products++;
+                        total_amount+=parseInt(e.inventory[i].sale);
+                        row_data += '<tr id="'+row_id+'"><td class="delete_btn_class"><button type="button" class="btn btn-danger " onclick="delete_row('+row_id+','+e.inventory[i].id+')">Delete</button></td><td>'+e.inventory[i].name+'</td><td>'+e.inventory[i].sale+'</td></tr>';
+    
+                    row_id++;
+                    }
+                    total_amount += 250;
+                    $("#row_data").html(row_data);
+                    $("#total_products").html(total_products);
+                    $("#total_amount").html(total_amount);
+                    $("body").removeClass("loading");
+                }
+                else
+                {
+                    alert('no product found');
+                    $("body").removeClass("loading");
+                }
+                    // document.getElementById('order_id').value = '';
+                
+                //cosole.log(e.messege);
+            },
+            error: function(e) {
+                alert(e); 
+                $("body").removeClass("loading");
+            }
+        });
+            
+        }
+    function onchangeprice()
+    {
+        
+        let price = document.getElementById("price").value; 
+        let advance_payment = document.getElementById("advance_payment").value;
+        let cod_amount = (price-advance_payment);
+        document.getElementById("cod_amount").value = cod_amount;
+        // alert(cod_amount);
+    }
+
+    $( document ).ready(function() {
+        // var Inputmask = require('inputmask');
+        var cities =@json($cities);
+        $('.cities_dropdown').select2();
+        
+        var cities =@json($cities);
+        $('.information_display_dropdown').select2();
+        
+        var cities =@json($cities);
+        $('.payment_mode_id_dropdown').select2();
+            //static mask
+    });
+
+
         var base_url = '<?php echo e(url('/')); ?>';
         var delete_image_path ="";
         var image_box_id = '2';
@@ -110,8 +235,10 @@
             </div> 
         @endif
 
-        <form action="{{ route('ManualOrders.update',$ManualOrder->id) }}" id="update_form" name="update_form" enctype="multipart/form-data"method="post">
+        <form action="{{ route('ManualOrders.update',$ManualOrder->id) }}" id="update_form"  enctype="multipart/form-data" method="post">
             @csrf
+            
+            <input type="hidden" value="{{$ManualOrder->id}}" name="order_id" id="order_id">
             <div class="container">
                 <div class="row"> 
                     <div class="row">
@@ -141,7 +268,6 @@
                     <div class="form-group">
                         <input type="file" name="images[]" id="images" multiple/>
                         <!--<div class="file btn btn-lg btn-secondary">Add new-->
-                            
                             <input type="hidden" name="images_path" id="images_path" />
                             
                         <!--</div>-->
@@ -195,11 +321,25 @@
                             @if($errors->get('receiver_name')) <small id="receiver_name_error" class="form-text text-danger">{{$errors->first('receiver_name')}} </small>@endif
                         </div> 
             
-                        <div class="form-group col-auto">
+                        <!--<div class="form-group col-auto">-->
+                        <!--    <label for="address">city</label>-->
+                        <!--    <input type="text" class="form-control" id="city @if($errors->get('city')) is-invalid @endif"   name="city" placeholder="City" value="{{old('city')}}@if(isset($ManualOrder)){{$ManualOrder->city}}@endif"/>-->
+                        <!--    <small id="city_error" class="form-text text-danger">@if($errors->get('city')) {{$errors->first('city')}} @endif</small>-->
+                        <!--</div> -->
+                        
+                        <div class="form-group col-sm">
                             <label for="address">city</label>
-                            <input type="text" class="form-control" id="city @if($errors->get('city')) is-invalid @endif"   name="city" placeholder="City" value="{{old('city')}}@if(isset($ManualOrder)){{$ManualOrder->city}}@endif"/>
+                            <select class="form-control @if($errors->get('city')) is-invalid @endif cities_dropdown city" id="city"  onchange="get_fare_list(<?=$count?>)" name="city" required>
+                                <option value="">Select City</option>
+                                @for($i=0 ; $i < sizeof($cities); $i++)
+                                 
+                                    <option value="{{$cities[$i]->id}}" {{ ($cities[$i]->id == $ManualOrder->city) ? 'selected="selected"' : '' }}>{{$cities[$i]->name}}</option>
+                                    
+                                @endfor
+                                
+                            </select> 
                             <small id="city_error" class="form-text text-danger">@if($errors->get('city')) {{$errors->first('city')}} @endif</small>
-                        </div> 
+                        </div>
                         
                         <div class="form-group col-auto">
                             <label for="receiver_name">Reciever Number</label>
@@ -227,25 +367,25 @@
             
                         <div class="form-group col-auto">
                             <label for="Number">price</label>
-                            <input type="text" class="form-control @if($errors->get('price')) is-invalid @endif" value="{{old('price')}}@if(isset($ManualOrder)){{$ManualOrder->price}}@endif" id="price"  name="price" placeholder="Price" >
+                            <input type="text" class="form-control @if($errors->get('price')) is-invalid @endif" value="{{old('price')}}@if(isset($ManualOrder)){{$ManualOrder->price}}@endif" onchange="onchangeprice()" id="price"  name="price" placeholder="Price" >
                             @if($errors->get('price')) <small id="price_error" class="form-text text-danger">{{$errors->first('price')}} </small>@endif
                         </div>
             
                         <div class="form-group col-auto">
                             <label for="Number">Advance Payment</label>
-                            <input type="text" class="form-control @if($errors->get('advance_payment')) is-invalid @endif" value="{{old('advance_payment')}}@if(isset($ManualOrder)){{$ManualOrder->advance_payment}}@endif" id="advance_payment"  name="advance_payment" placeholder="Advance Payment" >
+                            <input type="text" class="form-control @if($errors->get('advance_payment')) is-invalid @endif" onchange="onchangeprice()" value="{{old('advance_payment')}}@if(isset($ManualOrder)){{$ManualOrder->advance_payment}}@endif" id="advance_payment"  name="advance_payment" placeholder="Advance Payment" >
                             @if($errors->get('advance_payment')) <small id="advance_payment_error" class="form-text text-danger">{{$errors->first('advance_payment')}} </small>@endif
                         </div>
             
                         <div class="form-group col-auto">
                             <label for="Number">COD Amount</label>
-                            <input type="text" class="form-control @if($errors->get('cod_amount')) is-invalid @endif" value="{{old('cod_amount')}}@if(isset($ManualOrder)){{$ManualOrder->cod_amount}}@endif" id="cod_amount"  name="cod_amount" placeholder="COD" >
+                            <input type="text" class="form-control @if($errors->get('cod_amount')) is-invalid @endif" value="{{old('cod_amount')}}@if(isset($ManualOrder)){{$ManualOrder->cod_amount}}@endif" id="cod_amount"  name="cod_amount" placeholder="COD" readonly>
                             @if($errors->get('cod_amount')) <small id="cod_amount_error" class="form-text text-danger">{{$errors->first('cod_amount')}} </small>@endif
                         </div>
                         
                         <div class="form-group col-auto">
                             <label for="Description">Description</label>
-                            <textarea class="form-control" id="description @if($errors->get('description')) is-invalid @endif"   name="description" placeholder="description" required>{{old('description')}}@if(isset($ManualOrder)){{$ManualOrder->description}}@endif</textarea>
+                            <textarea class="form-control" id="description @if($errors->get('description')) is-invalid @endif" name="description" placeholder="description" required>{{old('description')}}@if(isset($ManualOrder)){{$ManualOrder->description}}@endif</textarea>
                             <small id="description_error" class="form-text text-danger">@if($errors->get('description')) {{$errors->first('description')}} @endif</small>
                         </div>
             
@@ -254,7 +394,58 @@
                         </div>
                     </div>
                 </div>
+                <div class="d-flex justify-content-start">
+                    <div class="form-group col-sm-3">
+                        <input type="text" class="form-control" id="sku_number" placeholder="Enter SKU" name="sku_number" >
+                    </div>   
+        
+                    <div class="form-group">
+                        <button type="button" id="add_product_btn" class="btn btn-primary" >Add Order</button>
+                    
+                    </div>
+                    
+                </div>
             </div>
+            <table class="table table-bordered">
+                    
+                    <thead>
+                        
+                        <tr>
+                            <th scope="col" class="delete_btn_class">#</th> 
+                            <th scope="col">Product ID</th>
+                            <th scope="col">Product Name</th> 
+                        </tr>
+                    </thead>
+                    <tbody id="row_data">
+                        <?php $row_id=1;?>
+                        <?php $total_amount=0;?>
+                        <?php $total_products=0;?>
+                        @foreach($inventories as $inventory)
+                            <tr id="<?=$row_id?>">
+                                <td class="delete_btn_class">
+                                    <button type="button" class="btn btn-danger " onclick="delete_row('<?=$row_id?>','{{$inventory->id}}')">Delete</button>
+                                </td>
+                                <td>{{$inventory->name}}</td>
+                                <td>{{$inventory->sale}}</td> 
+                                
+                                <?php $total_amount+=$inventory->sale;?>
+                                <?php $total_products++;?>
+                                <?$row_id++?>
+                            </tr>
+                        @endforeach
+                        <?php $total_amount+=250;?>
+                        
+                    </tbody>
+                    <tbody id="row_data">
+                        <tr>
+                            <th scope="col" colspan="4"><h4><lable>Total Products: <span class="badge badge-secondary" id="total_products">
+                        <?=$total_products;?></span></lable></h4></th>
+                            <th scope="col" colspan="4"><h4><lable>Total Amount: <span class="badge badge-secondary" id="total_amount">
+                        <?=$total_amount;?></span></lable></h4></th>
+                        </tr> 
+                          
+                    </tbody>
+                </table>
                 
         </form> 
 

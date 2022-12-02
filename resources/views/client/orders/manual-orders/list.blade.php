@@ -159,6 +159,7 @@ var order_link='';
         $('#save_order_status_and_price').on('click',function(){
         
         
+        $("body").addClass("loading");
         let receiver_name = $('#receiver_name').val();
         let receiver_number = $('#receiver_number').val();
         let reciever_address = $('#reciever_address').val();
@@ -224,10 +225,14 @@ var order_link='';
                      
                 } 
                 
+                
             }
+            $("body").removeClass("loading");
             //console.log(response);
           },
           error: function(response) {
+                alert(response); 
+                $("body").removeClass("loading");
             // $('#nameErrorMsg').text(response.responseJSON.errors.name);
             // $('#emailErrorMsg').text(response.responseJSON.errors.email);
             // $('#mobileErrorMsg').text(response.responseJSON.errors.mobile);

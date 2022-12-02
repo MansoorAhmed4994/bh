@@ -154,18 +154,22 @@ var order_link='';
             $('#imagemodal').modal('show');   
         });   
                  
-                 
-        $('#add_new_inventory').on('click',function(){ 
+        
+        $('#add_new_inventory').on('click',function(){
+            $("body").addClass("loading"); 
             $('#createinventorymodal').modal('hide');
             var sku = $('#sku').val();
-            var units = $('#units').val();
-            var unit_type = $('#unit_type').val();
-            var sale = $('#sale').val();
-            var cost = $('#cost').val(); 
+            var category_id = $('#category_id').val();
             var name = $('#name').val();
+            var sale = $('#sale').val();
             
-            console.log(sku+'\n'+units+'\n'+unit_type+'\n'+sale+'\n'+cost+'\n');
-            if(sku !='' && units !='' && unit_type !='' && sale > 0 && cost > 0)
+            var products_id = $('#products_id').val();
+            var stock_status = $('#stock_status').val();
+            var qty = $('#qty').val(); 
+            var cost = $('#cost').val();  
+            
+            // console.log(sku+'\n'+units+'\n'+unit_type+'\n'+sale+'\n'+cost+'\n');
+            if(sku !=''&& name !='' && stock_status !='' && qty !='' && sale > 0 && cost > 0)
             {
                 $.ajax({
                     url: base_url + '/admin/inventory', 
@@ -175,23 +179,30 @@ var order_link='';
                   type:"POST",
                   dataType: 'json',
                   data:{
-                    sku:sku,
-                    units:units,
-                    unit_type:unit_type,
+                    sku:sku, 
+                    name:name,
                     sale:sale,
+                    category_id:category_id,
+                    
+                    product_id:products_id,
+                    stock_status:stock_status,
+                    qty:qty,
                     cost:cost, 
-                    name:name, 
                   },
                   success:function(response){
                     //$('#successMsg').show();
                         if(response.messege)
                         {
                            alert(response.messege);
+                           
+                        $("body").removeClass("loading");
                             
                         }
                     console.log(response);
                     },
                     error: function(response) {
+                    alert(response); 
+                    $("body").removeClass("loading");
                         
                     // $('#nameErrorMsg').text(response.responseJSON.errors.name);
                     // $('#emailErrorMsg').text(response.responseJSON.errors.email);
@@ -213,7 +224,7 @@ var order_link='';
     
     function change_order_status_and_price(val,status) 
     {   
-        //alert('working');
+        $("body").addClass("loading");
         dispatch_order_id = val;
         order_status = status;
         //alert('working');
@@ -248,10 +259,12 @@ var order_link='';
                 
                 //alert(images);
                 
+                $("body").removeClass("loading");
                 
             },
             error: function(e) {
-                console.log(e.responseText);
+                alert(e); 
+                $("body").removeClass("loading");
             }
         });
     }
@@ -309,14 +322,24 @@ var order_link='';
                     
                     <h4>Add New Inventory <hr></h4> 
                         <div class="alert alert-success" id="dispatch-succes-noti" style="display:none" role="alert">successfully dispatch and update</div>
-                     
                         
                         <div class="form-group">
                             <label for="SKU">SKU</label>
                             <input type="text" class="form-control" value="" id="sku"  name="sku" placeholder="SKU" required>
                             <small id="sku_error" class="form-text text-danger"></small>
                         </div> 
-                     
+                        
+                        <div class="form-group">
+                            <label for="Type">Category</label>
+                            <select class="form-select" aria-label="Default select example" id ="category_id" name="category_id">
+                              <option selected value ="">Select Type</option> 
+                              @foreach($categories as $category)
+                              
+                              <option value="1">{{$category->name}}</option>
+                              @endforeach 
+                            </select> 
+                            <small id="category_id_error" class="form-text text-danger"></small>
+                        </div>  
                         
                         <div class="form-group">
                             <label for="name">Name</label>
@@ -324,34 +347,45 @@ var order_link='';
                             <small id="name_error" class="form-text text-danger"></small>
                         </div>
                         
+                        <!--<div class="form-group">-->
+                        <!--    <label for="Type">Weight Type</label>-->
+                        <!--    <select class="form-select" aria-label="Default select example" id ="unit_type" name="unit_type">-->
+                        <!--      <option selected value ="">Select Type</option> -->
+                        <!--      <option value="ml">ml</option>-->
+                        <!--      <option value="mg">mg</option>   -->
+                        <!--    </select> -->
+                        <!--    <small id="unit_type_error" class="form-text text-danger"></small>-->
+                        <!--</div> -->
+            
                         <div class="form-group">
-                            <label for="units">Units</label>
-                            <input type="text" class="form-control" id="units"  name="units" placeholder="Reciever Number" required>
+                            <label for="sale">sale</label>
+                            <input type="number" class="form-control" value="0" id="sale"  name="sale" placeholder="sale" required>
+                            <small id="sale_error" class="form-text text-danger"></small>
+                        </div>
+                         
+                        
+                        <div class="form-group">
+                            <label for="stock_status">Stock Status</label>
+                            <select class="form-select" aria-label="Default select example" id ="stock_status" name="stock_status" required>
+                                <option selected value ="">Select Type</option> 
+                                <option value="in">In</option>
+                                <!--<option value="out">Out</option>   -->
+                            </select> 
+                            <!--<input type="text" class="form-control" id="stock_status"  name="stock_status" placeholder="Reciever Number" required>-->
                             <small id="units_error" class="form-text text-danger"></small>
                         </div> 
                         
                         <div class="form-group">
-                            <label for="Type">Type</label>
-                            <select class="form-select" aria-label="Default select example" id ="unit_type" name="unit_type">
-                              <option selected value ="">Select Type</option> 
-                              <option value="ml">ml</option>
-                              <option value="mg">mg</option>
-                              <option value="pc">pc</option>  
-                            </select> 
-                            <small id="unit_type_error" class="form-text text-danger"></small>
+                            <label for="units">Quantity</label>
+                            <input type="number" class="form-control" id="qty"  name="qty" placeholder="qty" required>
+                            <small id="qty_error" class="form-text text-danger"></small>
                         </div> 
             
                         <div class="form-group">
                             <label for="cost">cost</label>
-                            <input type="text" class="form-control" value="0" id="cost"  name="cost" placeholder="cost" required>
+                            <input type="number" class="form-control" value="0" id="cost"  name="cost" placeholder="cost" required>
                             <small id="cost_error" class="form-text text-danger"></small>
-                        </div> 
-            
-                        <div class="form-group">
-                            <label for="sale">sale</label>
-                            <input type="text" class="form-control" value="0" id="sale"  name="sale" placeholder="sale" required>
-                            <small id="sale_error" class="form-text text-danger"></small>
-                        </div>   
+                        </div>    
                     </div>
         
             </div>
@@ -467,28 +501,23 @@ var order_link='';
                 <th scope="col" class="delete_btn_class"><input type="checkbox" onclick="checkAll(this)" ></th>
                 <th scope="col">#</th> 
                 <th scope="col">Act</th>
-                <th scope="col">Img.</th>
-                <th scope="col">Consignment.Id</th>
+                <th scope="col">Inv.id</th>
+                <th scope="col">Prd.Id</th>
                 <th scope="col">Ord.ID</th>
-                <th scope="col">F.Name</th> 
-                <th scope="col">Rec.Number</th>
-                <th scope="col">Number</th> 
-                <th scope="col">Description</th>
-                <th scope="col">Address</th>
-                <th scope="col">Price</th>
-                <th scope="col">OD Y/N</th>
-                <th scope="col">cr.Date</th>
-                <th scope="col">Up.Date</th>
-                <th scope="col">Status</th>
-                <th scope="col">Status Reason</th>
+                <th scope="col">SKU</th> 
+                <th scope="col">Name</th>
+                <th scope="col">sale</th> 
+                <th scope="col">Weight</th>
+                <th scope="col">Inv.cost</th>
+                <th scope="col">Inv.sale</th>  
             </tr>
         </thead>
         <tbody>  
             <?php $count=1;?>
-            @foreach($list as $lists)
+            @foreach($inventories as $inventory)
             
-            <tr style="background-color:@if($lists->status == 'deleted')#f99c9c @elseif($lists->status == 'prepaired') #b7b8b9 @elseif($lists->status == 'confirmed') #91c6ff @elseif($lists->status == 'dispatched') #84f39c @elseif($lists->status == 'deleted') #e77272 @else #f9df90 @endif">
-                <td ><input type="checkbox" id="order_checkbox" class="order_checkbox_class" name="order_checkbox" onclick="get_checked_values()" value="{{$lists->id}}"></td>
+            <tr>
+                <td ><input type="checkbox" id="order_checkbox" class="order_checkbox_class" name="order_checkbox" onclick="get_checked_values()" value="{{$inventory->iid}}"></td>
                 
                 <td scope="row"><?=$count?></td> 
                 
@@ -498,68 +527,20 @@ var order_link='';
                           Actions
                         </button>
                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">            
-                            <a type="button" target="_blank" href="{{route('ManualOrders.edit',$lists->id)}}" class="dropdown-item">Edit</a>   
-                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'pending')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Quick Edit</button>          
-                            <a type="button" target="_blank" href="{{route('ManualOrders.show',$lists->id)}}" class="dropdown-item">view</a>
-                            <a type="button" href="{{route('ManualOrders.print.order.slip',$lists->id)}}" class="dropdown-item">Print Slip</a>
-                            <!--<a type="button" href="{{route('ManualOrders.order.status',['prepared',$lists->id])}}" class="dropdown-item">prepared</a>   -->
-                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'prepared');order_link ='{{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}';" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Prepared</button>
-                            <a type="button" href="{{route('ManualOrders.order.status',['complete',$lists->id])}}" class="dropdown-item">Complete</a> 
-                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'confirmed')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Confirmed</button>
-                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'dispatched')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Dispatch</button>
-                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'hold')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Hold</button>
-                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'incomplete')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Incomplete</button>
-                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'not responding')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">not responding</button>
-                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'cancel')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Cancel</button>
-                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'return')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Return</button>
-                            <!--<a type="button" href="{{route('ManualOrders.order.status',['hold',$lists->id])}}" class="dropdown-item">Hold</a> -->
-                            <!--<a type="button" href="{{route('ManualOrders.order.status',['incomplete',$lists->id])}}" class="dropdown-item">Incomplete</a>-->
-                            <!--<a type="button" href="{{route('ManualOrders.order.status',['cancel',$lists->id])}}" class="dropdown-item">Cancel</a>-->
+                            <a type="button" target="_blank" href="{{route('inventory.edit',$inventory->iid)}}" class="dropdown-item">Edit</a>  
                         </div>
                      </div>
                 </td>
-                <td >
-                    @if(!empty($lists->images))
-                        @foreach(explode('|', $lists->images) as $image)   
-                        <img class="pop rounded " style="margin-right: 5px;" src="{{asset($image)}}" alt="Card image cap" width="25" >
-                        @endforeach
-                    @endif
-                </td>
-                <td>{{$lists->consignment_id}}</td> 
-                <td>{{$lists->id}}</td>
-                <td>{{$lists->first_name}}</td>   
-                <?php 
-                $number = $lists->number;
-                $reciever_number = $lists->receiver_number;
-                
-                $get_char_num = substr($lists->number,0,1);
-                if($get_char_num == 0)
-                {
-                    $number = substr($lists->number, 1);
-                    $number = '+92'.$number;
-                    
-                }
-                
-                $get_char_rec_num = substr($lists->receiver_number,0,1);
-                if($get_char_rec_num == 0)
-                {
-                    $reciever_number = substr($lists->receiver_number, 1);
-                    $reciever_number = '+92'.$reciever_number;
-                    
-                }
+                <td>{{$inventory->iid}}</td>
+                <td>{{$inventory->pid}}</td>
+                <td>{{$inventory->sku}}</td>
+                <td>{{$inventory->pname}}</td>
+                <td>{{$inventory->psale}}</td>
+                <td>{{$inventory->weight}}</td>
+                <td>{{$inventory->icost}}</td>
+                <td>{{$inventory->isale}}</td> 
                 
                 
-                ?>
-                <td><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualikum {{$lists->first_name}}, I am from Brandhub, Please confirm your order, click on the link to and check your articles and press confirmed button {{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}"><?=$reciever_number?></a></td> 
-                <td><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$number?>&text=Assalamualaikum, {{$lists->first_name}}, I am from Brandhub, Please confirm your order, click on the link to and check your articles and press confirmed button {{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}"><?=$number?></a></td> 
-                <td>{{$lists->description}}</td> 
-                <td>{{$lists->reciever_address}}</td>
-                <td>{{$lists->price}}</td>  
-                <td><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$number?>&text=Assalamualaikum, {{$lists->first_name}}, Mam did you recieve your order, please click on link to Track your Order {{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}">Get Status</a></td> 
-                <td>{{date('d-M-y', strtotime($lists->created_at))}} <br> {{date('G:i a', strtotime($lists->created_at))}}</td>
-                <td>{{date('d-M-y', strtotime($lists->updated_at))}} <br> {{date('G:i a', strtotime($lists->updated_at))}}</td> 
-                <td>{{$lists->status}}</td>
-                <td>{{$lists->status_reason}}</td>
             </tr>
             <?php $count++;?>
             @endforeach
@@ -567,7 +548,8 @@ var order_link='';
         
     </table>
 </div>
-{{ $list->links() }}
+<!--{{ $inventories->links() }}-->
+{!! $inventories->appends(Request::all())->links() !!}
 
 <script type="application/javascript">
 

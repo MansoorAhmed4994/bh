@@ -16,6 +16,8 @@ class UpdateManualOrdersStatusReason extends Migration
         Schema::table('manual_orders', function($table)
         {
             $table->text('status_reason')->default('')->after('updated_by')->nullable();
+            $table->float('charged_dc',8,2)->default('0.00')->after('fare')->nullable();
+            $table->text('payment_status')->default('not recieved')->after('charged_dc')->nullable();
         });
         //
     }

@@ -220,9 +220,12 @@ class ManualOrdersController extends Controller
         
         //dd($ManualOrder);
         $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.id',$ManualOrder)->first();
+        $cities = $this->get_trax_cities();
+        $inventory = Inventory::leftJoin('products', 'inventories.products_id', '=', 'products.id')->select('inventories.id as id','products.name as name','products.sale_price as sale')->where(['inventories.reference_id'=>$ManualOrder->id,'inventories.stock_status' => 'out'])->get();
+
         //dd(ManualOrders::leftJoin('customers', 'customers.id', '=', 'manual_orders.customers_id')->where('manual_orders.status','pending')); 
-       // dd($ManualOrder) ;
-        return view('client.orders.manual-orders.edit')->with('ManualOrder',$ManualOrder);
+        // dd($cities) ;
+        return view('client.orders.manual-orders.edit')->with(['ManualOrder'=>$ManualOrder, 'cities'=>$cities,'inventories'=>$inventory]);
         //
     }
 

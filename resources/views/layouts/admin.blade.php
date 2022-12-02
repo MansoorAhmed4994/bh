@@ -46,7 +46,29 @@
         .dropdown-menu .dropdown-menu{
             margin-left:0.7rem; margin-right:0.7rem; margin-bottom: .5rem;
         }
-        }	
+        }
+        
+        .overlay{
+        display: none;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 999;
+        background: rgba(255,255,255,0.8) center no-repeat;
+    }
+
+    /* Turn off scrollbar when body element has the loading class */
+    body.loading{
+        overflow: hidden; 
+        
+    }
+    /* Make spinner image visible when body element has the loading class */
+    body.loading .overlay{
+        display: block; 
+        z-index: 11111;
+    }
     </style>
 
 
@@ -54,6 +76,13 @@
 </head>
 
 <body>
+    <div class="overlay">
+        <div class="text-center" style="margin-top: 25%;">
+            <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    </div>
     <div id="app"> 
         
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -158,7 +187,7 @@
             <!-- container-fluid.// -->
         </nav>
 
-        <main class="py-4">
+        <main class="py-4"> 
         @include('frontend.layouts.alerts')
             @yield('content')
         </main>

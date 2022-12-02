@@ -21,6 +21,8 @@ class CreateCustomersTable extends Migration
             $table->string('number');
             $table->string('email')->nullable();
             $table->string('whatsapp_number')->nullable();
+            $table->text('description')->nullable();
+            $table->text('remarks')->nullable();
             $table->bigInteger('created_by');
             $table->bigInteger('updated_by');
             $table->timestamps();

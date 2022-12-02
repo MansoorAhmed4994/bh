@@ -16,12 +16,13 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('sku')->nullable();
-            $table->integer('slug')->nullable();
-            $table->integer('category')->nullable();
+            $table->string('slug')->nullable();
+            $table->integer('category_id')->nullable();
             $table->string('name')->nullable();
-            $table->float('wieght',8,2)->nullable();
+            $table->float('weight',8,2)->nullable();
+            $table->string('weight_type')->nullable();
             $table->float('sale_price',8,2)->nullable();
-            $table->float('cost_price',8,2)->nullable();
+            $table->float('discount_price',8,2)->nullable();
             $table->string('images')->nullable();
             $table->string('video_url')->nullable();
             $table->timestamps();

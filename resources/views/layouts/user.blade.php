@@ -66,7 +66,7 @@
     /* Make spinner image visible when body element has the loading class */
     body.loading .overlay{
         display: block;
-        argin-top: 25%;
+        z-index: 11111;
     }
     </style>
 

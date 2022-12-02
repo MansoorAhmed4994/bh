@@ -40,6 +40,7 @@ Route::group(['middleware' => ['auth' => 'admin'] , 'prefix' => 'admin/','namesp
 Route::group(['middleware' => 'auth:user' ],function(){
 
     Route::get('/', 'HomeController@index')->name('dashboard');
+    Route::get('/contactmanage', 'HomeController@contact')->name('contactmanage'); 
     Route::get('user/dashboard', 'Auth\DashboardController@index')->name('user.dashboard');
 });
 
@@ -87,7 +88,12 @@ Route::group(['prefix' => 'mnp/', 'namespace' => 'Shipment', 'middleware' => 'au
 
 Route::group(['prefix' => 'admin/', 'namespace' => 'Admin', 'middleware' => 'auth:user,admin' ],function(){
     
-    Route::resource('inventory', 'InventoryController');
+    Route::get('inventory', 'InventoryController@index')->name('inventory.index');
+    Route::post('inventory', 'InventoryController@store')->name('inventory.store');
+    Route::post('inventory/getproduct', 'InventoryController@getproduct')->name('inventory.get.product');
+    Route::get('inventory/edit/{inventory}', 'InventoryController@edit')->name('inventory.edit');
+    Route::post('inventory/update/{inventory}', 'InventoryController@update')->name('inventory.update');
+    Route::get('inventory/deletcustomerproduct/{inventory_id}', 'InventoryController@deletcustomerproduct')->name('inventory.delete.customer.product');
     
     
 });
