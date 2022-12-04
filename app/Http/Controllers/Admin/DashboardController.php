@@ -36,7 +36,20 @@ class DashboardController extends Controller
         //     $from_date = Carbon::now()->subDays(30)->toDateTimeString();
         //     $to_date = Carbon::now()->addDays(5)->toDateTimeString(); 
         // }
-         
+            $remaining_invertory = DB::table('remaining_inventories')
+                 ->select( DB::raw('sum(qty) as total'), DB::raw('sum(cost*qty) as amount'))
+                //  ->whereBetween('created_at', [$from_date, $to_date])
+                 ->get();
+        //  dd($remaining_invertory);
+        
+        
+            $inventory = DB::table('inventories')
+                 ->select('stock_status', DB::raw('sum(qty) as qty'), DB::raw('sum(cost) as cost'), DB::raw('sum(sale) as sale'))
+                 ->whereBetween('created_at', [$from_date, $to_date])
+                 ->groupBy('stock_status')
+                 ->get(); 
+                 
+                //  dd($inventory);
             $list = DB::table('manual_orders')
                  ->select('status', DB::raw('count(*) as total'), DB::raw('sum(price) as amount'))
                  ->whereBetween('created_at', [$from_date, $to_date])
@@ -111,7 +124,21 @@ class DashboardController extends Controller
           
         //   dd($shipment);
         //if ($result->count()) { }
-        return view('admin.dashboard')->with(['data'=>$list,'shipment'=>$shipment,'shipmenttracking'=>$statusfinal,'date_from'=> $from_date,'date_to'=>$to_date]);
+        return view('admin.dashboard')->with([
+            'data'=>$list,
+            'shipment'=>$shipment,
+            'shipmenttracking'=>$statusfinal,
+            'date_from'=> $from_date,
+            'date_to'=>$to_date,
+            'remaining_invertory'=>$remaining_invertory,
+            'inventories'=>$inventory
+            ]);
         // return view('admin.dashboard');
+        
+        
+        
+        
+        
+        
     }
 }

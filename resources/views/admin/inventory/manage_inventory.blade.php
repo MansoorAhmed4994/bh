@@ -419,46 +419,48 @@ var order_link='';
 </div>
 
 <nav class="navbar navbar-light bg-light">
-  <form class="form-inline" method="post" action="{{ route('ManualOrders.index') }}">
+  <form class="form-inline" method="post" action="{{route('inventory.index')}}">
       @csrf
-    <div class="form-group">
-        <input class="form-control mr-sm-2" type="search" name="search_order_id" placeholder="Search by Order id #" aria-label="Search">
+      
+      <div class="form-group">
+        <div class="input-group">
+            <div class="input-group-text"> 
+                <input onclick="mobile_view()" type="checkbox">
+            </div> 
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-sm">Mobile View</span>
+            </div>
+            
+            <input class="input-group-text" type="search" name="search_product" placeholder="Product SKU / Name / Category " aria-label="Search">
+            <select class="custom-select" aria-label="Default select example" name="order_status">
+                <option selected value ="">Select By</option>
+                <option value="all">All</option>
+                <option value="stock_status">Stock Status</option>
+                <option value="stock_type">Stock Type</option>
+                <option value="prepared">Prepared</option>
+                <option value="confirmed">Confirmed</option>
+                <option value="cancel">complete</option> 
+                <option value="dispatched">Dispatched</option> 
+                <option value="hold">Hold</option>
+                <option value="incomplete">incomplete</option> 
+                <option value="cancel">cancel</option> 
+                <option value="return">return</option> 
+                <option value="deleted">delete</option> 
+                <option value="not responding"></option>  
+            </select> 
+            
+            <input class="input-group-text" type="date" name="date_from" id="date_from">
+            <input class="input-group-text" type="date" name="date_to" id="date_to">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="submit">Search</button>
+            </div>
+            <div class="input-group-append">
+            <button class="btn btn-outline-secondary" data-toggle="modal" data-target="#createinventorymodal" type="button">Add New inventory</button>
+            </div>
+        </div>
     </div>
+
     
-    <div class="form-group">
-        <input class="form-control mr-sm-2" type="search" name="search_text" placeholder="Name OR Number" aria-label="Search">
-    </div>
-    
-    <div class="form-group">
-        <select class="form-select" aria-label="Default select example" name="order_status">
-          <option selected value ="">Select Order Status</option>
-          <option value="all">All</option>
-          <option value="pending">Pending</option>
-          <option value="duplicate">Dulicate</option>
-          <option value="prepared">Prepared</option>
-          <option value="confirmed">Confirmed</option>
-          <option value="cancel">complete</option> 
-          <option value="dispatched">Dispatched</option> 
-          <option value="hold">Hold</option>
-          <option value="incomplete">incomplete</option> 
-          <option value="cancel">cancel</option> 
-          <option value="return">return</option> 
-          <option value="deleted">delete</option> 
-          <option value="not responding"></option>  
-        </select> 
-    </div>
-    
-    <div class="form-group">
-        <button class="form-control btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </div>
-    
-    <div class="form-group">
-        <input onclick="mobile_view()" type="checkbox">Mobile View
-    </div>
-    
-    <div class="form-group">
-        <button class="form-control btn btn-outline-success my-2 my-sm-0" data-toggle="modal" data-target="#createinventorymodal" type="button">Add New inventory</button>
-    </div>
     
     
     
@@ -503,11 +505,15 @@ var order_link='';
                 <th scope="col">Act</th>
                 <th scope="col">Inv.id</th>
                 <th scope="col">Prd.Id</th>
-                <th scope="col">Ord.ID</th>
                 <th scope="col">SKU</th> 
+                <th scope="col">category</th> 
                 <th scope="col">Name</th>
                 <th scope="col">sale</th> 
                 <th scope="col">Weight</th>
+                <th scope="col">Refence id</th>
+                <th scope="col">Type</th>
+                <th scope="col">Status</th>
+                <th scope="col">QTY</th>
                 <th scope="col">Inv.cost</th>
                 <th scope="col">Inv.sale</th>  
             </tr>
@@ -534,9 +540,14 @@ var order_link='';
                 <td>{{$inventory->iid}}</td>
                 <td>{{$inventory->pid}}</td>
                 <td>{{$inventory->sku}}</td>
+                <td>{{$inventory->category}}</td>
                 <td>{{$inventory->pname}}</td>
                 <td>{{$inventory->psale}}</td>
                 <td>{{$inventory->weight}}</td>
+                <td>{{$inventory->reference_id}}</td>
+                <td>{{$inventory->type}}</td>
+                <td>{{$inventory->status}}</td>
+                <td>{{$inventory->qty}}</td>
                 <td>{{$inventory->icost}}</td>
                 <td>{{$inventory->isale}}</td> 
                 

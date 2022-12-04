@@ -88,7 +88,7 @@ Route::group(['prefix' => 'mnp/', 'namespace' => 'Shipment', 'middleware' => 'au
 
 Route::group(['prefix' => 'admin/', 'namespace' => 'Admin', 'middleware' => 'auth:user,admin' ],function(){
     
-    Route::get('inventory', 'InventoryController@index')->name('inventory.index');
+    Route::any('inventory/{status?}/{date_from?}/{date_to?}', 'InventoryController@index')->name('inventory.index');
     Route::post('inventory', 'InventoryController@store')->name('inventory.store');
     Route::post('inventory/getproduct', 'InventoryController@getproduct')->name('inventory.get.product');
     Route::get('inventory/edit/{inventory}', 'InventoryController@edit')->name('inventory.edit');

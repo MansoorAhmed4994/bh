@@ -28,23 +28,49 @@ class InventoryController extends Controller
 
     }
     
-    public function index(Request $request)
+    public function index(Request $request,$status='')
     {
         $categories = Category::all();
-        $inventories = Inventory::leftJoin('products', 'inventories.products_id', '=', 'products.id')
-        ->select(
+        $query = Inventory::query();
+        $query = $query->leftJoin('products', 'inventories.products_id', '=', 'products.id');
+        $query = $query->leftJoin('categories', 'categories.id', '=', 'products.category_id');
+        $query = $query->select(
             'inventories.id as iid',
             'products.id as pid',
-            'products.name as sku',
+            'products.sku as sku',
+            'categories.name as category',
             'products.name as pname',
             'products.sale_price as psale',
             'products.weight as weight',
+            'inventories.reference_id as reference_id',
+            'inventories.stock_type as type',
+            'inventories.qty as qty',
+            'inventories.stock_status as status',
             'inventories.cost as icost',
             'inventories.sale as isale'
-            )
-        ->orderBy('iid', 'ASC')
-            ->paginate(100);
-        //dd($list);
+            );
+        if($status != '')
+        {
+            $query = $query->where('stock_status', $status);
+            // dd($status);
+        }
+        if(isset($request->search_product))
+        {
+            $search_test = $request->search_product;
+            $query = $query->where(function ($query) use ($search_test) {
+            $query
+                ->where('products.name','like',$search_test.'%')
+                ->orWhere('products.name','like','%'.$search_test.'%')
+                ->orWhere('products.name','like','%'.$search_test)
+                ->orWhere('products.sku','like',$search_test.'%')
+                ->orWhere('products.sku','like','%'.$search_test.'%')
+                ->orWhere('products.sku','like','%'.$search_test);
+            });
+        }
+        
+            $query = $query->orderBy('iid', 'ASC');
+            $inventories = $query->paginate(20);
+        // dd($inventories);
         return view('admin.inventory.manage_inventory')->with(['inventories'=>$inventories,'categories'=> $categories]);     
         
     }
