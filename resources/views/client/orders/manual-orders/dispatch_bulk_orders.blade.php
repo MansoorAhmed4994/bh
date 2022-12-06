@@ -18,10 +18,10 @@
           }
         }
         
-        function change_price(price)
+        function change_cod_amount(cod_amount)
         {
             //total_parcels--;
-            total_amount = total_amount-parseInt(price); 
+            total_amount = total_amount-parseInt(cod_amount); 
             $('#total_amount').html(total_amount);
             $('#total_parcels').html(total_parcels);
             $('#field_total_amount').val(total_amount);
@@ -55,12 +55,12 @@
             return true;
         }
 
-        function delete_row(id,price)
+        function delete_row(id,cod_amount)
         {
             var row = document.getElementById(id);
             row.parentNode.removeChild(row);
             total_parcels--;
-            total_amount = total_amount-parseInt(price); 
+            total_amount = total_amount-parseInt(cod_amount); 
             $('#total_amount').html(total_amount);
             $('#total_parcels').html(total_parcels);
             $('#field_total_amount').val(total_amount);
@@ -138,16 +138,16 @@
                         {
                             if(e.messege != 'no order found')
                             {
-                                var price = 0;
-                                if($.isNumeric(parseInt(e.messege.price)))
+                                var cod_amount = 0;
+                                if($.isNumeric(parseInt(e.messege.cod_amount)))
                                 {
-                                    price = e.messege.price
-                                    total_amount += parseInt(e.messege.price);
+                                    cod_amount = e.messege.cod_amount
+                                    total_amount += parseInt(e.messege.cod_amount);
                                     $('#total_amount').html(total_amount);
                                 }
                                 total_parcels++;
                                 $('#total_parcels').html(total_parcels);
-                                var row_data = '<tr id="'+row_id+'"><td class="delete_btn_class"><button type="button" class="btn btn-danger " onclick="delete_row('+row_id+','+price+')">Delete</button></td><td class="delete_btn_class"><input type="checkbox" value="'+e.messege.id+'" name="order_ids[]" checked></td><td>'+e.messege.id+'</td><td>'+e.messege.receiver_name+'</td><td>'+e.messege.receiver_number+'</td><td>'+e.messege.reciever_address+'</td><td><input tye="hidden" onkeyup="change_price(this.value)" value="'+price+'" name="price[]" id="total_amount"></td></td><td>'+e.messege.status+'</td><td style="border: 2px solid black;"></td></tr>';
+                                var row_data = '<tr id="'+row_id+'"><td class="delete_btn_class"><button type="button" class="btn btn-danger " onclick="delete_row('+row_id+','+cod_amount+')">Delete</button></td><td class="delete_btn_class"><input type="checkbox" value="'+e.messege.id+'" name="order_ids[]" checked></td><td>'+e.messege.id+'</td><td>'+e.messege.receiver_name+'</td><td>'+e.messege.receiver_number+'</td><td>'+e.messege.reciever_address+'</td><td><input tye="hidden" onkeyup="change_cod_amount(this.value)" value="'+cod_amount+'" name="cod_amount[]" id="total_amount"></td></td><td>'+e.messege.status+'</td><td style="border: 2px solid black;"></td></tr>';
                                 $("#row_data").prepend(row_data);
                                 row_id++;
                                 $("body").removeClass("loading");
@@ -300,7 +300,7 @@
                             <th scope="col">Name</th>
                             <th scope="col">number</th>
                             <th scope="col">Address</th>
-                            <th scope="col">price</th>
+                            <th scope="col">COD</th>
                             <th scope="col">status</th>
                             <th scope="col">Cus. Sign</th>
                         </tr>

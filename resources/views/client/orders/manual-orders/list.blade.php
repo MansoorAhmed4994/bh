@@ -591,8 +591,9 @@ var order_link='';
                 
                 
                 ?>
-                <td><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualikum {{$lists->first_name}}, I am from Brandhub, Please confirm your order, click on the link to and check your articles and press confirmed button {{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}"><?=$reciever_number?></a></td> 
-                <td><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$number?>&text=Assalamualaikum, {{$lists->first_name}}, I am from Brandhub, Please confirm your order, click on the link to and check your articles and press confirmed button {{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}"><?=$number?></a></td> 
+                <td><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualikum {{$lists->first_name}},%0a I am from Brandhub,%0a Please confirm your order,%0a click on the link to and check your articles and press confirmed button. %0alink: {{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}"><?=$reciever_number?></a></td> 
+                <td><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$number?>&text=Assalamualaikum, {{$lists->first_name}},%0a I am from Brandhub,%0a Please confirm your order,%0a click on the link to and check your articles and press confirmed button. %0alink: {{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}"><?=$number?></a></td> 
+                <td><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualaikum {{$lists->first_name}},%0aI am from Brandhub, check the details and verify.%0aName: {{$lists->first_name}}%0aNumber: {{$lists->receiver_number}}%0aAddress: {{$lists->reciever_address}}%0acity: {{$lists->cities->name}}%0aCOD: {{$lists->cod_amount}}"><?=$number?></a></td> 
                 <td>{{$lists->description}}</td> 
                 <td>{{$lists->reciever_address}}</td>
                 <td>{{$lists->price}}</td>  

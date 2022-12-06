@@ -30,32 +30,35 @@
         </div>
         
     </div> 
-    <div style="width: 600px; margin: auto;">
+    <div style="width: 100%; margin: auto;">
     <canvas id="myChart1"></canvas>
 </div>
 
 
 
-</div>
-
+</div> 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-  const labels = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-  ];
+//   const labels = [
+//     'January',
+//     'February',
+//     'March',
+//     'April',
+//     'May',
+//     'June',
+//   ];
+  
+  const labels = {!! json_encode($cities_name) !!};
+  
 
   const data = {
     labels: labels,
     datasets: [{
-      label: 'My First dataset',
+      label: 'Order Delivered in Cities',
       backgroundColor: 'rgb(255, 99, 132)',
       borderColor: 'rgb(255, 99, 132)',
-      data: [0, 10, 5, 2, 20, 30, 45],
+    //   data: [0, 10, 5, 2, 20, 30, 45],
+      data :{!! json_encode($total_city_orders)!!},
     }]
   };
 

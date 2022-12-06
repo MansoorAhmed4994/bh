@@ -5,6 +5,8 @@ use CountryState;
 use Illuminate\Http\Request;
 use App\Models\Client\Bhvareesha; 
 use App\Models\Client\Customers; 
+
+use App\Models\Client\ManualOrders;
 use DB;
 use Carbon\Carbon;
 
@@ -36,8 +38,23 @@ class HomeController extends Controller
                  ->whereBetween('updated_at', [$from_date, $to_date])
                  ->groupBy('status')
                  ->get();
-        
-        
+                 
+         $order_report_by_cities = ManualOrders::leftJoin('cities', 'manual_orders.cities_id', '=', 'cities.id')->
+         select('cities.name', DB::raw('count(*) as total')) 
+         ->groupBy('cities.name')->get();
+         ;
+                //  dd($order_report_by_cities);
+        // $cities_name=[];
+        $cities_name = array();
+        $total_city_orders = array();
+        // $total_orders=[];
+        foreach($order_report_by_cities as $city)
+        {
+            $cities_name[] = $city->name;
+            $total_city_orders[] = $city->total;
+        }
+        // dd($cities_name);
+        // dd($order_report_by_cities->first());
         //  $list =DB::table('manual_orders')->orderBy('id', 'DESC')->whereBetween('created_at', [$from_date, $to_date])
         //   ->groupBy('status')
         //   ->select('status', DB::raw('count(*) as total'), DB::raw('sum(price) as amount'))
@@ -46,7 +63,7 @@ class HomeController extends Controller
           
          // dd($list);
         //if ($result->count()) { }
-        return view('dashboard')->with('data',$list);
+        return view('dashboard')->with(['data'=>$list,'cities_name'=>$cities_name,'total_city_orders'=>$total_city_orders]);
     }
     
     public function contact()

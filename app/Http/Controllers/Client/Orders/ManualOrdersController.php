@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\Client\ManualOrders;
 use App\Models\Riders;
 use App\Models\Inventory;
+use App\Models\Client\Cities;
 use App\Models\Order_details;
 use App\Models\Client\Customers;
 use Illuminate\Support\Facades\File; 
@@ -44,7 +45,28 @@ class ManualOrdersController extends Controller
     
     public function OrderFieldList()
     {
-        return array('manual_orders.consignment_id','manual_orders.advance_payment','manual_orders.cod_amount','manual_orders.id','manual_orders.customers_id','manual_orders.description','manual_orders.receiver_number','customers.first_name','manual_orders.reciever_address','customers.last_name','customers.number','customers.address','manual_orders.price','manual_orders.images','manual_orders.total_pieces','manual_orders.date_order_paid','manual_orders.status','manual_orders.created_at','manual_orders.updated_at','manual_orders.status_reason'); 
+        return array(
+            'manual_orders.id',
+            'customers.first_name',
+            'customers.last_name',
+            'customers.number',
+            'customers.address',
+            'manual_orders.consignment_id',
+            'manual_orders.advance_payment',
+            'manual_orders.cod_amount',
+            'manual_orders.customers_id',
+            'manual_orders.description',
+            'manual_orders.receiver_number',
+            'manual_orders.reciever_address',
+            'manual_orders.cities_id',
+            'manual_orders.price',
+            'manual_orders.images',
+            'manual_orders.total_pieces',
+            'manual_orders.date_order_paid',
+            'manual_orders.status',
+            'manual_orders.created_at',
+            'manual_orders.updated_at',
+            'manual_orders.status_reason'); 
 
     }
     
@@ -59,18 +81,18 @@ class ManualOrdersController extends Controller
         {
             $search_test = $request->search_text;
             $order_status = $request->order_status;
-            $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.id',$order_id)
+            $list = ManualOrders::leftJoin('customers', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.id',$order_id)
             ->select($this->OrderFieldList())
             ->paginate(20);
         }
         else if($search_text != '')
         {
-        $search_test = $request->search_text;
-        
-        $order_status = $request->order_status;
-        $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->
-        where(function ($query) use ($search_test) {
-            $query->where('customers.first_name','like',$search_test.'%')
+            $search_test = $request->search_text;
+            
+            $order_status = $request->order_status;
+            $list = ManualOrders::leftJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->
+            where(function ($query) use ($search_test) {
+                $query->where('customers.first_name','like',$search_test.'%')
                     ->orWhere('customers.first_name','like','%'.$search_test.'%')
                     ->orWhere('customers.first_name','like','%'.$search_test)
                     ->orWhere('customers.last_name','like',$search_test.'%')
@@ -89,9 +111,9 @@ class ManualOrdersController extends Controller
         }
         else if($order_status != '')
         {
-            $query = Customers::query();
+            $query = ManualOrders::query();
             
-            $query = $query->rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id');
+            $query = $query->leftJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id');
             if($order_status != 'all')
             {
                 $query = $query->where('manual_orders.status',$order_status);
@@ -102,13 +124,14 @@ class ManualOrdersController extends Controller
         }
         else
         {
-            $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')
+            $list = ManualOrders::leftJoin('customers', 'manual_orders.customers_id', '=', 'customers.id')
             ->where('manual_orders.status','pending')
             ->orderBy('manual_orders.id', 'DESC')
             ->select($this->OrderFieldList())
             ->paginate(20);
         }
-        //dd($list);
+        // dd(ManualOrders::find(1)->cities->id);
+        // dd($list[0]->cities->name);
         return view('client.orders.manual-orders.list')->with('list',$list); 
     }
     
@@ -129,7 +152,6 @@ class ManualOrdersController extends Controller
             
         // dd($views_customer_data);
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -272,7 +294,7 @@ class ManualOrdersController extends Controller
         //$manual_orders = new ManualOders();
         $ManualOrder->receiver_name = $request->receiver_name;
         $ManualOrder->receiver_number = $request->receiver_number;
-        $ManualOrder->city = $request->city;
+        $ManualOrder->cities_id = $request->city;
         $ManualOrder->reciever_address = $request->reciever_address;  
         if($images != null)
         {
@@ -676,7 +698,7 @@ class ManualOrdersController extends Controller
             $data['$shipper_reference_number_1'] = $reference_number;
             $ManualOrder->receiver_name = $receiver_name;
             $ManualOrder->receiver_number = $receiver_number;
-            $ManualOrder->city = $city;
+            $ManualOrder->cities_id = $city;
             $ManualOrder->reciever_address = $reciever_address;
             $ManualOrder->total_pieces = $total_pieces;
             $ManualOrder->weight = $weight;
@@ -825,6 +847,16 @@ class ManualOrdersController extends Controller
     
     public function testing()
     {
+        $cities_arr= [];
+        
+        $cities = $this->get_trax_cities();
+        // dd($cities[0]);
+        foreach($cities as $city)
+        {
+            $cities_arr[] = ['id'=>$city->id,'name'=>$city->name];
+        }
+        Cities::insert($cities_arr);
+        dd($cities_arr);
         $data= '20222319352805'; 
         // $url = "https://sonic.pk/api/shipment/payments?tracking_number=20217219406041";
         // $headers = ['Authorization:'.env('TRAX_API_KEY'), 'Accepts:' . 'application/json',"real:json content"];

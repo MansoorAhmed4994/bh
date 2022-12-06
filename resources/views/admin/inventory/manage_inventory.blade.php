@@ -96,42 +96,6 @@ var order_link='';
         table_data =  "<div class='table-div'>"+tbody_data+"</div>"; 
         document.getElementsByClassName('table-container')[0].innerHTML = table_data;
         
-        // for(var i=0; i<tr.length;i++)
-        // {
-        //     tr[i].remove();
-        // }
-        
-        // for(var i=0; i<table.length;i++)
-        // {
-            
-        //     document.getElementsByClassName('table-container')[0].innerHTML =  "<div class='col-sm-12 row table-div'>"+table[i].innerHTML+"</div>";
-        //     // table[i].classList.add("col-sm-12");
-        //     // table[i].classList.add("row");
-        // }
-         
-        
-        // for(var i=0; i<tbody.length;i++)
-        // {
-            
-        //     document.getElementsByClassName('table-div')[0].innerHTML = "<div class='col-sm-12 tbody-div justify-content-around'>"+tbody[i].innerHTML+"</div>";
-        //     tbody[i].remove();
-        //     // tbody[i].classList.add("col-sm-12");
-        //     // tbody[i].classList.add("justify-content-around");
-        // }
-        
-        // f
-        
-        // 
-        
-        // for(var i=0; i<td.length;i++)
-        // {
-        //     if(td[i].querySelector("img") != null)
-        //     {
-        //         td[i].innerHTML = "<div class='img-scroll-box tr-div'>"+td[i].innerHTML+"</div>";
-        //     }
-        //     td[i].classList.add("td");
-        // }
-        //td.classList.add("td");
     }
     
     function checkAll(bx) {
@@ -172,7 +136,7 @@ var order_link='';
             if(sku !=''&& name !='' && stock_status !='' && qty !='' && sale > 0 && cost > 0)
             {
                 $.ajax({
-                    url: base_url + '/admin/inventory', 
+                    url: base_url + '/admin/inventory/store', 
                   headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },

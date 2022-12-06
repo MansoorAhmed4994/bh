@@ -18,7 +18,7 @@ class CreateManualOrdersTable extends Migration
             $table->integer('customers_id')->unsigned();
             $table->string('receiver_name')->nullable();
             $table->string('receiver_number')->nullable();
-            $table->string('city')->nullable(); 
+            $table->bigInteger('cities_id')->nullable(); 
             $table->string('reciever_address')->nullable();
             $table->string('order_delivery_location')->nullable();
             $table->text('images',100)->nullable();

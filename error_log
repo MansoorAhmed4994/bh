@@ -72,3 +72,6 @@
 [01-Dec-2022 21:15:56 UTC] PHP Fatal error:  Access level to App\Models\Inventory::$timestamps must be public (as in class Illuminate\Database\Eloquent\Model) in /home/desenado/manualordersstaging.brandhub.com.pk/app/Models/Inventory.php on line 22
 [01-Dec-2022 21:16:36 UTC] PHP Fatal error:  Access level to App\Models\Products::$timestamps must be public (as in class Illuminate\Database\Eloquent\Model) in /home/desenado/manualordersstaging.brandhub.com.pk/app/Models/Products.php on line 28
 [01-Dec-2022 21:23:11 UTC] PHP Fatal error:  Trait 'App\Models\Notifiable' not found in /home/desenado/manualordersstaging.brandhub.com.pk/app/Models/Products.php on line 7
+[06-Dec-2022 19:05:34 UTC] PHP Fatal error:  Cannot use [] for reading in /home/desenado/manualordersstaging.brandhub.com.pk/app/Http/Controllers/Client/Orders/ManualOrdersController.php on line 829
+[06-Dec-2022 19:05:55 UTC] PHP Fatal error:  Cannot use [] for reading in /home/desenado/manualordersstaging.brandhub.com.pk/app/Http/Controllers/Client/Orders/ManualOrdersController.php on line 829
+[06-Dec-2022 19:06:06 UTC] PHP Fatal error:  Cannot use [] for reading in /home/desenado/manualordersstaging.brandhub.com.pk/app/Http/Controllers/Client/Orders/ManualOrdersController.php on line 829
