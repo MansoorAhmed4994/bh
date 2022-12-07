@@ -510,12 +510,13 @@ var order_link='';
                 <th scope="col">Consignment.Id</th>
                 <th scope="col">Ord.ID</th>
                 <th scope="col">F.Name</th> 
-                <th scope="col">Rec.Number</th>
-                <th scope="col">Number</th> 
+                <th scope="col">Rec.Phone</th>
+                <th scope="col">Cus.Phone</th>  
+                <th scope="col">Send Msg</th> 
                 <th scope="col">Description</th>
                 <th scope="col">Address</th>
                 <th scope="col">Price</th>
-                <th scope="col">Advance Payment</th>
+                <th scope="col">Adv.Payment</th>
                 <th scope="col">COD</th>
                 <th scope="col">OD Y/N</th>
                 <th scope="col">cr.Date</th>
@@ -593,7 +594,7 @@ var order_link='';
                 ?>
                 <td><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualikum {{$lists->first_name}},%0a I am from Brandhub,%0a Please confirm your order,%0a click on the link to and check your articles and press confirmed button. %0alink: {{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}"><?=$reciever_number?></a></td> 
                 <td><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$number?>&text=Assalamualaikum, {{$lists->first_name}},%0a I am from Brandhub,%0a Please confirm your order,%0a click on the link to and check your articles and press confirmed button. %0alink: {{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}"><?=$number?></a></td> 
-                <td><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualaikum {{$lists->first_name}},%0aI am from Brandhub, check the details and verify.%0aName: {{$lists->first_name}}%0aNumber: {{$lists->receiver_number}}%0aAddress: {{$lists->reciever_address}}%0acity: {{$lists->cities->name}}%0aCOD: {{$lists->cod_amount}}"><?=$number?></a></td> 
+                <td><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualaikum {{$lists->first_name}},%0aI am from Brandhub, check the details and verify.%0aName: {{$lists->first_name}}%0aNumber: {{$lists->receiver_number}}%0aAddress: {{$lists->reciever_address}}%0acity: @if(isset($lists->cities->name))?$lists->cities->name@else '' @endif %0aCOD: {{$lists->cod_amount}}">Send Confirmation msg</a></td> 
                 <td>{{$lists->description}}</td> 
                 <td>{{$lists->reciever_address}}</td>
                 <td>{{$lists->price}}</td>  

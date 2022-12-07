@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;use PragmaRX\Countries\Package\Countries;
+use App\Models\Client\ManualOrders;
 use DB;
 use Carbon\Carbon;
 
@@ -56,6 +57,19 @@ class DashboardController extends Controller
                  ->groupBy('status')
                  ->get(); 
                  
+            $order_report_by_cities = ManualOrders::leftJoin('cities', 'manual_orders.cities_id', '=', 'cities.id')->
+            select('cities.name', DB::raw('count(*) as total'))
+            ->whereBetween('created_at', [$from_date, $to_date])
+            ->groupBy('cities.name')->havingRaw('COUNT(*) > 10')->get();
+            
+            $cities_name = array();
+            $total_city_orders = array();
+            // $total_orders=[];
+            foreach($order_report_by_cities as $city)
+            {
+                $cities_name[] = $city->name;
+                $total_city_orders[] = $city->total;
+            }
             
         
         
@@ -131,7 +145,9 @@ class DashboardController extends Controller
             'date_from'=> $from_date,
             'date_to'=>$to_date,
             'remaining_invertory'=>$remaining_invertory,
-            'inventories'=>$inventory
+            'inventories'=>$inventory,
+            'cities_name'=>$cities_name,
+            'total_city_orders'=>$total_city_orders,
             ]);
         // return view('admin.dashboard');
         
