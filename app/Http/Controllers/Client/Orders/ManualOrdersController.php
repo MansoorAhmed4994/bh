@@ -90,7 +90,7 @@ class ManualOrdersController extends Controller
             $search_test = $request->search_text;
             
             $order_status = $request->order_status;
-            $list = ManualOrders::leftJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->
+            $list = ManualOrders::leftJoin('customers', 'manual_orders.customers_id', '=', 'customers.id')->
             where(function ($query) use ($search_test) {
                 $query->where('customers.first_name','like',$search_test.'%')
                     ->orWhere('customers.first_name','like','%'.$search_test.'%')
@@ -113,7 +113,7 @@ class ManualOrdersController extends Controller
         {
             $query = ManualOrders::query();
             
-            $query = $query->leftJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id');
+            $query = $query->leftJoin('customers', 'manual_orders.customers_id', '=', 'customers.id');
             if($order_status != 'all')
             {
                 $query = $query->where('manual_orders.status',$order_status);
