@@ -90,7 +90,7 @@ class TraxController extends Controller
             $data['$shipper_reference_number_1'] = $reference_number;
             $ManualOrder->receiver_name = $receiver_name;
             $ManualOrder->receiver_number = $receiver_number;
-            $ManualOrder->city = $city;
+            $ManualOrder->cities_id = $city;
             $ManualOrder->reciever_address = $reciever_address;
             $ManualOrder->total_pieces = $total_pieces;
             $ManualOrder->weight = $weight;
