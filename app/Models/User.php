@@ -72,4 +72,17 @@ class User extends Authenticatable
         return $this->belongTo(Role::class,'name');
         
     }
+    
+    public function userpages()
+    {
+        return $this->hasMany(Page::class,'name');
+        
+    }
+    
+    
+
+    public function page_permission()
+    {
+        return $this->belongsToMany(Page::class);
+    }
 }

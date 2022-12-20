@@ -18,7 +18,7 @@ class CreatePagesTable extends Migration
             $table->string('name')->nullable();
             $table->string('slug')->nullable();
             $table->string('route_name')->nullable();
-            $table->string('link')->nullable(); 
+            $table->string('link')->nullable();  
             $table->timestamps();
             $table->bigInteger('created_by');
             $table->bigInteger('updated_by');

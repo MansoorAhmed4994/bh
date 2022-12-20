@@ -137,6 +137,7 @@
                         @can ('manage-users')
                         <ul class="dropdown-menu">
                             <li> <a class="dropdown-item" href="{{route('admin.user.index')}}"> List</a></li>
+                            <li> <a class="dropdown-item" href="{{route('register')}}" target="_blank"> Register</a></li>
                         </ul>
                         @endcan
                         
