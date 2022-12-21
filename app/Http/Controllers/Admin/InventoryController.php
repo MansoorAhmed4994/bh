@@ -295,6 +295,7 @@ class InventoryController extends Controller
      */
     public function edit(Inventory $inventory)
     { 
+        // dd($inventory);
         $categories = Category::all();
         return view('admin.inventory.edit')->with(['inventory'=>$inventory,'categories'=> $categories]);
         

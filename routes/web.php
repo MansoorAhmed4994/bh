@@ -93,7 +93,7 @@ Route::group(['prefix' => 'trax/', 'namespace' => 'Shipment', 'middleware' => 'a
 Route::group(['prefix' => 'admin/', 'namespace' => 'Admin', 'middleware' => 'auth:user,admin' ],function(){
     
     //Inventory view
-    Route::any('inventory/{status?}/{date_from?}/{date_to?}', 'InventoryController@index')->name('inventory.index');
+    Route::any('inventory/list/{status?}/{date_from?}/{date_to?}', 'InventoryController@index')->name('inventory.index');
     Route::post('inventory/getproduct', 'InventoryController@getproduct')->name('inventory.get.product');
     
     //Inventory create
