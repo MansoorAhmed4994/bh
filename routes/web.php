@@ -116,6 +116,11 @@ Route::group(['prefix' => 'admin/', 'namespace' => 'Admin', 'middleware' => 'aut
     //Accounts edit
     Route::any('accounts/update_shipment_payments/{id}/{order_id}', 'AccountsController@UpdateShipmentPaymentStatus')->name('update.shipment.status');
     Route::post('update_bulk_shipment_payments/', 'AccountsController@UpdateBulkShipmentPaymentStatus')->name('update.bulk.shipment.status');
+    
+    //cron
+    Route::get('crone_update_shipment_payments/', 'AccountsController@CroneUpdateShipmentPaymentStatuss')->name('crone.update.shipment.payment.status');
+    Route::get('crone_update_shipment_tracking/', 'AccountsController@CroneUpdateShipmentTrackingStatus')->name('crone.update.shipment.tracking.status');
+    Route::get('crone_update_fare/', 'AccountsController@CroneUpdateFare')->name('crone.update.fare');
      
 });
 
@@ -193,7 +198,3 @@ Route::group(['prefix' => 'riders', 'as'=> 'riders.'],function(){
 
 
 
-//cron
-    Route::get('crone_update_shipment_payments/', 'AccountsController@CroneUpdateShipmentPaymentStatuss')->name('crone.update.shipment.payment.status');
-    Route::get('crone_update_shipment_tracking/', 'AccountsController@CroneUpdateShipmentTrackingStatus')->name('crone.update.shipment.tracking.status');
-    Route::get('crone_update_fare/', 'AccountsController@CroneUpdateFare')->name('crone.update.fare');
