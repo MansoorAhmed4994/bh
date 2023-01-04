@@ -11,7 +11,7 @@ class ManualOrders extends Model
 {
     public function customers()
     {
-        return $this->belongsTo(Customers::class);
+        return $this->belongsTo(Customers::class,'customers_id','id');
     }
     
     

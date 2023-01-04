@@ -506,8 +506,8 @@ class ManualOrdersController extends Controller
     public function previouse_order_history(Request $request)
     {
         $data='';
-        $ManualOrders = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->select('manual_orders.id','manual_orders.customers_id','manual_orders.receiver_number','customers.first_name','manual_orders.created_at','manual_orders.status','manual_orders.reciever_address')->where('customers.number',$request->number)->get();
-        //dd($ManualOrders->first());
+        $ManualOrders = ManualOrders::leftJoin('customers', 'manual_orders.customers_id', '=', 'customers.id')->select('manual_orders.id','manual_orders.customers_id','manual_orders.receiver_number','customers.first_name','manual_orders.created_at','manual_orders.status','manual_orders.reciever_address','customers.address')->where('customers.number',$request->number)->get();
+        // dd($ManualOrders->first()->customers->address);
         $data =  '
          <thead>
                 <tr>
@@ -537,7 +537,7 @@ class ManualOrdersController extends Controller
             $data .= '</tbody>';
         //dd($data);
         
-        return response()->json(['messege' => $data,'field_values'=> $ManualOrders->first()]); 
+        return response()->json(['messege' => $data,'field_values'=> $ManualOrders->first(),'address'=>$ManualOrders->first()->customers->address]); 
         // return view('client.orders.manual-orders.view')->with('ManualOrder',$ManualOrder);
     }
     

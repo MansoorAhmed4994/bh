@@ -41,7 +41,7 @@
                     success: function(e)
                     {
                         $('#first_name').val(e.field_values.first_name);
-                        $('#address').val(e.field_values.reciever_address);
+                        $('#address').val(e.address);
                         $('#previouse_order_detail').html(e.messege),  
                         console.log(e.messege);
                         
