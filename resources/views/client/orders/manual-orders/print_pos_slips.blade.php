@@ -42,16 +42,17 @@ table
   -moz-box-sizing: border-box;
 }
 .main-page {
-  width: 210mm;
-  min-height: 297mm;
-  margin: 10mm auto;
-  background: white;
-  box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
+    width: 100mm;
+    min-height: 297mm;
+    margin: 10mm auto;
+    background: white;
+    box-shadow:
 }
 .sub-page {
-  padding: 20px;
-  height: auto;
-  page-break-after: always;
+    padding: 20px;
+    float: left;
+    height: auto;
+    page-break-after: always;
 }
 @page {
   size: A4;

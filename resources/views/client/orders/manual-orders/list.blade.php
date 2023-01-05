@@ -148,18 +148,18 @@ var order_link='';
     }
         
     $( document ).ready(function() { 
-    $('.pop').on('click', function() {
-        // alert($(this).attr('src'));
-        $('.imagepreview').attr('src', $(this).attr('src'));
-        $('#imagemodal').modal('show');   
-    });   
+        $('.pop').on('click', function() {
+            // alert($(this).attr('src'));
+            $('.imagepreview').attr('src', $(this).attr('src'));
+            $('#imagemodal').modal('show');   
+        });   
                 
                 
             
         $('#save_order_status_and_price').on('click',function(){
         
         
-        $("body").addClass("loading");
+        
         let receiver_name = $('#receiver_name').val();
         let receiver_number = $('#receiver_number').val();
         let reciever_address = $('#reciever_address').val();
@@ -173,11 +173,14 @@ var order_link='';
         {
             if(status_reason == '')
             {
+                
                 alert("please give Reason to "+order_status);
+                // $("body").removeClass("loading");
                 return;
             }
             
         }
+        $("body").addClass("loading");
     //console.log(status_reason);
         $.ajax({
           url: base_url + '/client/orders/ManualOrders/dispatch-order-edit/'+dispatch_order_id,
@@ -224,7 +227,7 @@ var order_link='';
                     window.open(link, '_blank');
                      
                 } 
-                
+                $("#dispatch-succes-noti").css("display", "block");
                 
             }
             $("body").removeClass("loading");
