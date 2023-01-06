@@ -5,36 +5,36 @@
 
 @section('content') 
 <style>
-.td-div {
-    float: left;
-    width: 100%;
-    position: relative;
-    background: white;
-    margin-top: 7px;
-    border-radius: 10px;
-    text-align: center;
-    border-bottom: 1px solid #ccc7c7;
-    padding: 5px 0;
-}
-.tr-div{
-    float: left;
-    border: 1px solid black;
-    border-radius: 15px;
-    box-shadow: 1px 1px 10px 1px;
-    padding: 13px;
-    
-} 
-.img-scroll-box {
-    height: auto;
-    float: left;
-    overflow: auto;
-    white-space: nowrap;
-}
-.parcel-img {
-    border: 8px solid red;
-    width: 80%;
-}   white-space: nowrap;
-}
+    .td-div {
+        float: left;
+        width: 100%;
+        position: relative;
+        background: white;
+        margin-top: 7px;
+        border-radius: 10px;
+        text-align: center;
+        border-bottom: 1px solid #ccc7c7;
+        padding: 5px 0;
+    }
+    .tr-div{
+        float: left;
+        border: 1px solid black;
+        border-radius: 15px;
+        box-shadow: 1px 1px 10px 1px;
+        padding: 13px;
+        
+    } 
+    .img-scroll-box {
+        height: auto;
+        float: left;
+        overflow: auto;
+        white-space: nowrap;
+    }
+    .parcel-img {
+        border: 8px solid red;
+        width: 80%;
+       white-space: nowrap;
+    }
 </style>
 <script  type="application/javascript">
 var base_url = '<?php echo e(url('/')); ?>';
@@ -475,7 +475,7 @@ var order_link='';
   <!--<button type="button" class="btn btn-primary" data-target="myModalLabel" class="dropdown-item">Dispatched</button> -->
   
   
-    <form class="form-inline" method="post" action="{{ route('ManualOrders.order.action') }}">
+    <form class="form-inline" method="post"  target="_blank" action="{{ route('ManualOrders.order.action') }}">
       @csrf
     <input type="hidden" name="order_ids" id="order_ids">
     <div class="form-group">

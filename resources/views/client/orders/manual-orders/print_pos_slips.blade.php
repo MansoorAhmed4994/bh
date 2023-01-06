@@ -1,5 +1,6 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml"><head><style>
+<?php require 'vendor/autoload.php';?>
 table, td, th {
     /*border: 1px solid black;*/
 	font-family:Calibri;
@@ -14,18 +15,18 @@ td h5
      
     text-align: left!important;
     border: none!important;
-    font-size: 2em;
+    font-size: 20px;
 }
 td h4
 {
      
     text-align: right!important;
     border: none!important;
-    font-size: 2em;
+        font-size: 20px;
 }
 table
 {
-    width: 100%;
+    width: 89mm;
     border: 1px solid black;
 }
     
@@ -53,6 +54,22 @@ table
     float: left;
     height: auto;
     page-break-after: always;
+    margin-bottom: 30px;
+}
+
+tfoot tr td h5 {
+    float: left;
+    font-size: 20px;
+    margin-left: 5px;
+}
+
+td:first-child {
+    width: 126px;
+}
+
+tfoot tr td input {
+    float: left; 
+    margin-top: 5px;
 }
 @page {
   size: A4;
@@ -110,25 +127,68 @@ table
         
                 <table>
                     <tbody>
-                        <tr>
-                            <td colspan="2" style="padding: 10px;">
-                                <img src="data:image/png;base64,<?php echo DNS1D::getBarcodePNG((string)$ManualOrder->id, 'C39') ?>" alt="barcode" width="200"  />
+                        <tr> 
+                                @php
+                                    $generatorPNG = new Picqer\Barcode\BarcodeGeneratorPNG();
+                                @endphp
+                                   
+                              
+                            <td colspan="2" style="padding: 10px;"> 
+                                <!--<img src="data:image/png;base64,-->
+                                <?php 
+                                // echo DNS1D::getBarcodeSVG((string)$ManualOrder->id, 'C39') 
+                                
+                                ?>
+                                <!--alt="barcode" width="200"  />-->
+                                <img src="data:image/png;base64,{{ base64_encode($generatorPNG->getBarcode($ManualOrder->id, $generatorPNG::TYPE_CODE_128)) }}" style="width:80%">
                     			<span class="notranslate"><h3>{{$ManualOrder->id}}</h3></span></tr>
                             </td>
                         <tr>
-                            <td><h5>Name: </h5></td><td><h4>{{$ManualOrder->first_name}}</h4></td> 
+                            <td><h5>Name: </h5></td>
+                            <td><h4>{{$ManualOrder->first_name}}</h4></td> 
                         </tr>
                         <tr>
-                            <td><h5>Number: </h5></td><td><h4>{{$ManualOrder->receiver_number}}</h4></td> 
+                            <td><h5>Number: </h5></td>
+                            <td><h4>{{$ManualOrder->receiver_number}}</h4></td> 
                         </tr>
                         <tr>
-                            <td><h5>Address: </h5></td><td><h4>{{$ManualOrder->reciever_address}}</h4></td> 
-                        </tr>
-                        <tr>
-                            <td><h5>price: </h5></td><td><h4>{{$ManualOrder->price}}</h4></td> 
+                            <td><h5>Address: </h5></td>
+                            <td><h4>{{$ManualOrder->reciever_address}}</h4></td> 
                         </tr>
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <td><h5>Status </h5></td>
+                            <td><h4>Reason</h4></td> 
+                        </tr>
+                        <tr>
+                            <td> <input type="checkbox"> <h5>Pending </h5></td>
+                            <td> </td> 
+                        </tr>
+                        <tr>
+                            <td> <input type="checkbox"> <h5>Prepared </h5></td>
+                            <td> </td> 
+                        </tr>
+                        <tr>
+                            <td> <input type="checkbox"> <h5>Incomplete </h5></td>
+                            <td> </td> 
+                        </tr>
+                        <tr>
+                            <td> <input type="checkbox"> <h5>Not.Resp </h5></td>
+                            <td> </td> 
+                        </tr>
+                        <tr>
+                            <td> <input type="checkbox"> <h5>Hold </h5></td>
+                            <td> </td> 
+                        </tr>
+                        <tr>
+                            <td> <input type="checkbox"> <h5>Confirmed </h5></td>
+                            <td> </td> 
+                        </tr> 
+                    </tfoot>
                 </table>
+                <br><br><br><br><br><br><br>
+                <center><h5>Brandhub</h5></center>
              
             
              
@@ -209,4 +269,7 @@ table
     
     
     </body>
+    <script>
+    window.print();
+    </script>
 </html>

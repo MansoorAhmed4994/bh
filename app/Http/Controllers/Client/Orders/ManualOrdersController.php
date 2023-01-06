@@ -22,6 +22,8 @@ use App\Traits\ManualOrderTraits;
 use Carbon\Carbon;
 use DB;
 
+use Illuminate\Support\Picqer\Barcode;
+
 class ManualOrdersController extends Controller 
 { 
     private $images_path =  'storage/images/orders/manual-orders/';
@@ -447,7 +449,9 @@ class ManualOrdersController extends Controller
         }
         elseif($order_action == 'print_pos_slips')
         {
-             
+//              require 'vendor/autoload.php'; 
+// echo $generator->getBarcode('081231723897', $generator::TYPE_CODE_128);
+// dd();
             $explode_id = explode(',', $order_ids); 
             $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->whereIn('manual_orders.id',$explode_id)->get();
             //dd($ManualOrder);
