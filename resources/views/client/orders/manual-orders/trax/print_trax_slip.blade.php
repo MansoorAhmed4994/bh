@@ -162,24 +162,8 @@ padding: 0px;
     
     
     </body>
-</html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-         
-        
     
-    </body>
+    <script>
+        window.print();
+    </script>
 </html>

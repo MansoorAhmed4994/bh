@@ -7,9 +7,13 @@
 
         var row_id="1";
         
-        
+       
         
     $( document ).ready(function() {
+        
+        
+        var cities =@json($cities);
+        $('.cities_dropdown').select2();
         
         $('#add_product_btn').on('click',function(e)
         {  
@@ -326,6 +330,7 @@
                         <!--    <input type="text" class="form-control" id="city @if($errors->get('city')) is-invalid @endif"   name="city" placeholder="City" value="{{old('city')}}@if(isset($ManualOrder)){{$ManualOrder->city}}@endif"/>-->
                         <!--    <small id="city_error" class="form-text text-danger">@if($errors->get('city')) {{$errors->first('city')}} @endif</small>-->
                         <!--</div> -->
+                         
                         
                         <div class="form-group col-sm">
                             <label for="address">city</label>
@@ -333,7 +338,7 @@
                                 <option value="">Select City</option>
                                 @for($i=0 ; $i < sizeof($cities); $i++)
                                  
-                                    <option value="{{$cities[$i]->id}}" {{ ($cities[$i]->id == $ManualOrder->city) ? 'selected="selected"' : '' }}>{{$cities[$i]->name}}</option>
+                                    <option value="{{$cities[$i]->id}}" {{ ($cities[$i]->id == $ManualOrder->cities_id) ? 'selected="selected"' : '' }}>{{$cities[$i]->name}}</option>
                                     
                                 @endfor
                                 

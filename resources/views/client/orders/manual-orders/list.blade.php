@@ -146,6 +146,14 @@ var order_link='';
             get_checked_values();
         }
     }
+    
+    function change_price_popup_status()
+    {
+        let price = $('#price').val();
+        let advance_payment = $('#advance_payment').val();
+        let cod_amount = $('#cod_amount').val(price-advance_payment);
+        
+    }
         
     $( document ).ready(function() { 
         $('.pop').on('click', function() {
@@ -252,6 +260,7 @@ var order_link='';
     
     function change_order_status_and_price(val,status) 
     {   
+        $("body").addClass("loading");
         //alert('working');
         dispatch_order_id = val;
         order_status = status;
@@ -286,6 +295,7 @@ var order_link='';
                    //alert(str_array[i]);
                 }
                 $('#images_pop').html(images);
+                $("body").removeClass("loading");
                 
                 //alert(images);
                 
@@ -375,19 +385,19 @@ var order_link='';
             
                         <div class="form-group">
                             <label for="Number">price</label>
-                            <input type="text" class="form-control" value="0" id="price"  name="price" placeholder="Price" required>
+                            <input type="text" class="form-control" onkeyup="change_price_popup_status()" value="0" id="price"  name="price" placeholder="Price" required>
                             <small id="price_error" class="form-text text-danger"></small>
                         </div>
             
                         <div class="form-group">
                             <label for="Number">Advance Payment</label>
-                            <input type="text" class="form-control" value="" id="advance_payment"  name="advance_payment" placeholder="Advance Payment" required>
+                            <input type="text" class="form-control" onkeyup="change_price_popup_status()" id="advance_payment"  name="advance_payment" placeholder="Advance Payment" required>
                             <small id="advance_payment_error" class="form-text text-danger"></small>
                         </div>
             
                         <div class="form-group">
                             <label for="Number">COD Amount</label>
-                            <input type="text" class="form-control" value="" id="cod_amount"  name="cod_amount" placeholder="COD" required>
+                            <input type="text" class="form-control" value="" id="cod_amount"  name="cod_amount" placeholder="COD" readonly>
                             <small id="cod_amount_error" class="form-text text-danger"></small>
                         </div>
             
@@ -430,76 +440,86 @@ var order_link='';
   </div>
 </div>
 
-<nav class="navbar navbar-light bg-light">
-  <form class="form-inline" method="post" action="{{ route('ManualOrders.index') }}">
-      @csrf
-    <div class="form-group">
-        <input class="form-control mr-sm-2" type="search" name="search_order_id" placeholder="Search by Order id #" aria-label="Search">
+<nav class="navbar navbar-light bg-light"> 
+    <div class="col-sm-12">
+        <form class="form-inline" method="post" action="{{ route('ManualOrders.index') }}">
+        @csrf
+     
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-text"> 
+                        <input onclick="mobile_view()" type="checkbox">
+                    </div> 
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-sm">Mobile View</span>
+                    </div>
+                    
+                    <input class="input-group-text" type="search" name="search_order_id" placeholder="Search by Order id #" aria-label="Search">
+                    <input class="input-group-text" type="search" name="search_text" placeholder="Name OR Number" aria-label="Search">
+                    <select class="custom-select" aria-label="Default select example" name="order_by">
+                        <option selected value ="">Order By</option>
+                        <option value="manual_orders.id">Order ID</option>
+                        <option value="manual_orders.receiver_name">Reciever Name</option>
+                        <option value="orderpayments.receiver_number">Reciever Number</option>
+                        <option value="manual_orders.created_at">Created Order</option> 
+                        <option value="manual_orders.updated_at">Created Order</option> 
+                        <option value="manual_orders.status">Status</option>
+                    </select>
+                    <select class="custom-select" aria-label="Default select example" name="order_status">
+                        <option selected value ="">Order Status</option>
+                        <option value="all">All</option>
+                        <option value="pending">Pending</option>
+                        <option value="duplicate">Dulicate</option>
+                        <option value="prepared">Prepared</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="cancel">complete</option> 
+                        <option value="dispatched">Dispatched</option> 
+                        <option value="hold">Hold</option>
+                        <option value="incomplete">incomplete</option> 
+                        <option value="cancel">cancel</option> 
+                        <option value="return">return</option> 
+                        <option value="deleted">delete</option> 
+                        <option value="not responding"></option>  
+                    </select>
+                    <input class="input-group-text" type="date" name="date_from" id="date_from">
+                    <input class="input-group-text" type="date" name="date_to" id="date_to">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="submit">Search</button>
+                    </div>
+                </div>
+            </div>  
+        </form>
     </div>
-    
-    <div class="form-group">
-        <input class="form-control mr-sm-2" type="search" name="search_text" placeholder="Name OR Number" aria-label="Search">
+
+
+    <div class="col-sm-12 "> 
+        <form class="form-inline float-right" method="post"  target="_blank" action="{{ route('ManualOrders.order.action') }}">
+            @csrf
+            <div class="input-group">
+                <select class="form-select" aria-label="Default select example" name="order_action" required>
+                    <option selected >Select Action</option> 
+                    <option value="pending">Pending</option>
+                    <option value="prepared">Prepared</option>
+                    <option value="confirmed">Confirmed</option>
+                    <option value="cancel">complete</option> 
+                    <option value="dispatched">Dispatched</option> 
+                    <option value="hold">Hold</option>
+                    <option value="incomplete">incomplete</option> 
+                    <option value="print">Print </option>
+                    <option value="duplicate_orders">Duplicate Orders</option>
+                    <option value="print_mnp_slips">Print M&P Slips</option>
+                    <option value="print_trax_slips">Print Trax Slips</option>
+                    <option value="print_pos_slips">Print Pos Slips</option>
+                </select> 
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="submit">Submit</button> 
+                </div>
+            </div>
+            
+            <input type="hidden" name="order_ids" id="order_ids"> 
+        </form>  
     </div>
-    
-    <div class="form-group">
-        <select class="form-select" aria-label="Default select example" name="order_status">
-          <option selected value ="">Select Order Status</option>
-          <option value="all">All</option>
-          <option value="pending">Pending</option>
-          <option value="duplicate">Dulicate</option>
-          <option value="prepared">Prepared</option>
-          <option value="confirmed">Confirmed</option>
-          <option value="cancel">complete</option> 
-          <option value="dispatched">Dispatched</option> 
-          <option value="hold">Hold</option>
-          <option value="incomplete">incomplete</option> 
-          <option value="cancel">cancel</option> 
-          <option value="return">return</option> 
-          <option value="deleted">delete</option> 
-          <option value="not responding"></option>  
-        </select> 
-    </div>
-    
-    <div class="form-group">
-        <button class="form-control btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </div>
-    
-    <div class="form-group">
-        <input onclick="mobile_view()" type="checkbox">Mobile View
-    </div>
-    
-    
-    
-    
-  </form>
-  <!--<button type="button" class="btn btn-primary" data-target="myModalLabel" class="dropdown-item">Dispatched</button> -->
-  
-  
-    <form class="form-inline" method="post"  target="_blank" action="{{ route('ManualOrders.order.action') }}">
-      @csrf
-    <input type="hidden" name="order_ids" id="order_ids">
-    <div class="form-group">
-        <select class="form-select" aria-label="Default select example" name="order_action" required>
-          <option selected >Select Action</option> 
-          <option value="pending">Pending</option>
-          <option value="prepared">Prepared</option>
-          <option value="confirmed">Confirmed</option>
-          <option value="cancel">complete</option> 
-          <option value="dispatched">Dispatched</option> 
-          <option value="hold">Hold</option>
-          <option value="incomplete">incomplete</option> 
-          <option value="print">Print </option>
-          <option value="duplicate_orders">Duplicate Orders</option>
-          <option value="print_mnp_slips">Print M&P Slips</option>
-          <option value="print_trax_slips">Print Trax Slips</option>
-          <option value="print_pos_slips">Print Pos Slips</option>
-        </select> 
-    </div>
-    
-    <div class="form-group">
-        <button class="form-control btn btn-outline-success my-2 my-sm-0" type="submit">Submit</button>
-    </div>
-   </form>   
+         
 </nav>
 
 <div class="table-container" style="overflow-x:auto;"> 
@@ -648,6 +668,9 @@ var order_link='';
         });
         
     });
+    $(document).ready(function() {
+    $('.js-example-basic-multiple').select2();
+});
          
 </script>
 @endsection

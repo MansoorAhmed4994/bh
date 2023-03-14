@@ -94,6 +94,13 @@
                             {
                                 if(e.status == '1')
                                 {
+                                    var today = new Date();
+                                    var dd = String(today.getDate()).padStart(2, '0');
+                                    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                                    var yyyy = today.getFullYear();
+                                    
+                                    today = mm + '/' + dd + '/' + yyyy; 
+                                    document.getElementById("print_date").innerHTML = today;
                                     PrintElem();
                                 }
                                 else
@@ -290,8 +297,9 @@
                     
                     <thead>
                         <tr>
-                            <th scope="col" colspan="4"><h4><lable>Total Parcels: <span class="badge badge-secondary" id="total_parcels"></span></lable></h4></th>
-                            <th scope="col" colspan="4"><h4><lable>Total Amount: <span class="badge badge-secondary" id="total_amount"></span></lable></h4></th>
+                            <th scope="col" colspan="3"><h4><lable>Total Parcels: <span class="badge badge-secondary" id="total_parcels"></span></lable></h4></th>
+                            <th scope="col" colspan="3"><h4><lable>Total Amount: <span class="badge badge-secondary" id="total_amount"></span></lable></h4></th>
+                            <th  scope="col" colspan="2"><h4><lable>Printed on: <span class="badge badge-secondary" id="print_date"></span></lable></h4></th>
                         </tr>
                         <tr>
                             <th scope="col" class="delete_btn_class">#</th>

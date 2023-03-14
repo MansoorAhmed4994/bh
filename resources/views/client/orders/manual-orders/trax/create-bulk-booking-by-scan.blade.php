@@ -63,9 +63,14 @@
         
         function order_get_dispatch() {
             
-                $("body").addClass("loading"); 
+                 
                 
                     var id = document.getElementById('order_id').value; 
+                    if(id == '')
+                    {
+                        return;
+                    }
+                    $("body").addClass("loading");
                     $.ajax({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

@@ -1,4 +1,3 @@
-<!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
 
@@ -22,9 +21,11 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
     <!-- Styles -->
-    <link href="{{ asset('public/css/app.css') }}" rel="stylesheet" >
+    <link href="{{ asset('public/css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('public/css/style.css') }}" rel="stylesheet">
-    
+    <link  href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.css" rel="stylesheet"/> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js" ></script>
+   
     <style>
         @media all and (min-width: 992px) {
             .dropdown-menu li{ position: relative; 	}
@@ -46,7 +47,8 @@
         .dropdown-menu .dropdown-menu{
             margin-left:0.7rem; margin-right:0.7rem; margin-bottom: .5rem;
         }
-        }
+        }	
+        
         
         .overlay{
         display: none;
@@ -66,7 +68,7 @@
     }
     /* Make spinner image visible when body element has the loading class */
     body.loading .overlay{
-        display: block; 
+        display: block;
         z-index: 11111;
     }
     </style>
@@ -193,46 +195,46 @@
             @yield('content')
         </main>
     </div>
-    <script src="https://code.jquery.com/jquery-3.6.0.js">
-    
+</body>    
+
+    <script type="application/javascript">
         document.addEventListener("DOMContentLoaded", function(){
         // make it as accordion for smaller screens
-        if (window.innerWidth < 992) {
-
-        // close all inner dropdowns when parent is closed
-        document.querySelectorAll('.navbar .dropdown').forEach(function(everydropdown){
-            everydropdown.addEventListener('hidden.bs.dropdown', function () {
-            // after dropdown is hidden, then find all submenus
-                this.querySelectorAll('.submenu').forEach(function(everysubmenu){
-                // hide every submenu as well
-                everysubmenu.style.display = 'none';
+            if (window.innerWidth < 992) {
+    
+            // close all inner dropdowns when parent is closed
+            document.querySelectorAll('.navbar .dropdown').forEach(function(everydropdown){
+                everydropdown.addEventListener('hidden.bs.dropdown', function () {
+                // after dropdown is hidden, then find all submenus
+                    this.querySelectorAll('.submenu').forEach(function(everysubmenu){
+                    // hide every submenu as well
+                    everysubmenu.style.display = 'none';
+                    });
+                })
+            });
+    
+            document.querySelectorAll('.dropdown-menu a').forEach(function(element)
+            {                                                                                                        
+                    element.addEventListener('click', function (e) {
+                    let nextEl = this.nextElementSibling;
+                    if(nextEl && nextEl.classList.contains('submenu')) {	
+                    // prevent opening link if link needs to open dropdown
+                        e.preventDefault();
+                        if(nextEl.style.display == 'block')
+                        {
+                            nextEl.style.display = 'none';
+                        } 
+                        else 
+                        {
+                            nextEl.style.display = 'block';
+                        }
+    
+                    }
                 });
-            })
-        });
-
-        document.querySelectorAll('.dropdown-menu a').forEach(function(element)
-        {                                                                                                        
-                element.addEventListener('click', function (e) {
-                let nextEl = this.nextElementSibling;
-                if(nextEl && nextEl.classList.contains('submenu')) {	
-                // prevent opening link if link needs to open dropdown
-                e.preventDefault();
-                if(nextEl.style.display == 'block')
-                {
-                    nextEl.style.display = 'none';
-                } 
-                else 
-                {
-                    nextEl.style.display = 'block';
-                }
-
+              })
             }
-        });
-  })
-}
-// end if innerWidth
-}); 
-// DOMContentLoaded  end
+            // end if innerWidth
+        }); 
+        // DOMContentLoaded  end
     </script>
-</body>
 </html>

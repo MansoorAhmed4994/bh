@@ -1,7 +1,6 @@
 @extends('layouts.'.Auth::getDefaultDriver())
 @section('content') 
-<link  href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.css" rel="stylesheet"/> 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js" ></script>
+
 <script type="text/javascript">
 
     
@@ -40,9 +39,7 @@
                 document.getElementsByClassName("price_error[]")[i].innerHTML = 'error';
             }
         } 
-    }
-
-
+    } 
 
         var base_url = '<?php echo e(url('/')); ?>';
         function limit(element)
@@ -138,11 +135,12 @@
             
                         <div class="form-group col-sm">
                             <label for="address">city</label>
+                            
                             <select class="form-control @if($errors->get('city')) is-invalid @endif cities_dropdown city" id="city[]"  onchange="get_fare_list(<?=$count?>)" name="city[]" required>
                                 <option value="">Select City</option>
                                 @for($i=0 ; $i < sizeof($cities); $i++)
                                  
-                                    <option value="{{$cities[$i]->id}}" {{ ($cities[$i]->id == $ManualOrder->city) ? 'selected="selected"' : '' }}>{{$cities[$i]->name}}</option>
+                                    <option value="{{$cities[$i]->id}}" {{ ($cities[$i]->id == $ManualOrder->cities_id) ? 'selected="selected"' : '' }}>{{$cities[$i]->name}}</option>
                                     
                                 @endfor
                                 

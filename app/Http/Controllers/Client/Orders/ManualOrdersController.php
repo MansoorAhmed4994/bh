@@ -78,60 +78,57 @@ class ManualOrdersController extends Controller
         $order_id = $request->search_order_id;
         $search_text = $request->search_text;
         $order_status = $request->order_status;
+        $order_by = $request->order_by;
+        $query = ManualOrders::query();
+        $query = $query->leftJoin('customers', 'manual_orders.customers_id', '=', 'customers.id')->select($this->OrderFieldList());
         //dd($request);
+        
         if($order_id != '')
         {
-            $search_test = $request->search_text;
-            $order_status = $request->order_status;
-            $list = ManualOrders::leftJoin('customers', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.id',$order_id)
-            ->select($this->OrderFieldList())
-            ->paginate(20);
+            $query = $query->where('manual_orders.id',$order_id);
         }
         else if($search_text != '')
         {
-            $search_test = $request->search_text;
-            
-            $order_status = $request->order_status;
-            $list = ManualOrders::leftJoin('customers', 'manual_orders.customers_id', '=', 'customers.id')->
-            where(function ($query) use ($search_test) {
-                $query->where('customers.first_name','like',$search_test.'%')
-                    ->orWhere('customers.first_name','like','%'.$search_test.'%')
-                    ->orWhere('customers.first_name','like','%'.$search_test)
-                    ->orWhere('customers.last_name','like',$search_test.'%')
-                    ->orWhere('customers.last_name','like','%'.$search_test.'%')
-                    ->orWhere('customers.last_name','like','%'.$search_test)
-                    ->orWhere('customers.number','like','%'.$search_test) 
-                    ->orWhere('customers.number','like',$search_test.'%')
-                    ->orWhere('customers.number','like','%'.$search_test.'%')
-                    ->orWhere('manual_orders.id','like','%'.$search_test.'%')
-                    ->orWhere('manual_orders.consignment_id','like','%'.$search_test.'%');
-            })->where('manual_orders.status','like',$order_status.'%')
-            ->orderBy('manual_orders.id', 'DESC')
-            ->select($this->OrderFieldList())
-            ->paginate(20);
+            $query = $query->
+            where(function ($query) use ($search_text) {
+                $query->where('customers.first_name','like',$search_text.'%')
+                    ->orWhere('customers.first_name','like','%'.$search_text.'%')
+                    ->orWhere('customers.first_name','like','%'.$search_text)
+                    ->orWhere('customers.last_name','like',$search_text.'%')
+                    ->orWhere('customers.last_name','like','%'.$search_text.'%')
+                    ->orWhere('customers.last_name','like','%'.$search_text)
+                    ->orWhere('customers.number','like','%'.$search_text) 
+                    ->orWhere('customers.number','like',$search_text.'%')
+                    ->orWhere('customers.number','like','%'.$search_text.'%')
+                    ->orWhere('manual_orders.id','like','%'.$search_text.'%')
+                    ->orWhere('manual_orders.consignment_id','like','%'.$search_text.'%');
+            })->where('manual_orders.status','like',$order_status.'%');
             
         }
         else if($order_status != '')
         {
-            $query = ManualOrders::query();
-            
-            $query = $query->leftJoin('customers', 'manual_orders.customers_id', '=', 'customers.id');
             if($order_status != 'all')
             {
                 $query = $query->where('manual_orders.status',$order_status);
-            } 
-            $list = $query->orderBy('manual_orders.id', 'DESC')
-            ->select($this->OrderFieldList())
-            ->paginate(20); 
+            }  
         }
         else
         {
-            $list = ManualOrders::leftJoin('customers', 'manual_orders.customers_id', '=', 'customers.id')
-            ->where('manual_orders.status','pending')
-            ->orderBy('manual_orders.id', 'DESC')
-            ->select($this->OrderFieldList())
-            ->paginate(20);
+            $query = $query->where('manual_orders.status','pending');
         }
+        
+        if($order_by != '')
+        {
+            $query = $query->orderBy($order_by, 'ASC');
+        }
+        else
+        {
+            $query = $query->orderBy('manual_orders.id', 'DESC');
+        }
+        
+        
+        $list = $query->paginate(20);
+        // dd($query->get());
         // dd(ManualOrders::find(1)->cities->id);
         // dd($list[0]->cities->name);
         return view('client.orders.manual-orders.list')->with('list',$list); 

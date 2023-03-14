@@ -283,5 +283,8 @@ padding: 0px;
         <!--</form>-->
     
     
+    <script>
+    window.print();
+    </script>
     </body>
 </html>
