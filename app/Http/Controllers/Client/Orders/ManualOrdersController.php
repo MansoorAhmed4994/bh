@@ -79,6 +79,8 @@ class ManualOrdersController extends Controller
         $search_text = $request->search_text;
         $order_status = $request->order_status;
         $order_by = $request->order_by;
+        $date_from =  $request->date_from;
+        $date_to =  $request->date_to;
         $query = ManualOrders::query();
         $query = $query->leftJoin('customers', 'manual_orders.customers_id', '=', 'customers.id')->select($this->OrderFieldList());
         //dd($request);
@@ -115,6 +117,12 @@ class ManualOrdersController extends Controller
         else
         {
             $query = $query->where('manual_orders.status','pending');
+        }
+        
+        if($date_from != '' && $date_to != '')
+        {
+            $query = $query->whereBetween("manual_orders.created_at" ,[$date_from,$date_to]);
+            
         }
         
         if($order_by != '')
