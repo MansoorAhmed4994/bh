@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Customers extends Model
 {
-    public $timestamps = false;
+    
+    public $timestamps = true;
     protected $fillable = ['first_name','last_name','address','number','email','whatsapp_number','description','remarks','status','created_by','updated_by'];
     public function manual_orders()
     {

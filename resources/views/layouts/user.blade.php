@@ -122,6 +122,7 @@
                             <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Inventory</a>
                             <ul class="dropdown-menu">
                                 <li> <a class="dropdown-item" href="{{route('inventory.index')}}"> Manage Inventory </a></li> 
+                                <li> <a class="dropdown-item" href="{{route('inventory.pos')}}"> POS </a></li>
                             </ul> 
                         </li>
                         <li class="nav-item dropdown" id="shipment">

@@ -111,6 +111,9 @@
                             <ul class="dropdown-menu">
                                 <li> <a class="dropdown-item" href="{{route('ManualOrders.create')}}"> Add New order </a></li>
                                 <li> <a class="dropdown-item" href="{{route('ManualOrders.index')}}"> List</a></li>
+                                <li> <a class="dropdown-item" href="{{route('ManualOrders.dipatch.bulk.orders')}}">Dispatch Bulk Orders</a></li>
+                                <li> <a class="dropdown-item" href="{{route('ManualOrders.track.order')}}">Track</a></li>
+                                <li> <a class="dropdown-item" href="{{route('ManualOrders.print.slip.by.scan')}}">Prict Slip By Scan</a></li>
                 
                             </ul>
                         
@@ -120,6 +123,7 @@
                             <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Inventory</a>
                             <ul class="dropdown-menu">
                                 <li> <a class="dropdown-item" href="{{route('inventory.index')}}"> Manage Inventory </a></li> 
+                                <li> <a class="dropdown-item" href="{{route('inventory.pos')}}"> POS </a></li>
                             </ul> 
                         </li>
                         <li class="nav-item dropdown" id="shipment">

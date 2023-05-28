@@ -95,6 +95,7 @@ Route::group(['prefix' => 'admin/', 'namespace' => 'Admin', 'middleware' => 'aut
     //Inventory view
     Route::any('inventory/list/{status?}/{date_from?}/{date_to?}', 'InventoryController@index')->name('inventory.index');
     Route::post('inventory/getproduct', 'InventoryController@getproduct')->name('inventory.get.product');
+    Route::any('inventory/pos', 'InventoryController@pos')->name('inventory.pos');
     
     //Inventory create
     Route::post('inventory/store', 'InventoryController@store')->name('inventory.store');

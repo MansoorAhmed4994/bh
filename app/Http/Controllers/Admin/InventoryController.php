@@ -378,4 +378,9 @@ class InventoryController extends Controller
     {
         //
     }
+
+    public function pos()
+    {
+        return view('admin.inventory.return_inventory');
+    }
 }
