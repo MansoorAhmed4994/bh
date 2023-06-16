@@ -46,20 +46,20 @@ class DashboardController extends Controller
         
             $inventory = DB::table('inventories')
                  ->select('stock_status', DB::raw('sum(qty) as qty'), DB::raw('sum(cost) as cost'), DB::raw('sum(sale) as sale'))
-                 ->whereBetween('created_at', [$from_date, $to_date])
+                 ->whereBetween('updated_at', [$from_date, $to_date])
                  ->groupBy('stock_status')
                  ->get(); 
                  
                 //  dd($inventory);
             $list = DB::table('manual_orders')
                  ->select('status', DB::raw('count(*) as total'), DB::raw('sum(price) as amount'))
-                 ->whereBetween('created_at', [$from_date, $to_date])
+                 ->whereBetween('updated_at', [$from_date, $to_date])
                  ->groupBy('status')
                  ->get(); 
                  
             $order_report_by_cities = ManualOrders::leftJoin('cities', 'manual_orders.cities_id', '=', 'cities.id')->
             select('cities.name', DB::raw('count(*) as total'))
-            ->whereBetween('created_at', [$from_date, $to_date])
+            ->whereBetween('updated_at', [$from_date, $to_date])
             ->groupBy('cities.name')->havingRaw('COUNT(*) > 10')->get();
             
             $cities_name = array();
@@ -77,7 +77,7 @@ class DashboardController extends Controller
             ->select('manual_orders.payment_status', DB::raw('count(*) as total' ), DB::raw('sum(price-fare) as amount'), DB::raw('(sum(orderpayments.amount) ) as t_amount'), DB::raw('sum(fare) as fare'))
             ->leftJoin('orderpayments', 'orderpayments.order_id', '=', 'manual_orders.id')
             ->leftJoin('customers', 'customers.id', '=', 'manual_orders.customers_id')
-            ->whereBetween('manual_orders.created_at', [$from_date, $to_date]) 
+            ->whereBetween('manual_orders.updated_at', [$from_date, $to_date]) 
             ->where('manual_orders.consignment_id' ,'>','0') 
             ->groupBy('manual_orders.payment_status')
             ->get();
@@ -85,7 +85,7 @@ class DashboardController extends Controller
             $shipment_statuses = DB::table('manual_orders')
             ->select('shipment_tracking_status')
             ->groupBy('shipment_tracking_status')
-                ->whereBetween('manual_orders.created_at', [$from_date, $to_date])
+                ->whereBetween('manual_orders.updated_at', [$from_date, $to_date])
                 ->where('manual_orders.consignment_id' ,'>','0') 
             ->get();
             // dd($shipment_statuses);
@@ -99,7 +99,7 @@ class DashboardController extends Controller
                 ->select('manual_orders.payment_status', DB::raw('count(*) as total' ), DB::raw('sum(price-fare) as amount'))
                 ->leftJoin('orderpayments', 'orderpayments.order_id', '=', 'manual_orders.id')
                 ->leftJoin('customers', 'customers.id', '=', 'manual_orders.customers_id')
-                ->whereBetween('manual_orders.created_at', [$from_date, $to_date])
+                ->whereBetween('manual_orders.updated_at', [$from_date, $to_date])
                 ->where('manual_orders.consignment_id' ,'>','0') 
                 ->where('manual_orders.shipment_tracking_status' ,'=',$shipment_statuses->shipment_tracking_status) 
                 ->groupBy('manual_orders.payment_status')
