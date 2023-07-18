@@ -108,6 +108,7 @@
                 @else
                     <ul class="navbar-nav">
                         <li class="nav-item active"> <a class="nav-link" href="{{route('dashboard')}}">dashboard </a> </li>
+                        <li class="nav-item active"> <a class="nav-link" href="{{route('manualOrders.quick.search')}}">Quick Search </a> </li>
                         <li class="nav-item dropdown" id="myDropdown">
                             <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Manual Orders</a>
                             <ul class="dropdown-menu">

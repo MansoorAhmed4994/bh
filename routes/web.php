@@ -38,6 +38,8 @@ Route::group(['prefix' => 'client/orders/', 'namespace' => 'Client\Orders', 'mid
     Route::get('ManualOrders/status/order-list/{status}', 'ManualOrdersController@status_order_list')->name('ManualOrders.status.order.list'); 
     Route::post('ManualOrders/previouse/order-history', 'ManualOrdersController@previouse_order_history')->name('ManualOrders.previouse.order.history');
     Route::get('ManualOrders/dispatch-bulk-orders', 'ManualOrdersController@dispatch_bulk_orders')->name('ManualOrders.dipatch.bulk.orders');
+    Route::get('ManualOrders/quick-search', 'ManualOrdersController@QuickSearch')->name('manualOrders.quick.search'); 
+    Route::post('ManualOrders/quick-search', 'ManualOrdersController@QuickSearchActions')->name('manualOrders.quick.search.actions');  
     Route::get('get_product_details/{Sku}', 'ManualOrdersController@get_product_details')->name('get.product.details');
     Route::get('ManualOrders/print_slip_by_scan/', 'ManualOrdersController@print_slip_by_scan')->name('ManualOrders.print.slip.by.scan');
     Route::post('ManualOrders/print/order-action', 'ManualOrdersController@order_action')->name('ManualOrders.order.action'); 

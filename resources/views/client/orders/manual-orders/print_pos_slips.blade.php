@@ -143,51 +143,47 @@ tfoot tr td input {
                                 <img src="data:image/png;base64,{{ base64_encode($generatorPNG->getBarcode($ManualOrder->id, $generatorPNG::TYPE_CODE_128)) }}" style="width:80%">
                     			<span class="notranslate"><h3>{{$ManualOrder->id}}</h3></span></tr>
                             </td>
-                        <tr>
+                        <tr >
                             <td><h5>Name: </h5></td>
-                            <td><h4>{{$ManualOrder->first_name}}</h4></td> 
+                            <td style="padding: 10px 0px;"><h4>{{$ManualOrder->first_name}}</h4></td> 
                         </tr>
                         <tr>
                             <td><h5>Number: </h5></td>
-                            <td><h4>{{$ManualOrder->receiver_number}}</h4></td> 
+                            <td style="padding: 10px 0px;"><h4>{{$ManualOrder->receiver_number}}</h4></td> 
                         </tr>
                         <tr>
                             <td><h5>Address: </h5></td>
-                            <td><h4>{{$ManualOrder->reciever_address}}</h4></td> 
+                            <td style="padding: 10px 0px;"><h4>{{$ManualOrder->reciever_address}}</h4></td> 
                         </tr>
                     </tbody>
-                    <tfoot>
+                    <tfoot> 
                         <tr>
-                            <td><h5>Status </h5></td>
-                            <td><h4>Reason</h4></td> 
-                        </tr>
-                        <tr>
-                            <td> <input type="checkbox"> <h5>Pending </h5></td>
+                            <td style="height:40px"> <input type="checkbox"> <h5>Pending </h5></td>
                             <td> </td> 
                         </tr>
                         <tr>
-                            <td> <input type="checkbox"> <h5>Prepared </h5></td>
+                            <td style="height:40px"> <input type="checkbox"> <h5>Prepared </h5></td>
                             <td> </td> 
                         </tr>
                         <tr>
-                            <td> <input type="checkbox"> <h5>Incomplete </h5></td>
+                            <td style="height:40px"> <input type="checkbox"> <h5>Incomplete </h5></td>
                             <td> </td> 
                         </tr>
                         <tr>
-                            <td> <input type="checkbox"> <h5>Not.Resp </h5></td>
+                            <td style="height:40px"> <input type="checkbox"> <h5>Not.Resp </h5></td>
                             <td> </td> 
                         </tr>
                         <tr>
-                            <td> <input type="checkbox"> <h5>Hold </h5></td>
+                            <td style="height:40px"> <input type="checkbox"> <h5>Hold </h5></td>
                             <td> </td> 
                         </tr>
                         <tr>
-                            <td> <input type="checkbox"> <h5>Confirmed </h5></td>
+                            <td style="height:40px"> <input type="checkbox"> <h5>Confirmed </h5></td>
                             <td> </td> 
                         </tr> 
+                        <tr style="height:150px"></tr>
                     </tfoot>
                 </table>
-                <br><br><br><br><br><br><br>
                 <center><h5>Brandhub</h5></center>
              
             

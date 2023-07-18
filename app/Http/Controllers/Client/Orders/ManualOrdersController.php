@@ -854,6 +854,72 @@ class ManualOrdersController extends Controller
         
     }
     
+    public function QuickSearch()
+    {
+        
+        return view('client.orders.manual-orders.quick_order_search');
+    }
+    
+    public function QuickSearchActions(Request $request)
+    {
+        // dd($request->order_ids);
+        $order_status = $request->order_status;
+        $print_slips = $request->print_slips;
+        $order_ids = $request->order_ids;
+    //   dd($print_slips);
+        if($order_status != null )
+        {
+            //  dd($order_ids);
+            // $explode_id = explode(',', $order_ids);
+            // dd($explode_id);
+            $action_status = ManualOrders::whereIn('id',$order_ids)->update(['status' => $order_status]);
+           
+            
+            //dd($ManualOrder);
+        }
+        
+        if($print_slips == 'domestic')
+        {
+            $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->whereIn('manual_orders.id',$order_ids)->get();
+            $ids = array();
+            foreach($ManualOrder as $consignment_ids)
+            {
+                array_push($ids, $consignment_ids->consignment_id); 
+            }
+            
+            // dd($ids);
+            $slips = $this->print_trax_slips($ids);
+            // dd($slips);
+            return view('client.orders.manual-orders.trax.print_trax_slip')->with('slips',$slips);
+            
+        }
+        elseif($print_slips == 'local')
+        {
+              
+            $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->whereIn('manual_orders.id',$order_ids)->get();
+            return view('client.orders.manual-orders.print_slip')->with('ManualOrders',$ManualOrder);
+        }
+        elseif($print_slips == 'pos')
+        {
+        
+            $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->whereIn('manual_orders.id',$order_ids)->get();
+            return view('client.orders.manual-orders.print_pos_slips')->with('ManualOrders',$ManualOrder);
+        }
+        dd($print_slips);
+        // $action_status = ManualOrders::whereIn('id',$request->order_ids)->update(['status' => 'dispatched', 'riders_id'=> $request->riders]);
+        // if($action_status)
+        // {
+        //     return response()->json(['status' => '1', 'messege' => $action_status.'Succussfully Done']); 
+        // }
+        // else
+        // {
+        //     return response()->json(['status' => '0', 'messege' => 'some thing went wrong']); 
+        // }
+    }
+    
+    
+    
+    
     public function testing()
     {
         $cities_arr= [];

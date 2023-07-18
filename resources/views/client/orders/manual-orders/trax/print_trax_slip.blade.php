@@ -67,22 +67,20 @@ padding: 0px;
         <div class="main-page">
             <?php $count=1;?>
             
-            @foreach($slips as $slip)
-            
-             @if($count==1)
-                <div class="sub-page"> 
-            @endif
-            
-            <img src="{{$slip}}" style="width: 100%;/* float: left; */">
-            
-            <?php $count++;?>
-            
-            @if($count==4)
-                </div> 
-                <?php $count=1;?>
-            @endif
-        @endforeach
-      </div>
+                @foreach($slips as $slip)
+                
+                 @if($count==1)
+                    <div class="sub-page"> 
+                @endif 
+                <img src="{{$slip}}" style="width: 100%;/* float: left; */"> 
+                <?php $count++;?>
+                
+                @if($count==4)
+                    </div> 
+                    <?php $count=1;?>
+                @endif
+            @endforeach
+        </div>
     
     
     

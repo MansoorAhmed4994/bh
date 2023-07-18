@@ -76,3 +76,4 @@
 [06-Dec-2022 19:05:55 UTC] PHP Fatal error:  Cannot use [] for reading in /home/desenado/manualordersstaging.brandhub.com.pk/app/Http/Controllers/Client/Orders/ManualOrdersController.php on line 829
 [06-Dec-2022 19:06:06 UTC] PHP Fatal error:  Cannot use [] for reading in /home/desenado/manualordersstaging.brandhub.com.pk/app/Http/Controllers/Client/Orders/ManualOrdersController.php on line 829
 [09-Dec-2022 20:12:30 UTC] PHP Fatal error:  Trait 'App\Models\Notifiable' not found in /home/desenado/manualordersstaging.brandhub.com.pk/app/Models/Page.php on line 7
+[18-Jul-2023 21:25:47 UTC] PHP Fatal error:  Cannot use [] for reading in /home/desenado/manualordersstaging.brandhub.com.pk/app/Http/Controllers/Client/Orders/ManualOrdersController.php on line 884
