@@ -8,6 +8,7 @@
         var row_id="1";
         var total_amount=0;
         var total_parcels=0;
+        const order_ids = [];
         
        function checkAll(bx) {
           var cbs = document.getElementsByTagName('input');
@@ -105,57 +106,66 @@
 
 
 
-        function order_get_dispatch() {
+        function order_get_dispatch() 
+        {
+            var id = document.getElementById('order_id').value;
+            if(id == '')
+            {
+                return;
+            }
             
+            if(jQuery.inArray(id, order_ids) !== -1)
+            {
+                alert('Already exist');
+                return
+            }
+            else
+            {
                 
-                
-                    var id = document.getElementById('order_id').value;
-                    if(id == '')
+                order_ids.push(id);
+            }
+            $("body").addClass("loading"); 
+            document.getElementById('total_parcels').value = total_parcels;
+            document.getElementById('total_amount').value = total_amount;
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: base_url + '/client/orders/ManualOrders/get-order-details/'+id,
+                type: 'GET',
+                dataType: 'json',
+                success: function(e)
+                {
+                    if(e.messege != 'no order found')
                     {
-                        return;
-                    }
-                    $("body").addClass("loading"); 
-                    document.getElementById('total_parcels').value = total_parcels;
-                    document.getElementById('total_amount').value = total_amount;
-                    $.ajax({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        url: base_url + '/client/orders/ManualOrders/get-order-details/'+id,
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function(e)
+                        var cod_amount = 0;
+                        if($.isNumeric(parseInt(e.messege.cod_amount)))
                         {
-                            if(e.messege != 'no order found')
-                            {
-                                var cod_amount = 0;
-                                if($.isNumeric(parseInt(e.messege.cod_amount)))
-                                {
-                                    cod_amount = e.messege.cod_amount
-                                    total_amount += parseInt(e.messege.cod_amount);
-                                    $('#total_amount').html(total_amount);
-                                }
-                                total_parcels++;
-                                $('#total_parcels').html(total_parcels);
-                                var row_data = '<tr id="'+row_id+'"><td class="delete_btn_class"><button type="button" class="btn btn-danger " onclick="delete_row('+row_id+','+cod_amount+')">Delete</button></td><td class="delete_btn_class"><input type="checkbox" value="'+e.messege.id+'" name="order_ids[]" checked></td><td>'+e.messege.id+'</td><td>'+e.messege.receiver_name+'</td><td>'+e.messege.receiver_number+'</td><td>'+e.messege.reciever_address+'</td><td><input tye="hidden" onkeyup="change_cod_amount(this.value)" value="'+cod_amount+'" name="cod_amount[]" id="total_amount"></td></td><td>'+e.messege.status+'</td><td style="border: 2px solid black;"></td></tr>';
-                                $("#row_data").prepend(row_data);
-                                row_id++;
-                                $("body").removeClass("loading");
-                                document.getElementById('order_id').value = '';
-                                
-                            }
-                            else
-                            {
-                                alert('no record found');
-                                $("body").removeClass("loading");
-                            }
-                            
-                            //cosole.log(e.messege);
-                        },
-                        error: function(e) {
-                            console.log(e.messege);
+                            cod_amount = e.messege.cod_amount
+                            total_amount += parseInt(e.messege.cod_amount);
+                            $('#total_amount').html(total_amount);
                         }
-                });
+                        total_parcels++;
+                        $('#total_parcels').html(total_parcels);
+                        var row_data = '<tr id="'+row_id+'"><td class="delete_btn_class"><button type="button" class="btn btn-danger " onclick="delete_row('+row_id+','+cod_amount+')">Delete</button></td><td class="delete_btn_class"><input type="checkbox" value="'+e.messege.id+'" name="order_ids[]" checked></td><td>'+e.messege.id+'</td><td>'+e.messege.receiver_name+'</td><td>'+e.messege.receiver_number+'</td><td>'+e.messege.reciever_address+'</td><td><input tye="hidden" onkeyup="change_cod_amount(this.value)" value="'+cod_amount+'" name="cod_amount[]" id="total_amount"></td></td><td>'+e.messege.status+'</td><td style="border: 2px solid black;"></td></tr>';
+                        $("#row_data").prepend(row_data);
+                        row_id++;
+                        $("body").removeClass("loading");
+                        document.getElementById('order_id').value = '';
+                        
+                    }
+                    else
+                    {
+                        alert('Order "ID" does not exist);
+                        $("body").removeClass("loading");
+                    }
+                    
+                    //cosole.log(e.messege);
+                },
+                error: function(e) {
+                    console.log(e.messege);
+                }
+            });
             
         }
         
