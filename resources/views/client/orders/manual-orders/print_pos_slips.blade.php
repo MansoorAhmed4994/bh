@@ -157,7 +157,7 @@ tfoot tr td input {
                         </tr>
                         <tr>
                             <td><h5>Address: </h5></td>
-                            <td style="height:70px"><h4>{{$ManualOrder->cities->name}}</h4></td> 
+                            <td style="height:70px"><h4>@if($ManualOrder->cities != null) : {{$ManualOrder->cities->name}} @endif</h4></td> 
                         </tr>
                     </tbody>
                     <tfoot> 
