@@ -155,33 +155,53 @@ tfoot tr td input {
                             <td><h5>Address: </h5></td>
                             <td style="padding: 10px 0px;"><h4>{{$ManualOrder->reciever_address}}</h4></td> 
                         </tr>
+                        <tr>
+                            <td><h5>Address: </h5></td>
+                            <td style="height:70px"><h4>{{$ManualOrder->cities->name}}</h4></td> 
+                        </tr>
                     </tbody>
                     <tfoot> 
+                        <!--<tr>-->
+                        <!--    <td style="height:40px"> <input type="checkbox"> <h5>Pending </h5></td>-->
+                        <!--    <td> </td> -->
+                        <!--</tr>-->
+                        <!--<tr>-->
+                        <!--    <td style="height:40px"> <input type="checkbox"> <h5>Prepared </h5></td>-->
+                        <!--    <td> </td> -->
+                        <!--</tr>-->
+                        <!--<tr>-->
+                        <!--    <td style="height:40px"> <input type="checkbox"> <h5>Incomplete </h5></td>-->
+                        <!--    <td> </td> -->
+                        <!--</tr>-->
+                        <!--<tr>-->
+                        <!--    <td style="height:40px"> <input type="checkbox"> <h5>Not.Resp </h5></td>-->
+                        <!--    <td> </td> -->
+                        <!--</tr>-->
+                        <!--<tr>-->
+                        <!--    <td style="height:40px"> <input type="checkbox"> <h5>Hold </h5></td>-->
+                        <!--    <td> </td> -->
+                        <!--</tr>-->
+                        <!--<tr>-->
+                        <!--    <td style="height:40px"> <input type="checkbox"> <h5>Confirmed </h5></td>-->
+                        <!--    <td> </td> -->
+                        <!--</tr>  -->
                         <tr>
-                            <td style="height:40px"> <input type="checkbox"> <h5>Pending </h5></td>
+                            <td colspan="2" style="height:40px;"><h5 style="width:100%;text-align:center!important;">Payment Details </h5></td>
+                           
+                        </tr> 
+                        <tr>
+                            <td style="height:70px"> <h5>Price </h5></td>
                             <td> </td> 
-                        </tr>
+                        </tr>  
                         <tr>
-                            <td style="height:40px"> <input type="checkbox"> <h5>Prepared </h5></td>
+                            <td style="height:70px"><h5>Advance </h5></td>
                             <td> </td> 
-                        </tr>
+                        </tr>  
                         <tr>
-                            <td style="height:40px"> <input type="checkbox"> <h5>Incomplete </h5></td>
-                            <td> </td> 
-                        </tr>
-                        <tr>
-                            <td style="height:40px"> <input type="checkbox"> <h5>Not.Resp </h5></td>
-                            <td> </td> 
-                        </tr>
-                        <tr>
-                            <td style="height:40px"> <input type="checkbox"> <h5>Hold </h5></td>
-                            <td> </td> 
-                        </tr>
-                        <tr>
-                            <td style="height:40px"> <input type="checkbox"> <h5>Confirmed </h5></td>
+                            <td style="height:70px"> <h5>Amount </h5></td>
                             <td> </td> 
                         </tr> 
-                        <tr style="height:150px"></tr>
+                        <tr ><td colspan="2" style="height:300px;text-align: left!important;vertical-align: top;padding: 11px;font-weight: bold;">Note:</td></tr>
                     </tfoot>
                 </table>
                 <center><h5>Brandhub</h5></center>

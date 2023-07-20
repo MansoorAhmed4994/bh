@@ -40,9 +40,11 @@
                     dataType: 'json',
                     success: function(e)
                     {
-                        $('#first_name').val(e.field_values.first_name);
+                        // alert(e.city);
+                        $('#first_name').val(e.field_values.receiver_name);
                         $('#address').val(e.address);
                         $('#previouse_order_detail').html(e.messege),  
+                        $('#city').val(e.city),   
                         console.log(e.messege);
                         
                         
@@ -110,13 +112,29 @@
                         <label for="address">Address</label>
                         <textarea class="form-control" id="address"  name="address" placeholder="address" required></textarea>
                         <small id="address_error" class="form-text text-danger">@if($errors->get('address')) {{$errors->first('address')}} @endif</small>
-                    </div>   
+                    </div>  
+                    
+                    <div class="form-group ">
+                            <label for="address">city</label>
+                            
+                            <select class="form-control " id="city"  name="city" >
+                                <option value="">Select City</option>
+                                @for($i=0 ; $i < sizeof($cities); $i++)
+                                 
+                                    <option value="{{$cities[$i]->id}}">{{$cities[$i]->name}}</option>
+                                    
+                                @endfor
+                                
+                            </select> 
+                            <small id="city_error" class="form-text text-danger">@if($errors->get('city')) {{$errors->first('city')}} @endif</small>
+                        </div> 
         
                     <div class="form-group">
                         <label for="address">Description</label>
                         <textarea class="form-control" id="description"  name="description" placeholder="description" required></textarea>
                         <small id="description_error" class="form-text text-danger">@if($errors->get('description')) {{$errors->first('description')}} @endif</small>
                     </div> 
+                    
         
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary">Save</button>

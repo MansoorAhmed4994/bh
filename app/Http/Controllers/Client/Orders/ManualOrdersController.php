@@ -166,7 +166,8 @@ class ManualOrdersController extends Controller
      */
     public function create()
     {
-        return view('client.orders.manual-orders.create');
+        $cities = $this->GetCities()->cities;
+        return view('client.orders.manual-orders.create')->with([ 'cities'=>$cities]);
         //
     }
     
@@ -457,9 +458,18 @@ class ManualOrdersController extends Controller
 //              require 'vendor/autoload.php'; 
 // echo $generator->getBarcode('081231723897', $generator::TYPE_CODE_128);
 // dd();
+// dd($order_ids);
             $explode_id = explode(',', $order_ids); 
-            $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->whereIn('manual_orders.id',$explode_id)->get();
-            //dd($ManualOrder);
+            // $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->whereIn('manual_orders.id',$explode_id)->get();
+            $ManualOrder = Manualorders::whereIn('manual_orders.id',$explode_id)->get();
+            //  dd($ManualOrder->cities->id);
+            // foreach($ManualOrder as $ManualOrders)
+            // { 
+            //     dd($ManualOrders->cities->name);
+            //     // dd($ManualOrders->first());
+            // }
+            // dd();
+            // dd($ManualOrder[0]->Manualorders->Cities()->id);
             return view('client.orders.manual-orders.print_pos_slips')->with('ManualOrders',$ManualOrder);
                 //dd($order_ids);
         }
@@ -515,8 +525,15 @@ class ManualOrdersController extends Controller
     public function previouse_order_history(Request $request)
     {
         $data='';
-        $ManualOrders = ManualOrders::leftJoin('customers', 'manual_orders.customers_id', '=', 'customers.id')->select('manual_orders.id','manual_orders.customers_id','manual_orders.receiver_number','customers.first_name','manual_orders.created_at','manual_orders.status','manual_orders.reciever_address','customers.address')->where('customers.number',$request->number)->get();
-        // dd($ManualOrders->first()->customers->address);
+        $ManualOrders = ManualOrders::where('manual_orders.receiver_number',$request->number)->orderBy('manual_orders.id', 'DESC')->get();
+        // $ManualOrders = ManualOrders::where('customers.number',$request->number)->get();
+ 
+        // dd($ManualOrders);
+        $city = '';
+        if($ManualOrders->first()->cities != null)
+        {
+            $city = $ManualOrders->first()->cities->id;
+        }
         $data =  '
          <thead>
                 <tr>
@@ -546,7 +563,12 @@ class ManualOrdersController extends Controller
             $data .= '</tbody>';
         //dd($data);
         
-        return response()->json(['messege' => $data,'field_values'=> $ManualOrders->first(),'address'=>$ManualOrders->first()->customers->address]); 
+        return response()->json([
+            'messege' => $data,
+            'field_values'=> $ManualOrders->first(),
+            'address'=>$ManualOrders->first()->customers->address,
+            'city'=>$city
+            ]); 
         // return view('client.orders.manual-orders.view')->with('ManualOrder',$ManualOrder);
     }
     

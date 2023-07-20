@@ -4,7 +4,7 @@ namespace App\Models\Client;
 
 
 use App\Models\Orderpayments;
-use App\Models\Client\Cities;
+// use App\Models\Client\Cities;
 use Illuminate\Database\Eloquent\Model;
 
 class ManualOrders extends Model

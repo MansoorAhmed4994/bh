@@ -60,7 +60,10 @@ trait ManualOrderTraits {
             //$manual_orders->customer_id = $customers->id;
             $manual_orders->receiver_name = $request->first_name;
             $manual_orders->receiver_number = $request->number;
-            $manual_orders->cities_id = 1;
+            if($request->city != '')
+            {
+                $manual_orders->cities_id = $request->city;
+            }
             $manual_orders->reciever_address = $request->address;
             $manual_orders->images = implode("|",$images);
             $manual_orders->total_pieces = '';
@@ -104,7 +107,11 @@ trait ManualOrderTraits {
             //$manual_orders->customer_id = $customers->id;
             $manual_orders->receiver_name = $request->first_name;
             $manual_orders->receiver_number = $request->number;
-            $manual_orders->cities_id = 1;
+            if($request->city != '')
+            {
+                $manual_orders->cities_id = $request->city;
+            }
+            
             $manual_orders->reciever_address = $request->address;
             $manual_orders->images = implode("|",$images);
             $manual_orders->total_pieces = '';
