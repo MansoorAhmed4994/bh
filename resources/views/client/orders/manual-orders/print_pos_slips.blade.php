@@ -145,7 +145,7 @@ tfoot tr td input {
                             </td>
                         <tr >
                             <td><h5>Name: </h5></td>
-                            <td style="padding: 10px 0px;"><h4>{{$ManualOrder->first_name}}</h4></td> 
+                            <td style="padding: 10px 0px;"><h4>{{$ManualOrder->receiver_name}}</h4></td> 
                         </tr>
                         <tr>
                             <td><h5>Number: </h5></td>
