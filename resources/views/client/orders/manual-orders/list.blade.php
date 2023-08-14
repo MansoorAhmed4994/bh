@@ -560,7 +560,17 @@ var container = "";
             <?php $count=1;?>
             @foreach($list as $lists)
             
-            <tr style="background-color:@if($lists->status == 'deleted')#f99c9c @elseif($lists->status == 'prepaired') #b7b8b9 @elseif($lists->status == 'confirmed') #91c6ff @elseif($lists->status == 'dispatched') #84f39c @elseif($lists->status == 'deleted') #e77272 @else #f9df90 @endif">
+            <tr style="
+            @if($lists->status == 'deleted') background-color:red;color: white;
+            @elseif($lists->status == 'pending') background-color:orange ;
+            @elseif($lists->status == 'addition') background-color:yellow ;
+            @elseif($lists->status == 'prepared') background-color:#90f9ec;
+            @elseif($lists->status == 'confirmed') background-color:blue ;color: white;
+            @elseif($lists->status == 'dispatched') background-color:green ;color: white;
+            @elseif($lists->status == 'deleted') background-color:pink ;
+            @elseif($lists->status == 'incomplete') background-color:grey;color: white; 
+            @elseif($lists->status == 'incomplete') background-color:lightgrey; 
+            @else background-color:white; @endif">
                 <td ><input type="checkbox" id="order_checkbox" class="order_checkbox_class" name="order_checkbox" onclick="get_checked_values()" value="{{$lists->id}}"></td>
                 
                 <td scope="row"><?=$count?></td> 
@@ -632,8 +642,8 @@ var container = "";
                 <td>{{$lists->advance_payment}}</td> 
                 <td>{{$lists->cod_amount}}</td> 
                 <td><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$number?>&text=Assalamualaikum, {{$lists->first_name}}, Mam did you recieve your order, please click on link to Track your Order {{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}">Get Status</a></td> 
-                <td>{{date('d-M-y', strtotime($lists->created_at))}} <br> {{date('G:i a', strtotime($lists->created_at))}}</td>
-                <td>{{date('d-M-y', strtotime($lists->updated_at))}} <br> {{date('G:i a', strtotime($lists->updated_at))}}</td> 
+                <td style="font-size: 10px;">{{date('d-M-y', strtotime($lists->created_at))}} <br> {{date('G:i a', strtotime($lists->created_at))}}</td>
+                <td style="font-size: 10px;">{{date('d-M-y', strtotime($lists->updated_at))}} <br> {{date('G:i a', strtotime($lists->updated_at))}}</td> 
                 <td>{{$lists->status}}</td>
                 <td>{{$lists->status_reason}}</td>
             </tr>
