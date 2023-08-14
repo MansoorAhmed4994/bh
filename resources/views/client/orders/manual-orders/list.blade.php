@@ -41,81 +41,98 @@ var base_url = '<?php echo e(url('/')); ?>';
 var dispatch_order_id =  '';
 var order_status = '';
 var order_link='';
+var container = "";
       
       
     function demand_view()
     {
-        var tr_data="<div class='col-sm-12 tr-div'>";
-        var linkArray = $(".imgaes-demand").map(function() {
-            return $(this).attr('src');
-        }).get();
-
-        for(var i=0; i< linkArray.length;i++)
-        { 
-            tr_data  += "<img src='"+linkArray[i]+"' style='width:400px; height:600px;margin: 2px; border: 2px solid #777272; border-style: dashed;'>"; 
-            // img[i].classList.add("row");
+        if (document.getElementById('demand_checkbox').checked) 
+        {
+            
+            var tr_data="<div class='col-sm-12 tr-div'>";
+            var linkArray = $(".imgaes-demand").map(function() {
+                return $(this).attr('src');
+            }).get();
+    
+            for(var i=0; i< linkArray.length;i++)
+            { 
+                tr_data  += "<img src='"+linkArray[i]+"' style='width:400px; height:600px;margin: 2px; border: 2px solid #777272; border-style: dashed;'>"; 
+                // img[i].classList.add("row");
+            }
+            tr_data += "</div>";
+            
+            tbody_data = "<div class='col-sm-12 tbody-div '>"+tr_data+"</div>";
+            table_data =  "<div class='table-div'>"+tbody_data+"</div>"; 
+            document.getElementsByClassName('table-container')[0].innerHTML = table_data;
+            // console.log(linkArray[0]);
+                
+        } 
+        else {
+            // alert(container);
+            document.getElementsByClassName('table-container')[0].innerHTML = container;
         }
-        tr_data += "</div>";
-        
-        tbody_data = "<div class='col-sm-12 tbody-div '>"+tr_data+"</div>";
-        table_data =  "<div class='table-div'>"+tbody_data+"</div>"; 
-        document.getElementsByClassName('table-container')[0].innerHTML = table_data;
-        // console.log(linkArray[0]);
         
     }   
     
         
-    function mobile_view()
+    function mobile_view(mobile_checkbox)
     {
-        var table = document.getElementsByTagName('table');
-        var td = document.getElementsByTagName('td');
-        var thead = document.getElementsByTagName('thead');
-        var tbody = document.getElementsByTagName('tbody');
-        var tr = document.getElementsByTagName('tr');
-        var img = document.getElementsByTagName('img');
-        var td_data = "";
-        var tr_data = "";
-        var table_data = ""; 
-        
-        for(var i=0; i<img.length;i++)
+        if (document.getElementById('mobile_checkbox').checked) 
         {
-            img[i].classList.add("parcel-img");
-            // img[i].classList.add("row");
-        }
-        
-        for(var i=0; i<td.length;i++)
-        {
-            if(td[i].querySelector("img") != null)
+            var table = document.getElementsByTagName('table');
+            var td = document.getElementsByTagName('td');
+            var thead = document.getElementsByTagName('thead');
+            var tbody = document.getElementsByTagName('tbody');
+            var tr = document.getElementsByTagName('tr');
+            var img = document.getElementsByTagName('img');
+            var td_data = "";
+            var tr_data = "";
+            var table_data = ""; 
+            
+            for(var i=0; i<img.length;i++)
             {
-                td[i].innerHTML = "<div class='img-scroll-box td-div'>"+td[i].innerHTML+"</div>";
+                img[i].classList.add("parcel-img");
+                // img[i].classList.add("row");
             }
-            else
+            
+            for(var i=0; i<td.length;i++)
             {
-                if(td[i].innerHTML == "" || td[i].innerHTML == " ")
+                if(td[i].querySelector("img") != null)
                 {
-                    
+                    td[i].innerHTML = "<div class='img-scroll-box td-div'>"+td[i].innerHTML+"</div>";
                 }
                 else
                 {
-                    td[i].innerHTML = "<div class='td-div'>"+td[i].innerHTML+"</div>";
+                    if(td[i].innerHTML == "" || td[i].innerHTML == " ")
+                    {
+                        
+                    }
+                    else
+                    {
+                        td[i].innerHTML = "<div class='td-div'>"+td[i].innerHTML+"</div>";
+                    }
                 }
+                // td[i].classList.add("td");
             }
-            // td[i].classList.add("td");
+            
+            for(var i=0; i<thead.length;i++)
+            {
+                thead[i].remove();
+            }
+            
+            for(var i=0; i<tr.length;i++)
+            { 
+                tr_data  += "<div class='col-sm-12 tr-div'>"+tr[i].innerHTML+"</div>"; 
+            }
+            
+            tbody_data = "<div class='col-sm-12 tbody-div '>"+tr_data+"</div>"
+            table_data =  "<div class='table-div'>"+tbody_data+"</div>"; 
+            document.getElementsByClassName('table-container')[0].innerHTML = table_data;
+        } 
+        else {
+            // alert(container);
+            document.getElementsByClassName('table-container')[0].innerHTML = container;
         }
-        
-        for(var i=0; i<thead.length;i++)
-        {
-            thead[i].remove();
-        }
-        
-        for(var i=0; i<tr.length;i++)
-        { 
-            tr_data  += "<div class='col-sm-12 tr-div'>"+tr[i].innerHTML+"</div>"; 
-        }
-        
-        tbody_data = "<div class='col-sm-12 tbody-div '>"+tr_data+"</div>"
-        table_data =  "<div class='table-div'>"+tbody_data+"</div>"; 
-        document.getElementsByClassName('table-container')[0].innerHTML = table_data;
         
     }
     
@@ -433,13 +450,13 @@ var order_link='';
             <div class="form-group">
                 <div class="input-group">
                     <div class="input-group-text"> 
-                        <input onclick="mobile_view()" type="checkbox">
+                        <input onclick="mobile_view()" id="mobile_checkbox" type="checkbox">
                     </div> 
                     <div class="input-group-prepend">
-                        <span class="input-group-text" id="inputGroup-sizing-sm">Mobile View</span> 
+                        <span class="input-group-text" >Mobile View</span> 
                     </div>
                     <div class="input-group-text"> 
-                        <input onclick="demand_view()" type="checkbox">
+                        <input onclick="demand_view()" id="demand_checkbox" type="checkbox">
                     </div> 
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="inputGroup-sizing-sm">Demand View</span> 
@@ -513,7 +530,7 @@ var order_link='';
          
 </nav>
 
-<div class="table-container" style="overflow-x:auto;"> 
+<div class="table-container" id="table-container-data" style="overflow-x:auto;"> 
     <table class="table table-bordered" style="min-height: 500px;">
         <thead>
             <tr> 
@@ -627,7 +644,12 @@ var order_link='';
     </table>
 </div>
 {!! $list->appends(Request::all())->links() !!} 
+
+
 <script type="application/javascript">
+
+container = document.getElementsByClassName('table-container')[0].innerHTML;
+
 
     $( document ).ready(function() {
             
@@ -662,6 +684,7 @@ var order_link='';
     $(document).ready(function() {
     $('.js-example-basic-multiple').select2();
 });
+
          
 </script>
 @endsection
