@@ -333,6 +333,10 @@ function get_fare_list(index)
     {
         return;
     } 
+    else if ( price <=0  ||  price == "")
+    {
+        return;
+    }
     $("body").addClass("loading"); 
     $.ajax({
           url: base_url + '/trax/get-fare-list',

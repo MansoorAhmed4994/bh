@@ -156,8 +156,16 @@ tfoot tr td input {
                             <td style="padding: 10px 0px;"><h4>{{$ManualOrder->reciever_address}}</h4></td> 
                         </tr>
                         <tr>
-                            <td><h5>Address: </h5></td>
+                            <td><h5>City: </h5></td>
                             <td style="height:70px"><h4>@if($ManualOrder->cities != null) : {{$ManualOrder->cities->name}} @endif</h4></td> 
+                        </tr>
+                        <tr>
+                            <td><h5>Pieces: </h5></td>
+                            <td style="height:70px"><h4>{{$ManualOrder->total_pieces}}</h4></td> 
+                        </tr>
+                        <tr>
+                            <td><h5>Weight: </h5></td>
+                            <td style="height:70px"><h4>{{$ManualOrder->weight}}</h4></td> 
                         </tr>
                     </tbody>
                     <tfoot> 

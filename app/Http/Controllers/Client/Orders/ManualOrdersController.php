@@ -116,7 +116,12 @@ class ManualOrdersController extends Controller
         }
         else
         {
-            $query = $query->where('manual_orders.status','pending');
+            $query = $query->
+            where(function ($query) use ($search_text) {
+                $query->where('manual_orders.status','pending')
+                ->orwhere('manual_orders.status','addition');
+            });
+            // $query = $query->where('manual_orders.status','pending');
         }
         
         if($date_from != '' && $date_to != '')
@@ -144,7 +149,7 @@ class ManualOrdersController extends Controller
     
     public function InActiveCustomers(Request $request)
     {
-        $from_date = Carbon::now()->subDays(60)->toDateTimeString();
+        $from_date = Carbon::now()->subDays(60)->toDateTimeString(); 
         $views_customer_data = DB::table('manual_orders')
             ->select('customers.id', DB::raw('count(*) as total_purchase' ),  'customers.first_name', 'customers.status','customers.number as receiver_number','customers.whatsapp_number as number','customers.created_at','customers.description','customers.address as reciever_address','customers.remarks')
             // ->leftJoin('orderpayments', 'orderpayments.order_id', '=', 'manual_orders.id')
@@ -554,7 +559,7 @@ class ManualOrdersController extends Controller
                     $data .= '<tr>
                       <th><button class="btn btn-primary" onclick="fetch_data('.$onclick.')">Fetch Data</button></th>
                       <th>'.$ManualOrder->id.'</th>
-                      <td>'.$ManualOrder->first_name.'</td>
+                      <td>'.$ManualOrder->receiver_name.'</td>
                       <td>'.$ManualOrder->receiver_number.'</td>
                       <td>'.$ManualOrder->created_at.'</td>
                       <td>'.$ManualOrder->reciever_address.'</td>

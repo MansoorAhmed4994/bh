@@ -16,6 +16,7 @@ trait ManualOrderTraits {
     
     public function CreateOrder(Request $request)
     { 
+        $status = $request->order_addition;
         $validated = $request->validate([
 
             'images' => 'required',
@@ -77,7 +78,7 @@ trait ManualOrderTraits {
             $manual_orders->service_type = '';
             $manual_orders->created_by = '1';
             $manual_orders->updated_by = '1';
-            $manual_orders->status = 'pending';
+            $manual_orders->status = $status;
             //$manual_orders = $manual_orders->save();
              $status = $customers->manual_orders()->save($manual_orders);
              
@@ -125,7 +126,7 @@ trait ManualOrderTraits {
             $manual_orders->service_type = '';
             $manual_orders->created_by = '1';
             $manual_orders->updated_by = '1';
-            $manual_orders->status = 'pending';
+            $manual_orders->status = $status;
             //$manual_orders = $manual_orders->save();
             $status = $customer_id->first()->manual_orders()->save($manual_orders);
              //dd();

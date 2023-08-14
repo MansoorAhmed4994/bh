@@ -41,7 +41,28 @@ var base_url = '<?php echo e(url('/')); ?>';
 var dispatch_order_id =  '';
 var order_status = '';
 var order_link='';
-         
+      
+      
+    function demand_view()
+    {
+        var tr_data="<div class='col-sm-12 tr-div'>";
+        var linkArray = $(".imgaes-demand").map(function() {
+            return $(this).attr('src');
+        }).get();
+
+        for(var i=0; i< linkArray.length;i++)
+        { 
+            tr_data  += "<img src='"+linkArray[i]+"' style='width:400px; height:600px;margin: 2px; border: 2px solid #777272; border-style: dashed;'>"; 
+            // img[i].classList.add("row");
+        }
+        tr_data += "</div>";
+        
+        tbody_data = "<div class='col-sm-12 tbody-div '>"+tr_data+"</div>";
+        table_data =  "<div class='table-div'>"+tbody_data+"</div>"; 
+        document.getElementsByClassName('table-container')[0].innerHTML = table_data;
+        // console.log(linkArray[0]);
+        
+    }   
     
         
     function mobile_view()
@@ -96,42 +117,6 @@ var order_link='';
         table_data =  "<div class='table-div'>"+tbody_data+"</div>"; 
         document.getElementsByClassName('table-container')[0].innerHTML = table_data;
         
-        // for(var i=0; i<tr.length;i++)
-        // {
-        //     tr[i].remove();
-        // }
-        
-        // for(var i=0; i<table.length;i++)
-        // {
-            
-        //     document.getElementsByClassName('table-container')[0].innerHTML =  "<div class='col-sm-12 row table-div'>"+table[i].innerHTML+"</div>";
-        //     // table[i].classList.add("col-sm-12");
-        //     // table[i].classList.add("row");
-        // }
-         
-        
-        // for(var i=0; i<tbody.length;i++)
-        // {
-            
-        //     document.getElementsByClassName('table-div')[0].innerHTML = "<div class='col-sm-12 tbody-div justify-content-around'>"+tbody[i].innerHTML+"</div>";
-        //     tbody[i].remove();
-        //     // tbody[i].classList.add("col-sm-12");
-        //     // tbody[i].classList.add("justify-content-around");
-        // }
-        
-        // f
-        
-        // 
-        
-        // for(var i=0; i<td.length;i++)
-        // {
-        //     if(td[i].querySelector("img") != null)
-        //     {
-        //         td[i].innerHTML = "<div class='img-scroll-box tr-div'>"+td[i].innerHTML+"</div>";
-        //     }
-        //     td[i].classList.add("td");
-        // }
-        //td.classList.add("td");
     }
     
     function checkAll(bx) {
@@ -451,7 +436,13 @@ var order_link='';
                         <input onclick="mobile_view()" type="checkbox">
                     </div> 
                     <div class="input-group-prepend">
-                        <span class="input-group-text" id="inputGroup-sizing-sm">Mobile View</span>
+                        <span class="input-group-text" id="inputGroup-sizing-sm">Mobile View</span> 
+                    </div>
+                    <div class="input-group-text"> 
+                        <input onclick="demand_view()" type="checkbox">
+                    </div> 
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-sm">Demand View</span> 
                     </div>
                     
                     <input class="input-group-text" type="search" name="search_order_id" placeholder="Search by Order id #" aria-label="Search">
@@ -586,7 +577,7 @@ var order_link='';
                 <td >
                     @if(!empty($lists->images))
                         @foreach(explode('|', $lists->images) as $image)   
-                        <img class="pop rounded " style="margin-right: 5px;" src="{{asset($image)}}" alt="Card image cap" width="25" >
+                        <img class="pop rounded imgaes-demand" style="margin-right: 5px;" src="{{asset($image)}}" alt="Card image cap" width="25" >
                         @endforeach
                     @endif
                 </td>

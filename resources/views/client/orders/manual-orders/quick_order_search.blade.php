@@ -117,6 +117,7 @@
             if(jQuery.inArray(id, order_ids) !== -1)
             {
                 alert('Already exist');
+                document.getElementById('order_id').value = '';
                 return
             }
             else
@@ -157,6 +158,7 @@
                     else
                     {
                         alert('Order "ID" does not exist');
+                        document.getElementById('order_id').value = '';
                         $("body").removeClass("loading");
                     }
                     

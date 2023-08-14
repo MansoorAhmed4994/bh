@@ -41,7 +41,7 @@
                     success: function(e)
                     {
                         // alert(e.city);
-                        $('#first_name').val(e.field_values.receiver_name);
+                        $('#first_name').val(e.field_values['receiver_name']);
                         $('#address').val(e.address);
                         $('#previouse_order_detail').html(e.messege),  
                         $('#city').val(e.city),   
@@ -134,6 +134,16 @@
                         <textarea class="form-control" id="description"  name="description" placeholder="description" required></textarea>
                         <small id="description_error" class="form-text text-danger">@if($errors->get('description')) {{$errors->first('description')}} @endif</small>
                     </div> 
+                    
+                    <div class="form-group ">
+                            <label for="address">city</label>
+                            <select class="form-control " id="order_addition"  name="order_addition" required>
+                                <option value="">Select addition</option>
+                                <option value="addition">Product Addition</option>
+                                <option value="pending">New Order</option>
+                            </select> 
+                            <small id="city_error" class="form-text text-danger">@if($errors->get('city')) {{$errors->first('city')}} @endif</small>
+                        </div> 
                     
         
                     <div class="form-group">
