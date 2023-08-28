@@ -582,13 +582,13 @@ class ManualOrdersController extends Controller
         //dd($request->status);
         $status = $request->status;
         
-        $list_order = 'DESC';
+        $list_order = 'ASC';
         if($status == 'pending'  )
         {
             $list_order = 'ASC';
         }
         $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.status','like',$status.'%')
-            ->orderBy('manual_orders.id', $list_order)
+            ->orderBy('manual_orders.updated_at', $list_order)
             ->select($this->OrderFieldList())
             ->paginate(20);
             //dd($list);

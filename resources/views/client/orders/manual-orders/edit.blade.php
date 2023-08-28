@@ -270,7 +270,7 @@
                     </div>   
                     
                     <div class="form-group">
-                        <input type="file" name="images[]" id="images" multiple/>
+                        <input type="file" name="images[]" id="images" accept="image/png, image/gif, image/jpeg" multiple/>
                         <!--<div class="file btn btn-lg btn-secondary">Add new-->
                             <input type="hidden" name="images_path" id="images_path" />
                             

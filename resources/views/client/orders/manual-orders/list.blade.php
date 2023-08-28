@@ -158,11 +158,11 @@ var container = "";
     }
         
     $( document ).ready(function() { 
-        $('.pop').on('click', function() {
-            // alert($(this).attr('src'));
-            $('.imagepreview').attr('src', $(this).attr('src'));
-            $('#imagemodal').modal('show');   
-        });   
+        // $('.pop').on('click', function() {
+        //     // alert($(this).attr('src'));
+        //     $('.imagepreview').attr('src', $(this).attr('src'));
+        //     $('#imagemodal').modal('show');   
+        // });   
                 
                 
             
@@ -348,7 +348,7 @@ var container = "";
 
 
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
       <div class="modal-content">
             <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
@@ -357,16 +357,19 @@ var container = "";
             </button>
             </div>
             <div class="modal-body">
-                <div class="col-sm-12">
-                    
-                    <h4>Reciever Detail <hr></h4> 
+                <div class="row col-sm-12"> 
+                
+                    <div class="col-sm-4">
+                        <h4>Reciever Detail <hr></h4> 
                         <div class="alert alert-success" id="dispatch-succes-noti" style="display:none" role="alert">successfully dispatch and update</div>
-                    
                         <div class="form-group col-sm">
                             <div class="card" id="images_pop" style="max-width: 200px;"> 
                             </div>
                         </div>
-                        
+                    </div>
+                    
+                    <div class="col-sm-4">
+                            
                         <div class="form-group">
                             <label for="receiver_name">Reciever Name</label>
                             <input type="text" class="form-control" value="" id="receiver_name"  name="receiver_name" placeholder="Reciever Name" required>
@@ -384,6 +387,10 @@ var container = "";
                             <textarea class="form-control" id="reciever_address"   name="reciever_address" placeholder="reciever_address" required></textarea>
                             <small id="reciever_address_error" class="form-text text-danger"></small>
                         </div> 
+                        
+                    </div>
+                    
+                    <div class="col-sm-4">
             
                         <div class="form-group">
                             <label for="Number">price</label>
@@ -408,7 +415,7 @@ var container = "";
                             <textarea  class="form-control" value="" id="status_reason"  name="status_reason" placeholder="Reason for status" required></textarea>
                             <small id="status_reason_error" class="form-text text-danger"></small>
                         </div>
-                        
+                    </div>
                         
                     </div>
         
@@ -602,9 +609,12 @@ var container = "";
                      </div>
                 </td>
                 <td >
-                    @if(!empty($lists->images))
+                    @if(!empty($lists->images)) 
+                     <?php $count_image_index= 0;?>
                         @foreach(explode('|', $lists->images) as $image)   
-                        <img class="pop rounded imgaes-demand" style="margin-right: 5px;" src="{{asset($image)}}" alt="Card image cap" width="25" >
+                        
+                        <img class="pop rounded imgaes-demand" style="margin-right: 5px;" src="{{asset($image)}}" onclick="UniversalImagesSlider(<?=$count_image_index;?>,'{{$lists->images}}')"  data-toggle="modal"  alt="Card image cap" width="25" />
+                        <?php $count_image_index++;?>
                         @endforeach
                     @endif
                 </td>

@@ -20,7 +20,7 @@ Auth::routes();
             Admin Routes
 ====================================*/
 
-Route::group(['middleware' => 'auth:user' ],function(){
+Route::group(['middleware' => 'auth:user'],function(){
 
     Route::get('/', 'HomeController@index')->name('dashboard');
     Route::get('/contactmanage', 'HomeController@contact')->name('contactmanage'); 
@@ -74,6 +74,20 @@ Route::group(['prefix' => 'mnp/', 'namespace' => 'Shipment', 'middleware' => 'au
     Route::post('bookings', 'MnpController@MnpCreateBulkBookingByOrderIds')->name('create.bulk.booking');
 
 }); 
+
+
+/*==================================
+            Customer Payments Routes
+====================================*/
+Route::group(['prefix' => 'client/orders/', 'namespace' => 'Client\Orders', 'middleware' => 'auth:user,admin'],function(){
+    
+    Route::any('CustomerPayments/', 'CustomerPaymentController@index')->name('customer.payments.index');
+    Route::post('CustomerPayment/GetCustomerPayments', 'CustomerPaymentController@GetCustomerPayments')->name('customer.payments.record.list');
+    
+    //create
+    Route::post('CustomerPayments/store', 'CustomerPaymentController@store')->name('customer.payments.store');
+
+});
 
 Route::group(['prefix' => 'trax/', 'namespace' => 'Shipment', 'middleware' => 'auth:user,admin','as'=> 'trax.'],function(){
     
@@ -198,6 +212,5 @@ Route::group(['prefix' => 'riders', 'as'=> 'riders.'],function(){
     Route::post('/generate-loadsheet', 'LoadSheetController@generate_load_sheet')->name('generate.load.sheet'); 
     
 }); 
-
-
-
+ 
+URL::forceScheme('https');

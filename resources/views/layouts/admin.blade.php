@@ -23,8 +23,10 @@
     <!-- Styles -->
     <link href="{{ asset('public/css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('public/css/style.css') }}" rel="stylesheet">
-    <link  href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.css" rel="stylesheet"/> 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js" ></script>
+    <!--<link  href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.css" rel="stylesheet"/> -->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js" ></script>-->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
    
     <style>
         @media all and (min-width: 992px) {
@@ -114,7 +116,8 @@
                                 <li> <a class="dropdown-item" href="{{route('ManualOrders.index')}}"> List</a></li>
                                 <li> <a class="dropdown-item" href="{{route('ManualOrders.dipatch.bulk.orders')}}">Dispatch Bulk Orders</a></li>
                                 <li> <a class="dropdown-item" href="{{route('ManualOrders.track.order')}}">Track</a></li>
-                                <li> <a class="dropdown-item" href="{{route('ManualOrders.print.slip.by.scan')}}">Prict Slip By Scan</a></li>
+                                <li> <a class="dropdown-item" href="{{route('ManualOrders.print.slip.by.scan')}}">Price Slip By Scan</a></li>
+                                <li> <a class="dropdown-item" href="{{route('customer.payments.index')}}">Customer Payment</a></li>
                 
                             </ul>
                         
@@ -196,7 +199,8 @@
         </nav>
 
         <main class="py-4"> 
-        @include('frontend.layouts.alerts')
+            @include('layouts.universal_features.slider')
+            @include('layouts.alerts')
             @yield('content')
         </main>
     </div>
