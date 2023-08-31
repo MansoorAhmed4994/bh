@@ -1,5 +1,5 @@
 <div class="modal" id="UniversalImageModal" tabindex="-2" role="dialog" aria-labelledby="Image slider">
-    <div class="modal-dialog modal-dialog-centered modal-xl"  role="document">
+    <div class="modal-dialog modal-dialog-centered modal-md"  role="document">
     <div class="modal-content"  > 
         <div class="modal-footer">
             <button type="button" id="closeuniversalimagemodal" onclick="removeElementsByClass('modal-backdrop');" class="close">Close</button> 
@@ -42,10 +42,6 @@
             slider_imgage_src += '<div class="carousel-item '+active_image_index+'">';
             slider_imgage_src += '<img class="d-block w-100" src="{{  url('') }}/'+images_array[i]+'" alt="">';
             slider_imgage_src += '</div>';
-             
-            
-            
-            
             
         }
         
@@ -64,14 +60,13 @@
         $('#UniversalImageModal').modal('show');
     }
  
-$(document).ready(function() {
-    $("#closeuniversalimagemodal").click(function(){
-        $('#UniversalImageModal').modal('hide');
-        // $('body').attr("class", ""); 
-        
+    $(document).ready(function() {
+        $("#closeuniversalimagemodal").click(function(){
+            $('#UniversalImageModal').modal('hide');
+            // $('body').attr("class", ""); 
+            
+        });
     });
-    
-});
     
 </script>
 

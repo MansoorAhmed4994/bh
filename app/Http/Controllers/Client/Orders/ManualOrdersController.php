@@ -12,6 +12,7 @@ use App\Models\Inventory;
 use App\Models\Client\Cities;
 use App\Models\Order_details;
 use App\Models\Client\Customers;
+use App\Models\ActivityLogs;
 use Illuminate\Support\Facades\File; 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -74,7 +75,6 @@ class ManualOrdersController extends Controller
     
     public function index(Request $request)
     {
-
         $order_id = $request->search_order_id;
         $search_text = $request->search_text;
         $order_status = $request->order_status;
@@ -404,6 +404,7 @@ class ManualOrdersController extends Controller
         {
              
             $explode_id = explode(',', $order_ids); 
+            
             $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->whereIn('manual_orders.id',$explode_id)->get();
             //dd($ManualOrder);
             return view('client.orders.manual-orders.print_slip')->with('ManualOrders',$ManualOrder);
@@ -412,7 +413,12 @@ class ManualOrdersController extends Controller
         elseif($order_action == 'prepared')
         {
             $explode_id = explode(',', $order_ids);
-            //dd($explode_id);
+            // dd($explode_id);  
+            foreach($explode_id as $explode_ids)
+            {
+                create_activity_log(['table_name'=>'manual_orders','ref_id'=>$explode_ids,'activity_desc'=>'Order status updated to prepared','created_by'=>Auth::id(),'method'=>'update','route'=>route('ManualOrders.store')]);
+    
+            }
             $ManualOrder = ManualOrders::whereIn('id',$explode_id)->update(['status' => 'prepared']);
             //dd($ManualOrder);
         }
@@ -420,12 +426,22 @@ class ManualOrdersController extends Controller
         {
             $explode_id = explode(',', $order_ids);
             //dd($explode_id);
+            foreach($explode_id as $explode_ids)
+            {
+                create_activity_log(['table_name'=>'manual_orders','ref_id'=>$explode_ids,'activity_desc'=>'Order status updated to confirmed','created_by'=>Auth::id(),'method'=>'update','route'=>route('ManualOrders.store')]);
+    
+            }
             $ManualOrder = ManualOrders::whereIn('id',$explode_id)->update(['status' => 'confirmed']);
         }
         elseif($order_action == 'dispatched')
         {
             $explode_id = explode(',', $order_ids);
             //dd($explode_id);
+            foreach($explode_id as $explode_ids)
+            {
+                create_activity_log(['table_name'=>'manual_orders','ref_id'=>$explode_ids,'activity_desc'=>'Order status updated to dispatched','created_by'=>Auth::id(),'method'=>'update','route'=>route('ManualOrders.store')]);
+    
+            }
             $ManualOrder = ManualOrders::whereIn('id',$explode_id)->update(['status' => 'dispatched']);
             return redirect()->route('ManualOrders.index')->with('success', 'Order dispatched succussfully ');
             //return Redirect::back()->with('success', 'Order dispatched succussfully ');
@@ -518,6 +534,9 @@ class ManualOrdersController extends Controller
             $ManualOrdersMaster->status = 'pending';
             $ManualOrdersMaster->save();
             $ids_update = ManualOrders::whereIn('id',$duplicate_ids)->update(['status' => 'duplicate']);
+        
+            create_activity_log(['table_name'=>'manual_orders','ref_id'=>$ManualOrdersMaster->id,'activity_desc'=>'two orders merge from '.$ManualOrdersMaster->id.' to '.$duplicate_ids[0],'created_by'=>Auth::id(),'method'=>'update','route'=>route('ManualOrders.order.action')]);
+            
             return redirect()->route('ManualOrders.index')->with('success', $success_msg);
             dd($ManualOrdersMaster,$ids_update);
             dd($images,$price,implode(",",$duplicate_ids));
@@ -586,24 +605,31 @@ class ManualOrdersController extends Controller
         if($status == 'pending'  )
         {
             $list_order = 'ASC';
-        }
-        $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.status','like',$status.'%')
-            ->orderBy('manual_orders.updated_at', $list_order)
-            ->select($this->OrderFieldList())
-            ->paginate(20);
+        } 
+        $query = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.status','like',$status.'%');
+        $query = $query->orderBy('manual_orders.updated_at', $list_order)->select($this->OrderFieldList());
+         
+        $duplicate_check = DB::table('manual_orders')
+        ->select('receiver_number', DB::raw('COUNT(*) as `count`'))
+        ->where('manual_orders.status','like',$status.'%')
+        ->groupBy('receiver_number')->havingRaw('COUNT(*) > 1')->get();
+        
+        // dd($query);
+        
+        $query = $query->paginate(20);
             //dd($list);
             //dd($list);
             //$list = $list->all();
             //dd($list->all());
-        return view('client.orders.manual-orders.list')->with('list',$list);
+        return view('client.orders.manual-orders.list')->with(['list'=>$query,'duplicate_check' => $duplicate_check]);
         
-    }
+    } 
     
     public function dispatch_bulk_orders()
     {
         $riders = Riders::where('status','active')->get();
         //dd($riders);
-        return view('client.orders.manual-orders.dispatch_bulk_orders')->with('riders', $riders);
+        return view('client.orders.manual-orders.dispatch_bulk_orders')->with(['riders'=> $riders]);
     }
     
     public function get_order_details( $ManualOrder)
@@ -649,6 +675,7 @@ class ManualOrdersController extends Controller
         
         $status = $ManualOrder->save();
         
+        
         return response()->json(['messege' => $status]);
     }
     
@@ -685,6 +712,7 @@ class ManualOrdersController extends Controller
     {
         
         //dd();
+        
         $pickup_address_id = $this->get_trax_pickup_address();
         
         //dd($request->item_product_type_id);
@@ -900,7 +928,11 @@ class ManualOrdersController extends Controller
             // $explode_id = explode(',', $order_ids);
             // dd($explode_id);
             $action_status = ManualOrders::whereIn('id',$order_ids)->update(['status' => $order_status]);
-           
+            foreach($order_ids as $order_id)
+            {
+                create_activity_log(['table_name'=>'manual_orders','ref_id'=>$order_id,'activity_desc'=>'Order status updated to '.$order_status,'created_by'=>Auth::id(),'method'=>'update','route'=>route('manualOrders.quick.search.actions')]);
+    
+            }
             
             //dd($ManualOrder);
         }

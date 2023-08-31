@@ -17,6 +17,8 @@ trait ManualOrderTraits {
     public function CreateOrder(Request $request)
     { 
         $status = $request->order_addition;
+        $customer_id = '';
+        $manualorders_id = '';
         $validated = $request->validate([
 
             'images' => 'required',
@@ -56,7 +58,6 @@ trait ManualOrderTraits {
             // dd($customers->id);
             
             
-    
             $manual_orders = new ManualOrders();
             //$manual_orders->customer_id = $customers->id;
             $manual_orders->receiver_name = $request->first_name;
@@ -81,10 +82,14 @@ trait ManualOrderTraits {
             $manual_orders->status = $status;
             //$manual_orders = $manual_orders->save();
              $status = $customers->manual_orders()->save($manual_orders);
-             
+            $manualorders_id = $status->id;
+            $customer_id = $customer_id->first()->id;
             if($status->id)
             {
+                create_activity_log(['table_name'=>'manual_orders','ref_id'=>$manualorders_id,'activity_desc'=>'New order placed','created_by'=>Auth::id(),'method'=>'insert','route'=>route('ManualOrders.store')]);
+                create_activity_log(['table_name'=>'customers','ref_id'=>$customer_id,'activity_desc'=>'New Customer placed','created_by'=>Auth::id(),'method'=>'insert','route'=>route('ManualOrders.store')]);
                 return 'Order id:  '.$status->id.'  Successfully Placed';
+                
             }
             else
             {
@@ -129,11 +134,14 @@ trait ManualOrderTraits {
             $manual_orders->status = $status;
             //$manual_orders = $manual_orders->save();
             $status = $customer_id->first()->manual_orders()->save($manual_orders);
-             //dd();
+             //dd(); 
+            $manualorders_id = $status->id; 
              
             if($status->id)
             {
                 //dd();
+                create_activity_log(['table_name'=>'manual_orders','ref_id'=>$manualorders_id,'activity_desc'=>'New order placed','created_by'=>Auth::id(),'method'=>'insert','route'=>route('ManualOrders.store')]);
+
                 return 'Order id:  '.$status->id.'  Successfully Placed';
             }
         }
@@ -148,7 +156,13 @@ trait ManualOrderTraits {
     public function UpdateStatusByIdIds($explode_id,$status)
     { 
         $ManualOrder = ManualOrders::whereIn('id',$explode_id)->update(['status' => $status]);
-            return redirect()->route('ManualOrders.index')->with('success', 'Order dispatched succussfully ');
+        
+        foreach($explode_id as $explode_ids)
+        {
+            create_activity_log(['table_name'=>'manual_orders','ref_id'=>$explode_ids,'activity_desc'=>'Status column updated to: '.$status,'created_by'=>Auth::id(),'method'=>'update','route'=>route('ManualOrders.store')]);
+
+        }
+        return redirect()->route('ManualOrders.index')->with('success', 'Order dispatched succussfully ');
     }
         
     public function UpdateReferenceNumberByOrderIds($order_ids)

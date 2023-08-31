@@ -77,3 +77,47 @@
 [06-Dec-2022 19:06:06 UTC] PHP Fatal error:  Cannot use [] for reading in /home/desenado/manualordersstaging.brandhub.com.pk/app/Http/Controllers/Client/Orders/ManualOrdersController.php on line 829
 [09-Dec-2022 20:12:30 UTC] PHP Fatal error:  Trait 'App\Models\Notifiable' not found in /home/desenado/manualordersstaging.brandhub.com.pk/app/Models/Page.php on line 7
 [18-Jul-2023 21:25:47 UTC] PHP Fatal error:  Cannot use [] for reading in /home/desenado/manualordersstaging.brandhub.com.pk/app/Http/Controllers/Client/Orders/ManualOrdersController.php on line 884
+[30-Aug-2023 21:06:15 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function function_exist() in /home/desenado/manualordersstaging.brandhub.com.pk/app/Http/Helpers/helper.php:3
+Stack trace:
+#0 /home/desenado/manualordersstaging.brandhub.com.pk/vendor/composer/autoload_real.php(55): require()
+#1 /home/desenado/manualordersstaging.brandhub.com.pk/vendor/composer/autoload_real.php(38): composerRequiref8a2aa3c52b43655e50fa259113e7eee('b364d9f72c00ad0...', '/home/desenado/...')
+#2 /home/desenado/manualordersstaging.brandhub.com.pk/vendor/autoload.php(25): ComposerAutoloaderInitf8a2aa3c52b43655e50fa259113e7eee::getLoader()
+#3 /home/desenado/manualordersstaging.brandhub.com.pk/index.php(24): require('/home/desenado/...')
+#4 {main}
+  thrown in /home/desenado/manualordersstaging.brandhub.com.pk/app/Http/Helpers/helper.php on line 3
+[30-Aug-2023 21:06:33 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function function_exist() in /home/desenado/manualordersstaging.brandhub.com.pk/app/Http/Helpers/helper.php:3
+Stack trace:
+#0 /home/desenado/manualordersstaging.brandhub.com.pk/vendor/composer/autoload_real.php(55): require()
+#1 /home/desenado/manualordersstaging.brandhub.com.pk/vendor/composer/autoload_real.php(38): composerRequiref8a2aa3c52b43655e50fa259113e7eee('b364d9f72c00ad0...', '/home/desenado/...')
+#2 /home/desenado/manualordersstaging.brandhub.com.pk/vendor/autoload.php(25): ComposerAutoloaderInitf8a2aa3c52b43655e50fa259113e7eee::getLoader()
+#3 /home/desenado/manualordersstaging.brandhub.com.pk/index.php(24): require('/home/desenado/...')
+#4 {main}
+  thrown in /home/desenado/manualordersstaging.brandhub.com.pk/app/Http/Helpers/helper.php on line 3
+[30-Aug-2023 21:06:34 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function function_exist() in /home/desenado/manualordersstaging.brandhub.com.pk/app/Http/Helpers/helper.php:3
+Stack trace:
+#0 /home/desenado/manualordersstaging.brandhub.com.pk/vendor/composer/autoload_real.php(55): require()
+#1 /home/desenado/manualordersstaging.brandhub.com.pk/vendor/composer/autoload_real.php(38): composerRequiref8a2aa3c52b43655e50fa259113e7eee('b364d9f72c00ad0...', '/home/desenado/...')
+#2 /home/desenado/manualordersstaging.brandhub.com.pk/vendor/autoload.php(25): ComposerAutoloaderInitf8a2aa3c52b43655e50fa259113e7eee::getLoader()
+#3 /home/desenado/manualordersstaging.brandhub.com.pk/index.php(24): require('/home/desenado/...')
+#4 {main}
+  thrown in /home/desenado/manualordersstaging.brandhub.com.pk/app/Http/Helpers/helper.php on line 3
+[30-Aug-2023 21:06:36 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function function_exist() in /home/desenado/manualordersstaging.brandhub.com.pk/app/Http/Helpers/helper.php:3
+Stack trace:
+#0 /home/desenado/manualordersstaging.brandhub.com.pk/vendor/composer/autoload_real.php(55): require()
+#1 /home/desenado/manualordersstaging.brandhub.com.pk/vendor/composer/autoload_real.php(38): composerRequiref8a2aa3c52b43655e50fa259113e7eee('b364d9f72c00ad0...', '/home/desenado/...')
+#2 /home/desenado/manualordersstaging.brandhub.com.pk/vendor/autoload.php(25): ComposerAutoloaderInitf8a2aa3c52b43655e50fa259113e7eee::getLoader()
+#3 /home/desenado/manualordersstaging.brandhub.com.pk/index.php(24): require('/home/desenado/...')
+#4 {main}
+  thrown in /home/desenado/manualordersstaging.brandhub.com.pk/app/Http/Helpers/helper.php on line 3
+[30-Aug-2023 21:07:29 UTC] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 65015808 bytes) in /home/desenado/manualordersstaging.brandhub.com.pk/app/Http/Helpers/helper.php on line 7
+[30-Aug-2023 21:53:40 UTC] PHP Parse error:  syntax error, unexpected 'Namespace' (T_NAMESPACE), expecting identifier (T_STRING) or '{' in /home/desenado/manualordersstaging.brandhub.com.pk/app/Http/Helpers/helper.php on line 2
+[31-Aug-2023 21:23:01 UTC] PHP Fatal error:  During class fetch: Uncaught ParseError: syntax error, unexpected 'foreach' (T_FOREACH) in /home/desenado/manualordersstaging.brandhub.com.pk/app/Traits/ManualOrderTraits.php:160
+Stack trace:
+#0 /home/desenado/manualordersstaging.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#1 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Manu...')
+#2 /home/desenado/manualordersstaging.brandhub.com.pk/app/Http/Controllers/Client/Orders/ManualOrdersController.php(28): spl_autoload_call('App\\Traits\\Manu...')
+#3 /home/desenado/manualordersstaging.brandhub.com.pk/vendor/composer/ClassLoader.php(571): include('/home/desenado/...')
+#4 /home/desenado/manualordersstaging.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#5 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Http\\Contro...')
+#6 [internal function]: spl_autoload_call('App\\Http\\Contro...')
+#7 /home/desena in /home/desenado/manualordersstaging.brandhub.com.pk/app/Http/Controllers/Client/Orders/ManualOrdersController.php on line 28

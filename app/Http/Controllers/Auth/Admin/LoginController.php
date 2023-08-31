@@ -9,6 +9,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class LoginController extends Controller
 {
@@ -67,16 +69,52 @@ class LoginController extends Controller
         // // user surpasses their maximum number of attempts they will get locked out.
         // $this->incrementLoginAttempts($request);
         //dd($request->email);
-        if(Auth::guard('admin')->attempt($request->only('email','password'),$request->filled('remember'))){
-        //Authentication passed...
-            return redirect()
-            ->route('admin.dashboard')
-            ->with('status','You are Logged in as Admin!');
+        $user = User::select("*")->where(['email'=>$request->email])->first();
+        // dd($user->roles()->get()->pluck('name')[0]);
+        if($user->roles()->get()->pluck('name')[0] == 'admin')
+        {
+            // dd();
+            if(Hash::check($request->password, $user->password))
+            {
+                // dd($user);
+                // Hash::check($request->email, $user->password);
+                // return redirect()
+                // ->route('admin.dashboard')
+                // ->with('status','You are Logged in as Admin!');
+                if(Auth::guard('admin')->attempt($request->only('email','password'),$request->filled('remember'))){
+                //Authentication passed...
+                    return redirect()
+                    ->route('admin.dashboard')
+                    ->with('status','You are Logged in as Admin!');
+                }
+                else
+                {
+                    return redirect()->route('admin.login')->with('flash_message_error','Wrong Credientials');
+                } 
+                
+                return redirect()->route('admin.login')->with('flash_message_success','Successfully');
+            }
+            else
+            {
+                
+                return redirect()->route('admin.login')->with('flash_message_error','Wrtong Password! please try again');
+            }
         }
         else
-            {
-                return redirect()->route('admin.login')->with('flash_message_error','Wrong Credientials');
-            }
+        {
+            return redirect()->route('admin.login')->with('flash_message_error','You dont have permission to access admin panel');
+        }
+        
+        // if(Auth::guard('admin')->attempt($request->only('email','password'),$request->filled('remember'))){
+        // //Authentication passed...
+        //     return redirect()
+        //     ->route('admin.dashboard')
+        //     ->with('status','You are Logged in as Admin!');
+        // }
+        // else
+        //     {
+        //         return redirect()->route('admin.login')->with('flash_message_error','Wrong Credientials');
+        //     }
          
         return $this->sendFailedLoginResponse($request);
     }
