@@ -259,80 +259,6 @@ var container = "";
     });
     
     
-    function print_pos_slip(route,className) 
-    {  
-        
-        const elements = document.getElementsByClassName(className);
-            while(elements.length > 0){
-                elements[0].parentNode.removeChild(elements[0]);
-            }
-            window.open(route, '_blank');
-    }
-    
-    function check_pos_slip_duplication(route,id,className)
-    {
-        // $("body").addClass("loading");
-        $.ajax({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            url: base_url + '/client/orders/ManualOrders/chec-pos-slip-duplication/'+id,
-            
-            type: 'GET',
-            dataType: 'json',
-            success: function(e)
-            {
-                if(e.activitylog != null || e.manualorders != null)
-                {
-                    var data
-                    data +='<div class="row col-sm-12">';
-                    
-                    
-                    data += '<div class="col-sm-2">';
-                    if(e.activitylog.length > 0)
-                    {
-                        for(var i=0; i<e.activitylog.length; i++)
-                        {
-                            data += '<h5>Printed Date: '+e.activitylog['created_at']+'</h5><br>';
-                        } 
-                    }
-                    else
-                    {
-                        data += '<h5>No Printed Record Found</h5><br>';
-                    }
-                    data += '</div>';
-                    
-                    for(var i=0; i<e.manualorders.length; i++)
-                    {
-                        data += '<div class="col-sm-2"><h4>Order #'+(i+1)+'<hr></h4><h5>order id:'+e.manualorders[0]['id']+'</h5><br>';
-                        data += '<h5>Name: '+e.manualorders[0]['receiver_name']+'</h5><br>';
-                        data += '<h5>Number: '+e.manualorders[0]['receiver_number']+'</h5><br>';
-                        data += '<h5>Address: '+e.manualorders[0]['reciever_address']+'</h5><br>';
-                        data += '<h5>Status: '+e.manualorders[0]['status']+'</h5><br></div>';
-                    }
-                    data +='</div>';
-                    $('#PSDM').html(data);
-                    $('#PSDM_yes_btn').attr('onclick',"print_pos_slip('"+route+"','"+className+"')");
-                    // $("body").removeClass("loading");
-                    $('#pos_slip_duplication_modal').modal('show');
-                    // console.log(e.activitylog);
-                    // print_pos_slip(className);
-                } 
-                
-                
-                 
-                
-                //alert(images);
-                
-                
-            },
-            error: function(e) {
-                console.log(e.responseText);
-            }
-        });
-        
-    }
-    
     
     function change_order_status_and_price(val,status) 
     {   
@@ -419,29 +345,6 @@ var container = "";
     </div>
   </div>
 </div>
-
-
-
-<div class="modal fade" id="pos_slip_duplication_modal" tabindex="-1" role="dialog" aria-labelledby="Pos Slip Duplication" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-      <div class="modal-content">
-            <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle">Are you Sure you want to print? (Please check details below)</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-            </div>
-            <div class="modal-body" id="PSDM">
-                
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" id="PSDM_close_btn">Close</button>
-                <button type="button" class="btn btn-primary" id="PSDM_yes_btn">Save changes</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 
 
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -548,7 +451,7 @@ var container = "";
 
 <nav class="navbar navbar-light bg-light"> 
     <div class="col-sm-12">
-        <form class="form-inline" method="post" action="{{ route('ManualOrders.index') }}">
+        <form class="form-inline" method="post" action="{{ route('ManualOrders.reports.printed.slips') }}">
         @csrf
      
             <div class="form-group">
@@ -664,7 +567,7 @@ var container = "";
             <?php $count=1;?>
             @foreach($list as $lists)
             
-            <tr class="list_<?=$count;?>" style="
+            <tr style="
             @if($lists->status == 'deleted') background-color:red;color: white;
             @elseif($lists->status == 'pending') background-color:orange ;
             @elseif($lists->status == 'addition') background-color:yellow ;
@@ -699,7 +602,6 @@ var container = "";
                             <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'not responding')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">not responding</button>
                             <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'cancel')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Cancel</button>
                             <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'return')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Return</button>
-                            <button type="button" onclick="check_pos_slip_duplication('{{route('ManualOrders.print.pos.slip',$lists->id)}}','{{$lists->id}}','list_<?=$count;?>')"class="dropdown-item" >Print Pos Slip</button>
                             <!--<a type="button" href="{{route('ManualOrders.order.status',['hold',$lists->id])}}" class="dropdown-item">Hold</a> -->
                             <!--<a type="button" href="{{route('ManualOrders.order.status',['incomplete',$lists->id])}}" class="dropdown-item">Incomplete</a>-->
                             <!--<a type="button" href="{{route('ManualOrders.order.status',['cancel',$lists->id])}}" class="dropdown-item">Cancel</a>-->

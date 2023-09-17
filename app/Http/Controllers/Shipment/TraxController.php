@@ -156,6 +156,8 @@ class TraxController extends Controller
         //dd();
     }
     
+  
+    
     public function get_trax_pickup_address()
     {
         $response = $this->GetPickupAddresses();

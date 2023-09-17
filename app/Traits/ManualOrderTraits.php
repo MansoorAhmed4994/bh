@@ -25,8 +25,11 @@ trait ManualOrderTraits {
             'first_name' => 'required',
             'number' => 'required',
             'address' => 'required',
+            'order_id' => 'required'
 
         ]);
+        
+        
         $customer_id = Customers::where('number',$request->number);
         //dd($customer_id);
         if($customer_id->get()->isEmpty())
@@ -98,7 +101,7 @@ trait ManualOrderTraits {
         }
         else
         {
-            //dd($customer_id->id);
+            
             $images=array();
             if($files=$request->file('images')){
                 foreach($files as $file){
@@ -109,40 +112,66 @@ trait ManualOrderTraits {
                 }
             }
             
-            $manual_orders = new ManualOrders();
-            //$manual_orders->customer_id = $customers->id;
-            $manual_orders->receiver_name = $request->first_name;
-            $manual_orders->receiver_number = $request->number;
-            if($request->city != '')
+            if($status == 'addition')
             {
-                $manual_orders->cities_id = $request->city;
+                $order_id = $request->order_id;
+                $manual_orders = ManualOrders::find($order_id);
+                // dd($manual_orders);
+                if($images != null)
+                {
+                    $manual_orders->images = $manual_orders->images.'|'.(implode("|",$images));
+                }
+                $manual_orders->status = $status;
+                $status = $customer_id->first()->manual_orders()->save($manual_orders);
+                 //dd(); 
+                $manualorders_id = $status->id; 
+                 
+                if($status->id)
+                {
+                    //dd();
+                    create_activity_log(['table_name'=>'manual_orders','ref_id'=>$manualorders_id,'activity_desc'=>'Order Updated successfully','created_by'=>Auth::id(),'method'=>'insert','route'=>route('ManualOrders.store')]);
+    
+                    return 'Order id:  '.$status->id.'  Successfully Placed';
+                }
+                // dd($manual_orders->images);
             }
-            
-            $manual_orders->reciever_address = $request->address;
-            $manual_orders->images = implode("|",$images);
-            $manual_orders->total_pieces = '';
-            $manual_orders->weight = '';
-            $manual_orders->price = '';
-            $manual_orders->cod_amount = '';
-            $manual_orders->advance_payment = '';
-            $manual_orders->date_order_paid = '';
-            $manual_orders->description = $request->description;
-            $manual_orders->reference_number = '';
-            $manual_orders->service_type = '';
-            $manual_orders->created_by = '1';
-            $manual_orders->updated_by = '1';
-            $manual_orders->status = $status;
-            //$manual_orders = $manual_orders->save();
-            $status = $customer_id->first()->manual_orders()->save($manual_orders);
-             //dd(); 
-            $manualorders_id = $status->id; 
-             
-            if($status->id)
+            else
             {
-                //dd();
-                create_activity_log(['table_name'=>'manual_orders','ref_id'=>$manualorders_id,'activity_desc'=>'New order placed','created_by'=>Auth::id(),'method'=>'insert','route'=>route('ManualOrders.store')]);
-
-                return 'Order id:  '.$status->id.'  Successfully Placed';
+                $manual_orders = new ManualOrders();
+                //$manual_orders->customer_id = $customers->id;
+                $manual_orders->receiver_name = $request->first_name;
+                $manual_orders->receiver_number = $request->number;
+                if($request->city != '')
+                {
+                    $manual_orders->cities_id = $request->city;
+                }
+                
+                $manual_orders->reciever_address = $request->address;
+                $manual_orders->images = implode("|",$images);
+                $manual_orders->total_pieces = '';
+                $manual_orders->weight = '';
+                $manual_orders->price = '';
+                $manual_orders->cod_amount = '';
+                $manual_orders->advance_payment = '';
+                $manual_orders->date_order_paid = '';
+                $manual_orders->description = $request->description;
+                $manual_orders->reference_number = '';
+                $manual_orders->service_type = '';
+                $manual_orders->created_by = '1';
+                $manual_orders->updated_by = '1';
+                $manual_orders->status = $status;
+                //$manual_orders = $manual_orders->save();
+                $status = $customer_id->first()->manual_orders()->save($manual_orders);
+                 //dd(); 
+                $manualorders_id = $status->id; 
+                 
+                if($status->id)
+                {
+                    //dd();
+                    create_activity_log(['table_name'=>'manual_orders','ref_id'=>$manualorders_id,'activity_desc'=>'New order placed','created_by'=>Auth::id(),'method'=>'insert','route'=>route('ManualOrders.store')]);
+    
+                    return 'Order id:  '.$status->id.'  Successfully Placed';
+                }
             }
         }
     }

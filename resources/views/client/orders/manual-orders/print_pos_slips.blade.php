@@ -121,8 +121,7 @@ tfoot tr td input {
             //echo $date->format('Y-m-d H:i:s');
             // Will print 2011-02-16 16:24:04
         ?>
-        @foreach($ManualOrders as $ManualOrder)
-         
+        @foreach($ManualOrders as $ManualOrder) 
             <div class="sub-page">  
         
                 <table>
@@ -166,6 +165,17 @@ tfoot tr td input {
                         <tr>
                             <td><h5>Weight: </h5></td>
                             <td style="height:70px"><h4>{{$ManualOrder->weight}}</h4></td> 
+                        </tr>
+                        <tr>
+                            <td><h5>Printed Date: </h5></td>
+                            <?php
+                                $date = new DateTime();
+                                $date->setTimezone(new DateTimeZone('UTC'));
+                                $date->setTimezone(new DateTimeZone('Asia/Karachi'));
+                                
+                                $current_date = $date->format('Y-m-d H:i:s');
+                            ?>
+                            <td style="height:70px"><h4>{{$current_date}}</h4></td> 
                         </tr>
                     </tbody>
                     <tfoot> 

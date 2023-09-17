@@ -44,6 +44,9 @@ Route::group(['prefix' => 'client/orders/', 'namespace' => 'Client\Orders', 'mid
     Route::get('ManualOrders/print_slip_by_scan/', 'ManualOrdersController@print_slip_by_scan')->name('ManualOrders.print.slip.by.scan');
     Route::post('ManualOrders/print/order-action', 'ManualOrdersController@order_action')->name('ManualOrders.order.action'); 
     Route::get('ManualOrders/get-order-details/{ManualOrder}', 'ManualOrdersController@get_order_details')->name('ManualOrders.get.order.detail');
+    Route::get('ManualOrders/print/PosSlip/{ManualOrder}', 'ManualOrdersController@PrintPosSlip')->name('ManualOrders.print.pos.slip'); 
+    Route::get('ManualOrders/chec-pos-slip-duplication/{ManualOrder}', 'ManualOrdersController@CheckPosSlipDuplication')->name('ManualOrders.check.pos.slip.duplication'); 
+    
     
     //edit
     Route::get('ManualOrders/{Manualorders}/edit', 'ManualOrdersController@edit')->name('ManualOrders.edit');
@@ -63,6 +66,9 @@ Route::group(['prefix' => 'client/orders/', 'namespace' => 'Client\Orders', 'mid
     
     //testing
     Route::get('testing123', 'Client\Orders\ManualOrdersController@testing')->name('ManualOrders.testing123');
+    
+    //Reports
+    Route::any('ManualOrders/reports/printed slips', 'ManualOrdersController@PrintedSlipsReport')->name('ManualOrders.reports.printed.slips');
     
 });
 

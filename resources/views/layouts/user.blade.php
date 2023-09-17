@@ -121,6 +121,14 @@
                                 <li> <a class="dropdown-item" href="{{route('ManualOrders.track.order')}}">Track</a></li>
                                 <li> <a class="dropdown-item" href="{{route('ManualOrders.print.slip.by.scan')}}">Prict Slip By Scan</a></li> 
                                 <li> <a class="dropdown-item" href="{{route('customer.payments.index')}}">Customer Payment</a></li>
+                                <li> <a class="dropdown-item" href="{{route('ManualOrders.reports.printed.slips')}}">Printed Slips</a></li>
+                                
+                            </ul> 
+                        </li><li class="nav-item dropdown" id="myDropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Reports</a>
+                            <ul class="dropdown-menu">
+                                <li> <a class="dropdown-item" href="{{route('ManualOrders.reports.printed.slips')}}">Printed Slips</a></li>
+                                
                             </ul> 
                         </li>
                         <li class="nav-item dropdown" id="myDropdown">
