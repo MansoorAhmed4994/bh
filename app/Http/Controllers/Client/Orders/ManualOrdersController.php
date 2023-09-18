@@ -613,12 +613,35 @@ class ManualOrdersController extends Controller
     }
     
     public function previouse_order_history(Request $request)
-    {
+    { 
+        $query = ManualOrders::query();
+        $number = $request->receiver_number;
+        if($request->number[0] == '0')
+        {
+            $number = substr_replace($request->number, '', 0, 1);
+            // dd($number);
+            $query = $query->where('manual_orders.receiver_number','like','%'.$number);
+            // where(function ($query) use ($number) {
+            //     $query->where('customers.first_name','like',$search_text.'%')
+            //         ->orWhere('customers.first_name','like','%'.$search_text.'%')
+            //         ->orWhere('customers.first_name','like','%'.$search_text)
+            //         ->orWhere('customers.last_name','like',$search_text.'%')
+            //         ->orWhere('customers.last_name','like','%'.$search_text.'%')
+            //         ->orWhere('customers.last_name','like','%'.$search_text)
+            //         ->orWhere('customers.number','like','%'.$search_text) 
+            //         ->orWhere('customers.number','like',$search_text.'%')
+            //         ->orWhere('customers.number','like','%'.$search_text.'%')
+            //         ->orWhere('manual_orders.id','like','%'.$search_text.'%')
+            //         ->orWhere('manual_orders.consignment_id','like','%'.$search_text.'%');
+            // });
+        }
+        
         $data='';
-        $ManualOrders = ManualOrders::where('manual_orders.receiver_number',$request->number)->orderBy('manual_orders.id', 'DESC')->get();
+        $ManualOrders = $query->orderBy('manual_orders.id', 'DESC')->get();
         // $ManualOrders = ManualOrders::where('customers.number',$request->number)->get();
  
-        // dd($ManualOrders->first()->cities());
+        // dd($ManualOrders);
+        
         $city = '';
         if($ManualOrders->first()->cities != null)
         {

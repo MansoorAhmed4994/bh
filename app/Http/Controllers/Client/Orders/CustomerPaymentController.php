@@ -3,19 +3,22 @@
 namespace App\Http\Controllers\Client\Orders;
 
 use App\Http\Controllers\Controller;
-use App\Models\Client\CustomerPayments;
-use Illuminate\Http\Request;
 
+//Models
+use App\Models\Client\CustomerPayments; 
+
+//Libraries
+use Carbon\Carbon;
+use DB;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File; 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Pagination\LengthAwarePaginator; 
-use Carbon\Carbon;
-use DB;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class CustomerPaymentController extends Controller
 {
-    private $images_path =  'storage/images/orders/manual-orders/customer_payments';
+    private $images_path =  'storage/images/orders/manual-orders/customer_payments/';
     /**
      * Display a listing of the resource.
      *
@@ -63,6 +66,7 @@ class CustomerPaymentController extends Controller
         //dd($customer_id);
         if($customer_id->get()->isEmpty())
         {
+            
             $check_again_transanction = CustomerPayments::where('datetime',$request->datetime)->where('transfer_to',$request->transfer_to)->where('sender_name',$request->sender_name);
             // dd($check_again_transanction);
             if($check_again_transanction->get()->isEmpty())
@@ -77,10 +81,12 @@ class CustomerPaymentController extends Controller
             $images=array();
             if($files=$request->file('images')){
                 foreach($files as $file){
-                    $name=$file->getClientOriginalName();
                     
-                    $file->move($this->images_path,$name);
-                    $images[]=$this->images_path.$name;
+                    
+                    $name=$file->getClientOriginalName();
+                    $finaly_path = uniqid().$this->images_path;
+                    $file->move($finaly_path,$name);
+                    $images[]=$finaly_path.$name;
                 }
             } 
             
@@ -106,12 +112,13 @@ class CustomerPaymentController extends Controller
             }
             else
             {
-                return redirect()->route('customer.payments.index')->with('errors','Some thing went wrong! please try again');
+                return redirect()->route('customer.payments.index')->with(['errors'=>'Some thing went wrong! please try again']);
             }
         }
         else
         {
-            return redirect()->route('customer.payments.index')->with('errors','Transaction id already exist');
+            
+            return redirect()->route('customer.payments.index')->with(['errors'=>'Transaction id already exist']);
         }
         //
     }
@@ -169,7 +176,7 @@ class CustomerPaymentController extends Controller
         // $ManualOrders = ManualOrders::where('customers.number',$request->number)->get();
         // dd($customerPayments);
         
-        $data =  '
+        $data .=  '
          <thead>
                 <tr>
                     <th scope="col">id</th>
@@ -188,7 +195,7 @@ class CustomerPaymentController extends Controller
                         $data .=  '<th>Action Approved</td>';
                     } 
         
-        $data = ' 
+        $data .= ' 
                   <th scope="col">Action</th>
                 </tr>
             </thead>
@@ -196,8 +203,8 @@ class CustomerPaymentController extends Controller
             foreach($customerPayments as $customerPayment)
             { 
                 $data .= '<tr> 
-                    <th>'.$customerPayment->id.'</th>
-                    <th>'.$customerPayment->images.'</th>
+                    <th>'.$customerPayment->id.'</th> 
+                    <th><img class="previouse_order_images" src="'.asset($customerPayment->images).'"/ width="100"></th>
                     <td>'.$customerPayment->order_id.'</td>
                     <td>'.$customerPayment->transaction_id.'</td>
                     <td>'.$customerPayment->sender_name.'</td>
@@ -209,11 +216,11 @@ class CustomerPaymentController extends Controller
                 {
                     if(Auth::guard('admin')->check())
                     {
-                        $data .=  '<td><button class="btn btn-danger" onclick="getpaymentapproval('.$customerPayment->id.')">Approval Pending</button></td>';
+                        $data .=  '<td><button class="btn btn-danger" onclick="actionpaymentapproval('.$customerPayment->id.',"approved")">Approval Pending</button></td>';
                     }
                     else
                     {
-                        $data .=  '<td><button class="btn btn-danger" disable>Approved</button></td>';
+                        $data .=  '<td><button class="btn btn-danger" disable>Approval Pending</button></td>';
                     }
                 }
                 else
@@ -221,6 +228,17 @@ class CustomerPaymentController extends Controller
                     $data .=  '<td><button class="btn btn-success" disable>Approved</button></td>';
                 }
                 
+                if($customerPayment->status == 'approval pending')
+                {
+                    $data .=  
+                    '<td><select class="btn btn-primary" onchange="actionpaymentapproval('.$customerPayment->id.',this.value)">';
+                    
+                    $data .=  '
+                    <option value="">Select Action</option>
+                    <option value="delete">Delete</option>
+                    <option value="approval pending">Remove Approval</option>
+                    </select></td>';
+                }
                 
                   
                 $data .= '</tr>'; 

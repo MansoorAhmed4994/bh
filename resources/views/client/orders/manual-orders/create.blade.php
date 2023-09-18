@@ -25,7 +25,20 @@
             
             $('#number').focusout('click',function(e)
             {  
-                //alert(final_images);
+                var number = $('#number').val();
+                const firstTwoChars = number.slice(0, 2);
+                if(firstTwoChars == '92')
+                {
+                    alert('please coorect receiver number (for e.g: 03XXXXXXXXX)');
+                    return;
+                }
+                else if(number.length != '11')
+                {
+                    alert('please coorect receiver number (for e.g: length must be 11 digit)');
+                    return;
+                    
+                }
+                // console.log(firstTwoChars);
                 var base_url = '<?php echo e(url('/')); ?>';
                 $.ajax({
                     headers: {
@@ -33,7 +46,7 @@
                     },
                     url: base_url + '/client/orders/ManualOrders/previouse/order-history',
                     data: {
-                        number:  $('#number').val(), 
+                        number: number,  
                     },
                     type: 'POST',
                     dataType: 'json',
@@ -176,7 +189,7 @@
                     <small id="images_error" class="form-text text-danger">@if($errors->get('images')) {{$errors->first('images')}}@endif </small>
                 </div> 
     
-                <div class="form-group">
+                <div class="form-group"> 
                     <label for="Number">Number</label>
                     <input type="tel"  class="form-control"   pattern="0[0-9]{2}(?!1234567)(?!1111111)(?!7654321)[0-9]{8}" id="number"  name="number" placeholder="number Number" required>
                     <small id="number_error" class="form-text text-danger">@if($errors->get('number')) {{$errors->first('number')}} @endif</small>

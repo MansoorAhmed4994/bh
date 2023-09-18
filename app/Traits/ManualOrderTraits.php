@@ -24,8 +24,7 @@ trait ManualOrderTraits {
             'images' => 'required',
             'first_name' => 'required',
             'number' => 'required',
-            'address' => 'required',
-            'order_id' => 'required'
+            'address' => 'required', 
 
         ]);
         

@@ -110,34 +110,20 @@
                     </ul>
                 @else
                     <ul class="navbar-nav">
-                        <li class="nav-item active"> <a class="nav-link" href="{{route('dashboard')}}">dashboard </a> </li>
-                        <li class="nav-item active"> <a class="nav-link" href="{{route('manualOrders.quick.search')}}">Quick Search </a> </li>
+                        <li class="nav-item active"> <a class="nav-link" href="{{route('dashboard')}}">dashboard </a> </li> 
                         <li class="nav-item dropdown" id="myDropdown">
                             <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Manual Orders</a>
                             <ul class="dropdown-menu">
-                                <li> <a class="dropdown-item" href="{{route('ManualOrders.create')}}"> Add New order </a></li>
+                                <li> <a class="dropdown-item" href="{{route('ManualOrders.create')}}"> Add Order</a></li>
                                 <li> <a class="dropdown-item" href="{{route('ManualOrders.index')}}"> List</a></li>
-                                <li> <a class="dropdown-item" href="{{route('ManualOrders.dipatch.bulk.orders')}}">Dispatch Bulk Orders</a></li>
-                                <li> <a class="dropdown-item" href="{{route('ManualOrders.track.order')}}">Track</a></li>
-                                <li> <a class="dropdown-item" href="{{route('ManualOrders.print.slip.by.scan')}}">Prict Slip By Scan</a></li> 
-                                <li> <a class="dropdown-item" href="{{route('customer.payments.index')}}">Customer Payment</a></li>
-                                <li> <a class="dropdown-item" href="{{route('ManualOrders.reports.printed.slips')}}">Printed Slips</a></li>
-                                
+                                <li> <a class="dropdown-item" href="{{route('customer.payments.index')}}">Order Payment</a></li> 
+                                <li> <a class="dropdown-item" href="{{{route('manualOrders.quick.search')}}">Quick Order Actions</a></li> 
                             </ul> 
-                        </li><li class="nav-item dropdown" id="myDropdown">
-                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Reports</a>
-                            <ul class="dropdown-menu">
-                                <li> <a class="dropdown-item" href="{{route('ManualOrders.reports.printed.slips')}}">Printed Slips</a></li>
-                                
-                            </ul> 
-                        </li>
                         <li class="nav-item dropdown" id="myDropdown">
-                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Inventory</a>
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Loadsheets</a>
                             <ul class="dropdown-menu">
-                                <li> <a class="dropdown-item" href="{{route('inventory.index')}}"> Manage Inventory </a></li> 
-                                <li> <a class="dropdown-item" href="{{route('inventory.pos')}}"> POS </a></li>
-                            </ul> 
-                        </li>
+                                <li> <a class="dropdown-item" href="{{route('ManualOrders.dipatch.bulk.orders')}}">Local Loadsheet</a></li> 
+                            </ul>
                         <li class="nav-item dropdown" id="shipment">
                             <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Shipment</a>
                             <ul class="dropdown-menu">
@@ -147,10 +133,7 @@
                         </li>
                         <li class="nav-item active"> 
                             <a class="nav-link" target="_blank" href="{{route('ManualOrders.track.order')}}">Track Order </a> 
-                        </li>
-                        <li class="nav-item active"> 
-                            <a class="nav-link" target="_blank" href="{{route('inactive.customers')}}">Inactive Customers </a> 
-                        </li>
+                        </li> 
                     </ul>
                     <ul class="navbar-nav ms-auto"> 
                         <li class="nav-item dropdown">

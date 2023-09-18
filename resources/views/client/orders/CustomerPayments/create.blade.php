@@ -3,6 +3,7 @@
 
 @section('content') 
 <script type="application/javascript">
+var base_url = '<?php echo e(url('/')); ?>';
         function fetch_data(name,address)
         {
             $( document ).ready(function() {
@@ -25,9 +26,8 @@
             
             $('#order_id').focusout('click',function(e)
             {  
+                 
                 
-                alert('working');
-                var base_url = '<?php echo e(url('/')); ?>';
                 $.ajax({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -49,6 +49,33 @@
                 });
             });
         });
+        
+            
+            function actionpaymentapproval(id,action)
+            {
+                 alert(id);
+                
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: base_url + '/client/orders/CustomerPayment/ActionCustomerPayments',
+                    data: {
+                        payment_id:  id, 
+                        action:  action, 
+                    },
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function(e)
+                    { 
+                        $('#previouse_order_detail').html(e.messege); 
+                        // alert(e.messege); 
+                    },
+                    error: function(e) {
+                        console.log(e.responseText);
+                    }
+                });
+            }
     </script>
     
     <style> 
@@ -74,11 +101,11 @@
         </div>
     </div>
       
-    <div class="container"> 
+    <div class="col-sm-12"> 
          
         
         <div class="row">
-            <div class="col-sm-4">
+            <div class="col-sm-3">
                 <form method="post" action="{{ route('customer.payments.store') }}" enctype="multipart/form-data" class="dropzone" id="dropzone">
                     @csrf
         
