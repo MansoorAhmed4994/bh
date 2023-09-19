@@ -497,7 +497,7 @@ var container = "";
             
                         <div class="form-group">
                             <label for="Number">Advance Payment</label>
-                            <input type="text" class="form-control" onkeyup="change_price_popup_status()" id="advance_payment"  name="advance_payment" placeholder="Advance Payment" required>
+                            <input type="text" class="form-control" onkeyup="change_price_popup_status()" id="advance_payment"  name="advance_payment" placeholder="Advance Payment" readonly>
                             <small id="advance_payment_error" class="form-text text-danger"></small>
                         </div>
             

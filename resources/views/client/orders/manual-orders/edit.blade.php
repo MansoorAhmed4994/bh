@@ -213,9 +213,78 @@
                     }
                 });
             });
+             
+            $('#btncustomerpaymentiframe').on('click',function(e)
+            { 
+                $('#customerpaymentiframe').modal('show');
+                $('#customerpaymentiframe').modal('handleUpdate');
+                
+            });
+            
+            $('#btnclosecustomerpaymentiframe,#btnclose2customerpaymentiframe').on('click',function(e)
+            { 
+                // $("body").addClass("loading"); 
+                $('#customerpaymentiframe').modal('hide'); 
+                var order_id = document.getElementById('order_id').value;
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: base_url + '/client/orders/ManualOrders/GetAdvacePayment',
+                    data: { 
+                        order_id: order_id, 
+                    },
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function(e)
+                    {
+                        console.log(e);
+                        $('#advance_payment').val(e.advance_payment); 
+                        // $("body").removeClass("loading"); 
+                    },
+                    error: function(e) {
+                        console.log(e.responseText);
+                    }
+                });
+            });  
+            
         });
 
-        
+        function validateForm()
+        { 
+
+            var validation_status = true;
+             
+            //  alert(fi.files.length);
+            
+            
+            if($('#shipment_type').val() == 'trax')
+            {
+                if($('#shipping_mode_id').val() == '')
+                {
+                    
+                    validation_status = false;
+                    $('#shipping_mode_id_error').html('Please Select Shipment Method'); 
+                    $('#fare_error').html('Please Select Shipment Method to auto fil fare');
+                }
+                
+                if($('#fare').val() == '')
+                {
+                    
+                    validation_status = false;
+                    $('#fare_error').html('Please Select Shipment Method to auto fil fare');
+                }
+            }
+            
+            if($('#product_price').val() == '' || $('#product_price').val() <= '0')
+            {
+                
+                validation_status = false;
+                $('#product_price_error').html('Please enter price');  
+            }
+            
+            return validation_status;
+        }
 
         
 
@@ -231,6 +300,27 @@
 
     </style>  
 </head>
+
+<div class="modal fade" id="customerpaymentiframe" tabindex="-1" role="dialog" aria-labelledby="customerpaymentiframe" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl" style="height:80%" role="document">
+    <div class="modal-content"  style="height:100%">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Customer Payment</h5>
+        <button type="button" class="close" data-dismiss="modal" id="btnclose2customerpaymentiframe" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <iframe src="{{route('customer.payments.index')}}" style="width:100%;height:100%" title="W3Schools Free Online Web Tutorials"></iframe>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="btnclosecustomerpaymentiframe" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
     <div class="row mb-3">
         <div class="col-lg-12 margin-tb">
             <div class="text-center">
@@ -247,7 +337,7 @@
             </div> 
         @endif
 
-        <form action="{{ route('ManualOrders.update',$ManualOrder->id) }}" id="update_form"  enctype="multipart/form-data" method="post">
+        <form action="{{ route('ManualOrders.update',$ManualOrder->id) }}" onsubmit="return validateForm()" id="update_form"  enctype="multipart/form-data" method="post">
             @csrf
             
             <input type="hidden" value="{{$ManualOrder->id}}" name="order_id" id="order_id">
@@ -362,29 +452,35 @@
                     <h5>Payment Details <hr></h5>
                     <div class="form-group col-auto">
                         <label for="Product Price">Product Price</label>
-                        <input type="text" class="form-control @if($errors->get('product_price')) is-invalid @endif" value="{{old('product_price')}}@if(isset($product_price)){{$product_price}}@endif" onchange="onchangeprice();" id="product_price"  name="product_price" required readonly>
-                        @if($errors->get('product_price')) <small id="product_price_error" class="form-text text-danger">{{$errors->first('product_price')}} </small>@endif
+                        <input type="text" class="form-control @if($errors->get('product_price')) is-invalid @endif" value="{{old('product_price')}}@if(isset($product_price)){{$product_price}}@endif" onchange="onchangeprice();get_fare_list();" id="product_price"  name="product_price" required>
+                         <small id="product_price_error" class="form-text text-danger">@if($errors->get('product_price')){{$errors->first('product_price')}} @endif</small>
                     </div>
                     <div class="form-group col-auto">
                         <label for="Delivery Charges">Delivery Charges</label>
-                        <input type="text" class="form-control @if($errors->get('dc')) is-invalid @endif" value="{{old('dc')}}@if(isset($ManualOrder)){{$ManualOrder->dc}}@endif" onchange="onchangeprice();" id="dc"  name="dc" placeholder="dc" required>
+                        <input type="text" class="form-control @if($errors->get('dc')) is-invalid @endif" value="{{old('dc')}}@if(isset($ManualOrder)){{$ManualOrder->dc}}@endif" onchange="onchangeprice();get_fare_list();" id="dc"  name="dc" placeholder="dc" required>
                         @if($errors->get('dc')) <small id="dc_error" class="form-text text-danger">{{$errors->first('dc')}} </small>@endif
                     </div>
                     <div class="form-group col-auto">
                         <label for="Packaging Cost">Packaging Cost</label>
-                        <input type="text" class="form-control @if($errors->get('packaging_cost')) is-invalid @endif" value="{{old('packaging_cost')}}@if(isset($ManualOrder)){{$ManualOrder->packaging_cost}}@endif" id="packaging_cost" onchange="onchangeprice();" name="packaging_cost" placeholder="packaging_cost" >
+                        <input type="text" class="form-control @if($errors->get('packaging_cost')) is-invalid @endif" value="{{old('packaging_cost')}}@if(isset($ManualOrder)){{$ManualOrder->packaging_cost}}@endif" id="packaging_cost" onchange="onchangeprice();get_fare_list();" name="packaging_cost" placeholder="packaging_cost" >
                         @if($errors->get('packaging_cost')) <small id="packaging_cost_error" class="form-text text-danger">{{$errors->first('packaging_cost')}} </small>@endif
                     </div>
                     <div class="form-group col-auto">
                         <label for="Number">price</label>
                         <input type="text" class="form-control @if($errors->get('price')) is-invalid @endif" value="{{old('price')}}@if(isset($ManualOrder)){{$ManualOrder->price}}@endif" onchange="onchangeprice();" id="price"  name="price" placeholder="Price" readonly>
-                        @if($errors->get('price')) <small id="price_error" class="form-text text-danger">{{$errors->first('price')}} </small>@endif
+                        
                     </div>
-        
                     <div class="form-group col-auto">
                         <label for="Number">Advance Payment</label>
-                        <input type="text" class="form-control @if($errors->get('advance_payment')) is-invalid @endif" onchange="onchangeprice()" value="{{old('advance_payment')}}@if(isset($ManualOrder)){{$ManualOrder->advance_payment}}@endif" onchange="onchangeprice();" id="advance_payment"  name="advance_payment" placeholder="Advance Payment" readonly>
                         @if($errors->get('advance_payment')) <small id="advance_payment_error" class="form-text text-danger">{{$errors->first('advance_payment')}} </small>@endif
+                        
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text" id="btncustomerpaymentiframe">Add</div>
+                            </div>
+                            <input type="text" class="form-control @if($errors->get('advance_payment')) is-invalid @endif" onchange="onchangeprice()" value="{{old('advance_payment')}}@if($ManualOrder->advance_payment !== null){{$ManualOrder->advance_payment}}@else 0 @endif" onchange="onchangeprice();" id="advance_payment"  name="advance_payment" placeholder="Advance Payment" readonly>
+                        </div>
+                        @if($errors->get('price')) <small id="price_error" class="form-text text-danger">{{$errors->first('price')}} </small>@endif
                     </div>
         
                     <div class="form-group col-auto">
@@ -425,40 +521,44 @@
                     
                     <div class="form-group col-sm">
                         <label for="address">Shipment type</label>
-                        <select class="form-control" id="shipment_type" name="shipment_type" required>
+                        <select class="form-control" id="shipment_type" onchange="get_fare_list();shipment_type_change();" name="shipment_type" required>
                             <option value="">Select Shipment type</option>
-                            <option value="local_rider">Local Rider</option>
+                            <option value="local">Local Rider</option>
                             <option value="trax">Trax</option> 
                         </select> 
                         <small id="shipment_type_error" class="form-text text-danger"></small>
                     </div>
-                    
+                
+                    <div id="trax_shipment_fields" style="display:none;">
                         
-                    <div class="form-group col-sm"> 
-                        <label for="receiver_name">Shipment Method</label>
-                        <select class="form-control @if($errors->get('shipping_mode_id')) is-invalid @endif shipping_mode_id_dropdown shipping_mode_id" name="shipping_mode_id" id="shipping_mode_id" onchange="calculate_charges()" required>
-                            <option value="" selected="selected">Select Shipment Method</option> 
-                            <option value="1">Rush</option>
-                            <option value="2">Saver Plus</option>
-                            <option value="3">Swift</option>
-                        </select>
+                        <div class="form-group col-sm"> 
+                            <label for="Shipment Method">Shipment Method</label>
+                            <select class="form-control @if($errors->get('shipping_mode_id')) is-invalid @endif shipping_mode_id_dropdown shipping_mode_id" name="shipping_mode_id" id="shipping_mode_id" onchange="calculate_charges()" >
+                                <option value="" selected="selected">Select Shipment Method</option> 
+
+                            </select>
+                            <small id="shipping_mode_id_error" class="form-text text-danger shipping_mode_id_error">@if($errors->get('fare')) {{$errors->first('fare')}} @endif</small>
+                        </div>
+        
+                        <div class="form-group col-sm">
+                            <label for="fare">Fare</label>
+                            <input type="text" onkeyup="limit(this);" class="form-control @if($errors->get('fare')) is-invalid @endif fare" value="{{old('fare')}}@if(isset($ManualOrder)){{trim($ManualOrder->fare)}}@endif" id="fare" autocomplete="off" name="fare" placeholder="fare"  >
+                            <small id="fare_error" class="form-text text-danger fare_error">@if($errors->get('fare')) {{$errors->first('fare')}} @endif</small>
+                        </div>
+        
+                        <div class="form-group col-sm">
+                            <label for="reference_number">Customer refence</label>
+                            <input type="text" class="form-control @if($errors->get('reference_number')) is-invalid @endif" value="{{old('reference_number')}}@if(isset($ManualOrder)){{trim($ManualOrder->reference_number)}}@endif" id="reference_number"  name="reference_number" required>
+                            @if($errors->get('reference_number')) <small id="reference_number_error" class="form-text text-danger">{{$errors->first('reference_number')}} </small>@endif
+                        </div>
+                        
                     </div>
-    
-                    <div class="form-group col-sm">
-                        <label for="fare">Fare</label>
-                        <input type="text" onkeyup="limit(this);" class="form-control @if($errors->get('fare')) is-invalid @endif fare" value="{{old('fare')}}@if(isset($ManualOrder)){{trim($ManualOrder->fare)}}@endif" id="fare" autocomplete="off" name="fare" placeholder="fare"  required>
-                        @if($errors->get('fare')) <small id="fare_error" class="form-text text-danger fare_error">{{$errors->first('fare')}} </small>@endif
-                    </div>
-    
-                    <div class="form-group col-sm">
-                        <label for="reference_number">Customer refence</label>
-                        <input type="text" class="form-control @if($errors->get('reference_number')) is-invalid @endif" value="{{old('reference_number')}}@if(isset($ManualOrder)){{trim($ManualOrder->reference_number)}}@endif" id="reference_number"  name="reference_number" required>
-                        @if($errors->get('reference_number')) <small id="reference_number_error" class="form-text text-danger">{{$errors->first('reference_number')}} </small>@endif
+                        
+                    <div class="form-group col-auto">
+                        <button type="submit" class="btn btn-primary" name="submit" value="save">Save</button>
+                        <button type="submit" class="btn btn-primary" name="submit" value="saveandprint">Save & Print Slip</button>
                     </div>
                     
-                    <div class="form-group col-auto">
-                        <button type="submit" class="btn btn-primary">Save</button>
-                    </div>
                 </div> 
                 
             </div>
@@ -510,7 +610,7 @@
                                     <?$row_id++?>
                                 </tr>
                             @endforeach
-                            <?php $total_amount+=250;?>
+                            <?php $total_amount+=0;?>
                             
                         </tbody>
                         <tbody id="row_data">
@@ -629,6 +729,11 @@
 
 function get_fare_list()
 {   
+    var shipment_type_value = document.getElementById("shipment_type").value;
+    if( shipment_type_value == 'local' || shipment_type_value == '')
+    {
+        return;
+    }
     document.getElementById("fare").value = '';
     let destination_city_id = document.getElementById("city").value;
     let estimated_weight = document.getElementById("weight").value;
@@ -678,10 +783,8 @@ function get_fare_list()
             amount:price,
           },
           success:function(response){
-              
-              //console.log(response);
-            //$('#successMsg').show();
-            if(response.data.status == 0)
+               
+            if(response.best_fare.length != 0)
             {
                 text ='';
                 //console.log(response.best_fare);
@@ -712,6 +815,20 @@ function get_fare_list()
             // $('#messageErrorMsg').text(response.responseJSON.errors.message);
           },
       });
+}
+
+function shipment_type_change()
+{
+    var shipment_type_value = document.getElementById("shipment_type").value;
+    if(shipment_type_value == 'trax')
+    {
+        document.getElementById("trax_shipment_fields").style.display = "block"; 
+    }
+    else if(shipment_type_value == 'local' || shipment_type_value == '')
+    { 
+        document.getElementById("trax_shipment_fields").style.display = "none";
+    }
+    
 }
 
 

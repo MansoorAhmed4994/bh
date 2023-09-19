@@ -53,22 +53,43 @@ var base_url = '<?php echo e(url('/')); ?>';
             
             function actionpaymentapproval(id,action)
             {
-                 alert(id);
-                
+                //  alert(id);
+                 var ur = '';
+                if(action == 'delete')
+                {
+                    url = '/client/orders/CustomerPayment/delete/'+id;
+                }
+                else if(action == 'approved')
+                {
+                    url = '/client/orders/CustomerPayment/ChangeStatus/'+id+'/approved';
+                    
+                }
+                else if(action == 'approval pending')
+                {
+                    url = '/client/orders/CustomerPayment/ChangeStatus/'+id+'/approval pending';
+                    
+                }
                 $.ajax({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: base_url + '/client/orders/CustomerPayment/ActionCustomerPayments',
+                    url: base_url + url,
                     data: {
                         payment_id:  id, 
                         action:  action, 
                     },
-                    type: 'POST',
+                    type: 'GET',
                     dataType: 'json',
                     success: function(e)
                     { 
-                        $('#previouse_order_detail').html(e.messege); 
+                        if(e.error == 1)
+                        {
+                            alert(e.messege);
+                        }
+                        else
+                        {
+                            alert(e.messege); 
+                        }
                         // alert(e.messege); 
                     },
                     error: function(e) {
@@ -133,6 +154,12 @@ var base_url = '<?php echo e(url('/')); ?>';
                         <label for="First Name">Sender Name</label>
                         <input type="text" class="form-control" id="sender_name"  name="sender_name" >
                         <small id="datetime_error" class="form-text text-danger"></small>
+                    </div> 
+        
+                    <div class="form-group">
+                        <label for="First Name">Amount</label>
+                        <input type="number" class="form-control" id="amount"  name="amount" >
+                        <small id="amount_error" class="form-text text-danger"></small>
                     </div> 
         
                     <div class="form-group">

@@ -217,6 +217,7 @@ class TraxController extends Controller
         $data['amount'] = $request->amount;
         $calculation =  $this->CalculateDestinationRates($data);
         
+        
         if($calculation->status == 0)
         {
             //dd();
@@ -232,14 +233,17 @@ class TraxController extends Controller
             'shippment' => 'Rush',
             'fare'=>$total_charges+$gst,
             ));
-            //echo '<pre>';print_r($calculation);
+            // echo '<pre>';print_r($calculation);
             
         }
+            // echo '<pre>';print_r($calculation);
         
         $data['shipping_mode_id'] = 2;
         $calculation =  $this->CalculateDestinationRates($data);
         if($calculation->status == 0)
         {
+            
+            // dd('checking shipment 2',$calculation);
             $charges = $calculation->information->charges; 
             $total_charges = $charges->total_charges;
             $gst = $charges->gst;
@@ -251,10 +255,12 @@ class TraxController extends Controller
             'shippment' => 'Saver Plus',
             'fare'=>$total_charges+$gst,
             ));
+            
             // echo '<pre>';print_r($data);
             // echo '<pre>';print_r($calculation);
             // echo '<pre>';print_r($best_fare);
         }
+            // echo '<pre>';print_r($calculation);
         
         $data['shipping_mode_id'] = 3;
         $calculation =  $this->CalculateDestinationRates($data);
@@ -273,7 +279,9 @@ class TraxController extends Controller
             'fare'=>$total_charges+$gst,
             )); 
         }
-        //dd($best_fare);
+            // echo '<pre>';print_r($calculation);
+            
+            
         if($best_fare_result == 1)
         {
             return response()->json(['data' => $calculation,'best_fare'=>$best_fare]);
@@ -314,7 +322,7 @@ class TraxController extends Controller
         //     return response()->json(['data' => $calculation]);
             
         // }
-        return response()->json(['data' => $calculation]);
+        return response()->json(['data' => $calculation,'best_fare'=>$best_fare]);
         
     }
      

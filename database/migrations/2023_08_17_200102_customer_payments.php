@@ -18,7 +18,8 @@ class CustomerPayments extends Migration
             $table->bigInteger('order_id');
             $table->bigInteger('transaction_id');
             $table->string('sender_name')->nullable();  
-            $table->string('transfer_to')->nullable(); 
+            $table->string('transfer_to')->nullable();
+            $table->bigInteger('amount'); 
             $table->datetime('datetime');
             $table->string('images')->nullable();
             $table->string('description')->nullable();

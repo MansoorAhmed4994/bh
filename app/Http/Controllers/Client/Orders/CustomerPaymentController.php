@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 
 //Models
 use App\Models\Client\CustomerPayments; 
+use App\Models\Client\ManualOrders;
 
 //Libraries
 use Carbon\Carbon;
@@ -55,6 +56,7 @@ class CustomerPaymentController extends Controller
             'order_id' => 'required',
             'transaction_id' => 'required',
             'sender_name' => 'required',
+            'amount' => 'required',
             'datetime' => 'required',
             'transfer_to' => 'required',
             'description' => 'required',
@@ -94,7 +96,8 @@ class CustomerPaymentController extends Controller
             $customer_payments = new CustomerPayments(); 
             $customer_payments->order_id = $request->order_id;
             $customer_payments->transaction_id = $request->transaction_id;
-            $customer_payments->sender_name = $request->sender_name; 
+            $customer_payments->sender_name = $request->sender_name;
+            $customer_payments->amount = $request->amount; 
             $customer_payments->datetime = $request->datetime; 
             $customer_payments->transfer_to = $request->transfer_to; 
             $customer_payments->description = $request->description;
@@ -106,8 +109,18 @@ class CustomerPaymentController extends Controller
              $status = $customer_payments->save();
             //  dd($status);
             if($status)
-            {
-                return redirect()->route('customer.payments.index')->with('success','Payment id:  '.$request->transaction_id.'  Successfully Added');
+            { 
+                $amount = CustomerPayments::where('customer_payments.order_id',$request->order_id)->sum('amount');
+                $ManualOrder = ManualOrders::where('id',$request->order_id)->update(['advance_payment' => $amount]);
+                if($ManualOrder)
+                {
+                    
+                    return redirect()->route('customer.payments.index')->with('success','Payment id:  '.$request->transaction_id.'  Successfully Added');
+                }
+                else
+                {
+                    return redirect()->route('customer.payments.index')->with(['errors'=>'Advance payment not update but payment S.S uploaded']);
+                }
                 // return 'Payment id:  '.$request->transaction_id.'  Successfully Added';
             }
             else
@@ -165,6 +178,62 @@ class CustomerPaymentController extends Controller
      */
     public function destroy($id)
     {
+        $delete_query = CustomerPayments::find($id);
+        $order_id = $delete_query->order_id;
+        $status = ManualOrders::find($order_id)->status;
+        $update_status = false;
+        
+        
+        if($status != 'dispatched' )
+        {
+            $update_status = true; 
+        } 
+        
+        if($status == 'dispatched' && Auth::guard('user')->check())
+        {
+            $update_status = false;
+            return response()->json([
+                'messege' => 'Order is dispatched! Only Admin can delete this payment',
+                'error' => 1
+                ]);
+        }
+        elseif($status == 'dispatched' && Auth::guard('admin')->check())
+        {
+            $update_status = true;
+        }
+        
+        if($update_status == true)
+        {
+            $status = $delete_query->delete();
+            if($status)
+            {
+                $amount = CustomerPayments::where('customer_payments.order_id',$order_id)->sum('amount');
+                $ManualOrder = ManualOrders::where('id',$order_id)->update(['advance_payment' => $amount]);
+                if($ManualOrder)
+                {
+                    return response()->json([
+                    'messege' => 'deleted',
+                    'error' => 0
+                    ]);
+                }
+                else
+                {
+                    return response()->json([
+                    'messege' => 'Manualorders payment not updated',
+                    'error' => 1
+                    ]);
+                }
+            }
+            else
+            {
+                return response()->json([
+                'messege' => 'Customer payment not deleted',
+                'error' => 1
+                ]);
+            }   
+        }
+            
+
         //
     }
     
@@ -180,20 +249,16 @@ class CustomerPaymentController extends Controller
          <thead>
                 <tr>
                     <th scope="col">id</th>
+                    <th scope="col">S.S</th>
                     <th scope="col">Order ID</th>
                     <th scope="col">Transaction id</th>
                     <th scope="col">Sender Name</th>
+                    <th scope="col">Amount</th>
                     <th scope="col">Datetime</th>
                     <th scope="col">Transfer To</th>
                     <th scope="col">Description</th>
-                    <th scope="col">Action Edit</th>';
-                    
-                    
-                    if(Auth::guard('admin')->check())
-                    {
-                        
-                        $data .=  '<th>Action Approved</td>';
-                    } 
+                    <th scope="col">Status</th>';
+                     
         
         $data .= ' 
                   <th scope="col">Action</th>
@@ -208,37 +273,41 @@ class CustomerPaymentController extends Controller
                     <td>'.$customerPayment->order_id.'</td>
                     <td>'.$customerPayment->transaction_id.'</td>
                     <td>'.$customerPayment->sender_name.'</td>
+                    <td>'.$customerPayment->amount.'</td>
                     <td>'.$customerPayment->datetime.'</td>
                     <td>'.$customerPayment->transfer_to.'</td>
-                    <td>'.$customerPayment->description.'</td>';
+                    <td>'.$customerPayment->description.'</td>
+                    <td>'.$customerPayment->status.'</td>';
                 
-                if($customerPayment->status == 'approval pending')
-                {
-                    if(Auth::guard('admin')->check())
-                    {
-                        $data .=  '<td><button class="btn btn-danger" onclick="actionpaymentapproval('.$customerPayment->id.',"approved")">Approval Pending</button></td>';
-                    }
-                    else
-                    {
-                        $data .=  '<td><button class="btn btn-danger" disable>Approval Pending</button></td>';
-                    }
-                }
-                else
-                {
-                    $data .=  '<td><button class="btn btn-success" disable>Approved</button></td>';
-                }
+                // if($customerPayment->status == 'approval pending')
+                // {
+                //     if(Auth::guard('admin')->check())
+                //     {
+                //         $data .=  '<td><button class="btn btn-danger" onclick="actionpaymentapproval('.$customerPayment->id.',"approved")">Approval Pending</button></td>';
+                //     }
+                //     else
+                //     {
+                //         $data .=  '<td><button class="btn btn-danger" disable>Approval Pending</button></td>';
+                //     }
+                // }
+                // else
+                // {
+                //     $data .=  '<td><button class="btn btn-success" disable>Approved</button></td>';
+                // }
                 
-                if($customerPayment->status == 'approval pending')
+               
+                $data .=  
+                '<td><select class="btn btn-primary" onchange="actionpaymentapproval('.$customerPayment->id.',this.value)">';
+                
+                $data .=  '<option value="">Select Action</option>';
+                $data .=  '<option value="delete">Delete</option>';
+                if(Auth::guard('admin')->check())
                 {
-                    $data .=  
-                    '<td><select class="btn btn-primary" onchange="actionpaymentapproval('.$customerPayment->id.',this.value)">';
-                    
-                    $data .=  '
-                    <option value="">Select Action</option>
-                    <option value="delete">Delete</option>
-                    <option value="approval pending">Remove Approval</option>
-                    </select></td>';
+                    $data .=  '<option value="approval pending">Remove Approval</option>';
+                    $data .=  '<option value="approved">Approved</option>';
                 }
+                $data .=  '</select></td>';
+                
                 
                   
                 $data .= '</tr>'; 
@@ -248,5 +317,37 @@ class CustomerPaymentController extends Controller
         return response()->json([
             'messege' => $data
             ]);
+    }
+    
+    
+    public function CheckPaymentApproval($order_id)
+    {
+        
+    }
+    
+    public function ChangePaymentStatus($id,$status)
+    {
+        // dd($id,$status);
+        if(Auth::guard('admin')->check())
+        { 
+            $status = CustomerPayments::where('id',$id)->update(['status' => $status]); 
+            if($status)
+            {
+                return response()->json([
+                'messege' => 'updated status to '.$status,
+                'error' => 0
+                ]);
+            }
+        }
+        else
+        {
+            return response()->json([
+            'messege' => 'Only Admin can change the status',
+            'error' => 1
+            ]);
+        }
+            
+        
+                
     }
 }

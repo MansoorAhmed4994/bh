@@ -43,13 +43,15 @@ Route::group(['prefix' => 'client/orders/', 'namespace' => 'Client\Orders', 'mid
     Route::get('get_product_details/{Sku}', 'ManualOrdersController@get_product_details')->name('get.product.details');
     Route::get('ManualOrders/print_slip_by_scan/', 'ManualOrdersController@print_slip_by_scan')->name('ManualOrders.print.slip.by.scan');
     Route::post('ManualOrders/print/order-action', 'ManualOrdersController@order_action')->name('ManualOrders.order.action'); 
-    Route::get('ManualOrders/get-order-details/{ManualOrder}', 'ManualOrdersController@get_order_details')->name('ManualOrders.get.order.detail');
+    Route::get('ManualOrders/get-order-details/{ManualOrder}', 'ManualOrdersController@get_order_details')->name('ManualOrders.get.order.detail'); 
     Route::get('ManualOrders/print/PosSlip/{ManualOrder}', 'ManualOrdersController@PrintPosSlip')->name('ManualOrders.print.pos.slip'); 
     Route::get('ManualOrders/chec-pos-slip-duplication/{ManualOrder}', 'ManualOrdersController@CheckPosSlipDuplication')->name('ManualOrders.check.pos.slip.duplication'); 
+    Route::post('ManualOrders/GetAdvacePayment', 'ManualOrdersController@GetAdvacePayment')->name('ManualOrders.get.advance.payment'); 
     
     
     //edit
-    Route::get('ManualOrders/{Manualorders}/edit', 'ManualOrdersController@edit')->name('ManualOrders.edit');
+    Route::get('ManualOrders/edit/{ManualOrder}/', 'ManualOrdersController@edit')->name('ManualOrders.edit');
+    Route::get('ManualOrders/details/', 'ManualOrdersController@details')->name('ManualOrders.details');
     Route::any('ManualOrders/update/{ManualOrder}', 'ManualOrdersController@update')->name('ManualOrders.update');
     Route::post('ManualOrders/add-image', 'ManualOrdersController@add_order_image')->name('ManualOrders.add.order.image');
     Route::get('ManualOrders/dispatch-order-edit/{ManualOrder}', 'ManualOrdersController@popup_dispatch_edit')->name('ManualOrders.dispatch.order.edit');
@@ -90,6 +92,8 @@ Route::group(['prefix' => 'client/orders/', 'namespace' => 'Client\Orders', 'mid
     Route::any('CustomerPayments/', 'CustomerPaymentController@index')->name('customer.payments.index');
     Route::post('CustomerPayment/GetCustomerPayments', 'CustomerPaymentController@GetCustomerPayments')->name('customer.payments.record.list');
     Route::post('CustomerPayment/ActionCustomerPayments', 'CustomerPaymentController@ActionCustomerPayments')->name('action.customer.payments');
+    Route::get('CustomerPayment/delete/{id}', 'CustomerPaymentController@destroy')->name('customer.payments.delete');
+    Route::get('CustomerPayment/ChangeStatus/{id}/{status}', 'CustomerPaymentController@ChangePaymentStatus')->name('customer.payments.change.status');
     
     //create
     Route::post('CustomerPayments/store', 'CustomerPaymentController@store')->name('customer.payments.store');

@@ -19,6 +19,7 @@ use App\Models\Client\Cities;
 use App\Models\Order_details;
 use App\Models\Client\Customers;
 use App\Models\ActivityLogs;
+use App\Models\Client\CustomerPayments; 
 
 //Traits
 use App\Traits\MNPTraits;
@@ -255,26 +256,45 @@ class ManualOrdersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+     
+    public function details($Manualorders = null)
+    {
+        return view('client.orders.manual-orders.details');
+    }
+     
     public function edit($ManualOrder)
     {
         
-        //dd($ManualOrder);
-        $this->UpdateReferenceNumberByOrderIds([$ManualOrder]);
+        // dd($Manualorders);
         $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.id',$ManualOrder)->first();
-        $cities = $this->get_trax_cities();
         // dd($ManualOrder);
+        if($ManualOrder == null)
+        {
+            dd('no such order id found');
+        }
+        $cities = $this->get_trax_cities();
+        $this->UpdateReferenceNumberByOrderIds([$ManualOrder]);
+        
         $inventory = Inventory::leftJoin('products', 'inventories.products_id', '=', 'products.id')->
         select(
-            'inventories.id as id',
-            'products.sku as sku',
-            'products.name as name',
-            'products.sale_price as sale'
-            )
-            ->where(['inventories.reference_id'=>$ManualOrder->id,'inventories.stock_status' => 'out'])->get();
-// dd($inventory); 
-        //dd(ManualOrders::leftJoin('customers', 'customers.id', '=', 'manual_orders.customers_id')->where('manual_orders.status','pending')); 
-        // dd($cities) ;
+        'inventories.id as id',
+        'products.sku as sku',
+        'products.name as name',
+        'products.sale_price as sale'
+        )
+        ->where(['inventories.reference_id'=>$ManualOrder->id,'inventories.stock_status' => 'out'])->get();
+        
         return view('client.orders.manual-orders.edit')->with(['ManualOrder'=>$ManualOrder, 'cities'=>$cities,'inventories'=>$inventory,'product_price'=>$this->updateorderprice($ManualOrder->id)]);
+
+        // if($Manualorders != null)
+        // {
+         
+        // }
+        // else
+        // {
+        //     return view('client.orders.manual-orders.edit')->with(['cities'=>$cities]);
+
+        // }
         //
     }
 
@@ -342,62 +362,84 @@ class ManualOrdersController extends Controller
         
         $traxdata = []; 
         //Shipment details
-        if($request->shipment_type == 'trax')
+        if($request->submit == "save")
         {
-            $mytime = Carbon::now();
-            $current_date_time = $mytime->toDateTimeString();
-            $pickup_address_id = $this->get_trax_pickup_address(); 
-            $reference_number= '('.$ManualOrder->id.')('.$current_date_time.')';
-            
-            $traxdata['order_id'] = $ManualOrder->id;
-            $traxdata['service_type_id'] = 1;
-            $traxdata['pickup_address_id'] = $pickup_address_id;
-            $traxdata['information_display'] = 0;
-            $traxdata['consignee_city_id'] = $request->city;
-            $traxdata['consignee_name'] = trim($request->receiver_name);
-            $traxdata['consignee_address'] = trim($request->reciever_address);
-            $traxdata['consignee_phone_number_1'] = trim($request->receiver_number);
-            $traxdata['consignee_email_address'] = trim('orderstesting@brandhub.com');
-            $traxdata['item_product_type_id'] = 1;
-            $traxdata['item_description'] = trim($request->description);
-            $traxdata['item_quantity'] = (int)trim($request->total_pieces);
-            $traxdata['item_insurance'] = 0;
-            $traxdata['item_price'] = trim($request->price);
-            $traxdata['pickup_date'] = $mytime;
-            $traxdata['special_instructions'] = trim('Nothing');
-            $traxdata['estimated_weight'] = trim($request->weight);
-            $traxdata['shipping_mode_id'] = (int)trim($request->shipping_mode_id);
-            $traxdata['amount'] = (int)trim($request->cod_amount);
-            $traxdata['$shipper_reference_number_1'] = $reference_number;
-            $traxdata['payment_mode_id'] = 1;
-            $traxdata['charges_mode_id'] = 4;
-            
-            $ApiResponse = $this->CreateBooking($traxdata);
-            // dd($ApiResponse);
-            if($ApiResponse->status == 0)
-            { 
-                $id = array();
-                array_push($id, $ApiResponse->tracking_number);
-                // dd($id);
-                $ManualOrder->date_order_paid = $request->date_order_paid;
-                $ManualOrder->reference_number = $request->reference_number;
-                $ManualOrder->service_type = $request->service_type; 
-                $ManualOrder->consignment_id = $ApiResponse->tracking_number;
-                $ManualOrder->status = 'dispatched';  
-                $status = $ManualOrder->save();
-                $slips = $this->print_trax_slips($id);
-                return view('client.orders.manual-orders.trax.print_trax_slip')->with('slips',$slips);
-            }
-            else
+            if($ManualOrder->save())
             {
-                dd('These shipments not created',$ApiResponse); 
+                return redirect()->route('ManualOrders.index')->with('success', 'Order Updated Successfully');
             }
-            
+        }
+        elseif($request->submit == 'saveandprint')
+        { 
+        
+            if($request->shipment_type == 'trax')
+            {
+                $mytime = Carbon::now();
+                $current_date_time = $mytime->toDateTimeString();
+                $pickup_address_id = $this->get_trax_pickup_address(); 
+                $reference_number= '('.$ManualOrder->id.')('.$current_date_time.')';
+                
+                $traxdata['order_id'] = $ManualOrder->id;
+                $traxdata['service_type_id'] = 1;
+                $traxdata['pickup_address_id'] = $pickup_address_id;
+                $traxdata['information_display'] = 0;
+                $traxdata['consignee_city_id'] = $request->city;
+                $traxdata['consignee_name'] = trim($request->receiver_name);
+                $traxdata['consignee_address'] = trim($request->reciever_address);
+                $traxdata['consignee_phone_number_1'] = trim($request->receiver_number);
+                $traxdata['consignee_email_address'] = trim('orderstesting@brandhub.com');
+                $traxdata['item_product_type_id'] = 1;
+                $traxdata['item_description'] = trim($request->description);
+                $traxdata['item_quantity'] = (int)trim($request->total_pieces);
+                $traxdata['item_insurance'] = 0;
+                $traxdata['item_price'] = trim($request->price);
+                $traxdata['pickup_date'] = $mytime;
+                $traxdata['special_instructions'] = trim('Nothing');
+                $traxdata['estimated_weight'] = trim($request->weight);
+                $traxdata['shipping_mode_id'] = (int)trim($request->shipping_mode_id);
+                $traxdata['amount'] = (int)trim($request->cod_amount);
+                $traxdata['$shipper_reference_number_1'] = $reference_number;
+                $traxdata['payment_mode_id'] = 1;
+                $traxdata['charges_mode_id'] = 4;
+                
+                $ApiResponse = $this->CreateBooking($traxdata);
+                // dd($ApiResponse);
+                if($ApiResponse->status == 0)
+                { 
+                    $id = array();
+                    array_push($id, $ApiResponse->tracking_number);
+                    // dd($id);
+                    $ManualOrder->date_order_paid = $request->date_order_paid;
+                    $ManualOrder->reference_number = $request->reference_number;
+                    $ManualOrder->service_type = $request->service_type; 
+                    $ManualOrder->consignment_id = $ApiResponse->tracking_number;
+                    $ManualOrder->status = 'dispatched';  
+                    $status = $ManualOrder->save();
+                    $slips = $this->print_trax_slips($id);
+                    return view('client.orders.manual-orders.trax.print_trax_slip')->with('slips',$slips);
+                }
+                else
+                {
+                    dd('These shipments not created',$ApiResponse); 
+                }
+                
+            }
+            else if($request->shipment_type == 'local')
+            {
+                // dd($ManualOrder);
+                $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.id',$ManualOrder->id)->get();
+                // foreach($ManualOrder as $ManualOrders)
+                // {
+                //     create_activity_log(['table_name'=>'manual_orders','ref_id'=>$ManualOrders->id,'activity_desc'=>'Local Slip','created_by'=>Auth::id(),'method'=>'print','route'=>route('ManualOrders.order.action')]);
+        
+                // }
+                return view('client.orders.manual-orders.print_slip')->with('ManualOrders',$ManualOrder);
+            }
         }
         
         //dd($ManualOrder);c
 
-        return redirect()->route('ManualOrders.index')->with('success', 'Order Updated Successfully');
+        // return redirect()->route('ManualOrders.index')->with('success', 'Order Updated Successfully');
     }
 
     /**
@@ -748,7 +790,6 @@ class ManualOrdersController extends Controller
     
     public function popup_dispatch_edit($ManualOrder)
     {
-        
         //dd($ManualOrder);
         $ManualOrder = ManualOrders::where('manual_orders.id',$ManualOrder)->first();
         //dd(ManualOrders::leftJoin('customers', 'customers.id', '=', 'manual_orders.customers_id')->where('manual_orders.status','pending')); 
@@ -1201,6 +1242,14 @@ class ManualOrdersController extends Controller
         $activitylog = ActivityLogs::select('*')->where('ref_id','=',$ManualOrder)->where('table_name','=','manual_orders')->where('activity_desc','=','pos slip')->get();
         // dd($activitylog);
         return response()->json(['status' => '1', 'messege' => 'success','activitylog'=>$activitylog,'manualorders'=>$manual_orders]);
+    }
+    
+    public function GetAdvacePayment(Request $request)
+    {
+        
+        $advance_payment = Manualorders::find($request->order_id)->advance_payment; 
+        return response()->json(['advance_payment' => $advance_payment]);
+        // dd($advance_payment);
     }
     
     
