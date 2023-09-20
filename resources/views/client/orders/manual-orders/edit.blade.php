@@ -355,11 +355,9 @@
 
         <form action="{{ route('ManualOrders.update',$ManualOrder->id) }}" onsubmit="return validateForm()" id="update_form"  enctype="multipart/form-data" method="post">
             @csrf
-            
-            <input type="hidden" value="{{$ManualOrder->id}}" name="order_id" id="order_id">
-            
-            <div class="col-sm-12 row"> 
-                <div class="col-sm-2">
+            <div class="col-sm-12 row">
+                <input type="hidden" value="{{$ManualOrder->id}}" name="order_id" id="order_id">
+                <div class="col-sm-3 row">
                     <div class="form-group">
                         <input type="file" name="images[]" id="images" accept="image/png, image/gif, image/jpeg" multiple/>
                         <!--<div class="file btn btn-lg btn-secondary">Add new-->
@@ -372,215 +370,214 @@
                     <?php $count=1;?>
                     
                     @if(!empty($ManualOrder->images))
-                        @foreach(explode('|', $ManualOrder->images) as $image)  
-                        <div class="form-group col-sm">
-                            <div class="card" id="imagebox{{$count}}" style="max-width: 200px;">
+                        @foreach(explode('|', $ManualOrder->images) as $image) 
+                        <div class="col-sm-6">
+                            <div class="card" id="imagebox{{$count}}" style="max-width: 100%;">
                                 <img class="card-img-top" src="{{asset($image)}}" alt="Card image cap" >
                                 <div class="card-body">
-                                    <button type="button"  onclick="delete_image('{{$image}}','imagebox{{$count}}')" class="btn btn-primary"  data-toggle="modal" data-target="#exampleModal">
-                                    delete
-                                    </button> 
+                                    <!--<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>-->
+                                    <a onclick="delete_image('{{$image}}','imagebox{{$count}}')" class="btn btn-primary"  data-toggle="modal" data-target="#exampleModal">Delete</a>
                                 </div>
                             </div>
                         </div>
+                        
                             <?php $count++;?> 
                         @endforeach
                     @endif
                     
                 </div>
-                
                     
-                <div class="col-sm-2">
-                    <h5>Customer Detail <hr></h5>
-        
-                    <div class="form-group col-auto">
-                        <label for="First Name">First Name</label>
-                        <input type="text" class="form-control @if($errors->get('first_name')) is-invalid @endif" value="{{old('first_name')}}@if(isset($ManualOrder)){{$ManualOrder->first_name}}@endif" id="first_name"  value="{{old('first_name')}} @if(isset($ManualOrder)) {{$ManualOrder->first_name}}  @endif" name="first_name" placeholder="First Name" required>
-                        @if($errors->get('first_name')) <small id="first_name_error" class="form-text text-danger"></small>{{$errors->first('first_name')}} @endif
-                    </div> 
-        
-                    <div class="form-group col-auto">
-                        <label for="First Name">last Name</label>
-                        <input type="text" class="form-control @if($errors->get('last_name')) is-invalid @endif" value="{{old('last_name')}}@if(isset($ManualOrder)){{$ManualOrder->last_name}}@endif" id="last_name"  value="{{old('last_name')}} @if(isset($ManualOrder)) {{$ManualOrder->last_name}}  @endif" name="last_name" placeholder="Last Name" >
-                        @if($errors->get('last_name')) <small id="last_name_error" class="form-text text-danger"></small>{{$errors->first('last_name')}} @endif
-                    </div> 
-        
+                <div class="col-sm-9 row"> 
                     
-        
-                    <div class="form-group col-auto">
-                        <label for="Number">Number</label>
-                        <input type="text" class="form-control @if($errors->get('number')) is-invalid @endif" value="{{old('number')}}@if(isset($ManualOrder)){{$ManualOrder->number}}@endif" id="number"  name="number" placeholder="number Number" required>
-                        @if($errors->get('number')) <small id="number_error" class="form-text text-danger">{{$errors->first('number')}} </small>@endif
-                    </div>     
-        
-                    <div class="form-group col-auto">
-                        <label for="Number">Whatsapp Number</label>
-                        <input type="text" class="form-control @if($errors->get('whatsapp_number')) is-invalid @endif" value="{{old('whatsapp_number')}}@if(isset($ManualOrder)){{$ManualOrder->number}}@endif" id="whatsapp_number"  name="whatsapp_number" placeholder="Whatsapp number" >
-                        @if($errors->get('whatsapp_number')) <small id="whatsapp_number_error" class="form-text text-danger">{{$errors->first('whatsapp_number')}} </small>@endif
-                    </div> 
-        
-                    <div class="form-group col-auto">
-                        <label for="address">Address</label>
-                        <textarea class="form-control" id="address @if($errors->get('address')) is-invalid @endif"   name="address" placeholder="address" required>{{old('address')}}@if(isset($ManualOrder)){{$ManualOrder->address}}@endif</textarea>
-                        <small id="address_error" class="form-text text-danger">@if($errors->get('address')) {{$errors->first('address')}} @endif</small>
-                    </div>  
-                </div>
-                
-                <div class="col-sm-2">
+                    
+                        
+                    <div class="col-sm-2">
+                        <h5>Customer Detail <hr></h5>
             
-                    <h5>Reciever Detail <hr></h5>
+                        <div class="form-group col-auto">
+                            <label for="First Name">First Name</label>
+                            <input type="text" class="form-control @if($errors->get('first_name')) is-invalid @endif" value="{{old('first_name')}}@if(isset($ManualOrder)){{$ManualOrder->first_name}}@endif" id="first_name"  value="{{old('first_name')}} @if(isset($ManualOrder)) {{$ManualOrder->first_name}}  @endif" name="first_name" placeholder="First Name" required>
+                            @if($errors->get('first_name')) <small id="first_name_error" class="form-text text-danger"></small>{{$errors->first('first_name')}} @endif
+                        </div> 
+            
+                        <div class="form-group col-auto">
+                            <label for="First Name">last Name</label>
+                            <input type="text" class="form-control @if($errors->get('last_name')) is-invalid @endif" value="{{old('last_name')}}@if(isset($ManualOrder)){{$ManualOrder->last_name}}@endif" id="last_name"  value="{{old('last_name')}} @if(isset($ManualOrder)) {{$ManualOrder->last_name}}  @endif" name="last_name" placeholder="Last Name" >
+                            @if($errors->get('last_name')) <small id="last_name_error" class="form-text text-danger"></small>{{$errors->first('last_name')}} @endif
+                        </div> 
+            
+                        
+            
+                        <div class="form-group col-auto">
+                            <label for="Number">Number</label>
+                            <input type="text" class="form-control @if($errors->get('number')) is-invalid @endif" value="{{old('number')}}@if(isset($ManualOrder)){{$ManualOrder->number}}@endif" id="number"  name="number" placeholder="number Number" required>
+                            @if($errors->get('number')) <small id="number_error" class="form-text text-danger">{{$errors->first('number')}} </small>@endif
+                        </div>     
+            
+                        <div class="form-group col-auto">
+                            <label for="Number">Whatsapp Number</label>
+                            <input type="text" class="form-control @if($errors->get('whatsapp_number')) is-invalid @endif" value="{{old('whatsapp_number')}}@if(isset($ManualOrder)){{$ManualOrder->number}}@endif" id="whatsapp_number"  name="whatsapp_number" placeholder="Whatsapp number" >
+                            @if($errors->get('whatsapp_number')) <small id="whatsapp_number_error" class="form-text text-danger">{{$errors->first('whatsapp_number')}} </small>@endif
+                        </div> 
+            
+                        <div class="form-group col-auto">
+                            <label for="address">Address</label>
+                            <textarea class="form-control" id="address @if($errors->get('address')) is-invalid @endif"   name="address" placeholder="address" required>{{old('address')}}@if(isset($ManualOrder)){{$ManualOrder->address}}@endif</textarea>
+                            <small id="address_error" class="form-text text-danger">@if($errors->get('address')) {{$errors->first('address')}} @endif</small>
+                        </div>  
+                    </div>
                     
-                    <div class="form-group col-auto">
-                        <label for="receiver_name">Reciever Name</label>
-                        <input type="text" class="form-control @if($errors->get('receiver_name')) is-invalid @endif" value="{{old('receiver_name')}}@if(isset($ManualOrder)){{$ManualOrder->receiver_name}}@endif" id="receiver_name"  name="receiver_name" placeholder="Reciever Name" required>
-                        @if($errors->get('receiver_name')) <small id="receiver_name_error" class="form-text text-danger">{{$errors->first('receiver_name')}} </small>@endif
-                    </div> 
-                     
-                    
-                    <div class="form-group col-sm">
-                        <label for="address">city</label>
-                        <select class="form-control @if($errors->get('city')) is-invalid @endif cities_dropdown city" id="city"  onchange="get_fare_list()" name="city" required>
-                            <option value="">Select City</option>
-                            @for($i=0 ; $i < sizeof($cities); $i++)
-                             
-                                <option value="{{$cities[$i]->id}}" {{ ($cities[$i]->id == $ManualOrder->cities_id) ? 'selected="selected"' : '' }}>{{$cities[$i]->name}}</option>
+                    <div class="col-sm-3">
+                
+                        <h5>Reciever Detail <hr></h5>
+                        
+                        <div class="form-group col-auto">
+                            <label for="receiver_name">Reciever Name</label>
+                            <input type="text" class="form-control @if($errors->get('receiver_name')) is-invalid @endif" value="{{old('receiver_name')}}@if(isset($ManualOrder)){{$ManualOrder->receiver_name}}@endif" id="receiver_name"  name="receiver_name" placeholder="Reciever Name" required>
+                            @if($errors->get('receiver_name')) <small id="receiver_name_error" class="form-text text-danger">{{$errors->first('receiver_name')}} </small>@endif
+                        </div> 
+                         
+                        
+                        <div class="form-group col-sm">
+                            <label for="address">city</label>
+                            <select class="form-control @if($errors->get('city')) is-invalid @endif cities_dropdown city" id="city"  onchange="get_fare_list()" name="city" required>
+                                <option value="">Select City</option>
+                                @for($i=0 ; $i < sizeof($cities); $i++)
+                                 
+                                    <option value="{{$cities[$i]->id}}" {{ ($cities[$i]->id == $ManualOrder->cities_id) ? 'selected="selected"' : '' }}>{{$cities[$i]->name}}</option>
+                                    
+                                @endfor
                                 
-                            @endfor
+                            </select> 
+                            <small id="city_error" class="form-text text-danger">@if($errors->get('city')) {{$errors->first('city')}} @endif</small>
+                        </div>
+                        
+                        <div class="form-group col-auto">
+                            <label for="receiver_name">Reciever Number</label>
+                            <input type="text" class="form-control @if($errors->get('receiver_number')) is-invalid @endif" value="{{old('receiver_number')}}@if(isset($ManualOrder)){{$ManualOrder->receiver_number}}@endif" id="receiver_number"  name="receiver_number" placeholder="Reciever Number" required>
+                            @if($errors->get('receiver_number')) <small id="receiver_name_error" class="form-text text-danger">{{$errors->first('receiver_name')}} </small>@endif
+                        </div> 
+                        
+                        <div class="form-group col-auto">
+                            <label for="receiver_name">Reciever address</label>
+                            <textarea class="form-control" id="reciever_address @if($errors->get('reciever_address')) is-invalid @endif"   name="reciever_address" placeholder="reciever_address" required>{{old('reciever_address')}}@if(isset($ManualOrder)){{$ManualOrder->reciever_address}}@endif</textarea>
+                            <small id="reciever_address_error" class="form-text text-danger">@if($errors->get('reciever_address')) {{$errors->first('reciever_address')}} @endif</small>
+                        </div>     
+                    </div>
+                    
+                    <div class="col-sm-2">
+                        <h5>Payment Details <hr></h5>
+                        <div class="form-group col-auto">
+                            <label for="Product Price">Product Price</label>
+                            <input type="text" class="form-control @if($errors->get('product_price')) is-invalid @endif" value="{{old('product_price')}}@if($product_price != ''){{$product_price}}@else 0 @endif" onchange="onchangeprice();get_fare_list();" id="product_price"  name="product_price" required>
+                             <small id="product_price_error" class="form-text text-danger">@if($errors->get('product_price')){{$errors->first('product_price')}} @endif</small>
+                        </div>
+                        <div class="form-group col-auto">
+                            <label for="Delivery Charges">Delivery Charges</label>
+                            <input type="text" class="form-control @if($errors->get('dc')) is-invalid @endif" value="{{old('dc')}}@if($ManualOrder != ''){{$ManualOrder->dc}} 0 @else @endif" onchange="onchangeprice();get_fare_list();" id="dc"  name="dc" placeholder="dc" required>
+                            @if($errors->get('dc')) <small id="dc_error" class="form-text text-danger">{{$errors->first('dc')}} </small>@endif
+                        </div>
+                        <div class="form-group col-auto">
+                            <label for="Packaging Cost">Packaging Cost</label>
+                            <input type="text" class="form-control @if($errors->get('packaging_cost')) is-invalid @endif" value="{{old('packaging_cost')}}@if($ManualOrder != ''){{$ManualOrder->packaging_cost}} 0 @else @endif" id="packaging_cost" onchange="onchangeprice();get_fare_list();" name="packaging_cost" placeholder="packaging_cost" >
+                             <small id="packaging_cost_error" class="form-text text-danger">@if($errors->get('packaging_cost')) {{$errors->first('packaging_cost')}} @endif</small>
+                        </div>
+                        <div class="form-group col-auto">
+                            <label for="Number">price</label>
+                            <input type="text" class="form-control @if($errors->get('price')) is-invalid @endif" value="{{old('price')}}@if(isset($ManualOrder)){{$ManualOrder->price}}@endif" onchange="onchangeprice();" id="price"  name="price" placeholder="Price" readonly>
+                            <small id="price_error" class="form-text text-danger">@if($errors->get('price')) {{$errors->first('price')}} @endif</small>
+                        </div>
+                        <div class="form-group col-auto">
+                            <label for="Number">Advance Payment</label>
+                            <small id="advance_payment_error" class="form-text text-danger">@if($errors->get('advance_payment')) {{$errors->first('advance_payment')}} @endif</small>
                             
-                        </select> 
-                        <small id="city_error" class="form-text text-danger">@if($errors->get('city')) {{$errors->first('city')}} @endif</small>
-                    </div>
-                    
-                    <div class="form-group col-auto">
-                        <label for="receiver_name">Reciever Number</label>
-                        <input type="text" class="form-control @if($errors->get('receiver_number')) is-invalid @endif" value="{{old('receiver_number')}}@if(isset($ManualOrder)){{$ManualOrder->receiver_number}}@endif" id="receiver_number"  name="receiver_number" placeholder="Reciever Number" required>
-                        @if($errors->get('receiver_number')) <small id="receiver_name_error" class="form-text text-danger">{{$errors->first('receiver_name')}} </small>@endif
-                    </div> 
-                    
-                    <div class="form-group col-auto">
-                        <label for="receiver_name">Reciever address</label>
-                        <textarea class="form-control" id="reciever_address @if($errors->get('reciever_address')) is-invalid @endif"   name="reciever_address" placeholder="reciever_address" required>{{old('reciever_address')}}@if(isset($ManualOrder)){{$ManualOrder->reciever_address}}@endif</textarea>
-                        <small id="reciever_address_error" class="form-text text-danger">@if($errors->get('reciever_address')) {{$errors->first('reciever_address')}} @endif</small>
-                    </div>     
-                </div>
-                
-                <div class="col-sm-2">
-                    <h5>Payment Details <hr></h5>
-                    <div class="form-group col-auto">
-                        <label for="Product Price">Product Price</label>
-                        <input type="text" class="form-control @if($errors->get('product_price')) is-invalid @endif" value="{{old('product_price')}}@if($product_price != ''){{$product_price}}@else 0 @endif" onchange="onchangeprice();get_fare_list();" id="product_price"  name="product_price" required>
-                         <small id="product_price_error" class="form-text text-danger">@if($errors->get('product_price')){{$errors->first('product_price')}} @endif</small>
-                    </div>
-                    <div class="form-group col-auto">
-                        <label for="Delivery Charges">Delivery Charges</label>
-                        <input type="text" class="form-control @if($errors->get('dc')) is-invalid @endif" value="{{old('dc')}}@if($ManualOrder != ''){{$ManualOrder->dc}} 0 @else @endif" onchange="onchangeprice();get_fare_list();" id="dc"  name="dc" placeholder="dc" required>
-                        @if($errors->get('dc')) <small id="dc_error" class="form-text text-danger">{{$errors->first('dc')}} </small>@endif
-                    </div>
-                    <div class="form-group col-auto">
-                        <label for="Packaging Cost">Packaging Cost</label>
-                        <input type="text" class="form-control @if($errors->get('packaging_cost')) is-invalid @endif" value="{{old('packaging_cost')}}@if($ManualOrder != ''){{$ManualOrder->packaging_cost}} 0 @else @endif" id="packaging_cost" onchange="onchangeprice();get_fare_list();" name="packaging_cost" placeholder="packaging_cost" >
-                         <small id="packaging_cost_error" class="form-text text-danger">@if($errors->get('packaging_cost')) {{$errors->first('packaging_cost')}} @endif</small>
-                    </div>
-                    <div class="form-group col-auto">
-                        <label for="Number">price</label>
-                        <input type="text" class="form-control @if($errors->get('price')) is-invalid @endif" value="{{old('price')}}@if(isset($ManualOrder)){{$ManualOrder->price}}@endif" onchange="onchangeprice();" id="price"  name="price" placeholder="Price" readonly>
-                        <small id="price_error" class="form-text text-danger">@if($errors->get('price')) {{$errors->first('price')}} @endif</small>
-                    </div>
-                    <div class="form-group col-auto">
-                        <label for="Number">Advance Payment</label>
-                        <small id="advance_payment_error" class="form-text text-danger">@if($errors->get('advance_payment')) {{$errors->first('advance_payment')}} @endif</small>
-                        
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text" id="btncustomerpaymentiframe">Add</div>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text" id="btncustomerpaymentiframe">Add</div>
+                                </div>
+                                <input type="text" class="form-control @if($errors->get('advance_payment')) is-invalid @endif" onchange="onchangeprice()" value="{{old('advance_payment')}}@if($ManualOrder->advance_payment !== null){{$ManualOrder->advance_payment}}@else 0 @endif" onchange="onchangeprice();" id="advance_payment"  name="advance_payment" placeholder="Advance Payment" readonly>
                             </div>
-                            <input type="text" class="form-control @if($errors->get('advance_payment')) is-invalid @endif" onchange="onchangeprice()" value="{{old('advance_payment')}}@if($ManualOrder->advance_payment !== null){{$ManualOrder->advance_payment}}@else 0 @endif" onchange="onchangeprice();" id="advance_payment"  name="advance_payment" placeholder="Advance Payment" readonly>
+                             <small id="price_error" class="form-text text-danger">@if($errors->get('price')) {{$errors->first('price')}} @endif</small>
                         </div>
-                         <small id="price_error" class="form-text text-danger">@if($errors->get('price')) {{$errors->first('price')}} @endif</small>
-                    </div>
-        
-                    <div class="form-group col-auto">
-                        <label for="Number">COD Amount</label>
-                        <input type="text" class="form-control @if($errors->get('cod_amount')) is-invalid @endif" value="{{old('cod_amount')}}@if(isset($ManualOrder)){{$ManualOrder->cod_amount}}@endif" id="cod_amount"  name="cod_amount" placeholder="COD" readonly required>
-                        @if($errors->get('cod_amount')) <small id="cod_amount_error" class="form-text text-danger">{{$errors->first('cod_amount')}} </small>@endif
-                    </div>
-                
-                </div>
-                
-                <div class="col-sm-2">
-                    
-                    <h5>Product Details <hr></h5>
-                    
-                    <div class="form-group col-sm">
-                        <label for="Number">Pieces</label>
-                        <input type="text" class="form-control @if($errors->get('total_pieces')) is-invalid @endif" value="{{old('total_pieces')}}@if(isset($ManualOrder)){{trim($ManualOrder->total_pieces)}}@endif" id="total_pieces"  name="total_pieces" placeholder="Total Pieces" required>
-                        @if($errors->get('total_pieces')) <small id="total_pieces_error" class="form-text text-danger">{{$errors->first('total_pieces')}} </small>@endif
-                    </div>
-        
-                    <div class="form-group col-auto">
-                        <label for="Number">weight</label>
-                        <input type="text" class="form-control @if($errors->get('weight')) is-invalid @endif" value="{{old('weight')}}@if(isset($ManualOrder)){{$ManualOrder->weight}}@endif" id="weight"  name="weight" onchange="get_fare_list()" placeholder="Weight (in kg)" required>
-                        @if($errors->get('weight')) <small id="weight_error" class="form-text text-danger">{{$errors->first('weight')}} </small>@endif
-                    </div>
-                    
-                    <div class="form-group col-auto">
-                        <label for="Description">Description</label>
-                        <textarea class="form-control" id="description @if($errors->get('description')) is-invalid @endif" name="description" placeholder="description" required>{{old('description')}}@if(isset($ManualOrder)){{$ManualOrder->description}}@endif</textarea>
-                        <small id="description_error" class="form-text text-danger">@if($errors->get('description')) {{$errors->first('description')}} @endif</small>
-                    </div>
-                
-                </div>
-                
-                <div class="col-sm-2">
-                    
-                    <h5>Shipment Details <hr></h5>
-                    
-                    <div class="form-group col-sm">
-                        <label for="address">Shipment type</label>
-                        <select class="form-control" id="shipment_type" onchange="get_fare_list();shipment_type_change();" name="shipment_type" required>
-                            <option value="">Select Shipment type</option>
-                            <option value="local">Local Rider</option>
-                            <option value="trax">Trax</option> 
-                        </select> 
-                        <small id="shipment_type_error" class="form-text text-danger"></small>
-                    </div>
-                
-                    <div id="trax_shipment_fields" style="display:none;">
-                        
-                        <div class="form-group col-sm"> 
-                            <label for="Shipment Method">Shipment Method</label>
-                            <select class="form-control @if($errors->get('shipping_mode_id')) is-invalid @endif shipping_mode_id_dropdown shipping_mode_id" name="shipping_mode_id" id="shipping_mode_id" onchange="calculate_charges()" >
-                                <option value="" selected="selected">Select Shipment Method</option> 
-
-                            </select>
-                            <small id="shipping_mode_id_error" class="form-text text-danger shipping_mode_id_error">@if($errors->get('fare')) {{$errors->first('fare')}} @endif</small>
-                        </div>
-        
-                        <div class="form-group col-sm">
-                            <label for="fare">Fare</label>
-                            <input type="text" onkeyup="limit(this);" class="form-control @if($errors->get('fare')) is-invalid @endif fare" value="{{old('fare')}}@if(isset($ManualOrder)){{trim($ManualOrder->fare)}}@endif" id="fare" autocomplete="off" name="fare" placeholder="fare"  >
-                            <small id="fare_error" class="form-text text-danger fare_error">@if($errors->get('fare')) {{$errors->first('fare')}} @endif</small>
-                        </div>
-        
-                        <div class="form-group col-sm">
-                            <label for="reference_number">Customer refence</label>
-                            <input type="text" class="form-control @if($errors->get('reference_number')) is-invalid @endif" value="{{old('reference_number')}}@if(isset($ManualOrder)){{trim($ManualOrder->reference_number)}}@endif" id="reference_number"  name="reference_number" required>
-                            @if($errors->get('reference_number')) <small id="reference_number_error" class="form-text text-danger">{{$errors->first('reference_number')}} </small>@endif
-                        </div>
-                        
-                    </div>
-                        
-                    <div class="form-group col-auto">
-                        <button type="submit" class="btn btn-primary" name="submit" value="save">Save</button>
-                        <button type="submit" class="btn btn-primary" name="submit" value="saveandprint">Save & Print Slip</button>
-                    </div>
-                    
-                </div> 
-                
-            </div>
             
+                        <div class="form-group col-auto">
+                            <label for="Number">COD Amount</label>
+                            <input type="text" class="form-control @if($errors->get('cod_amount')) is-invalid @endif" value="{{old('cod_amount')}}@if(isset($ManualOrder)){{$ManualOrder->cod_amount}}@endif" id="cod_amount"  name="cod_amount" placeholder="COD" readonly required>
+                            @if($errors->get('cod_amount')) <small id="cod_amount_error" class="form-text text-danger">{{$errors->first('cod_amount')}} </small>@endif
+                        </div>
+                    
+                    </div>
+                    
+                    <div class="col-sm-2">
+                        
+                        <h5>Product Details <hr></h5>
+                        
+                        <div class="form-group col-sm">
+                            <label for="Number">Pieces</label>
+                            <input type="text" class="form-control @if($errors->get('total_pieces')) is-invalid @endif" value="{{old('total_pieces')}}@if(isset($ManualOrder)){{trim($ManualOrder->total_pieces)}}@endif" id="total_pieces"  name="total_pieces" placeholder="Total Pieces" required>
+                            @if($errors->get('total_pieces')) <small id="total_pieces_error" class="form-text text-danger">{{$errors->first('total_pieces')}} </small>@endif
+                        </div>
             
-            <div class="col-sm-12 row">
+                        <div class="form-group col-auto">
+                            <label for="Number">weight</label>
+                            <input type="text" class="form-control @if($errors->get('weight')) is-invalid @endif" value="{{old('weight')}}@if(isset($ManualOrder)){{$ManualOrder->weight}}@endif" id="weight"  name="weight" onchange="get_fare_list()" placeholder="Weight (in kg)" required>
+                            @if($errors->get('weight')) <small id="weight_error" class="form-text text-danger">{{$errors->first('weight')}} </small>@endif
+                        </div>
+                        
+                        <div class="form-group col-auto">
+                            <label for="Description">Description</label>
+                            <textarea class="form-control" id="description @if($errors->get('description')) is-invalid @endif" name="description" placeholder="description" required>{{old('description')}}@if(isset($ManualOrder)){{$ManualOrder->description}}@endif</textarea>
+                            <small id="description_error" class="form-text text-danger">@if($errors->get('description')) {{$errors->first('description')}} @endif</small>
+                        </div>
+                    
+                    </div>
+                    
+                    <div class="col-sm-3">
+                        
+                        <h5>Shipment Details <hr></h5>
+                        
+                        <div class="form-group col-sm">
+                            <label for="address">Shipment type</label>
+                            <select class="form-control" id="shipment_type" onchange="get_fare_list();shipment_type_change();" name="shipment_type" required>
+                                <option value="">Select Shipment type</option>
+                                <option value="local">Local Rider</option>
+                                <option value="trax">Trax</option> 
+                            </select> 
+                            <small id="shipment_type_error" class="form-text text-danger"></small>
+                        </div>
+                    
+                        <div id="trax_shipment_fields" style="display:none;">
+                            
+                            <div class="form-group col-sm"> 
+                                <label for="Shipment Method">Shipment Method</label>
+                                <select class="form-control @if($errors->get('shipping_mode_id')) is-invalid @endif shipping_mode_id_dropdown shipping_mode_id" name="shipping_mode_id" id="shipping_mode_id" onchange="calculate_charges()" >
+                                    <option value="" selected="selected">Select Shipment Method</option> 
+    
+                                </select>
+                                <small id="shipping_mode_id_error" class="form-text text-danger shipping_mode_id_error">@if($errors->get('fare')) {{$errors->first('fare')}} @endif</small>
+                            </div>
+            
+                            <div class="form-group col-sm">
+                                <label for="fare">Fare</label>
+                                <input type="text" onkeyup="limit(this);" class="form-control @if($errors->get('fare')) is-invalid @endif fare" value="{{old('fare')}}@if(isset($ManualOrder)){{trim($ManualOrder->fare)}}@endif" id="fare" autocomplete="off" name="fare" placeholder="fare"  >
+                                <small id="fare_error" class="form-text text-danger fare_error">@if($errors->get('fare')) {{$errors->first('fare')}} @endif</small>
+                            </div>
+            
+                            <div class="form-group col-sm">
+                                <label for="reference_number">Customer refence</label>
+                                <input type="text" class="form-control @if($errors->get('reference_number')) is-invalid @endif" value="{{old('reference_number')}}@if(isset($ManualOrder)){{trim($ManualOrder->reference_number)}}@endif" id="reference_number"  name="reference_number" required>
+                                @if($errors->get('reference_number')) <small id="reference_number_error" class="form-text text-danger">{{$errors->first('reference_number')}} </small>@endif
+                            </div>
+                            
+                        </div>
+                            
+                        <div class="form-group col-auto">
+                            <button type="submit" class="btn btn-primary" name="submit" value="save">Save</button>
+                            <button type="submit" class="btn btn-primary" name="submit" value="saveandprint">Save & Print Slip</button>
+                        </div>
+                        
+                    </div>
+                    <div class="col-sm-12 row">
                 <div class="col-sm-4">
                     <div class="d-flex justify-content-start">
                         <div class="form-group">
@@ -642,6 +639,12 @@
                 </div>
                 
             </div>
+                    
+                </div>
+            </div>
+            
+            
+            
             
         </form>
 
