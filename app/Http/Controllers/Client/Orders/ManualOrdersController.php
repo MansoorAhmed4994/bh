@@ -265,6 +265,8 @@ class ManualOrdersController extends Controller
     public function edit($ManualOrder)
     {
         
+        $cities = $this->get_trax_cities();
+        $this->UpdateReferenceNumberByOrderIds([$ManualOrder]);
         // dd($Manualorders);
         $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.id',$ManualOrder)->first();
         // dd($ManualOrder);
@@ -272,8 +274,6 @@ class ManualOrdersController extends Controller
         {
             dd('no such order id found');
         }
-        $cities = $this->get_trax_cities();
-        $this->UpdateReferenceNumberByOrderIds([$ManualOrder]);
         
         $inventory = Inventory::leftJoin('products', 'inventories.products_id', '=', 'products.id')->
         select(

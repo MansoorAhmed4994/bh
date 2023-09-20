@@ -19,7 +19,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class CustomerPaymentController extends Controller
 {
-    private $images_path =  'storage/images/orders/manual-orders/customer_payments/';
+    private $images_path =  'storage/images/orders/customer_payments/';
     /**
      * Display a listing of the resource.
      *
@@ -77,7 +77,7 @@ class CustomerPaymentController extends Controller
             }
             else
             {
-                return redirect()->route('customer.payments.index')->with('errors','There are some error please check error log!');
+                return redirect()->route('customer.payments.index')->with('errors','Transfer to / Date time / sender name is same');
             }
             
             $images=array();
@@ -85,8 +85,8 @@ class CustomerPaymentController extends Controller
                 foreach($files as $file){
                     
                     
-                    $name=$file->getClientOriginalName();
-                    $finaly_path = uniqid().$this->images_path;
+                    $name=uniqid().$file->getClientOriginalName();
+                    $finaly_path = $this->images_path;
                     $file->move($finaly_path,$name);
                     $images[]=$finaly_path.$name;
                 }
@@ -112,6 +112,7 @@ class CustomerPaymentController extends Controller
             { 
                 $amount = CustomerPayments::where('customer_payments.order_id',$request->order_id)->sum('amount');
                 $ManualOrder = ManualOrders::where('id',$request->order_id)->update(['advance_payment' => $amount]);
+                
                 if($ManualOrder)
                 {
                     

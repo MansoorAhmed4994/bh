@@ -274,6 +274,14 @@
                     validation_status = false;
                     $('#fare_error').html('Please Select Shipment Method to auto fil fare');
                 }
+                
+                if($('#reference_number').val() == '')
+                {
+                    
+                    validation_status = false;
+                    $('#reference_number_error').html('Please Select Shipment Method to auto fil fare');
+                    
+                }
             }
             
             if($('#product_price').val() == '' || $('#product_price').val() <= '0')
@@ -281,6 +289,14 @@
                 
                 validation_status = false;
                 $('#product_price_error').html('Please enter price');  
+            }
+            
+            if($('#cod_amount').val() <  $('#price').val())
+            {
+                
+                validation_status = false;
+                $('#price_error').html('price cannot be less than cod');  
+                $('#product_price_error').html('Please enter product price');  
             }
             
             return validation_status;
@@ -452,27 +468,27 @@
                     <h5>Payment Details <hr></h5>
                     <div class="form-group col-auto">
                         <label for="Product Price">Product Price</label>
-                        <input type="text" class="form-control @if($errors->get('product_price')) is-invalid @endif" value="{{old('product_price')}}@if(isset($product_price)){{$product_price}}@endif" onchange="onchangeprice();get_fare_list();" id="product_price"  name="product_price" required>
+                        <input type="text" class="form-control @if($errors->get('product_price')) is-invalid @endif" value="{{old('product_price')}}@if($product_price != ''){{$product_price}}@else 0 @endif" onchange="onchangeprice();get_fare_list();" id="product_price"  name="product_price" required>
                          <small id="product_price_error" class="form-text text-danger">@if($errors->get('product_price')){{$errors->first('product_price')}} @endif</small>
                     </div>
                     <div class="form-group col-auto">
                         <label for="Delivery Charges">Delivery Charges</label>
-                        <input type="text" class="form-control @if($errors->get('dc')) is-invalid @endif" value="{{old('dc')}}@if(isset($ManualOrder)){{$ManualOrder->dc}}@endif" onchange="onchangeprice();get_fare_list();" id="dc"  name="dc" placeholder="dc" required>
+                        <input type="text" class="form-control @if($errors->get('dc')) is-invalid @endif" value="{{old('dc')}}@if($ManualOrder != ''){{$ManualOrder->dc}} 0 @else @endif" onchange="onchangeprice();get_fare_list();" id="dc"  name="dc" placeholder="dc" required>
                         @if($errors->get('dc')) <small id="dc_error" class="form-text text-danger">{{$errors->first('dc')}} </small>@endif
                     </div>
                     <div class="form-group col-auto">
                         <label for="Packaging Cost">Packaging Cost</label>
-                        <input type="text" class="form-control @if($errors->get('packaging_cost')) is-invalid @endif" value="{{old('packaging_cost')}}@if(isset($ManualOrder)){{$ManualOrder->packaging_cost}}@endif" id="packaging_cost" onchange="onchangeprice();get_fare_list();" name="packaging_cost" placeholder="packaging_cost" >
-                        @if($errors->get('packaging_cost')) <small id="packaging_cost_error" class="form-text text-danger">{{$errors->first('packaging_cost')}} </small>@endif
+                        <input type="text" class="form-control @if($errors->get('packaging_cost')) is-invalid @endif" value="{{old('packaging_cost')}}@if($ManualOrder != ''){{$ManualOrder->packaging_cost}} 0 @else @endif" id="packaging_cost" onchange="onchangeprice();get_fare_list();" name="packaging_cost" placeholder="packaging_cost" >
+                         <small id="packaging_cost_error" class="form-text text-danger">@if($errors->get('packaging_cost')) {{$errors->first('packaging_cost')}} @endif</small>
                     </div>
                     <div class="form-group col-auto">
                         <label for="Number">price</label>
                         <input type="text" class="form-control @if($errors->get('price')) is-invalid @endif" value="{{old('price')}}@if(isset($ManualOrder)){{$ManualOrder->price}}@endif" onchange="onchangeprice();" id="price"  name="price" placeholder="Price" readonly>
-                        
+                        <small id="price_error" class="form-text text-danger">@if($errors->get('price')) {{$errors->first('price')}} @endif</small>
                     </div>
                     <div class="form-group col-auto">
                         <label for="Number">Advance Payment</label>
-                        @if($errors->get('advance_payment')) <small id="advance_payment_error" class="form-text text-danger">{{$errors->first('advance_payment')}} </small>@endif
+                        <small id="advance_payment_error" class="form-text text-danger">@if($errors->get('advance_payment')) {{$errors->first('advance_payment')}} @endif</small>
                         
                         <div class="input-group">
                             <div class="input-group-prepend">
@@ -480,7 +496,7 @@
                             </div>
                             <input type="text" class="form-control @if($errors->get('advance_payment')) is-invalid @endif" onchange="onchangeprice()" value="{{old('advance_payment')}}@if($ManualOrder->advance_payment !== null){{$ManualOrder->advance_payment}}@else 0 @endif" onchange="onchangeprice();" id="advance_payment"  name="advance_payment" placeholder="Advance Payment" readonly>
                         </div>
-                        @if($errors->get('price')) <small id="price_error" class="form-text text-danger">{{$errors->first('price')}} </small>@endif
+                         <small id="price_error" class="form-text text-danger">@if($errors->get('price')) {{$errors->first('price')}} @endif</small>
                     </div>
         
                     <div class="form-group col-auto">
