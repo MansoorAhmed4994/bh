@@ -20,8 +20,8 @@ class UpdateManualordersChangeColumnType extends Migration
             $table->decimal('dc',16,2)->change();
             $table->decimal('packaging_cost',16,2)->change();
             $table->decimal('price',16,2)->change();
-            // $table->decimal('advance_payment',16,2)->default(300)->change();
-            // $table->decimal('cod_amount',16,2)->default(300)->change();
+            $table->decimal('advance_payment',16,2)->default(300)->change();
+            $table->decimal('cod_amount',16,2)->default(300)->change();
         });
         //
     }
