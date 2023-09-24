@@ -20,6 +20,7 @@ use App\Models\Order_details;
 use App\Models\Client\Customers;
 use App\Models\ActivityLogs;
 use App\Models\Client\CustomerPayments; 
+use App\Models\User; 
 
 //Traits
 use App\Traits\MNPTraits;
@@ -145,12 +146,12 @@ class ManualOrdersController extends Controller
             $query = $query->orderBy('manual_orders.id', 'DESC');
         }
         
-        
+        $users = User::select('*');
         $list = $query->paginate(20);
         // dd($query->get());
         // dd(ManualOrders::find(1)->cities->id);
         // dd($list[0]->cities->name);
-        return view('client.orders.manual-orders.list')->with('list',$list); 
+        return view('client.orders.manual-orders.list')->with(['list',$list,'users'=>$users]); 
     }
     
     public function InActiveCustomers(Request $request)

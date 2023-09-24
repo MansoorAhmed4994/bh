@@ -420,7 +420,7 @@
             @csrf
 
             <div class="col-sm-12 row">
-                <input type="hidden"  name="order_id" id="order_id">
+                <input type="hidden"  name="order_id" value="@if(isset($ManualOrder->id)){{$ManualOrder->id}}@endif" id="order_id">
                 <div class="col-sm-2 row">
                     <div class="form-group">
                         <input type="file" name="images[]" id="images" accept="image/png, image/gif, image/jpeg" multiple/>
