@@ -245,7 +245,7 @@ class InventoryController extends Controller
                 
                 // $inventory = Inventory::where(['reference_id'=>$request->order_id,'stock_status' => 'out'])->get();
                 $inventory = Inventory::leftJoin('products', 'inventories.products_id', '=', 'products.id')
-                ->select('inventories.id as id','products.name as name','inventories.sale as sale')
+                ->select('inventories.id as id','products.sku as sku','products.name as name','inventories.sale as sale')
                 ->where(['inventories.reference_id'=>$request->order_id,'inventories.stock_status' => 'out'])->get();
                 
                 // dd($inventory);
@@ -273,17 +273,27 @@ class InventoryController extends Controller
         // dd($inventory_id);
         $error=0;
         $inventory = Inventory::find($inventory_id); 
+        // dd($inventory);
         $product_id = $inventory->products_id;
         $ds = $inventory->destroy($inventory_id);
         
-        //update remaining inventory
-        $remaining_inventory = remaining_inventories::where('products_id',$product_id)->where('id','=',$inventory->warehouse_id)->first();
-        $remaining_inventory->qty = $remaining_inventory->qty+1;
-        $remaining_inventory->save(); 
-        
-        //Get updated price
-        $price = $this->updateorderprice($inventory->reference_id);
-        return response()->json(['messege' => 'Product delete successfully','error'=>$error,'price'=>$price]);
+        // $remaining_inventory = $inventory->products->first()->remaining_inventories()->where('qty','>=','0')->orderBy('id','ASC')->first();
+            // dd($remaining_inventory);
+            // if($remaining_inventory)
+            // {
+                // dd($remaining_inventory);
+                //create inventory in
+                // $inventory_create = $this->create_inventory_products($inventory->Products->first()->sku,'in',$inventory->reference_id,1,$inventory->cost,'Order',$inventory->products->first(),$inventory->products->first()->sale_price,$remaining_inventory->id);
+                
+                //update remaining inventory
+                $remaining_inventory = remaining_inventories::where('products_id',$product_id)->where('id','=',$inventory->warehouse_id)->first();
+                $remaining_inventory->qty = $remaining_inventory->qty+1;
+                $remaining_inventory->save(); 
+                
+                //Get updated price
+                $price = $this->updateorderprice($inventory->reference_id);
+                return response()->json(['messege' => 'Product delete successfully','error'=>$error,'price'=>$price]);
+            // }
         // dd($ds); 
     }
 

@@ -13,7 +13,7 @@ class Inventory extends Model
      protected $guarded = ['id'];
     public function Products()
     {
-        return $this->belongsTo(Products::class, 'id'); 
+        return $this->belongsTo(Products::class, 'products_id','id'); 
     }
     
     public function order_details()
