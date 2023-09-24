@@ -291,6 +291,7 @@
                 $('#product_price_error').html('Please enter price');  
             }
             
+            
             if($('#cod_amount').val() <  $('#price').val())
             {
                 
@@ -301,6 +302,26 @@
             
             return validation_status;
         }
+        
+        function getorderdetails()
+        {
+            var orderid = document.getElementById('search_order_id').value;
+            if(orderid == '')
+            {
+                alert('please enter order id');
+                return
+            }
+            window.location = base_url+'/client/orders/ManualOrders/edit/'+orderid;
+            
+        }
+        
+        $( document ).ready(function() {
+            $("#search_order_id").keypress(function (event) {
+                if (event.keyCode === 13) {
+                    getorderdetails();
+                }
+            });
+        });
 
         
 
@@ -345,19 +366,37 @@
         </div>
     </div>
     
-    <div class=""> 
-         
-        @if(Session::has('order_placed_message'))
-            <div class="alert alert-success" role="alert">
-                {{session()->get('order_placed_message')}}
-            </div> 
-        @endif
+<div class=""> 
+     
+    @if(Session::has('order_placed_message'))
+        <div class="alert alert-success" role="alert">
+            {{session()->get('order_placed_message')}}
+        </div> 
+    @endif
+        <div class="col-sm-12 row"> 
+            
+            <nav class="navbar navbar-light bg-light justify-content-center">  
+                <div class="form-group">
+                     
+                    <div class="input-group">
+                    
+                        <input class="input-group-text" type="number" value="@if(isset($ManualOrder->id)){{$ManualOrder->id}}@endif" id="search_order_id" name="search_order_id" placeholder="Search by Order id #" aria-label="Search">
+                        <div class="input-group-prepend">
+                            <a class="input-group-text btn btn-primary"  onclick="getorderdetails()">Search</a>
+                            </a>
+                        </div>
+                    </div>
+                </div> 
+            </nav>
+        </div> 
+
 
         <form action="{{ route('ManualOrders.update',$ManualOrder->id) }}" onsubmit="return validateForm()" id="update_form"  enctype="multipart/form-data" method="post">
             @csrf
+
             <div class="col-sm-12 row">
-                <input type="hidden" value="{{$ManualOrder->id}}" name="order_id" id="order_id">
-                <div class="col-sm-3 row">
+                <input type="hidden"  name="order_id" id="order_id">
+                <div class="col-sm-2 row">
                     <div class="form-group">
                         <input type="file" name="images[]" id="images" accept="image/png, image/gif, image/jpeg" multiple/>
                         <!--<div class="file btn btn-lg btn-secondary">Add new-->
@@ -387,7 +426,7 @@
                     
                 </div>
                     
-                <div class="col-sm-9 row"> 
+                <div class="col-sm-10 row"> 
                     
                     
                         
@@ -469,22 +508,22 @@
                         <h5>Payment Details <hr></h5>
                         <div class="form-group col-auto">
                             <label for="Product Price">Product Price</label>
-                            <input type="text" class="form-control @if($errors->get('product_price')) is-invalid @endif" value="{{old('product_price')}}@if($product_price != ''){{$product_price}}@else 0 @endif" onchange="onchangeprice();get_fare_list();" id="product_price"  name="product_price" required>
+                            <input type="number" class="form-control @if($errors->get('product_price')) is-invalid @endif" value="{{old('product_price')}}@if($ManualOrder->product_price != ''){{$ManualOrder->product_price}}@else{{0}}@endif" onchange="onchangeprice();get_fare_list();" id="product_price"  name="product_price" required>
                              <small id="product_price_error" class="form-text text-danger">@if($errors->get('product_price')){{$errors->first('product_price')}} @endif</small>
                         </div>
                         <div class="form-group col-auto">
                             <label for="Delivery Charges">Delivery Charges</label>
-                            <input type="text" class="form-control @if($errors->get('dc')) is-invalid @endif" value="{{old('dc')}}@if($ManualOrder != ''){{$ManualOrder->dc}} 0 @else @endif" onchange="onchangeprice();get_fare_list();" id="dc"  name="dc" placeholder="dc" required>
+                            <input type="number" step="0.01" class="form-control @if($errors->get('dc')) is-invalid @endif" value="{{old('dc')}}@if($ManualOrder != ''){{$ManualOrder->dc}}{{0}}@else @endif" onchange="onchangeprice();get_fare_list();" id="dc"  name="dc" placeholder="dc" required>
                             @if($errors->get('dc')) <small id="dc_error" class="form-text text-danger">{{$errors->first('dc')}} </small>@endif
                         </div>
                         <div class="form-group col-auto">
                             <label for="Packaging Cost">Packaging Cost</label>
-                            <input type="text" class="form-control @if($errors->get('packaging_cost')) is-invalid @endif" value="{{old('packaging_cost')}}@if($ManualOrder != ''){{$ManualOrder->packaging_cost}} 0 @else @endif" id="packaging_cost" onchange="onchangeprice();get_fare_list();" name="packaging_cost" placeholder="packaging_cost" >
+                            <input type="number" class="form-control @if($errors->get('packaging_cost')) is-invalid @endif" value="{{old('packaging_cost')}}@if($ManualOrder->packaging_cost != ''){{$ManualOrder->packaging_cost}}@else{{0}}@endif" id="packaging_cost" onchange="onchangeprice();get_fare_list();" name="packaging_cost" placeholder="packaging_cost" >
                              <small id="packaging_cost_error" class="form-text text-danger">@if($errors->get('packaging_cost')) {{$errors->first('packaging_cost')}} @endif</small>
                         </div>
                         <div class="form-group col-auto">
                             <label for="Number">price</label>
-                            <input type="text" class="form-control @if($errors->get('price')) is-invalid @endif" value="{{old('price')}}@if(isset($ManualOrder)){{$ManualOrder->price}}@endif" onchange="onchangeprice();" id="price"  name="price" placeholder="Price" readonly>
+                            <input type="number" class="form-control @if($errors->get('price')) is-invalid @endif" value="{{old('price')}}@if($ManualOrder->price != ''){{$ManualOrder->price}}@else{{0}}@endif" onchange="onchangeprice();" id="price"  name="price" placeholder="Price" readonly>
                             <small id="price_error" class="form-text text-danger">@if($errors->get('price')) {{$errors->first('price')}} @endif</small>
                         </div>
                         <div class="form-group col-auto">
@@ -495,14 +534,14 @@
                                 <div class="input-group-prepend">
                                     <div class="input-group-text" id="btncustomerpaymentiframe">Add</div>
                                 </div>
-                                <input type="text" class="form-control @if($errors->get('advance_payment')) is-invalid @endif" onchange="onchangeprice()" value="{{old('advance_payment')}}@if($ManualOrder->advance_payment !== null){{$ManualOrder->advance_payment}}@else 0 @endif" onchange="onchangeprice();" id="advance_payment"  name="advance_payment" placeholder="Advance Payment" readonly>
+                                <input type="number" class="form-control @if($errors->get('advance_payment')) is-invalid @endif" onchange="onchangeprice()" value="{{old('advance_payment')}}@if($ManualOrder->advance_payment != ''){{$ManualOrder->advance_payment}}@else{{0}}@endif" onchange="onchangeprice();" id="advance_payment"  name="advance_payment" placeholder="Advance Payment" readonly>
                             </div>
                              <small id="price_error" class="form-text text-danger">@if($errors->get('price')) {{$errors->first('price')}} @endif</small>
                         </div>
             
                         <div class="form-group col-auto">
                             <label for="Number">COD Amount</label>
-                            <input type="text" class="form-control @if($errors->get('cod_amount')) is-invalid @endif" value="{{old('cod_amount')}}@if(isset($ManualOrder)){{$ManualOrder->cod_amount}}@endif" id="cod_amount"  name="cod_amount" placeholder="COD" readonly required>
+                            <input type="number" class="form-control @if($errors->get('cod_amount')) is-invalid @endif" value="{{old('cod_amount')}}@if($ManualOrder->cod_amount != ''){{$ManualOrder->cod_amount}}@else{{0}}@endif" id="cod_amount"  name="cod_amount" placeholder="COD" readonly required>
                             @if($errors->get('cod_amount')) <small id="cod_amount_error" class="form-text text-danger">{{$errors->first('cod_amount')}} </small>@endif
                         </div>
                     
@@ -572,8 +611,8 @@
                         </div>
                             
                         <div class="form-group col-auto">
-                            <button type="submit" class="btn btn-primary" name="submit" value="save">Save</button>
-                            <button type="submit" class="btn btn-primary" name="submit" value="saveandprint">Save & Print Slip</button>
+                            <button type="submit" class="btn btn-primary" name="submit" id="save" value="save">Save</button>
+                            <button type="submit" class="btn btn-primary" name="submit" id="saveandprint" value="saveandprint">Save & Print Slip</button>
                         </div>
                         
                     </div>

@@ -116,8 +116,8 @@
                             <ul class="dropdown-menu">
                                 <li> <a class="dropdown-item" href="{{route('ManualOrders.create')}}"> Add Order</a></li>
                                 <li> <a class="dropdown-item" href="{{route('ManualOrders.index')}}"> List</a></li> 
-                                <li> <a class="dropdown-item" href="{{route('ManualOrders.details')}}"> details</a></li>
-                                <li> <a class="dropdown-item" href="{{route('customer.payments.index')}}">Order Payment</a></li> 
+                                <li> <a class="dropdown-item" href="{{route('ManualOrders.details')}}"> details (View Order)</a></li>
+                                <li> <a class="dropdown-item" href="{{route('customer.payments.index')}}">Customer Payment</a></li> 
                                 <li> <a class="dropdown-item" href="{{route('manualOrders.quick.search')}}">Quick Order Actions</a></li> 
                             </ul> 
                         <li class="nav-item dropdown" id="myDropdown">

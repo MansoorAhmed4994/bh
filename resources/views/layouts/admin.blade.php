@@ -114,15 +114,19 @@
                             <ul class="dropdown-menu">
                                 <li> <a class="dropdown-item" href="{{route('ManualOrders.create')}}"> Add New order </a></li>
                                 <li> <a class="dropdown-item" href="{{route('ManualOrders.index')}}"> List</a></li>
-                                <li> <a class="dropdown-item" href="{{route('ManualOrders.dipatch.bulk.orders')}}">Dispatch Bulk Orders</a></li>
-                                <li> <a class="dropdown-item" href="{{route('ManualOrders.track.order')}}">Track</a></li>
+                                <li> <a class="dropdown-item" href="{{route('ManualOrders.details')}}"> details (View Order)</a></li> 
+                                <li> <a class="dropdown-item" href="{{route('customer.payments.index')}}">Customer Payment</a></li> 
                                 <li> <a class="dropdown-item" href="{{route('ManualOrders.print.slip.by.scan')}}">Price Slip By Scan</a></li>
-                                <li> <a class="dropdown-item" href="{{route('customer.payments.index')}}">Customer Payment</a></li>
                 
                             </ul>
                         
                         
                         </li>
+                        <li class="nav-item dropdown" id="myDropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Loadsheets</a>
+                            <ul class="dropdown-menu">
+                                <li> <a class="dropdown-item" href="{{route('ManualOrders.dipatch.bulk.orders')}}">Local Loadsheet</a></li> 
+                            </ul>
                         </li><li class="nav-item dropdown" id="myDropdown">
                             <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Reports</a>
                             <ul class="dropdown-menu">

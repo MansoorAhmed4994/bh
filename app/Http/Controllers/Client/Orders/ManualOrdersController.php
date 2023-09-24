@@ -358,13 +358,15 @@ class ManualOrdersController extends Controller
         //Product details
         $ManualOrder->total_pieces = $request->total_pieces;
         $ManualOrder->weight = $request->weight;
-        $ManualOrder->description = $request->description;
+        $ManualOrder->description = $request->description; 
         
         $traxdata = []; 
         //Shipment details
         if($request->submit == "save")
         {
-            if($ManualOrder->save())
+            $status = $ManualOrder->save();
+            // dd($status);
+            if($status)
             {
                 return redirect()->route('ManualOrders.index')->with('success', 'Order Updated Successfully');
             }
