@@ -267,12 +267,22 @@
                     $('#shipping_mode_id_error').html('Please Select Shipment Method'); 
                     $('#fare_error').html('Please Select Shipment Method to auto fil fare');
                 }
+                else
+                {
+                    
+                    $('#fare_error').html('');  
+                }
                 
                 if($('#fare').val() == '')
                 {
                     
                     validation_status = false;
                     $('#fare_error').html('Please Select Shipment Method to auto fil fare');
+                }
+                else
+                {
+                    
+                    $('#fare_error').html('');  
                 }
                 
                 if($('#reference_number').val() == '')
@@ -282,6 +292,11 @@
                     $('#reference_number_error').html('Please Select Shipment Method to auto fil fare');
                     
                 }
+                else
+                {
+                    
+                    $('#reference_number_error').html('');  
+                }
             }
             
             if($('#product_price').val() == '' || $('#product_price').val() <= '0')
@@ -290,14 +305,24 @@
                 validation_status = false;
                 $('#product_price_error').html('Please enter price');  
             }
+            else
+            {
+                
+                $('#product_price_error').html('');  
+            }
             
             
-            if($('#cod_amount').val() <  $('#price').val())
+            if($('#cod_amount').val() >  $('#price').val())
             {
                 
                 validation_status = false;
                 $('#price_error').html('price cannot be less than cod');  
                 $('#product_price_error').html('Please enter product price');  
+            }
+            else
+            {
+                
+                $('#product_price_error').html('');  
             }
             
             return validation_status;
