@@ -359,7 +359,7 @@ function get_fare_list(index)
     {
         return;
     } 
-    else if ( price <=0  ||  price == "" || advance_payment == "")
+    else if ( price <=0  ||  price == "" )
     {
         return;
     }

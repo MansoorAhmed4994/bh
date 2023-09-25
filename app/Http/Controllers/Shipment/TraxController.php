@@ -56,11 +56,12 @@ class TraxController extends Controller
             $city = $request->city[$x];
             $total_pieces= $request->total_pieces[$x];
             $weight= $request->weight[$x];
+            // $cod_amount = 1;
             $cod_amount = $request->cod_amount[$x];
             $advance_payment = $request->advance_payment[$x]; 
             $price= $request->price[$x];
             $fare = $request->fare[$x];
-            
+            // dd(trim($price));
             
             $data['order_id'] = $request->id[$x];
             $data['service_type_id'] = 1;
@@ -75,7 +76,9 @@ class TraxController extends Controller
             $data['item_description'] = trim($request->item_description[$x]);
             $data['item_quantity'] = (int)trim($total_pieces);
             $data['item_insurance'] = 0;
-            $data['item_price'] = trim($price);
+            $data['item_price'] = (Int) trim($price);
+            $data['parcel_value'] = (Int) trim($price);
+            
             $data['pickup_date'] = $mytime;
             $data['special_instructions'] = trim('Nothing');
             $data['estimated_weight'] = trim($request->weight[$x]);
@@ -108,10 +111,11 @@ class TraxController extends Controller
             
             $error_creating = '';
         //echo 'working';
-            if($status);
+            if($status)
             {
+                
                 $ApiResponse = $this->CreateBooking($data);
-                //dd($ApiResponse);
+                // dd($ApiResponse,$data);
                 
                 //DD(env('MNP_API_USERNAME')); 
                 if($ApiResponse->status == 0)
@@ -128,12 +132,12 @@ class TraxController extends Controller
                     if($status)
                     {   
                         //echo $ApiResponse->tracking_number;
-                        array_push($id, $ApiResponse->tracking_number);
+                        array_push($id, $ApiResponse->tracking_number); 
                         //return $this->print_trax_slips($id);
                     }
                     else
-                    {
-                        //dd($status);
+                    { 
+                        dd($status);
                         //dd($ManualOrder);
                     }
                     //dd(json_decode($resp)[0]->orderReferenceId);
@@ -142,16 +146,20 @@ class TraxController extends Controller
                 {
                     $error_creating = 'These shipments not created';
                     
-                    //dd($ApiResponse);die;
+                    dd($ApiResponse);
                 }
                 
+            }
+            else
+            {
+                dd($status,'data is not saving in database');
             }
             
         }
             
+        
         $slips = $this->print_trax_slips($id);
         return view('client.orders.manual-orders.trax.print_trax_slip')->with('slips',$slips);
-        
         
         //dd();
     }

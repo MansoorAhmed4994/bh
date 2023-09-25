@@ -590,7 +590,7 @@
                         </div>
                         <div class="form-group col-auto">
                             <label for="Number">price</label>
-                            <input type="number" step="0.01" class="form-control @if($errors->get('price')) is-invalid @endif" value="{{old('price')}}@if($ManualOrder->price != ''){{$ManualOrder->price}}@else{{0}}@endif" onchange="onchangeprice();" id="price"  name="price" placeholder="Price" readonly>
+                            <input type="number" step="0.01" class="form-control @if($errors->get('price')) is-invalid @endif" value="{{old('price')}}@if($ManualOrder->price != ''){{$ManualOrder->price}}@else{{0}}@endif" onchange="onchangeprice();get_fare_list()" id="price"  name="price" placeholder="Price" readonly>
                             <small id="price_error" class="form-text text-danger">@if($errors->get('price')) {{$errors->first('price')}} @endif</small>
                         </div>
                         <div class="form-group col-auto">
@@ -601,7 +601,7 @@
                                 <div class="input-group-prepend">
                                     <div class="input-group-text" id="btncustomerpaymentiframe">Add</div>
                                 </div>
-                                <input type="number" step="0.01" class="form-control @if($errors->get('advance_payment')) is-invalid @endif" onchange="onchangeprice()" value="{{old('advance_payment')}}@if($ManualOrder->advance_payment != ''){{$ManualOrder->advance_payment}}@else{{0}}@endif" onchange="onchangeprice();" id="advance_payment"  name="advance_payment" placeholder="Advance Payment" readonly>
+                                <input type="number" step="0.01" class="form-control @if($errors->get('advance_payment')) is-invalid @endif" onchange="onchangeprice()" value="{{old('advance_payment')}}@if($ManualOrder->advance_payment != ''){{$ManualOrder->advance_payment}}@else{{0}}@endif" onchange="onchangeprice();get_fare_list()" id="advance_payment"  name="advance_payment" placeholder="Advance Payment" readonly>
                             </div>
                              <small id="advance_payment_error" class="form-text text-danger">@if($errors->get('advance_payment')) {{$errors->first('advance_payment')}} @endif</small>
                         </div>
