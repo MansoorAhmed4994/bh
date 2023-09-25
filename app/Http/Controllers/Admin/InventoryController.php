@@ -271,30 +271,51 @@ class InventoryController extends Controller
     public function deletcustomerproduct($inventory_id)
     {
         // dd($inventory_id);
-        $error=0;
-        $inventory = Inventory::find($inventory_id); 
-        // dd($inventory);
-        $product_id = $inventory->products_id;
-        $ds = $inventory->destroy($inventory_id);
         
-        // $remaining_inventory = $inventory->products->first()->remaining_inventories()->where('qty','>=','0')->orderBy('id','ASC')->first();
-            // dd($remaining_inventory);
-            // if($remaining_inventory)
-            // {
+        $error=0;
+        $inventory = Inventory::find($inventory_id);
+        $check_duplicate_permission = ManualOders::find($inventory->reference_id);
+        $check_duplicate_permission = true;
+        if($check_duplicate_permission->status == 'dipatched')
+        {
+            if(Auth::guard('admin')->check())
+            {
+                $check_duplicate_permission = true;
+            }
+            else
+            {
+                $check_duplicate_permission = false;
+                return response()->json(['messege' => 'Only Admin can delete this product cause you dont have access','error'=>$error,'price'=>$price]);
+            }
+            
+        }
+        if($check_duplicate_permission == true)
+        {
+            
+        
+            // dd($inventory);
+            $product_id = $inventory->products_id;
+            $ds = $inventory->destroy($inventory_id);
+            
+            // $remaining_inventory = $inventory->products->first()->remaining_inventories()->where('qty','>=','0')->orderBy('id','ASC')->first();
                 // dd($remaining_inventory);
-                //create inventory in
-                // $inventory_create = $this->create_inventory_products($inventory->Products->first()->sku,'in',$inventory->reference_id,1,$inventory->cost,'Order',$inventory->products->first(),$inventory->products->first()->sale_price,$remaining_inventory->id);
-                
-                //update remaining inventory
-                $remaining_inventory = remaining_inventories::where('products_id',$product_id)->where('id','=',$inventory->warehouse_id)->first();
-                $remaining_inventory->qty = $remaining_inventory->qty+1;
-                $remaining_inventory->save(); 
-                
-                //Get updated price
-                $price = $this->updateorderprice($inventory->reference_id);
-                return response()->json(['messege' => 'Product delete successfully','error'=>$error,'price'=>$price]);
-            // }
-        // dd($ds); 
+                // if($remaining_inventory)
+                // {
+                    // dd($remaining_inventory);
+                    //create inventory in
+                    // $inventory_create = $this->create_inventory_products($inventory->Products->first()->sku,'in',$inventory->reference_id,1,$inventory->cost,'Order',$inventory->products->first(),$inventory->products->first()->sale_price,$remaining_inventory->id);
+                    
+                    //update remaining inventory
+                    $remaining_inventory = remaining_inventories::where('products_id',$product_id)->where('id','=',$inventory->warehouse_id)->first();
+                    $remaining_inventory->qty = $remaining_inventory->qty+1;
+                    $remaining_inventory->save(); 
+                    
+                    //Get updated price
+                    $price = $this->updateorderprice($inventory->reference_id);
+                    return response()->json(['messege' => 'Product delete successfully','success'=>$error,'price'=>$price]);
+                // }
+            // dd($ds); 
+        }
     }
 
     /**

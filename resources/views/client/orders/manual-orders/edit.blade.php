@@ -46,15 +46,22 @@
             dataType: 'json',
             success: function(e)
             { 
-                var row = document.getElementById(id);
-                row.parentNode.removeChild(row);
-                $('#product_price').val(e.price);
-                
-                $("#total_amount").html(e.price);
-                
+                if (typeof e.success !== 'undefined') {
+                    var row = document.getElementById(id);
+                    row.parentNode.removeChild(row);
+                    $('#product_price').val(e.price);
+                    
+                    $("#total_amount").html(e.price);
+                    
+                    
+                    get_fare_list();
+                    onchangeprice();
+                } 
+                else if(typeof e.error !== 'undefined')
+                {
+                    alert(e.messege);
+                }
                 $("body").removeClass("loading");
-                get_fare_list();
-                onchangeprice();
             },
             error: function(e) {alert(e); 
                 $("body").removeClass("loading");
@@ -116,13 +123,13 @@
     function onchangeprice()
     {
         
-        let product_price = parseInt(document.getElementById("product_price").value);
-        let dc = parseInt(document.getElementById("dc").value);
-        let packaging_cost = parseInt(document.getElementById("packaging_cost").value);
+        let product_price = parseFloat(document.getElementById("product_price").value);
+        let dc = parseFloat(document.getElementById("dc").value);
+        let packaging_cost = parseFloat(document.getElementById("packaging_cost").value);
         document.getElementById("price").value = product_price+dc+packaging_cost; 
         
-        let advance_payment = parseInt(document.getElementById("advance_payment").value); 
-        let cod_amount = ((product_price+dc+packaging_cost)-advance_payment);
+        let advance_payment = parseFloat(document.getElementById("advance_payment").value); 
+        let cod_amount = parseFloat((product_price+dc+packaging_cost)-advance_payment).toFixed(2);
         document.getElementById("cod_amount").value = cod_amount;
         // alert(cod_amount);
     }
@@ -312,7 +319,7 @@
             }
             
             
-            if($('#cod_amount').val() >  $('#price').val())
+            if($('#cod_amount').val() > $('#price').val())
             {
                 
                 validation_status = false;
@@ -322,8 +329,22 @@
             else
             {
                 
+                $('#price_error').html('');  
                 $('#product_price_error').html('');  
             }
+            
+            if($('#cod_amount').val() < 0)
+            {
+                
+                validation_status = false;  
+                $('#cod_amount_error').html('Cod cannot be less then 0');
+            }
+            // alert($('#cod_amount').val());
+            // if($('#cod_amount').val() < 0)
+            // {
+                
+            //     $('#cod_amount_error').html('Cod cannot be less then 0);  
+            // }
             
             return validation_status;
         }
@@ -526,14 +547,35 @@
                             <label for="receiver_name">Reciever address</label>
                             <textarea class="form-control" id="reciever_address @if($errors->get('reciever_address')) is-invalid @endif"   name="reciever_address" placeholder="reciever_address" required>{{old('reciever_address')}}@if(isset($ManualOrder)){{$ManualOrder->reciever_address}}@endif</textarea>
                             <small id="reciever_address_error" class="form-text text-danger">@if($errors->get('reciever_address')) {{$errors->first('reciever_address')}} @endif</small>
-                        </div>     
+                        </div>  
+                         
+                        <div class="form-group col-auto">   
+                        
+                            <select class="custom-select" aria-label="Default select example" name="order_status" id="order_status" required>
+                                <option selected value ="">Order Status</option>
+                                <option value="all">All</option>
+                                <option value="pending">Pending</option>
+                                <option value="prepared">Prepared</option>
+                                <option value="confirmed">Confirmed</option> 
+                                <option value="dispatched">Dispatched</option> 
+                                <option value="hold">Hold</option>
+                                <option value="incomplete">incomplete</option> 
+                                @if(Auth::guard('admin')->check())
+                                    <option value="deleted">delete</option> 
+                                    <option value="cancel">cancel</option> 
+                                    <option value="return">return</option> 
+                                    <option value="duplicate">Dulicate</option>
+                                    <option value="not responding"></option>  
+                                @endif
+                            </select>
+                        </div>
                     </div>
                     
                     <div class="col-sm-2">
                         <h5>Payment Details <hr></h5>
                         <div class="form-group col-auto">
                             <label for="Product Price">Product Price</label>
-                            <input type="number" class="form-control @if($errors->get('product_price')) is-invalid @endif" value="{{old('product_price')}}@if($ManualOrder->product_price != ''){{$ManualOrder->product_price}}@else{{0}}@endif" onchange="onchangeprice();get_fare_list();" id="product_price"  name="product_price" required>
+                            <input type="number" step="0.01" class="form-control @if($errors->get('product_price')) is-invalid @endif" value="{{old('product_price')}}@if($ManualOrder->product_price != ''){{$ManualOrder->product_price}}@else{{0}}@endif" onchange="onchangeprice();get_fare_list();" id="product_price"  name="product_price" required>
                              <small id="product_price_error" class="form-text text-danger">@if($errors->get('product_price')){{$errors->first('product_price')}} @endif</small>
                         </div>
                         <div class="form-group col-auto">
@@ -543,12 +585,12 @@
                         </div>
                         <div class="form-group col-auto">
                             <label for="Packaging Cost">Packaging Cost</label>
-                            <input type="number" class="form-control @if($errors->get('packaging_cost')) is-invalid @endif" value="{{old('packaging_cost')}}@if($ManualOrder->packaging_cost != ''){{$ManualOrder->packaging_cost}}@else{{0}}@endif" id="packaging_cost" onchange="onchangeprice();get_fare_list();" name="packaging_cost" placeholder="packaging_cost" >
+                            <input type="number" step="0.01" class="form-control @if($errors->get('packaging_cost')) is-invalid @endif" value="{{old('packaging_cost')}}@if($ManualOrder->packaging_cost != ''){{$ManualOrder->packaging_cost}}@else{{0}}@endif" id="packaging_cost" onchange="onchangeprice();get_fare_list();" name="packaging_cost" placeholder="packaging_cost" >
                              <small id="packaging_cost_error" class="form-text text-danger">@if($errors->get('packaging_cost')) {{$errors->first('packaging_cost')}} @endif</small>
                         </div>
                         <div class="form-group col-auto">
                             <label for="Number">price</label>
-                            <input type="number" class="form-control @if($errors->get('price')) is-invalid @endif" value="{{old('price')}}@if($ManualOrder->price != ''){{$ManualOrder->price}}@else{{0}}@endif" onchange="onchangeprice();" id="price"  name="price" placeholder="Price" readonly>
+                            <input type="number" step="0.01" class="form-control @if($errors->get('price')) is-invalid @endif" value="{{old('price')}}@if($ManualOrder->price != ''){{$ManualOrder->price}}@else{{0}}@endif" onchange="onchangeprice();" id="price"  name="price" placeholder="Price" readonly>
                             <small id="price_error" class="form-text text-danger">@if($errors->get('price')) {{$errors->first('price')}} @endif</small>
                         </div>
                         <div class="form-group col-auto">
@@ -559,15 +601,15 @@
                                 <div class="input-group-prepend">
                                     <div class="input-group-text" id="btncustomerpaymentiframe">Add</div>
                                 </div>
-                                <input type="number" class="form-control @if($errors->get('advance_payment')) is-invalid @endif" onchange="onchangeprice()" value="{{old('advance_payment')}}@if($ManualOrder->advance_payment != ''){{$ManualOrder->advance_payment}}@else{{0}}@endif" onchange="onchangeprice();" id="advance_payment"  name="advance_payment" placeholder="Advance Payment" readonly>
+                                <input type="number" step="0.01" class="form-control @if($errors->get('advance_payment')) is-invalid @endif" onchange="onchangeprice()" value="{{old('advance_payment')}}@if($ManualOrder->advance_payment != ''){{$ManualOrder->advance_payment}}@else{{0}}@endif" onchange="onchangeprice();" id="advance_payment"  name="advance_payment" placeholder="Advance Payment" readonly>
                             </div>
-                             <small id="price_error" class="form-text text-danger">@if($errors->get('price')) {{$errors->first('price')}} @endif</small>
+                             <small id="advance_payment_error" class="form-text text-danger">@if($errors->get('advance_payment')) {{$errors->first('advance_payment')}} @endif</small>
                         </div>
             
                         <div class="form-group col-auto">
                             <label for="Number">COD Amount</label>
-                            <input type="number" class="form-control @if($errors->get('cod_amount')) is-invalid @endif" value="{{old('cod_amount')}}@if($ManualOrder->cod_amount != ''){{$ManualOrder->cod_amount}}@else{{0}}@endif" id="cod_amount"  name="cod_amount" placeholder="COD" readonly required>
-                            @if($errors->get('cod_amount')) <small id="cod_amount_error" class="form-text text-danger">{{$errors->first('cod_amount')}} </small>@endif
+                            <input type="number" step="0.01" class="form-control @if($errors->get('cod_amount')) is-invalid @endif" value="{{old('cod_amount')}}@if($ManualOrder->cod_amount != ''){{$ManualOrder->cod_amount}}@else{{0}}@endif" id="cod_amount"  name="cod_amount" placeholder="COD" readonly required>
+                             <small id="cod_amount_error" class="form-text text-danger">@if($errors->get('cod_amount')){{$errors->first('cod_amount')}} @endif</small>
                         </div>
                     
                     </div>
@@ -913,8 +955,8 @@ function shipment_type_change()
     }
     
 }
-
-
+ 
+$('#order_status').val('{{$ManualOrder->status}}');
 get_fare_list();
 onchangeprice();
 </script>

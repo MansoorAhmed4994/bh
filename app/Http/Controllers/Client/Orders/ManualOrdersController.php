@@ -151,7 +151,7 @@ class ManualOrdersController extends Controller
         // dd($query->get());
         // dd(ManualOrders::find(1)->cities->id);
         // dd($list[0]->cities->name);
-        return view('client.orders.manual-orders.list')->with(['list',$list,'users'=>$users]); 
+        return view('client.orders.manual-orders.list')->with(['list'=>$list,'users'=>$users]); 
     }
     
     public function InActiveCustomers(Request $request)
@@ -360,6 +360,7 @@ class ManualOrdersController extends Controller
         $ManualOrder->total_pieces = $request->total_pieces;
         $ManualOrder->weight = $request->weight;
         $ManualOrder->description = $request->description; 
+        $ManualOrder->status = $request->order_status; 
         
         $traxdata = []; 
         //Shipment details
@@ -430,6 +431,8 @@ class ManualOrdersController extends Controller
             else if($request->shipment_type == 'local')
             {
                 // dd($ManualOrder);
+                $ManualOrder->status = 'dispatched';  
+                $status = $ManualOrder->save();
                 $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.id',$ManualOrder->id)->get();
                 // foreach($ManualOrder as $ManualOrders)
                 // {
