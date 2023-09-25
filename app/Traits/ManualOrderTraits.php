@@ -72,9 +72,9 @@ trait ManualOrderTraits {
             $manual_orders->images = implode("|",$images);
             $manual_orders->total_pieces = '';
             $manual_orders->weight = '';
-            $manual_orders->price = '0';
-            $manual_orders->cod_amount = '0';
-            $manual_orders->advance_payment = '0';
+            $manual_orders->price = 0;
+            $manual_orders->cod_amount = 0;
+            $manual_orders->advance_payment = 0;
             $manual_orders->date_order_paid = '';
             $manual_orders->description = $request->description;
             $manual_orders->reference_number = '';
@@ -149,9 +149,9 @@ trait ManualOrderTraits {
                 $manual_orders->images = implode("|",$images);
                 $manual_orders->total_pieces = '';
                 $manual_orders->weight = '';
-                $manual_orders->price = '';
-                $manual_orders->cod_amount = '';
-                $manual_orders->advance_payment = '';
+                $manual_orders->price = 0;
+                $manual_orders->cod_amount = 0;
+                $manual_orders->advance_payment = 0;
                 $manual_orders->date_order_paid = '';
                 $manual_orders->description = $request->description;
                 $manual_orders->reference_number = '';
