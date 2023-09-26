@@ -24,10 +24,16 @@ var base_url = '<?php echo e(url('/')); ?>';
         
         $( document ).ready(function() {
             
-            $('#order_id').focusout('click',function(e)
-            {  
+            // $('#order_id').focusout('click',function(e)
+            // {  
                  
                 
+                
+            // });
+        });
+        
+        function get_payments()
+            {
                 $.ajax({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -47,8 +53,9 @@ var base_url = '<?php echo e(url('/')); ?>';
                         console.log(e.responseText);
                     }
                 });
-            });
-        });
+            }
+        
+        
         
             
             function actionpaymentapproval(id,action)
@@ -140,7 +147,7 @@ var base_url = '<?php echo e(url('/')); ?>';
         
                     <div class="form-group">
                         <label for="orderid">Order ID</label>
-                        <input type="number"  class="form-control" id="order_id"  name="order_id" placeholder="order id" required>
+                        <input type="number"  class="form-control" onchange="get_payments()" id="order_id"  name="order_id" placeholder="order id" required>
                         <small id="order_id_error" class="form-text text-danger"> </small>
                     </div> 
         
@@ -206,5 +213,7 @@ var base_url = '<?php echo e(url('/')); ?>';
         </div>
     </div>
     
-     
+     <script>
+         get_payments();
+     </script>
   @endsection

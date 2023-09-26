@@ -242,7 +242,17 @@ class CustomerPaymentController extends Controller
     {
         // dd('work');
         $data='';
-        $customerPayments = CustomerPayments::where('customer_payments.order_id',$request->order_id)->orderBy('customer_payments.id', 'DESC')->get();
+        $customerPayments;
+        if($request->order_id == '')
+        {
+            $customerPayments = CustomerPayments::select('*')->where('customer_payments.status','approval pending')->orderBy('customer_payments.id', 'DESC')->get();
+        }
+        else
+        {
+            $customerPayments = CustomerPayments::where('customer_payments.order_id',$request->order_id)->orderBy('customer_payments.id', 'DESC')->get();
+            
+        }
+        // dd($customerPayments);
         // $ManualOrders = ManualOrders::where('customers.number',$request->number)->get();
         // dd($customerPayments);
         
