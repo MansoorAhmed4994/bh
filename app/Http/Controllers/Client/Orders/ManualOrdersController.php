@@ -397,6 +397,7 @@ class ManualOrdersController extends Controller
                 $traxdata['item_quantity'] = (int)trim($request->total_pieces);
                 $traxdata['item_insurance'] = 0;
                 $traxdata['item_price'] = trim($request->price);
+                $traxdata['parcel_value'] = trim($request->price);
                 $traxdata['pickup_date'] = $mytime;
                 $traxdata['special_instructions'] = trim('Nothing');
                 $traxdata['estimated_weight'] = trim($request->weight);

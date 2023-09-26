@@ -137,7 +137,7 @@ class TraxController extends Controller
                     }
                     else
                     { 
-                        dd($status);
+                        dd($status,'data not save in data');
                         //dd($ManualOrder);
                     }
                     //dd(json_decode($resp)[0]->orderReferenceId);
@@ -146,7 +146,7 @@ class TraxController extends Controller
                 {
                     $error_creating = 'These shipments not created';
                     
-                    dd($ApiResponse);
+                    dd($ApiResponse,'Api response');
                 }
                 
             }
