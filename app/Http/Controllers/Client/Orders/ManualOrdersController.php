@@ -799,6 +799,12 @@ class ManualOrdersController extends Controller
     
     public function get_order_details( $ManualOrder)
     { 
+        
+        if(check_customer_advance_payment($ManualOrder) > 0)
+        {
+            return response()->json(['error'=>'1','messege' => 'payment not approved order id #'.$ManualOrder]);
+            // dd('payment not approved',$ManualOrder);
+        } 
         $ManualOrder = ManualOrders::find($ManualOrder);
         //dd($ManualOrder);
         if($ManualOrder != null)
@@ -957,6 +963,11 @@ class ManualOrdersController extends Controller
                     // print_r(json_decode($resp)[0]);
                     // echo $price;
                     $ManualOrder = ManualOrders::find($request->id[$x]);
+                    
+                    if(check_customer_advance_payment($request->id[$x]) > 0)
+                    {
+                        dd('payment not approved',$request->id[$x]);
+                    }
                     //dd($ManualOrder);
                     $ManualOrder->consignment_id = $ApiResponse->tracking_number;
                     $status = $ManualOrder->save();
@@ -978,7 +989,6 @@ class ManualOrdersController extends Controller
             }
             
         }
-            
         $slips = $this->print_trax_slips($id);
         return view('client.orders.manual-orders.trax.print_trax_slip')->with('slips',$slips);
         
@@ -1108,6 +1118,13 @@ class ManualOrdersController extends Controller
         
         if($print_slips == 'domestic')
         {
+            foreach($order_ids as $order_id)
+            {
+                if(check_customer_advance_payment($order_id) > 0)
+                {
+                    dd('payment not approved',$order_id);
+                }
+            }
             $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->whereIn('manual_orders.id',$order_ids)->get();
             $ids = array();
             foreach($ManualOrder as $consignment_ids)

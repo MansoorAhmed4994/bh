@@ -88,14 +88,23 @@ class LoadSheetController extends Controller
     public function generate_load_sheet(Request $request)
     {
         //dd($request->all());
+        // dd($request->order_ids);
+        foreach( $request->order_ids as $order_id)
+        {
+            if(check_customer_advance_payment($order_id) > 0)
+            {
+                return response()->json(['status' => '1', 'messege' => 'payment not approved Order #: '.$order_id]); 
+                // dd('payment not approved',$order_id);
+            }
+        }
         $action_status = ManualOrders::whereIn('id',$request->order_ids)->update(['status' => 'dispatched', 'riders_id'=> $request->riders]);
         if($action_status)
         {
-            return response()->json(['status' => '1', 'messege' => $action_status.' Parcels Status successfully updated']); 
+            return response()->json(['error' => '0', 'messege' => $action_status.' Parcels Status successfully updated']); 
         }
         else
         {
-            return response()->json(['status' => '0', 'messege' => 'some thing went wrong']); 
+            return response()->json(['error' => '1', 'messege' => 'some thing went wrong']); 
         }
         // dd($action_status);
         // dd($request->order_ids[0]);

@@ -8,6 +8,7 @@
         var row_id="1";
         var total_amount=0;
         var total_parcels=0;
+        const order_ids = [];
         
        function checkAll(bx) {
           var cbs = document.getElementsByTagName('input');
@@ -92,7 +93,7 @@
                         { 
                             if(typeof(e.status) != 'undefined')
                             {
-                                if(e.status == '1')
+                                if(e.status == '0')
                                 {
                                     var today = new Date();
                                     var dd = String(today.getDate()).padStart(2, '0');
@@ -129,6 +130,23 @@
 
         function order_get_dispatch() {
             
+            var id = document.getElementById('order_id').value;
+            if(id == '')
+            {
+                return;
+            }
+            
+            if(jQuery.inArray(id, order_ids) !== -1)
+            {
+                alert('Already exist');
+                document.getElementById('order_id').value = '';
+                return
+            }
+            else
+            {
+                
+                order_ids.push(id);
+            }
                 $("body").addClass("loading"); 
                 
                     var id = document.getElementById('order_id').value;
@@ -143,6 +161,12 @@
                         dataType: 'json',
                         success: function(e)
                         {
+                            if (typeof e.error !== 'undefined') 
+                            {
+                                alert(e.messege);
+                                $("body").removeClass("loading");
+                                return;
+                            } 
                             if(e.messege != 'no order found')
                             {
                                 var cod_amount = 0;
