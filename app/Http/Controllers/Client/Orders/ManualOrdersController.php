@@ -419,6 +419,11 @@ class ManualOrdersController extends Controller
                     $ManualOrder->service_type = $request->service_type; 
                     $ManualOrder->consignment_id = $ApiResponse->tracking_number;
                     $ManualOrder->status = 'dispatched';  
+                    
+                    if(check_customer_advance_payment($ManualOrder->id) > 0)
+                    {
+                        dd('payment not approved');
+                    }
                     $status = $ManualOrder->save();
                     $slips = $this->print_trax_slips($id);
                     return view('client.orders.manual-orders.trax.print_trax_slip')->with('slips',$slips);
@@ -432,7 +437,13 @@ class ManualOrdersController extends Controller
             else if($request->shipment_type == 'local')
             {
                 // dd($ManualOrder);
-                $ManualOrder->status = 'dispatched';  
+                $order_id = $ManualOrder->id;
+                $ManualOrder->status = 'dispatched';
+                if(check_customer_advance_payment($ManualOrder->id) > 0)
+                {
+                    dd('payment not approved');
+                }
+                
                 $status = $ManualOrder->save();
                 $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.id',$ManualOrder->id)->get();
                 // foreach($ManualOrder as $ManualOrders)
@@ -440,6 +451,9 @@ class ManualOrdersController extends Controller
                 //     create_activity_log(['table_name'=>'manual_orders','ref_id'=>$ManualOrders->id,'activity_desc'=>'Local Slip','created_by'=>Auth::id(),'method'=>'print','route'=>route('ManualOrders.order.action')]);
         
                 // }
+                
+                
+                
                 return view('client.orders.manual-orders.print_slip')->with('ManualOrders',$ManualOrder);
             }
         }
@@ -529,6 +543,10 @@ class ManualOrdersController extends Controller
             {
                 create_activity_log(['table_name'=>'manual_orders','ref_id'=>$ManualOrders->id,'activity_desc'=>'Local Slip','created_by'=>Auth::id(),'method'=>'print','route'=>route('ManualOrders.order.action')]);
     
+            }
+            if(check_customer_advance_payment($ManualOrders->id) > 0)
+            {
+                dd('payment not approved');
             }
             return view('client.orders.manual-orders.print_slip')->with('ManualOrders',$ManualOrder);
                 //dd($order_ids);
@@ -829,6 +847,10 @@ class ManualOrdersController extends Controller
     {
         $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.id',$ManualOrder_id)->get();
         //dd($ManualOrder);
+        if(check_customer_advance_payment($ManualOrder_id) > 0)
+        {
+            dd('payment not approved');
+        }
         return view('client.orders.manual-orders.print_slip')->with('ManualOrders',$ManualOrder);
     }
     
@@ -999,6 +1021,8 @@ class ManualOrdersController extends Controller
     
     public function print_slip_by_scan()
     { 
+       
+        
         return view('client.orders.manual-orders.print_slip_by_scan');
         
     }
@@ -1050,8 +1074,7 @@ class ManualOrdersController extends Controller
                     //dd($status);
                 //array_push($products_insert_data,$d);
         } 
-        dd($products_insert_data);
-        //return view('client.orders.manual-orders.print_slip_by_scan');
+        dd($products_insert_data); 
         
     }
     
@@ -1102,6 +1125,14 @@ class ManualOrdersController extends Controller
         {
               
             $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->whereIn('manual_orders.id',$order_ids)->get();
+            foreach($order_ids as $order_id)
+            {
+                if(check_customer_advance_payment($order_id) > 0)
+                {
+                    dd('payment not approved',$order_id);
+                }
+            }
+            
             return view('client.orders.manual-orders.print_slip')->with('ManualOrders',$ManualOrder);
         }
         elseif($print_slips == 'pos')

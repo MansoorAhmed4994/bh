@@ -158,7 +158,7 @@
                                 
                             <div class="form-group col-sm">
                                 <label for="advance_payment">Advance Payment</label>
-                                <input type="number" class="form-control @if($errors->get('advance_payment')) is-invalid @endif advance_payment" value="0" onclick="onclickchangeadvancepayment(<?=$count?>);" onchange="onchangePrice(<?=$count?>);get_fare_list(<?=$count?>);" value="{{old('advance_payment')}}@if(isset($ManualOrder)){{trim($ManualOrder->advance_payment)}}@endif" id="advance_payment[]"  name="advance_payment[]" placeholder="Price" required>
+                                <input type="number" class="form-control @if($errors->get('advance_payment')) is-invalid @endif advance_payment" value="0" onclick="onclickchangeadvancepayment(<?=$count?>);" onchange="onchangePrice(<?=$count?>);get_fare_list(<?=$count?>);" value="{{old('advance_payment')}}@if(isset($ManualOrder)){{trim($ManualOrder->advance_payment)}}@endif" id="advance_payment[]"  name="advance_payment[]" placeholder="Price" readonly>
                                 @if($errors->get('advance_payment')) <small id="advance_payment_error[]" class="form-text text-danger advance_payment_error[]">{{$errors->first('advance_payment')}} </small>@endif
                             </div>
                             
