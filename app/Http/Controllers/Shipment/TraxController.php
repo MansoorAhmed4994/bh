@@ -207,9 +207,11 @@ class TraxController extends Controller
         $data['destination_city_id'] = $request->destination_city_id;
         $data['estimated_weight'] = $request->estimated_weight;
         $data['shipping_mode_id'] = $request->shipping_mode_id;
-        $data['amount'] = $request->amount;
+        $data['amount'] = (Int)$request->amount;
+        
+        
         $calculation =  $this->CalculateDestinationRates($data);
-        // dd($data,$calculation);
+        // dd($data,$calculation,$data['amount']);
         return response()->json(['data' => $calculation]);
     }
     
@@ -289,7 +291,7 @@ class TraxController extends Controller
         }
             // echo '<pre>';print_r($calculation);
             
-        // dd($calculationx);
+        // dd($calculationx,$best_fare);
         if($best_fare_result == 1)
         {
             return response()->json(['data' => $calculation,'best_fare'=>$best_fare]);
