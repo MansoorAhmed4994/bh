@@ -319,25 +319,29 @@
             }
             
             
-            if($('#cod_amount').val() > $('#price').val())
-            {
+            // if($('#cod_amount').val() > $('#price').val())
+            // {
+            //     console.log($('#cod_amount').val(),'===',('#price').val());
+            //     validation_status = false;
+            //     $('#price_error').html('price cannot be less than cod');  
+            //     $('#product_price_error').html('Please enter product price');  
+            // }
+            // else
+            // {
                 
-                validation_status = false;
-                $('#price_error').html('price cannot be less than cod');  
-                $('#product_price_error').html('Please enter product price');  
-            }
-            else
-            {
-                
-                $('#price_error').html('');  
-                $('#product_price_error').html('');  
-            }
+            //     $('#price_error').html('');  
+            //     $('#product_price_error').html('');  
+            // }
             
             if($('#cod_amount').val() < 0)
             {
                 
                 validation_status = false;  
                 $('#cod_amount_error').html('Cod cannot be less then 0');
+            }
+            else
+            {
+                $('#cod_amount_error').html('');
             }
             // alert($('#cod_amount').val());
             // if($('#cod_amount').val() < 0)
