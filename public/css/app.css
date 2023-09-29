@@ -4438,6 +4438,13 @@ input[type=button].btn-block {
     transition: none;
   }
 }
+.bh-logo
+{
+    width: 109px;
+    background-color: #fffafa;
+    display: inline-block;
+    border-radius: 6%;
+}
 
 .nav {
   display: flex;
@@ -4449,8 +4456,27 @@ input[type=button].btn-block {
 
 .nav-link {
   display: block;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 1rem; 
+  color:white!important;
+  transition: color 0.2s;
+} 
+
+a.nav-link:hover {
+    color: #a434dc!important;
 }
+
+li.nav-item:hover {
+    background: white;
+}
+
+li.nav-item {
+    color: black!important;
+    background: #c509fc;
+    border-radius: 6%;
+    border: 1px solid #ffffff70;
+    transition: background 0.2s;
+}
+ 
 
 .nav-link:hover,
 .nav-link:focus {
@@ -4558,6 +4584,8 @@ input[type=button].btn-block {
   font-size: 1.125rem;
   line-height: inherit;
   white-space: nowrap;
+  margin: 0 13px 0 0;
+  padding: 0 0 0;
 }
 
 .navbar-brand:hover,
@@ -4950,7 +4978,7 @@ input[type=button].btn-block {
 }
 
 .navbar-dark .navbar-nav .nav-link {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.5)
 }
 
 .navbar-dark .navbar-nav .nav-link:hover,
@@ -7025,7 +7053,7 @@ a.close.disabled {
 }
 
 .bg-primary {
-  background-color: #3490dc !important;
+  background-color: #a434dc !important;
 }
 
 a.bg-primary:hover,

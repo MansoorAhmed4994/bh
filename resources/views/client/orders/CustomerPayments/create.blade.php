@@ -49,7 +49,7 @@ var base_url = '<?php echo e(url('/')); ?>';
         
         function open_image_modal(id)
         { 
-            
+            // alert(id);
                 $("#payment_image_src").attr("src",$("#"+id).attr("src"));
                 $('#payment_image_zoom').modal('show'); 
             

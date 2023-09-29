@@ -281,7 +281,7 @@ class CustomerPaymentController extends Controller
                 $image_url = asset($customerPayment->images);
                 $data .= '<tr> 
                     <th>'.$customerPayment->id.'</th> 
-                    <th><img class="previouse_order_images" onclick="open_image_modal('.$customerPayment->transaction_id.')" src="'.$image_url.'"/ width="100"></th>
+                    <th><img class="previouse_order_images" id="'.$customerPayment->transaction_id.'" onclick="open_image_modal('.$customerPayment->transaction_id.')" src="'.$image_url.'"/ width="100"></th>
                     <td>'.$customerPayment->order_id.'</td>
                     <td>'.$customerPayment->transaction_id.'</td>
                     <td>'.$customerPayment->sender_name.'</td>
