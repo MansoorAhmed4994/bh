@@ -20,4 +20,30 @@
             return $status->count();
         }
     }
+    
+    if(!function_exists('check_order_status_for_print'))
+    {
+        function check_order_status_for_print($order_id)
+        {
+            $query=ManualOrders::query();
+            $status = $query->where(['id'=>$order_id]);
+            $query = $query->where('manual_orders.status','!=','dispatched')->where('manual_orders.status','!=','confirmed');
+            // where(function ($query) {
+            //     $query->where('manual_orders.status','!=','dispatched')
+            //         ->orwhere('manual_orders.status','!=','confirmed') ;
+            // });
+            // dd($query->get());
+            if($query->get()->count() > 0)
+            { 
+                $query = $query->first();
+                // dd($query->status);
+                return ['row_count'=>$query->count(),'status'=>$query->status];
+            }
+            else
+            {
+                
+                return ['row_count'=>$query->count(),'status'=>''];
+            }
+        }
+    }
 

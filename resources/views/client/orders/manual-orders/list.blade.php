@@ -163,95 +163,100 @@ var container = "";
         //     $('.imagepreview').attr('src', $(this).attr('src'));
         //     $('#imagemodal').modal('show');   
         // });   
-                
-                
-            
+        
+        $('#order_status_edit_close').on('click',function(){
+            $('#order_status_edit').modal('hide');
+        });
+        
+        $('#pos_slip_duplication_modal_close').on('click',function(){
+            $('#pos_slip_duplication_modal').modal('hide');
+        });
+                 
+        
+        
         $('#save_order_status_and_price').on('click',function(){
-        
-        
-        
-        let receiver_name = $('#receiver_name').val();
-        let receiver_number = $('#receiver_number').val();
-        let reciever_address = $('#reciever_address').val();
-        let price = $('#price').val();
-        let advance_payment = $('#advance_payment').val();
-        let cod_amount = $('#cod_amount').val();
-        let status_reason = $('#status_reason').val();
-        
-        
-        if(order_status == 'cancel' || order_status == 'hold' || order_status == 'incomplete')
-        {
-            if(status_reason == '')
-            {
-                
-                alert("please give Reason to "+order_status);
-                // $("body").removeClass("loading");
-                return;
-            }
+            let receiver_name = $('#receiver_name').val();
+            let receiver_number = $('#receiver_number').val();
+            let reciever_address = $('#reciever_address').val();
+            let price = $('#price').val();
+            let advance_payment = $('#advance_payment').val();
+            let cod_amount = $('#cod_amount').val();
+            let status_reason = $('#status_reason').val();
             
-        }
-        $("body").addClass("loading");
-    //console.log(status_reason);
-        $.ajax({
-          url: base_url + '/client/orders/ManualOrders/dispatch-order-edit/'+dispatch_order_id,
-          headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-          type:"POST",
-          dataType: 'json',
-          data:{
-            receiver_name:receiver_name,
-            receiver_number:receiver_number,
-            reciever_address:reciever_address,
-            price:price,
-            advance_payment:advance_payment,
-            cod_amount:cod_amount,
-            status:order_status,
-            status_reason:status_reason,
-          },
-          success:function(response){
-            //$('#successMsg').show();
-            if(response.messege == true)
+            
+            if(order_status == 'cancel' || order_status == 'hold' || order_status == 'incomplete')
             {
-                if(order_status == "cancel")
+                if(status_reason == '')
                 {
                     
-                    var get_char_rec_num = receiver_number.substring(0,1);
-                    if(get_char_rec_num == 0)
-                    {
-                        receiver_number = "+92"+receiver_number;
-                    }
-                    var link = "https://api.whatsapp.com/send?phone="+receiver_number+"&text=Assalamualaikum, "+receiver_name+", I am from Brandhub, i just want to inform you that your parcel has been cancelled due to unavailable of iterm, please contact here for more details 03362240865";
-                    $("#dispatch-succes-noti").css("display", "block");
-                    window.open(link, '_blank');
+                    alert("please give Reason to "+order_status);
+                    // $("body").removeClass("loading");
+                    return;
                 }
-                else if(order_status == "prepared")
-                { 
-                    var get_char_rec_num = receiver_number.substring(0,1);
-                    if(get_char_rec_num == 0)
-                    {
-                        receiver_number = "+92"+receiver_number;
-                    }
-                    var link = "https://api.whatsapp.com/send?phone="+receiver_number+"&text=Assalamualaikum "+receiver_name+", your order has been Prepared, Our representative will contact you ASAP, Kindly active on your Phone, You can also confirm your order by  clicking on the given link, and press confirmed button "+order_link+" Thank You";
-                    $("#dispatch-succes-noti").css("display", "block");
-                    window.open(link, '_blank');
-                     
-                } 
-                $("#dispatch-succes-noti").css("display", "block");
                 
             }
-            $("body").removeClass("loading");
-            //console.log(response);
-          },
-          error: function(response) {
-                alert(response); 
+            $("body").addClass("loading");
+        //console.log(status_reason);
+            $.ajax({
+              url: base_url + '/client/orders/ManualOrders/dispatch-order-edit/'+dispatch_order_id,
+              headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+              type:"POST",
+              dataType: 'json',
+              data:{
+                receiver_name:receiver_name,
+                receiver_number:receiver_number,
+                reciever_address:reciever_address,
+                price:price,
+                advance_payment:advance_payment,
+                cod_amount:cod_amount,
+                status:order_status,
+                status_reason:status_reason,
+              },
+              success:function(response){
+                //$('#successMsg').show();
+                if(response.messege == true)
+                {
+                    if(order_status == "cancel")
+                    {
+                        
+                        var get_char_rec_num = receiver_number.substring(0,1);
+                        if(get_char_rec_num == 0)
+                        {
+                            receiver_number = "+92"+receiver_number;
+                        }
+                        var link = "https://api.whatsapp.com/send?phone="+receiver_number+"&text=Assalamualaikum, "+receiver_name+", I am from Brandhub, i just want to inform you that your parcel has been cancelled due to unavailable of iterm, please contact here for more details 03362240865";
+                        $("#dispatch-succes-noti").css("display", "block");
+                        window.open(link, '_blank');
+                    }
+                    else if(order_status == "prepared")
+                    { 
+                        var get_char_rec_num = receiver_number.substring(0,1);
+                        if(get_char_rec_num == 0)
+                        {
+                            receiver_number = "+92"+receiver_number;
+                        }
+                        var link = "https://api.whatsapp.com/send?phone="+receiver_number+"&text=Assalamualaikum "+receiver_name+", your order has been Prepared, Our representative will contact you ASAP, Kindly active on your Phone, You can also confirm your order by  clicking on the given link, and press confirmed button "+order_link+" Thank You";
+                        $("#dispatch-succes-noti").css("display", "block");
+                        window.open(link, '_blank');
+                         
+                    } 
+                    $("#dispatch-succes-noti").css("display", "block");
+                    
+                }
                 $("body").removeClass("loading");
-            // $('#nameErrorMsg').text(response.responseJSON.errors.name);
-            // $('#emailErrorMsg').text(response.responseJSON.errors.email);
-            // $('#mobileErrorMsg').text(response.responseJSON.errors.mobile);
-            // $('#messageErrorMsg').text(response.responseJSON.errors.message);
-          },
-      });
+                //console.log(response);
+              },
+              error: function(response) {
+                    alert(response); 
+                    $("body").removeClass("loading");
+                // $('#nameErrorMsg').text(response.responseJSON.errors.name);
+                // $('#emailErrorMsg').text(response.responseJSON.errors.email);
+                // $('#mobileErrorMsg').text(response.responseJSON.errors.mobile);
+                // $('#messageErrorMsg').text(response.responseJSON.errors.message);
+              },
+          });
         
     
         }); 
@@ -349,10 +354,31 @@ var container = "";
             
             type: 'GET',
             dataType: 'json',
-            success: function(e)
+            success: function(e) 
             {
-                //console.log(e.messege.id);
-                //alert(e.messege.id);
+                var order_date =e.messege.created_at;
+                var dateParts = order_date.split("-");
+                var final_date = new Date(dateParts[0], dateParts[1] - 1, dateParts[2].substr(0,2));
+                console.log(final_date); 
+                var current_date = new Date();
+                
+                const diffTime = Math.abs(current_date - final_date);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));  
+                console.log(diffDays + " days");
+                
+                
+              
+                if(e.messege.status == 'dispatched')
+                {
+                    if(diffDays >= 3)
+                    {
+                        alert('you cant edit this order cause it is already dispatched');
+                        $("body").removeClass("loading");
+                        return;
+                    } 
+
+                }
+                
                 $('#receiver_name').val(e.messege.receiver_name);
                 // $('#imagemodal').val(e.messege.id);
                 $('#receiver_number').val(e.messege.receiver_number);
@@ -363,18 +389,15 @@ var container = "";
                 
                 var images ='';
                 var str_array = e.messege.images.split('|'); 
-                for(var i = 0; i < str_array.length; i++) {
-                   // Trim the excess whitespace.
-                //   str_array[i] = str_array[i].replace(/^\s*/, "").replace(/\s*$/, "");
+                for(var i = 0; i < str_array.length; i++) 
+                {
                      images = images+'<img class="pop rounded" style="margin-right: 5px;" src="{{asset("/")}}'+str_array[i]+'" alt="Card image cap" width="100">';
-                   // Add additional code here, such as:
-                   //alert(str_array[i]);
                 }
+                
                 $('#images_pop').html(images);
+                $('#order_status_edit').modal('show');
                 $("body").removeClass("loading");
-                
-                //alert(images);
-                
+                 
                 
             },
             error: function(e) {
@@ -382,6 +405,7 @@ var container = "";
             }
         });
     }
+    
     
     
     function get_checked_values()
@@ -427,15 +451,13 @@ var container = "";
       <div class="modal-content">
             <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLongTitle">Are you Sure you want to print? (Please check details below)</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
             </button>
             </div>
             <div class="modal-body" id="PSDM">
                 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" id="PSDM_close_btn">Close</button>
+                <button type="button" class="btn btn-secondary" id="pos_slip_duplication_modal_close">Close</button>
                 <button type="button" class="btn btn-primary" id="PSDM_yes_btn">Save changes</button>
             </div>
         </div>
@@ -444,14 +466,11 @@ var container = "";
 
 
 
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="order_status_edit" tabindex="-1" role="dialog" aria-labelledby="order_status_edit" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
       <div class="modal-content">
             <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
+            <h5 class="modal-title" id="exampleModalLongTitle">Edit Status</h5> 
             </div>
             <div class="modal-body">
                 <div class="row col-sm-12"> 
@@ -518,7 +537,7 @@ var container = "";
         
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" id="order_status_edit_close">Close</button>
                 <button type="button" class="btn btn-primary" id="save_order_status_and_price">Save changes</button>
             </div>
         </div>
@@ -526,25 +545,7 @@ var container = "";
 </div>
 
 
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
+
 
 <nav class="navbar navbar-light bg-light"> 
     <div class="col-sm-12">
@@ -577,21 +578,20 @@ var container = "";
                         <option value="manual_orders.updated_at">Created Order</option> 
                         <option value="manual_orders.status">Status</option>
                     </select>
+                    
                     <select class="custom-select" aria-label="Default select example" name="order_status">
                         <option selected value ="">Order Status</option>
                         <option value="all">All</option>
                         <option value="pending">Pending</option>
-                        <option value="duplicate">Dulicate</option>
+                        <option value="duplicate">Dulpicate</option>
                         <option value="prepared">Prepared</option>
                         <option value="confirmed">Confirmed</option>
-                        <option value="cancel">complete</option> 
                         <option value="dispatched">Dispatched</option> 
                         <option value="hold">Hold</option>
-                        <option value="incomplete">incomplete</option> 
+                        <option value="not responding">Not Responding</option> 
+                        <option value="incomplete">incomplete</option>  
                         <option value="cancel">cancel</option> 
                         <option value="return">return</option> 
-                        <option value="deleted">delete</option> 
-                        <option value="not responding"></option>  
                     </select>
                     <input class="input-group-text" type="date" name="date_from" id="date_from">
                     <input class="input-group-text" type="date" name="date_to" id="date_to">
@@ -612,8 +612,7 @@ var container = "";
                     <option selected >Select Action</option> 
                     <option value="pending">Pending</option>
                     <option value="prepared">Prepared</option>
-                    <option value="confirmed">Confirmed</option>
-                    <option value="cancel">complete</option> 
+                    <option value="confirmed">Confirmed</option>  
                     <option value="dispatched">Dispatched</option> 
                     <option value="hold">Hold</option>
                     <option value="incomplete">incomplete</option> 
@@ -686,20 +685,21 @@ var container = "";
                         </button>
                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">            
                             <a type="button" target="_blank" href="{{route('ManualOrders.edit',$lists->id)}}" class="dropdown-item">Edit</a>   
-                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'pending')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Quick Edit</button>          
+                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'pending')" class="dropdown-item" >Quick Edit</button>          
                             <a type="button" target="_blank" href="{{route('ManualOrders.show',$lists->id)}}" class="dropdown-item">view</a>
-                            <a type="button" href="{{route('ManualOrders.print.order.slip',$lists->id)}}" class="dropdown-item">Print Slip</a>
-                            <!--<a type="button" href="{{route('ManualOrders.order.status',['prepared',$lists->id])}}" class="dropdown-item">prepared</a>   -->
-                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'prepared');order_link ='{{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}';" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Prepared</button>
-                            <a type="button" href="{{route('ManualOrders.order.status',['complete',$lists->id])}}" class="dropdown-item">Complete</a> 
-                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'confirmed')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Confirmed</button>
-                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'dispatched')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Dispatch</button>
-                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'hold')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Hold</button>
-                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'incomplete')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Incomplete</button>
-                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'not responding')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">not responding</button>
-                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'cancel')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Cancel</button>
-                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'return')" class="dropdown-item" data-toggle="modal" data-target="#exampleModalCenter">Return</button>
+                            <a type="button" href="{{route('ManualOrders.print.order.slip',$lists->id)}}" class="dropdown-item">Print Slip</a> 
+                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'prepared');order_link ='{{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}';" class="dropdown-item">Prepared</button>
+                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'confirmed')" class="dropdown-item" >Confirmed</button>
+                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'dispatched')" class="dropdown-item" >Dispatch</button>
+                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'hold')" class="dropdown-item" >Hold</button>
+                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'incomplete')" class="dropdown-item" >Incomplete</button>
+                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'not responding')" class="dropdown-item" >not responding</button>
                             <button type="button" onclick="check_pos_slip_duplication('{{route('ManualOrders.print.pos.slip',$lists->id)}}','{{$lists->id}}','list_<?=$count;?>')"class="dropdown-item" >Print Pos Slip</button>
+                            @if(Auth::guard('admin')->check()) 
+                            
+                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'cancel')" class="dropdown-item" >Cancel</button>
+                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'return')" class="dropdown-item" >Return</button>
+                            @endif
                             <!--<a type="button" href="{{route('ManualOrders.order.status',['hold',$lists->id])}}" class="dropdown-item">Hold</a> -->
                             <!--<a type="button" href="{{route('ManualOrders.order.status',['incomplete',$lists->id])}}" class="dropdown-item">Incomplete</a>-->
                             <!--<a type="button" href="{{route('ManualOrders.order.status',['cancel',$lists->id])}}" class="dropdown-item">Cancel</a>-->

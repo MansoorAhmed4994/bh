@@ -91,10 +91,8 @@
                         dataType: 'json',
                         success: function(e)
                         { 
-                            if(typeof(e.status) != 'undefined')
-                            {
-                                if(e.status == '0')
-                                {
+                            if(typeof(e.success) != 'undefined')
+                            { 
                                     var today = new Date();
                                     var dd = String(today.getDate()).padStart(2, '0');
                                     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -103,22 +101,20 @@
                                     today = mm + '/' + dd + '/' + yyyy; 
                                     document.getElementById("print_date").innerHTML = today;
                                     PrintElem();
-                                }
-                                else
-                                {
                                     $("body").removeClass("loading");
-                                    alert(e.messege);
-                                }
+                                
                             }
                             else
                             {
-                                 alert('Some thing went wrong');
+                                 alert(e.messege);
+                                 $("body").removeClass("loading");
                             }
                             
                             $("body").removeClass("loading");
                         },
                         error: function(e) {
-                            console.log(e.messege);
+                            alert(e.messege);
+                            $("body").removeClass("loading");
                         }
                     });
                 }   
@@ -142,11 +138,7 @@
                 document.getElementById('order_id').value = '';
                 return
             }
-            else
-            {
-                
-                order_ids.push(id);
-            }
+            
                 $("body").addClass("loading"); 
                 
                     var id = document.getElementById('order_id').value;
@@ -183,6 +175,8 @@
                                 row_id++;
                                 $("body").removeClass("loading");
                                 document.getElementById('order_id').value = '';
+                                 
+                                order_ids.push(id); 
                                 
                             }
                             else

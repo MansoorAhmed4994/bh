@@ -278,9 +278,10 @@ class CustomerPaymentController extends Controller
             <tbody>';
             foreach($customerPayments as $customerPayment)
             { 
+                $image_url = asset($customerPayment->images);
                 $data .= '<tr> 
                     <th>'.$customerPayment->id.'</th> 
-                    <th><img class="previouse_order_images" src="'.asset($customerPayment->images).'"/ width="100"></th>
+                    <th><img class="previouse_order_images" onclick="open_image_modal('.$customerPayment->transaction_id.')" src="'.$image_url.'"/ width="100"></th>
                     <td>'.$customerPayment->order_id.'</td>
                     <td>'.$customerPayment->transaction_id.'</td>
                     <td>'.$customerPayment->sender_name.'</td>
@@ -288,7 +289,8 @@ class CustomerPaymentController extends Controller
                     <td>'.$customerPayment->datetime.'</td>
                     <td>'.$customerPayment->transfer_to.'</td>
                     <td>'.$customerPayment->description.'</td>
-                    <td>'.$customerPayment->status.'</td>';
+                    <td>'.$customerPayment->status.'</td> 
+                    ';
                 
                 // if($customerPayment->status == 'approval pending')
                 // {
@@ -316,6 +318,7 @@ class CustomerPaymentController extends Controller
                 {
                     $data .=  '<option value="approval pending">Remove Approval</option>';
                     $data .=  '<option value="approved">Approved</option>';
+                    $data .=  '<option value="edit">Edit</option>';
                 }
                 $data .=  '</select></td>';
                 

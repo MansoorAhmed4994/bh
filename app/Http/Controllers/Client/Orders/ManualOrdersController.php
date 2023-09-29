@@ -309,6 +309,7 @@ class ManualOrdersController extends Controller
     public function update(Request $request, ManualOrders $ManualOrder)
     {
         // dd($ManualOrder);
+        $order_id = $ManualOrder->id;
         $validated = $request->validate([
  
             'first_name' => 'required',
@@ -382,7 +383,7 @@ class ManualOrdersController extends Controller
                 $current_date_time = $mytime->toDateTimeString();
                 $pickup_address_id = $this->get_trax_pickup_address(); 
                 $reference_number= '('.$ManualOrder->id.')('.$current_date_time.')';
-                
+                // dd(trim($request->price));
                 $traxdata['order_id'] = $ManualOrder->id;
                 $traxdata['service_type_id'] = 1;
                 $traxdata['pickup_address_id'] = $pickup_address_id;
@@ -396,21 +397,23 @@ class ManualOrdersController extends Controller
                 $traxdata['item_description'] = trim($request->description);
                 $traxdata['item_quantity'] = (int)trim($request->total_pieces);
                 $traxdata['item_insurance'] = 0;
-                $traxdata['item_price'] = trim($request->price);
-                $traxdata['parcel_value'] = trim($request->price);
+                $traxdata['item_price'] = (int)trim($request->price);
+                $traxdata['parcel_value'] = (int)trim($request->price);
                 $traxdata['pickup_date'] = $mytime;
                 $traxdata['special_instructions'] = trim('Nothing');
                 $traxdata['estimated_weight'] = trim($request->weight);
                 $traxdata['shipping_mode_id'] = (int)trim($request->shipping_mode_id);
                 $traxdata['amount'] = (int)trim($request->cod_amount);
-                $traxdata['$shipper_reference_number_1'] = $reference_number;
+                $traxdata['shipper_reference_number_1'] = $reference_number;
                 $traxdata['payment_mode_id'] = 1;
                 $traxdata['charges_mode_id'] = 4;
                 
                 $ApiResponse = $this->CreateBooking($traxdata);
                 // dd($ApiResponse);
+                // echo '1';
                 if($ApiResponse->status == 0)
                 { 
+                    // echo '2';
                     $id = array();
                     array_push($id, $ApiResponse->tracking_number);
                     // dd($id);
@@ -419,12 +422,20 @@ class ManualOrdersController extends Controller
                     $ManualOrder->service_type = $request->service_type; 
                     $ManualOrder->consignment_id = $ApiResponse->tracking_number;
                     $ManualOrder->status = 'dispatched';  
-                    
-                    if(check_customer_advance_payment($ManualOrder->id) > 0)
+                    // echo '3';
+                    if(check_customer_advance_payment($order_id) > 0)
                     {
                         dd('payment not approved');
                     }
+                    // echo '4';
                     $status = $ManualOrder->save();
+                    $check_status = check_order_status_for_print($order_id); 
+                    if( $check_status['row_count'] > 0)
+                    {
+                        // echo '5';
+                        dd('Parcel Status is '.$check_status['status'].' and parcel cannot print slip until parcel status is confirmed OR Dispatched');
+                    }
+                    
                     $slips = $this->print_trax_slips($id);
                     return view('client.orders.manual-orders.trax.print_trax_slip')->with('slips',$slips);
                 }
@@ -436,15 +447,24 @@ class ManualOrdersController extends Controller
             }
             else if($request->shipment_type == 'local')
             {
-                // dd($ManualOrder);
-                $order_id = $ManualOrder->id;
+                // dd($ManualOrder); 
                 $ManualOrder->status = 'dispatched';
-                if(check_customer_advance_payment($ManualOrder->id) > 0)
+                if(check_customer_advance_payment($order_id) > 0)
                 {
                     dd('payment not approved');
                 }
                 
+                
+                
+                
+                $ManualOrder->status = 'dispatched';
                 $status = $ManualOrder->save();
+                // dd($status);
+                $check_status = check_order_status_for_print($order_id); 
+                if( $check_status['row_count'] > 0)
+                {
+                    dd('Parcel Status is '.$check_status['status'].' and parcel cannot print slip until parcel status is confirmed OR Dispatched');
+                }
                 $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.id',$ManualOrder->id)->get();
                 // foreach($ManualOrder as $ManualOrders)
                 // {
@@ -548,6 +568,11 @@ class ManualOrdersController extends Controller
             {
                 dd('payment not approved');
             }
+            $check_status = check_order_status_for_print($ManualOrders->id); 
+            if( $check_status['row_count'] > 0)
+            {
+                dd('Parcel Status is '.$check_status['status'].' and parcel cannot print slip until parcel status is confirmed OR Dispatched');
+            }
             return view('client.orders.manual-orders.print_slip')->with('ManualOrders',$ManualOrder);
                 //dd($order_ids);
         }
@@ -624,6 +649,7 @@ class ManualOrdersController extends Controller
                 create_activity_log(['table_name'=>'manual_orders','ref_id'=>$ManualOrders->id,'activity_desc'=>'pos slip','created_by'=>Auth::id(),'method'=>'print','route'=>route('ManualOrders.order.action')]);
     
             }
+            
             return view('client.orders.manual-orders.print_pos_slips')->with('ManualOrders',$ManualOrder);
                 //dd($order_ids);
         }
@@ -803,20 +829,18 @@ class ManualOrdersController extends Controller
         if(check_customer_advance_payment($ManualOrder) > 0)
         {
             return response()->json(['error'=>'1','messege' => 'payment not approved order id #'.$ManualOrder]);
-            // dd('payment not approved',$ManualOrder);
         } 
+        
         $ManualOrder = ManualOrders::find($ManualOrder);
-        //dd($ManualOrder);
         if($ManualOrder != null)
         {
-            return response()->json(['messege' => $ManualOrder]);
+            return response()->json(['success'=>'1','messege' => $ManualOrder]);
         }
         else
         {
-            return response()->json(['messege' => 'no order found']);
+            return response()->json(['error'=>'1','messege' => 'No order found ! order #: '.$ManualOrder]);
         }
-        
-        //return view('client.orders.manual-orders.dispatch');
+         
     }
     
     public function popup_dispatch_edit($ManualOrder)
@@ -856,6 +880,11 @@ class ManualOrdersController extends Controller
         if(check_customer_advance_payment($ManualOrder_id) > 0)
         {
             dd('payment not approved');
+        }
+        $check_status = check_order_status_for_print($ManualOrder_id); 
+        if( $check_status['row_count'] > 0)
+        {
+            dd('Parcel Status is '.$check_status['status'].' and parcel cannot print slip until parcel status is confirmed OR Dispatched');
         }
         return view('client.orders.manual-orders.print_slip')->with('ManualOrders',$ManualOrder);
     }
@@ -942,6 +971,7 @@ class ManualOrdersController extends Controller
             $ManualOrder->weight = $weight;
             $ManualOrder->price = $price;
             $ManualOrder->price = $fare;
+            $ManualOrder->status = 'dispatched';
             $ManualOrder->description = trim($request->item_description[$x]);
             $ManualOrder->reference_number = $reference_number;
             $ManualOrder->updated_by = Auth::id();
@@ -970,6 +1000,12 @@ class ManualOrdersController extends Controller
                     }
                     //dd($ManualOrder);
                     $ManualOrder->consignment_id = $ApiResponse->tracking_number;
+                    
+                    $check_status = check_order_status_for_print($ManualOrder_id); 
+                    if( $check_status['row_count'] > 0)
+                    {
+                        dd('Parcel Status is '.$check_status['status'].' and parcel cannot print slip until parcel status is confirmed OR Dispatched');
+                    }
                     $status = $ManualOrder->save();
                     
                     if($status)
@@ -1124,6 +1160,12 @@ class ManualOrdersController extends Controller
                 {
                     dd('payment not approved',$order_id);
                 }
+                
+                $check_status = check_order_status_for_print($order_id); 
+                if( $check_status['row_count'] > 0)
+                {
+                    dd('Parcel Status is '.$check_status['status'].' and parcel cannot print slip until parcel status is confirmed OR Dispatched');
+                }
             }
             $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->whereIn('manual_orders.id',$order_ids)->get();
             $ids = array();
@@ -1147,6 +1189,11 @@ class ManualOrdersController extends Controller
                 if(check_customer_advance_payment($order_id) > 0)
                 {
                     dd('payment not approved',$order_id);
+                }
+                $check_status = check_order_status_for_print($order_id); 
+                if( $check_status['row_count'] > 0)
+                {
+                    dd('Parcel Status is '.$check_status['status'].' and parcel cannot print slip until parcel status is confirmed OR Dispatched');
                 }
             }
             

@@ -24,13 +24,36 @@ var base_url = '<?php echo e(url('/')); ?>';
         
         $( document ).ready(function() {
             
-            // $('#order_id').focusout('click',function(e)
-            // {  
+            $('#edit_customer_payment_close').on('click',function(e)
+            {  
                  
+                $('#edit_customer_payment').modal('hide');
                 
+            });
+            
+            
+            // $('.payment_image_src').on('click',function(e)
+            // {   
+            //      $(".payment_image_src").attr("src",$('payment_image').attr('src'));
+            //     $('#payment_image_zoom').modal('show');
                 
             // });
+            
+            $('#payment_image_zoom_close').on('click',function(e)
+            {   
+                $('#payment_image_zoom').modal('hide');
+            });
+            
+            
         });
+        
+        function open_image_modal(id)
+        { 
+            
+                $("#payment_image_src").attr("src",$("#"+id).attr("src"));
+                $('#payment_image_zoom').modal('show'); 
+            
+        }
         
         function get_payments()
             {
@@ -65,6 +88,11 @@ var base_url = '<?php echo e(url('/')); ?>';
                 if(action == 'delete')
                 {
                     url = '/client/orders/CustomerPayment/delete/'+id;
+                }
+                if(action == 'edit')
+                {
+                    $('#edit_customer_payment').modal('show');
+                    return;
                 }
                 else if(action == 'approved')
                 {
@@ -119,6 +147,36 @@ var base_url = '<?php echo e(url('/')); ?>';
 
     </style>
     
+    <div class="modal fade" id="edit_customer_payment" tabindex="-1" role="dialog" aria-labelledby="edit_customer_payment" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Customer Payment</h5>   
+            </div>
+            <div class="modal-body">
+                <p>working</p>
+            </div>
+            <div class="modal-footer"> 
+                <button type="button" id="save_customer_payment_edit" class="btn btn-primary" >Save</button>
+                <button type="button" class="btn btn-secondary" id="edit_customer_payment_close" data-dismiss="modal">Close</button>
+            </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="payment_image_zoom" tabindex="-1" role="dialog" aria-labelledby="payment_image_zoom" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content"> 
+            <div class="modal-body">
+                
+                <img id="payment_image_src" src="">  
+            </div>
+            <div class="modal-footer">  
+                <button type="button" class="btn btn-secondary" id="payment_image_zoom_close" data-dismiss="modal">Close</button>
+            </div>
+            </div>
+        </div>
+    </div>
     
     
     <div class="row mb-3">

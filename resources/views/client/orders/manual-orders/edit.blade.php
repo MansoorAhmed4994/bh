@@ -446,7 +446,7 @@
 
             <div class="col-sm-12 row">
                 <input type="hidden"  name="order_id" value="@if(isset($ManualOrder->id)){{$ManualOrder->id}}@endif" id="order_id">
-                <div class="col-sm-2 row">
+                <div class="col-sm-12 row">
                     <div class="form-group">
                         <input type="file" name="images[]" id="images" accept="image/png, image/gif, image/jpeg" multiple/>
                         <!--<div class="file btn btn-lg btn-secondary">Add new-->
@@ -460,7 +460,7 @@
                     
                     @if(!empty($ManualOrder->images))
                         @foreach(explode('|', $ManualOrder->images) as $image) 
-                        <div class="col-sm-6">
+                        <div class="col-auto">
                             <div class="card" id="imagebox{{$count}}" style="max-width: 100%;">
                                 <img class="card-img-top" src="{{asset($image)}}" alt="Card image cap" >
                                 <div class="card-body">
@@ -476,7 +476,7 @@
                     
                 </div>
                     
-                <div class="col-sm-10 row"> 
+                <div class="col-sm-12 row"> 
                     
                     
                         
@@ -552,27 +552,6 @@
                             <textarea class="form-control" id="reciever_address @if($errors->get('reciever_address')) is-invalid @endif"   name="reciever_address" placeholder="reciever_address" required>{{old('reciever_address')}}@if(isset($ManualOrder)){{$ManualOrder->reciever_address}}@endif</textarea>
                             <small id="reciever_address_error" class="form-text text-danger">@if($errors->get('reciever_address')) {{$errors->first('reciever_address')}} @endif</small>
                         </div>  
-                         
-                        <div class="form-group col-auto">   
-                        
-                            <select class="custom-select" aria-label="Default select example" name="order_status" id="order_status" required>
-                                <option selected value ="">Order Status</option>
-                                <option value="all">All</option>
-                                <option value="pending">Pending</option>
-                                <option value="prepared">Prepared</option>
-                                <option value="confirmed">Confirmed</option> 
-                                <option value="dispatched">Dispatched</option> 
-                                <option value="hold">Hold</option>
-                                <option value="incomplete">incomplete</option> 
-                                @if(Auth::guard('admin')->check())
-                                    <option value="deleted">delete</option> 
-                                    <option value="cancel">cancel</option> 
-                                    <option value="return">return</option> 
-                                    <option value="duplicate">Dulicate</option>
-                                    <option value="not responding"></option>  
-                                @endif
-                            </select>
-                        </div>
                     </div>
                     
                     <div class="col-sm-2">
@@ -680,6 +659,30 @@
                             </div>
                             
                         </div>
+                    
+                         
+                    <div class="form-group col-auto">   
+                    
+                        <select class="form-control custom-select" aria-label="Default select example" name="order_status" id="order_status" required>
+                            <option selected value ="">Order Status</option>
+                            <option value="all">All</option>
+                            <option value="pending">Pending</option>
+                            <option value="prepared">Prepared</option>
+                            <option value="confirmed">Confirmed</option> 
+                            <option value="dispatched">Dispatched</option> 
+                            <option value="dc comming">Dc Comming</option> 
+                            <option value="addition">Addition</option> 
+                            <option value="hold">Hold</option>
+                            <option value="incomplete">incomplete</option> 
+                            @if(Auth::guard('admin')->check())
+                                <option value="deleted">delete</option> 
+                                <option value="cancel">cancel</option> 
+                                <option value="return">return</option> 
+                                <option value="duplicate">Dulicate</option>
+                                <option value="not responding"></option>  
+                            @endif
+                        </select>
+                    </div>
                             
                         <div class="form-group col-auto">
                             <button type="submit" class="btn btn-primary" name="submit" id="save" value="save">Save</button>
