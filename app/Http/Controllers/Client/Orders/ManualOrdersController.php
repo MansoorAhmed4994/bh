@@ -76,6 +76,8 @@ class ManualOrdersController extends Controller
             'manual_orders.status',
             'manual_orders.created_at',
             'manual_orders.updated_at',
+            DB::raw("CONCAT(t.first_name,' ',t.last_name) as updated_by"), 
+            DB::raw("CONCAT(users.first_name,' ',users.last_name) as created_by"), 
             'manual_orders.status_reason'); 
 
     }
@@ -86,12 +88,19 @@ class ManualOrdersController extends Controller
         $search_text = $request->search_text;
         $order_status = $request->order_status;
         $order_by = $request->order_by;
-        $date_from =  $request->date_from;
+        $date_from = $request->date_from;
         $date_to =  $request->date_to;
+        // $date_from =  Carbon::parse($request->date_from)->format('Y-m-d h:i:s');
+        // $date_to =  Carbon::parse($request->date_to)->format('Y-m-d h:i:s');
+        $date_by = 'created_at';
         $query = ManualOrders::query();
-        $query = $query->leftJoin('customers', 'manual_orders.customers_id', '=', 'customers.id')->select($this->OrderFieldList());
+        $query = $query
+        ->leftJoin('customers', 'manual_orders.customers_id', '=', 'customers.id')
+        ->leftJoin('users', 'manual_orders.created_by', '=', 'users.id') 
+        ->leftJoin('users as t', 'manual_orders.updated_by', '=', 't.id') 
+        ->select($this->OrderFieldList());
         //dd($request);
-        
+        // dd(Carbon::parse($date_from)->format('Y-m-d h:i:s'),$date_to);
         if($order_id != '')
         {
             $query = $query->where('manual_orders.id',$order_id);
@@ -125,18 +134,58 @@ class ManualOrdersController extends Controller
         {
             $query = $query->
             where(function ($query) use ($search_text) {
-                $query->where('manual_orders.status','pending')
-                ->orwhere('manual_orders.status','addition');
+                $query->where('manual_orders.status','like','%%');
             });
             // $query = $query->where('manual_orders.status','pending');
+        } 
+        if($request->date_by != '')
+        { 
+            $date_by = $request->date_by;
         }
         
-        if($date_from != '' && $date_to != '')
-        {
-            $query = $query->whereBetween("manual_orders.created_at" ,[$date_from,$date_to]);
+        if($date_from != '' && $date_to == '')
+        { 
+            $query = $query->where(DB::raw("(DATE_FORMAT(manual_orders.".$date_by.",'%Y-%m-%d'))") ,$date_from);
+            // $query = $query->where("manual_orders.".$date_by ,'<>',$date_from);
+            // dd($query->toSql());
+        }
+        elseif($date_from == '' && $date_to != '')
+        { 
+            $query = $query->where(DB::raw("(DATE_FORMAT(manual_orders.".$date_by.",'%Y-%m-%d'))"),$date_to); 
             
         }
+        elseif($date_from != '' && $date_to != '' && $date_from == $date_to )
+        {  
+            $query = $query->where(DB::raw("(DATE_FORMAT(manual_orders.".$date_by.",'%Y-%m-%d'))"),$date_to);
+            
+        }
+        elseif($date_from != '' && $date_to != '')
+        { 
+            $query = $query->whereBetween(DB::raw("(DATE_FORMAT(manual_orders.".$date_by.",'%Y-%m-%d'))"),[$date_from,$date_to]);
+            
+        }
+        // dd('');
+        $user_id = User::find(auth()->user()->id);
+        // $user_roles = implode(',',$user_id->roles()->get()->pluck('name')->toArray());
+        $user_roles = $user_id->roles()->get()->pluck('name')->toArray();
+        // dd($user_id->roles()->get()->pluck('name')->toArray());
         
+        
+        if(in_array('author', $user_roles) || in_array('admin', $user_roles))
+        { 
+            // echo 'available';
+        } 
+        elseif(in_array('user', $user_roles))
+        { 
+            // echo 'user available';
+            $query = $query->where("manual_orders.updated_by" ,$user_id->id);
+        }
+        // dd('working');
+        // elseif(in_array('user', $user_roles))
+        // {
+        //     echo 'available';
+        // }
+        // dd($user_roles);
         if($order_by != '')
         {
             $query = $query->orderBy($order_by, 'ASC');
@@ -145,12 +194,13 @@ class ManualOrdersController extends Controller
         {
             $query = $query->orderBy('manual_orders.id', 'DESC');
         }
-        
-        $users = User::select('*');
+        $users = User::select('*')->get();
+        // dd($users);
         $list = $query->paginate(20);
         // dd($query->get());
         // dd(ManualOrders::find(1)->cities->id);
-        // dd($list[0]->cities->name);
+        // dd($list[0]->cities->name); 
+        
         return view('client.orders.manual-orders.list')->with(['list'=>$list,'users'=>$users]); 
     }
     
@@ -849,6 +899,7 @@ class ManualOrdersController extends Controller
         $ManualOrder = ManualOrders::where('manual_orders.id',$ManualOrder)->first();
         //dd(ManualOrders::leftJoin('customers', 'customers.id', '=', 'manual_orders.customers_id')->where('manual_orders.status','pending')); 
         //dd($ManualOrder) ;
+        
         return response()->json(['messege' => $ManualOrder]);
         //
     }
@@ -864,7 +915,7 @@ class ManualOrdersController extends Controller
         $ManualOrder->cod_amount = $request->cod_amount;
         $ManualOrder->advance_payment = $request->advance_payment;
         $ManualOrder->status = $request->status;
-        $ManualOrder->updated_by = Auth::id();
+        $ManualOrder->updated_by = $request->user_id;
         $ManualOrder->status_reason = $request->status_reason;
         
         $status = $ManualOrder->save();

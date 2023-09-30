@@ -71,6 +71,7 @@ class LoginController extends Controller
         //dd($request->email);
         $user = User::select("*")->where(['email'=>$request->email])->first();
         // dd($user->roles()->get()->pluck('name')[0]);
+        // dd($user->roles()->get()->pluck('name')[0]);
         if($user->roles()->get()->pluck('name')[0] == 'admin')
         {
             // dd();

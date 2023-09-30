@@ -182,6 +182,7 @@ var container = "";
             let advance_payment = $('#advance_payment').val();
             let cod_amount = $('#cod_amount').val();
             let status_reason = $('#status_reason').val();
+            let user_id = $('#user_id').val();
             
             
             if(order_status == 'cancel' || order_status == 'hold' || order_status == 'incomplete')
@@ -213,6 +214,7 @@ var container = "";
                 cod_amount:cod_amount,
                 status:order_status,
                 status_reason:status_reason,
+                user_id:user_id,
               },
               success:function(response){
                 //$('#successMsg').show();
@@ -386,7 +388,7 @@ var container = "";
                 $('#price').val(e.messege.price);
                 $('#cod_amount').val(e.messege.cod_amount);
                 $('#advance_payment').val(e.messege.advance_payment);
-                
+                $('#user_id').val(e.messege.updated_by);
                 var images ='';
                 var str_array = e.messege.images.split('|'); 
                 for(var i = 0; i < str_array.length; i++) 
@@ -531,6 +533,18 @@ var container = "";
                             <textarea  class="form-control" value="" id="status_reason"  name="status_reason" placeholder="Reason for status" required></textarea>
                             <small id="status_reason_error" class="form-text text-danger"></small>
                         </div>
+            
+                        <div class="form-group">
+                            <select class="form-control @if($errors->get('user_id')) is-invalid @endif cities_dropdown user_id" id="user_id"  name="user_id" required>
+                                <option value="">Select user</option>
+                                @for($i=0 ; $i < sizeof($users); $i++)
+                                 
+                                    <option value="{{$users[$i]->id}}" >{{$users[$i]->first_name}} {{$users[$i]->last_name}}</option>
+                                    
+                                @endfor
+                                
+                            </select>  
+                        </div>
                     </div>
                         
                     </div>
@@ -589,11 +603,17 @@ var container = "";
                         <option value="dispatched">Dispatched</option> 
                         <option value="hold">Hold</option>
                         <option value="not responding">Not Responding</option> 
+                        <option value="dc comming">Dc Comming</option> 
                         <option value="incomplete">incomplete</option>  
-                        <option value="cancel">cancel</option> 
-                        <option value="return">return</option> 
+                        <option value="cancel">cancel</option>  
+                        <option value="return">return</option>  
                     </select>
                     <input class="input-group-text" type="date" name="date_from" id="date_from">
+                    <select class="custom-select" aria-label="Default select example" name="date_by" id="date_by"> 
+                        <option selected value ="">Select Date By</option>
+                        <option value="created_at">Created Order</option> 
+                        <option value="updated_at">Updated Order</option>  
+                    </select>
                     <input class="input-group-text" type="date" name="date_to" id="date_to">
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary" type="submit">Search</button>
@@ -615,7 +635,8 @@ var container = "";
                     <option value="confirmed">Confirmed</option>  
                     <option value="dispatched">Dispatched</option> 
                     <option value="hold">Hold</option>
-                    <option value="incomplete">incomplete</option> 
+                    <option value="incomplete">incomplete</option>  
+                    <option value="dc comming">Dc Comming</option> 
                     <option value="print">Print </option>
                     <option value="duplicate_orders">Duplicate Orders</option>
                     <option value="print_mnp_slips">Print M&P Slips</option>
@@ -657,6 +678,8 @@ var container = "";
                 <th scope="col">Up.Date</th>
                 <th scope="col">Status</th>
                 <th scope="col">Status Reason</th>
+                <th scope="col">Updated by</th>
+                <th scope="col">created by</th>
             </tr>
         </thead>
         <tbody>  
@@ -692,7 +715,7 @@ var container = "";
                             <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'confirmed')" class="dropdown-item" >Confirmed</button>
                             <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'dispatched')" class="dropdown-item" >Dispatch</button>
                             <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'hold')" class="dropdown-item" >Hold</button>
-                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'incomplete')" class="dropdown-item" >Incomplete</button>
+                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'dc comming')" class="dropdown-item" >dc comming</button>
                             <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'not responding')" class="dropdown-item" >not responding</button>
                             <button type="button" onclick="check_pos_slip_duplication('{{route('ManualOrders.print.pos.slip',$lists->id)}}','{{$lists->id}}','list_<?=$count;?>')"class="dropdown-item" >Print Pos Slip</button>
                             @if(Auth::guard('admin')->check()) 
@@ -754,6 +777,8 @@ var container = "";
                 <td style="font-size: 10px;">{{date('d-M-y', strtotime($lists->updated_at))}} <br> {{date('G:i a', strtotime($lists->updated_at))}}</td> 
                 <td>{{$lists->status}}</td>
                 <td>{{$lists->status_reason}}</td>
+                <td>{{$lists->updated_by}}</td>
+                <td>{{$lists->created_by}}</td>
             </tr>
             <?php $count++;?>
             @endforeach
@@ -797,6 +822,7 @@ container = document.getElementsByClassName('table-container')[0].innerHTML;
         $('#closeimagemodal').click(function() {
             $('#imagemodal').modal('hide');
         });
+        
         
     });
     $(document).ready(function() {

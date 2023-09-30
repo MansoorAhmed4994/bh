@@ -4440,7 +4440,8 @@ input[type=button].btn-block {
 }
 .bh-logo
 {
-    width: 109px;
+    padding: 5px;
+    width: 80px;
     background-color: #fffafa;
     display: inline-block;
     border-radius: 6%;
@@ -4471,9 +4472,9 @@ li.nav-item:hover {
 
 li.nav-item {
     color: black!important;
-    background: #c509fc;
+    /*background: #c509fc;*/
     border-radius: 6%;
-    border: 1px solid #ffffff70;
+    /*border: 1px solid #ffffff70;*/
     transition: background 0.2s;
 }
  
