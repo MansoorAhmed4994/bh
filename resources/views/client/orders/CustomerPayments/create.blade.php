@@ -56,185 +56,190 @@ var base_url = '<?php echo e(url('/')); ?>';
         }
         
         function get_payments()
-            {
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    url: base_url + '/client/orders/CustomerPayment/GetCustomerPayments',
-                    data: {
-                        order_id:  $('#order_id').val(), 
-                    },
-                    type: 'POST',
-                    dataType: 'json',
-                    success: function(e)
-                    { 
-                        $('#previouse_order_detail').html(e.messege); 
-                        // alert(e.messege); 
-                    },
-                    error: function(e) {
-                        console.log(e.responseText);
-                    }
-                });
-            }
-        
-        
-        
-            
-            function actionpaymentapproval(id,action)
-            {
-                //  alert(id);
-                 var ur = '';
-                if(action == 'delete')
-                {
-                    url = '/client/orders/CustomerPayment/delete/'+id;
-                }
-                if(action == 'edit')
-                {
-                    $('#edit_customer_payment').modal('show');
-                    get_customer_payment(id);
-                    return;
-                }
-                else if(action == 'approved')
-                {
-                    url = '/client/orders/CustomerPayment/ChangeStatus/'+id+'/approved';
-                    
-                }
-                else if(action == 'approval pending')
-                {
-                    url = '/client/orders/CustomerPayment/ChangeStatus/'+id+'/approval pending';
-                    
-                }
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    url: base_url + url,
-                    data: {
-                        payment_id:  id, 
-                        action:  action, 
-                    },
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function(e)
-                    { 
-                        if(e.error == 1)
-                        {
-                            alert(e.messege);
-                        }
-                        else
-                        {
-                            alert(e.messege); 
-                        }
-                        // alert(e.messege); 
-                    },
-                    error: function(e) {
-                        console.log(e.responseText);
-                    }
-                });
-            }
-            
-    function get_customer_payment(id) 
-    {   
-        $("body").addClass("loading");  
-        $.ajax({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            url: base_url + '/client/orders/CustomerPayment/edit/'+id,
-            
-            type: 'GET',
-            dataType: 'json',
-            success: function(e) 
-            {
-                console.log(e.data);
-                console.log(e.data['order_id']);
-                console.log(e.data.transaction_id);
-                
-                
-                $('#edit_order_id').val(e.data['order_id']);
-                $('#edit_transaction_id').val(e.data['transaction_id']);
-                $('#edit_amount').val(e.data['amount']);
-                $('#edit_datetime').val(e.data['datetime']);
-                $('#edit_sender_name').val(e.data['sender_name']);
-                $('#edit_transfer_to').val(e.data['transfer_to']);
-                $('#edit_description').val(e.data['description']); 
-                $('#edit_customer_payment_id').val(e.data['id']); 
-                // var images ='';
-                // var str_array = e.messege.images.split('|'); 
-                // for(var i = 0; i < str_array.length; i++) 
-                // {
-                //      images = images+'<img class="pop rounded" style="margin-right: 5px;" src="{{asset("/")}}'+str_array[i]+'" alt="Card image cap" width="100">';
-                // }
-                
-                // $('#images_pop').html(images);
-                // $('#order_status_edit').modal('show');
-                $("body").removeClass("loading");
-                 
-                
-            },
-            error: function(e) {
-                console.log(e.responseText);
-            }
-        });
-    }
-    
-    $( document).ready(function() { 
-    
-    $('#update_customer_payment').on('click',function(){
-            let edit_customer_payment_id = $('#edit_customer_payment_id').val();
-            let edit_order_id = $('#edit_order_id').val();
-            let edit_transaction_id = $('#edit_transaction_id').val();
-            let edit_amount = $('#edit_amount').val();
-            let edit_datetime = $('#edit_datetime').val('');
-            let edit_sender_name = $('#edit_sender_name').val();
-            let edit_transfer_to = $('#edit_transfer_to').val();
-            let edit_description = $('#edit_description').val(); 
-             
-            if(edit_order_id == '' || edit_transaction_id == '' || edit_amount == '' || edit_amount == '' || edit_datetime == '' || edit_sender_name == '' || edit_transfer_to == '' || edit_description == '')
-            {
-                aler('please fill all the fields');
-                return;
-            }
-            $("body").addClass("loading");
-        //console.log(status_reason);
+        {
             $.ajax({
-              url: base_url + '/client/orders/CustomerPayment/update/',
-              headers: {
+                headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-              type:"POST",
-              dataType: 'json',
-              data:{
-                id:edit_customer_payment_id,
-                order_id:edit_order_id,
-                transaction_id:edit_transaction_id,
-                amount:edit_amount,
-                datetime:edit_datetime,
-                sender_name:edit_sender_name,
-                transfer_to:edit_transfer_to,
-                description:edit_description,
-              },
-              success:function(response){
-                //$('#successMsg').show();
-                if(response.messege == true)
-                {
-                    
-                    
+                url: base_url + '/client/orders/CustomerPayment/GetCustomerPayments',
+                data: {
+                    order_id:  $('#order_id').val(), 
+                },
+                type: 'POST',
+                dataType: 'json',
+                success: function(e)
+                { 
+                    $('#previouse_order_detail').html(e.messege); 
+                    // alert(e.messege); 
+                },
+                error: function(e) {
+                    console.log(e.responseText);
                 }
-                $("body").removeClass("loading");
-                //console.log(response);
-              },
-              error: function(response) {
+            });
+        }
+        
+        
+        
+            
+        function actionpaymentapproval(id,action)
+        {
+            //  alert(id);
+             var ur = '';
+            if(action == 'delete')
+            {
+                url = '/client/orders/CustomerPayment/delete/'+id;
+            }
+            if(action == 'edit')
+            {
+                $('#edit_customer_payment').modal('show');
+                get_customer_payment(id);
+                return;
+            }
+            else if(action == 'approved')
+            {
+                url = '/client/orders/CustomerPayment/ChangeStatus/'+id+'/approved';
+                
+            }
+            else if(action == 'approval pending')
+            {
+                url = '/client/orders/CustomerPayment/ChangeStatus/'+id+'/approval pending';
+                
+            }
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: base_url + url,
+                data: {
+                    payment_id:  id, 
+                    action:  action, 
+                },
+                type: 'GET',
+                dataType: 'json',
+                success: function(e)
+                { 
+                    if(e.error == 1)
+                    {
+                        alert(e.messege);
+                    }
+                    else
+                    {
+                        alert(e.messege); 
+                    }
+                    // alert(e.messege); 
+                },
+                error: function(e) {
+                    console.log(e.responseText);
+                }
+            });
+        }
+            
+        function get_customer_payment(id) 
+        {   
+            $("body").addClass("loading");  
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: base_url + '/client/orders/CustomerPayment/edit/'+id,
+                type: 'GET',
+                dataType: 'json',
+                success: function(e) 
+                {
+                    console.log(e.data);
+                    console.log(e.data['order_id']);
+                    console.log(e.data.transaction_id);
+                    
+                    
+                    $('#edit_order_id').val(e.data['order_id']);
+                    $('#edit_transaction_id').val(e.data['transaction_id']);
+                    $('#edit_amount').val(e.data['amount']);
+                    $('#edit_datetime').val(e.data['datetime']);
+                    $('#edit_sender_name').val(e.data['sender_name']);
+                    $('#edit_transfer_to').val(e.data['transfer_to']);
+                    $('#edit_description').val(e.data['description']); 
+                    $('#edit_customer_payment_id').val(e.data['id']); 
+                    // var images ='';
+                    // var str_array = e.messege.images.split('|'); 
+                    // for(var i = 0; i < str_array.length; i++) 
+                    // {
+                    //      images = images+'<img class="pop rounded" style="margin-right: 5px;" src="{{asset("/")}}'+str_array[i]+'" alt="Card image cap" width="100">';
+                    // }
+                    
+                    // $('#images_pop').html(images);
+                    // $('#order_status_edit').modal('show');
+                    $("body").removeClass("loading");
+                     
+                    
+                },
+                error: function(e) {
+                    console.log(e.responseText);
+                }
+            });
+        }
+     
+    
+        function update_customer_payment()
+        {
+            var edit_customer_payment_id = $('#edit_customer_payment_id').val();
+            var edit_order_id = $('#edit_order_id').val();
+            var edit_transaction_id = $('#edit_transaction_id').val();
+            var edit_amount = $('#edit_amount').val();
+            var edit_datetime = $('#edit_datetime').val();
+            var edit_sender_name = $('#edit_sender_name').val();
+            var edit_transfer_to = $('#edit_transfer_to').val();
+            var edit_description = $('#edit_description').val(); 
+             
+            // if(edit_order_id == '' || edit_transaction_id == '' || edit_amount == '' || edit_amount == '' || edit_datetime == '' || edit_sender_name == '' || edit_transfer_to == '' || edit_description == '')
+            // {
+            //     aler('please fill all the fields');
+            //     return;
+            // }
+            // return;
+            $("body").addClass("loading"); 
+                $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: base_url + '/client/orders/CustomerPayment/update_payment',
+                type:"POST",
+                dataType: 'json',
+                data:{
+                    id:edit_customer_payment_id,
+                    order_id:edit_order_id,
+                    transaction_id:edit_transaction_id,
+                    amount:edit_amount,
+                    datetime:edit_datetime,
+                    sender_name:edit_sender_name,
+                    transfer_to:edit_transfer_to,
+                    description:edit_description,
+                },
+                success:function(response)
+                { 
+                    if (typeof e.success !== 'undefined') 
+                    {
+                    
+                        alert(e.messege);
+                    }
+                    
+                    if (typeof e.error !== 'undefined') 
+                    {
+                    
+                        alert(e.messege);
+                    }
+                    
+                    $("body").removeClass("loading"); 
+                },
+                error: function(response) {
                     alert(response); 
                     $("body").removeClass("loading"); 
-              },
-          });
+                },
+            });
         
-    
-        }); 
+        }
+         
                 
-    });
+    
     
     </script>
     
@@ -258,10 +263,9 @@ var base_url = '<?php echo e(url('/')); ?>';
                 <h5 class="modal-title">Edit Customer Payment</h5>   
             </div>
             <div class="modal-body">
-                
-                <form method="post"  class="dropzone" id="dropzone">
-                    @csrf
-          
+                 
+                    
+                <input type="hidden" name="edit_customer_payment_id" id="edit_customer_payment_id" >
         
                     <div class="form-group">
                         <label for="edit_orderid">Order ID</label>
@@ -316,13 +320,11 @@ var base_url = '<?php echo e(url('/')); ?>';
                     </div> 
         
                     <div class="form-group">
-                        <button type="button"  id="update_customer_payment" class="btn btn-primary">Save</button>
+                        <button type="button"  onclick="update_customer_payment()" class="btn btn-primary">Save</button>
                     </div>
-                        
-                </form> 
+                  
             </div>
-            <div class="modal-footer"> 
-                <button type="button" id="save_customer_payment_edit" class="btn btn-primary" >Save</button>
+            <div class="modal-footer">  
                 <button type="button" class="btn btn-secondary" id="edit_customer_payment_close" data-dismiss="modal">Close</button>
             </div>
             </div>

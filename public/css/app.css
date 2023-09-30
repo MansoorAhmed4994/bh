@@ -72,7 +72,8 @@ body {
   line-height: 1.6;
   color: #212529;
   text-align: left;
-  background-color: #f8fafc;
+  /*background-color: #f8fafc;*/
+    background: linear-gradient(120.55deg,#e5f0e7 -1.27%,#66009873 79.83%)!important;
 }
 
 [tabindex="-1"]:focus:not(:focus-visible) {
@@ -7054,7 +7055,7 @@ a.close.disabled {
 }
 
 .bg-primary {
-  background-color: #a434dc !important;
+  background-color: #660098 !important
 }
 
 a.bg-primary:hover,

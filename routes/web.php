@@ -67,7 +67,7 @@ Route::group(['prefix' => 'client/orders/', 'namespace' => 'Client\Orders', 'mid
     Route::post('ManualOrders/delete-image', 'ManualOrdersController@delete_order_image')->name('ManualOrders.delete.order.image');
     
     //testing
-    Route::get('testing123', 'Client\Orders\ManualOrdersController@testing')->name('ManualOrders.testing123');
+    // Route::get('testing123', 'Client\Orders\ManualOrdersController@testing')->name('ManualOrders.testing123');
     
     //Reports
     Route::any('ManualOrders/reports/printed slips', 'ManualOrdersController@PrintedSlipsReport')->name('ManualOrders.reports.printed.slips');
@@ -95,7 +95,7 @@ Route::group(['prefix' => 'client/orders/', 'namespace' => 'Client\Orders', 'mid
     Route::get('CustomerPayment/delete/{id}', 'CustomerPaymentController@destroy')->name('customer.payments.delete');
     Route::get('CustomerPayment/ChangeStatus/{id}/{status}', 'CustomerPaymentController@ChangePaymentStatus')->name('customer.payments.change.status');
     Route::get('CustomerPayment/edit/{customerpayment}', 'CustomerPaymentController@edit')->name('customer.payments.edit');
-    Route::post('CustomerPayment/update', 'CustomerPaymentController@update')->name('customer.payments.update');
+    Route::post('CustomerPayment/update_payment', 'CustomerPaymentController@update')->name('customer.payments.update.payment');
     
     //create
     Route::post('CustomerPayments/store', 'CustomerPaymentController@store')->name('customer.payments.store');

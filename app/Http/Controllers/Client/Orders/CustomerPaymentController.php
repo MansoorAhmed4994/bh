@@ -169,16 +169,25 @@ class CustomerPaymentController extends Controller
      */
     public function update(Request $request)
     { 
-        $action_status = CustomerPayments::whereIn('id',$request->id)->update([
-            'order_id' => order_id,
-            'transaction_id' => transaction_id,
-            'sender_name' => sender_name,
-            'amount' => amount,
-            'transfer_to' => transfer_to,
-            'description' => description,
+        $action_status = CustomerPayments::where('id',$request->id)->update([
+            'order_id' => $request->order_id,
+            'transaction_id' => $request->transaction_id,
+            'sender_name' => $request->sender_name,
+            'amount' => $request->amount,
+            'transfer_to' => $request->transfer_to,
+            'description' => $request->description,
             'updated_by' => Auth::id()
             ]);
-            dd($action_status);
+            if($action_status == 1)
+            {
+                return response()->json(['success' => '1','messege'=>'Payment Updated successfully']); 
+                
+            }
+            else
+            {
+                return response()->json(['error' => '1','messege'=>'Payment not saved please contact admin']);
+            }
+            // dd($action_status);
         //
     }
 
