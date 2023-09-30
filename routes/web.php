@@ -95,6 +95,7 @@ Route::group(['prefix' => 'client/orders/', 'namespace' => 'Client\Orders', 'mid
     Route::get('CustomerPayment/delete/{id}', 'CustomerPaymentController@destroy')->name('customer.payments.delete');
     Route::get('CustomerPayment/ChangeStatus/{id}/{status}', 'CustomerPaymentController@ChangePaymentStatus')->name('customer.payments.change.status');
     Route::get('CustomerPayment/edit/{customerpayment}', 'CustomerPaymentController@edit')->name('customer.payments.edit');
+    Route::post('CustomerPayment/update', 'CustomerPaymentController@update')->name('customer.payments.update');
     
     //create
     Route::post('CustomerPayments/store', 'CustomerPaymentController@store')->name('customer.payments.store');

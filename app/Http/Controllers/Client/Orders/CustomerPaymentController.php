@@ -167,8 +167,18 @@ class CustomerPaymentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request)
+    { 
+        $action_status = CustomerPayments::whereIn('id',$request->id)->update([
+            'order_id' => order_id,
+            'transaction_id' => transaction_id,
+            'sender_name' => sender_name,
+            'amount' => amount,
+            'transfer_to' => transfer_to,
+            'description' => description,
+            'updated_by' => Auth::id()
+            ]);
+            dd($action_status);
         //
     }
 
@@ -238,6 +248,7 @@ class CustomerPaymentController extends Controller
 
         //
     }
+    
     
     public function GetCustomerPayments(Request $request)
     {

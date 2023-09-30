@@ -644,6 +644,19 @@ class ManualOrdersController extends Controller
             $ManualOrder = ManualOrders::whereIn('id',$explode_id)->update(['status' => 'prepared']);
             //dd($ManualOrder);
         }
+        elseif($order_action == 'cancel')
+        {
+            $explode_id = explode(',', $order_ids);
+            // dd($explode_id);  
+            foreach($explode_id as $explode_ids)
+            {
+                create_activity_log(['table_name'=>'manual_orders','ref_id'=>$explode_ids,'activity_desc'=>'Order status updated to cancel','created_by'=>Auth::id(),'method'=>'update','route'=>route('ManualOrders.order.action')]);
+    
+            }
+            $ManualOrder = ManualOrders::whereIn('id',$explode_id)->update(['status' => 'cancel']);
+            //dd($ManualOrder);
+        }
+        
         elseif($order_action == 'confirmed')
         {
             $explode_id = explode(',', $order_ids);

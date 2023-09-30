@@ -634,6 +634,9 @@ var container = "";
                     <option value="prepared">Prepared</option>
                     <option value="confirmed">Confirmed</option>  
                     <option value="dispatched">Dispatched</option> 
+                    @if(Auth::guard('admin')->check())
+                    <option value="cancel">Cancel</option> 
+                    @endif
                     <option value="hold">Hold</option>
                     <option value="incomplete">incomplete</option>  
                     <option value="dc comming">Dc Comming</option> 
