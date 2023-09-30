@@ -144,24 +144,30 @@ class ManualOrdersController extends Controller
         }
         
         if($date_from != '' && $date_to == '')
-        { 
+        {
+        echo '3'."manual_orders.".$date_by ,$date_from;
+        
             $query = $query->where(DB::raw("(DATE_FORMAT(manual_orders.".$date_by.",'%Y-%m-%d'))") ,$date_from);
             // $query = $query->where("manual_orders.".$date_by ,'<>',$date_from);
             // dd($query->toSql());
         }
         elseif($date_from == '' && $date_to != '')
-        { 
-            $query = $query->where(DB::raw("(DATE_FORMAT(manual_orders.".$date_by.",'%Y-%m-%d'))"),$date_to); 
+        {
+        echo '4';
+            $query = $query->where(DB::raw("(DATE_FORMAT(manual_orders.".$date_by.",'%Y-%m-%d'))"),$date_to);
+            
             
         }
         elseif($date_from != '' && $date_to != '' && $date_from == $date_to )
-        {  
+        { 
+        echo '5'."manual_orders.".$date_by ,$date_from;
             $query = $query->where(DB::raw("(DATE_FORMAT(manual_orders.".$date_by.",'%Y-%m-%d'))"),$date_to);
             
         }
         elseif($date_from != '' && $date_to != '')
-        { 
-            $query = $query->whereBetween(DB::raw("(DATE_FORMAT(manual_orders.".$date_by.",'%Y-%m-%d'))"),[$date_from,$date_to]);
+        {
+        echo '6';
+            $query = $query->whereBetween("manual_orders.".$date_by ,[$date_from,$date_to]);
             
         }
         // dd('');
@@ -847,9 +853,7 @@ class ManualOrdersController extends Controller
         {
             $list_order = 'ASC';
         } 
-        $query = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->leftJoin('users', 'manual_orders.created_by', '=', 'users.id') 
-        ->leftJoin('users as t', 'manual_orders.updated_by', '=', 't.id')->where('manual_orders.status','like',$status.'%');
-        
+        $query = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.status','like',$status.'%');
         $query = $query->orderBy('manual_orders.updated_at', $list_order)->select($this->OrderFieldList());
          
         $duplicate_check = DB::table('manual_orders')
@@ -864,8 +868,7 @@ class ManualOrdersController extends Controller
             //dd($list);
             //$list = $list->all();
             //dd($list->all());
-            $users = User::select('*')->get();
-        return view('client.orders.manual-orders.list')->with(['list'=>$query,'duplicate_check' => $duplicate_check,'users'=>$users]);
+        return view('client.orders.manual-orders.list')->with(['list'=>$query,'duplicate_check' => $duplicate_check]);
         
     } 
     
