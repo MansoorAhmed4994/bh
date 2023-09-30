@@ -853,7 +853,9 @@ class ManualOrdersController extends Controller
         {
             $list_order = 'ASC';
         } 
-        $query = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.status','like',$status.'%');
+        $query = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')
+        ->leftJoin('users', 'manual_orders.created_by', '=', 'users.id') 
+        ->leftJoin('users as t', 'manual_orders.updated_by', '=', 't.id')->where('manual_orders.status','like',$status.'%');
         $query = $query->orderBy('manual_orders.updated_at', $list_order)->select($this->OrderFieldList());
          
         $duplicate_check = DB::table('manual_orders')
@@ -864,11 +866,12 @@ class ManualOrdersController extends Controller
         // dd($query);
         
         $query = $query->paginate(20);
+        $users = User::select('*')->get();
             //dd($list);
             //dd($list);
             //$list = $list->all();
             //dd($list->all());
-        return view('client.orders.manual-orders.list')->with(['list'=>$query,'duplicate_check' => $duplicate_check]);
+        return view('client.orders.manual-orders.list')->with(['list'=>$query,'duplicate_check' => $duplicate_check,'users'=>$users]);
         
     } 
     

@@ -50,8 +50,8 @@ var base_url = '<?php echo e(url('/')); ?>';
         function open_image_modal(id)
         { 
             // alert(id);
-                $("#payment_image_src").attr("src",$("#"+id).attr("src"));
-                $('#payment_image_zoom').modal('show'); 
+            $("#payment_image_src").attr("src",$("#"+id).attr("src"));
+            $('#payment_image_zoom').modal('show'); 
             
         }
         
@@ -92,6 +92,7 @@ var base_url = '<?php echo e(url('/')); ?>';
                 if(action == 'edit')
                 {
                     $('#edit_customer_payment').modal('show');
+                    get_customer_payment(id);
                     return;
                 }
                 else if(action == 'approved')
@@ -132,6 +133,50 @@ var base_url = '<?php echo e(url('/')); ?>';
                     }
                 });
             }
+            
+    function get_customer_payment(id) 
+    {   
+        $("body").addClass("loading");  
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: base_url + '/client/orders/CustomerPayment/edit/'+id,
+            
+            type: 'GET',
+            dataType: 'json',
+            success: function(e) 
+            {
+                console.log(e.data);
+                
+                
+                
+                // $('#receiver_name').val(e.messege.receiver_name);
+                // // $('#imagemodal').val(e.messege.id);
+                // $('#receiver_number').val(e.messege.receiver_number);
+                // $('#reciever_address').val(e.messege.reciever_address);
+                // $('#price').val(e.messege.price);
+                // $('#cod_amount').val(e.messege.cod_amount);
+                // $('#advance_payment').val(e.messege.advance_payment);
+                // $('#user_id').val(e.messege.updated_by);
+                // var images ='';
+                // var str_array = e.messege.images.split('|'); 
+                // for(var i = 0; i < str_array.length; i++) 
+                // {
+                //      images = images+'<img class="pop rounded" style="margin-right: 5px;" src="{{asset("/")}}'+str_array[i]+'" alt="Card image cap" width="100">';
+                // }
+                
+                // $('#images_pop').html(images);
+                // $('#order_status_edit').modal('show');
+                $("body").removeClass("loading");
+                 
+                
+            },
+            error: function(e) {
+                console.log(e.responseText);
+            }
+        });
+    }
     </script>
     
     <style> 
@@ -154,7 +199,75 @@ var base_url = '<?php echo e(url('/')); ?>';
                 <h5 class="modal-title">Edit Customer Payment</h5>   
             </div>
             <div class="modal-body">
-                <p>working</p>
+                
+                <form method="post" action="{{ route('customer.payments.store') }}" enctype="multipart/form-data" class="dropzone" id="dropzone">
+                    @csrf
+        
+                    <div class="form-group">
+                        <div class="file btn btn-lg btn-primary">Upload
+                            <input type="file" name="images[]" multiple  required/>
+                            
+                        </div>
+                        <small id="images_error" class="form-text text-danger"></small>
+                    </div> 
+        
+                    <div class="form-group">
+                        <label for="orderid">Order ID</label>
+                        <input type="number"  class="form-control" onchange="get_payments()" id="order_id"  name="order_id" placeholder="order id" required>
+                        <small id="order_id_error" class="form-text text-danger"> </small>
+                    </div> 
+        
+                    <div class="form-group">
+                        <label for="Number">Transaction Id  OR Reference number</label>
+                        <input type="number"  class="form-control" id="transaction_id"  name="transaction_id" placeholder="transaction ID (123XXXX)" required>
+                        <small id="transaction_id_error" class="form-text text-danger"> </small>
+                    </div>  
+        
+                    <div class="form-group">
+                        <label for="First Name">Sender Name</label>
+                        <input type="text" class="form-control" id="sender_name"  name="sender_name" >
+                        <small id="datetime_error" class="form-text text-danger"></small>
+                    </div> 
+        
+                    <div class="form-group">
+                        <label for="First Name">Amount</label>
+                        <input type="number" class="form-control" id="amount"  name="amount" >
+                        <small id="amount_error" class="form-text text-danger"></small>
+                    </div> 
+        
+                    <div class="form-group">
+                        <label for="First Name">Date Time</label>
+                        <input type="datetime-local" class="form-control" id="datetime"  name="datetime" required>
+                        <small id="datetime_error" class="form-text text-danger"></small>
+                    </div> 
+         
+                    
+                    <div class="form-group ">
+                            <label for="address">Transfer to</label>
+                            
+                            <select class="form-control " id="transfer_to"  name="transfer_to" >
+                                <option value="">Select Transfer Channel</option>  
+                                <option value="jazzcash">Jazzcash (03330139993)</option>  
+                                <option value="faysalbank">Faysal Bank (0118007000010667)</option> 
+                                <option value="hbl">HBL (005047700055903)</option> 
+                                <option value="easypaisa">Easypaisa (03362240865)</option> 
+                                    
+                                
+                            </select> 
+                            <small id="transfer_to_error" class="form-text text-danger"></small>
+                        </div> 
+        
+                    <div class="form-group">
+                        <label for="address">Description</label>
+                        <textarea class="form-control" id="description"  name="description" placeholder="description" required></textarea>
+                        <small id="description_error" class="form-text text-danger"></small>
+                    </div> 
+        
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                        
+                </form> 
             </div>
             <div class="modal-footer"> 
                 <button type="button" id="save_customer_payment_edit" class="btn btn-primary" >Save</button>

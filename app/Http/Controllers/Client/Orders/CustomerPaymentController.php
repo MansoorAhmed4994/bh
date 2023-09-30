@@ -154,9 +154,10 @@ class CustomerPaymentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(CustomerPayments $customerpayment)
     {
-        //
+        // $delete_query = CustomerPayments::find($id);
+        return response()->json(['success' => 'successfully get','data'=>$customerpayment]); 
     }
 
     /**
