@@ -185,7 +185,6 @@
                 {
                     final_images = final_images.join('|');
                     all_images = final_images.split("|");
-                    // all_images = final_images;
 
                 }
                 else
@@ -578,7 +577,6 @@
                         </div>
                         <div class="form-group col-auto">
                             <label for="Number">Advance Payment</label>
-                            <small id="advance_payment_error" class="form-text text-danger">@if($errors->get('advance_payment')) {{$errors->first('advance_payment')}} @endif</small>
                             
                             <div class="input-group">
                                 <div class="input-group-prepend">
@@ -586,7 +584,8 @@
                                 </div>
                                 <input type="number" step="0.01" class="form-control @if($errors->get('advance_payment')) is-invalid @endif" onchange="onchangeprice()" value="{{old('advance_payment')}}@if($ManualOrder->advance_payment != ''){{$ManualOrder->advance_payment}}@else{{0}}@endif" onchange="onchangeprice();get_fare_list()" id="advance_payment"  name="advance_payment" placeholder="Advance Payment" readonly>
                             </div>
-                             <small id="advance_payment_error" class="form-text text-danger">@if($errors->get('advance_payment')) {{$errors->first('advance_payment')}} @endif</small>
+                             
+                            <small id="advance_payment_error" class="form-text text-danger">@if($advance_payment_status) {{$advance_payment_status}} @endif</small>
                         </div>
             
                         <div class="form-group col-auto">

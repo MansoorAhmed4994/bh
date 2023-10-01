@@ -103,6 +103,7 @@ class ManualOrdersController extends Controller
         // dd(Carbon::parse($date_from)->format('Y-m-d h:i:s'),$date_to);
         if($order_id != '')
         {
+            echo '1';
             $query = $query->where('manual_orders.id',$order_id);
         }
         else if($search_text != '')
@@ -145,7 +146,7 @@ class ManualOrdersController extends Controller
         
         if($date_from != '' && $date_to == '')
         {
-        echo '3'."manual_orders.".$date_by ,$date_from;
+        // echo '3'."manual_orders.".$date_by ,$date_from;
         
             $query = $query->where(DB::raw("(DATE_FORMAT(manual_orders.".$date_by.",'%Y-%m-%d'))") ,$date_from);
             // $query = $query->where("manual_orders.".$date_by ,'<>',$date_from);
@@ -153,20 +154,20 @@ class ManualOrdersController extends Controller
         }
         elseif($date_from == '' && $date_to != '')
         {
-        echo '4';
+        // echo '4';
             $query = $query->where(DB::raw("(DATE_FORMAT(manual_orders.".$date_by.",'%Y-%m-%d'))"),$date_to);
             
             
         }
         elseif($date_from != '' && $date_to != '' && $date_from == $date_to )
         { 
-        echo '5'."manual_orders.".$date_by ,$date_from;
+        // echo '5'."manual_orders.".$date_by ,$date_from;
             $query = $query->where(DB::raw("(DATE_FORMAT(manual_orders.".$date_by.",'%Y-%m-%d'))"),$date_to);
             
         }
         elseif($date_from != '' && $date_to != '')
         {
-        echo '6';
+        // echo '6';
             $query = $query->whereBetween("manual_orders.".$date_by ,[$date_from,$date_to]);
             
         }
@@ -320,9 +321,9 @@ class ManualOrdersController extends Controller
     }
      
     public function edit($ManualOrder)
-    {
-        
+    { 
         $cities = $this->get_trax_cities();
+        $order_id = $ManualOrder;
         $this->UpdateReferenceNumberByOrderIds([$ManualOrder]);
         // dd($Manualorders);
         $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.id',$ManualOrder)->first();
@@ -335,13 +336,39 @@ class ManualOrdersController extends Controller
         $inventory = Inventory::leftJoin('products', 'inventories.products_id', '=', 'products.id')->
         select(
         'inventories.id as id',
-        'products.sku as sku',
+        'products.sku as sku', 
         'products.name as name',
         'products.sale_price as sale'
         )
         ->where(['inventories.reference_id'=>$ManualOrder->id,'inventories.stock_status' => 'out'])->get();
         
-        return view('client.orders.manual-orders.edit')->with(['ManualOrder'=>$ManualOrder, 'cities'=>$cities,'inventories'=>$inventory,'product_price'=>$this->updateorderprice($ManualOrder->id)]);
+        $advance_payment_status='';
+        $advance_payments = CustomerPayments::where('order_id',$order_id)->get();
+        // dd($advance_payment);
+        if($advance_payments->isEmpty())
+        {
+            $advance_payment_status = ' No payment Found ';
+        }
+        else
+        {
+            $count = 1;
+            foreach($advance_payments as $advance_payment)
+            {
+                if($advance_payment->status == 'approved')
+                { 
+                    $advance_payment_status .= ' Payment # '.$count.' Approved ';
+                }
+                else
+                {
+                    $advance_payment_status .= ' Payment # '.$count.' Not Approved ';
+                    
+                } 
+                
+            }
+        }
+        
+        
+        return view('client.orders.manual-orders.edit')->with(['ManualOrder'=>$ManualOrder, 'cities'=>$cities,'inventories'=>$inventory,'product_price'=>$this->updateorderprice($ManualOrder->id),'advance_payment_status'=>$advance_payment_status]);
 
         // if($Manualorders != null)
         // {
@@ -916,13 +943,13 @@ class ManualOrdersController extends Controller
     }
     
     public function popup_dispatch_edit($ManualOrder)
-    {
-        //dd($ManualOrder);
+    { 
+        //dd($ManualOrder); 
         $ManualOrder = ManualOrders::where('manual_orders.id',$ManualOrder)->first();
         //dd(ManualOrders::leftJoin('customers', 'customers.id', '=', 'manual_orders.customers_id')->where('manual_orders.status','pending')); 
-        //dd($ManualOrder) ;
+        //dd($ManualOrder) ; 
         
-        return response()->json(['messege' => $ManualOrder]);
+        return response()->json(['messege' => $ManualOrder,'advance_payment_status'=>$advance_payment_status]);
         //
     }
     

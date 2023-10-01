@@ -139,7 +139,7 @@ var container = "";
     function checkAll(bx) {
         // alert('work');
         //document.getElementByClassName("order_checkbox_class").checked = true;
-        var cbs = document.getElementsByClassName('order_checkbox_class');
+        var cbs = document.getElementsByTagName('input');
             for(var i=0; i < cbs.length; i++) {
             if(cbs[i].type == 'checkbox') {
                cbs[i].checked = bx.checked;
@@ -413,8 +413,7 @@ var container = "";
     function get_checked_values()
     {
         var array = [];
-        var checkboxes = document.getElementsByClassName('order_checkbox_class');
-        // var checkboxes = document.querySelectorAll('input[type=checkbox]:checked')
+        var checkboxes = document.querySelectorAll('input[type=checkbox]:checked')
         for (var i = 0; i < checkboxes.length; i++) 
         {
             array.push(checkboxes[i].value)
