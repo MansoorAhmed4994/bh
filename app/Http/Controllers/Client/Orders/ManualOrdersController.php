@@ -949,7 +949,7 @@ class ManualOrdersController extends Controller
         //dd(ManualOrders::leftJoin('customers', 'customers.id', '=', 'manual_orders.customers_id')->where('manual_orders.status','pending')); 
         //dd($ManualOrder) ; 
         
-        return response()->json(['messege' => $ManualOrder,'advance_payment_status'=>$advance_payment_status]);
+        return response()->json(['messege' => $ManualOrder]);
         //
     }
     
