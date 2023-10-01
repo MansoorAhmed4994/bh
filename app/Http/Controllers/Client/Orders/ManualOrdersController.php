@@ -76,8 +76,8 @@ class ManualOrdersController extends Controller
             'manual_orders.status',
             'manual_orders.created_at',
             'manual_orders.updated_at',
-            DB::raw("CONCAT(t.first_name,' ',t.last_name) as updated_by"), 
-            DB::raw("CONCAT(users.first_name,' ',users.last_name) as created_by"), 
+            DB::raw("CONCAT(t.first_name,'') as updated_by"), 
+            DB::raw("CONCAT(users.first_name,'') as created_by"), 
             'manual_orders.status_reason'); 
 
     }

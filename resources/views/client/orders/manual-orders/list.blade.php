@@ -717,6 +717,7 @@ var container = "";
                             <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'prepared');order_link ='{{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}';" class="dropdown-item">Prepared</button>
                             <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'confirmed')" class="dropdown-item" >Confirmed</button>
                             <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'dispatched')" class="dropdown-item" >Dispatch</button>
+                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'incomplete')" class="dropdown-item" >InComplete</button>
                             <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'hold')" class="dropdown-item" >Hold</button>
                             <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'dc comming')" class="dropdown-item" >dc comming</button>
                             <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'not responding')" class="dropdown-item" >not responding</button>
@@ -733,11 +734,12 @@ var container = "";
                      </div>
                 </td>
                 <td >
+                    <button class="btn btn-primary" onclick="UniversalImagesSlider(0,'{{$lists->images}}')">Images</button>
                     @if(!empty($lists->images)) 
                      <?php $count_image_index= 0;?>
                         @foreach(explode('|', $lists->images) as $image)   
                         
-                        <img class="pop rounded imgaes-demand" style="margin-right: 5px;" src="{{asset($image)}}" onclick="UniversalImagesSlider(<?=$count_image_index;?>,'{{$lists->images}}')"  data-toggle="modal"  alt="Card image cap" width="25" />
+                        <img class="pop rounded imgaes-demand" style="margin-right: 5px;display:none" src="{{asset($image)}}" onclick="UniversalImagesSlider(<?=$count_image_index;?>,'{{$lists->images}}')"  data-toggle="modal"  alt="Card image cap" width="25" />
                         <?php $count_image_index++;?>
                         @endforeach
                     @endif
@@ -769,9 +771,16 @@ var container = "";
                 ?>
                 <td><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualikum {{$lists->first_name}},%0a I am from Brandhub,%0a Please confirm your order,%0a click on the link to and check your articles and press confirmed button. %0alink: {{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}"><?=$reciever_number?></a></td> 
                 <td><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$number?>&text=Assalamualaikum, {{$lists->first_name}},%0a I am from Brandhub,%0a Please confirm your order,%0a click on the link to and check your articles and press confirmed button. %0alink: {{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}"><?=$number?></a></td> 
-                <td><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualaikum {{$lists->first_name}},%0aI am from Brandhub, check the details and verify.%0aName: {{$lists->first_name}}%0aNumber: {{$lists->receiver_number}}%0aAddress: {{$lists->reciever_address}}%0acity: @if(isset($lists->cities->name))?$lists->cities->name@else '' @endif %0aCOD: {{$lists->cod_amount}}">Send Confirmation msg</a></td> 
-                <td>{{$lists->description}}</td> 
-                <td>{{$lists->reciever_address}}</td>
+                <td>
+                    <select class="form-select">
+                        <option value="">Select</option>
+                        <option>
+                            <a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualaikum {{$lists->first_name}},%0aI am from Brandhub, check the details and verify.%0aName: {{$lists->first_name}}%0aNumber: {{$lists->receiver_number}}%0aAddress: {{$lists->reciever_address}}%0acity: @if(isset($lists->cities->name))?$lists->cities->name@else '' @endif %0aCOD: {{$lists->cod_amount}}">Send Confirmation msg</a>
+                        </option>
+                    </select>
+                </td> 
+                <td style="position:relative"><p class="text-hidden-ellipsis-nowrap" id="{{$lists->id}}_description" >{{$lists->description}}</p><a class="copy-to-clipboard-btn" onclick="copy_clipboard_by_id('{{$lists->id}}_description')">Copy</a></td> 
+                <td style="position:relative"><p class="text-hidden-ellipsis-nowrap" id="{{$lists->id}}_address" >{{$lists->reciever_address}}<p><a class="copy-to-clipboard-btn" onclick="copy_clipboard_by_id('{{$lists->id}}_address')">Copy</a></td>
                 <td>{{$lists->price}}</td>  
                 <td>{{$lists->advance_payment}}</td> 
                 <td>{{$lists->cod_amount}}</td> 
@@ -793,6 +802,20 @@ var container = "";
 
 
 <script type="application/javascript">
+
+function copy_clipboard_by_id(id) {
+  // Get the text field
+  var copyText = document.getElementById(id);
+    
+  // Select the text field
+//   copyText.select();
+//   copyText.setSelectionRange(0, 99999); // For mobile devices
+
+  // Copy the text inside the text field
+  navigator.clipboard.writeText(copyText.innerHTML);
+  
+  // Alert the copied text 
+}
 
 container = document.getElementsByClassName('table-container')[0].innerHTML;
 

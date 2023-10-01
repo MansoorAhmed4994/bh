@@ -75,7 +75,38 @@ body {
   /*background-color: #f8fafc;*/
     background: linear-gradient(120.55deg,#e5f0e7 -1.27%,#66009873 79.83%)!important;
 }
+.text-hidden-ellipsis-nowrap
+{
+    width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    background: transparent;
+    white-space: nowrap; 
+    margin:0;
+}
+.text-hidden-ellipsis-nowrap:hover
+{
+    width: 350px;
+    overflow: hidden;
+    border: 1px solid #000000;
+    position: absolute;
+    background: white;
+    height: auto;
+    white-space: normal;
+    border-radius: 15px 15px;
+    padding: 14px;
+    font-size: 20px;
+    left: 0;
+    z-index:11;
+    box-shadow: 1px 2px 1px 6px white;
 
+}
+.copy-to-clipboard-btn
+{
+    bottom: 5px;
+    position: absolute;
+    right: 5px;
+}
 [tabindex="-1"]:focus:not(:focus-visible) {
   outline: 0 !important;
 }
