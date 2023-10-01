@@ -460,8 +460,8 @@
                     @if(!empty($ManualOrder->images))
                         @foreach(explode('|', $ManualOrder->images) as $image) 
                         <div class="col-auto">
-                            <div class="card" id="imagebox{{$count}}" style="max-width: 100%;">
-                                <img class="card-img-top" src="{{asset($image)}}" alt="Card image cap" >
+                            <div class="card " id="imagebox{{$count}}" >
+                                <img class="card-img-top edit-img-box" src="{{asset($image)}}" alt="Card image cap" >
                                 <div class="card-body">
                                     <!--<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>-->
                                     <a onclick="delete_image('{{$image}}','imagebox{{$count}}')" class="btn btn-primary"  data-toggle="modal" data-target="#exampleModal">Delete</a>

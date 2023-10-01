@@ -124,6 +124,7 @@ function toggleDataSeries(e) {
         <div class="col-sm-12"> 
             <h2>Order All Order Status</h2><hr>
         </div> 
+    
     <?php $total_orders=0;?>
         @foreach($data as $list)
         <?php
@@ -132,7 +133,7 @@ function toggleDataSeries(e) {
         ?>
             <div class="col-sm-4 form-group">  
                 <div class="card" style="width: 18rem;"> 
-                  <div class="card-body" style="background:linear-gradient(45deg, <?=$color1?>, <?=$color2?>)">
+                  <div class="card-body status-{!! str_replace(' ', '-', $list->status) !!} dashbord-card-body">
                     <h3>{{$list->status}}</h3>
                     <h5 class="card-title">{{$list->total}}</h5> 
                     <h5 class="card-title">{{$list->amount}}</h5>  

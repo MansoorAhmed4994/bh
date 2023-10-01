@@ -120,7 +120,15 @@ trait ManualOrderTraits {
                 {
                     $manual_orders->images = $manual_orders->images.'|'.(implode("|",$images));
                 }
-                $manual_orders->status = $status;
+                if($manual_orders->status == 'pending')
+                {
+                    $manual_orders->status = 'pending';
+                }
+                else
+                {
+                    
+                    $manual_orders->status = $status;
+                }
                 $status = $customer_id->first()->manual_orders()->save($manual_orders);
                  //dd(); 
                 $manualorders_id = $status->id; 

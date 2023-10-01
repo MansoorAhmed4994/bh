@@ -103,6 +103,7 @@ body {
 }
 .copy-to-clipboard-btn
 {
+    color:white;
     bottom: 5px;
     position: absolute;
     right: 5px;
@@ -4476,9 +4477,61 @@ input[type=button].btn-block {
     width: 80px;
     background-color: #fffafa;
     display: inline-block;
-    border-radius: 6%;
+    border-radius: 8px;
 }
 
+.dashbord-card-body
+{
+    border-radius: 15px;
+    border: 1px solid white;
+    
+}
+
+.status-addition
+{ 
+    color: black;
+    background: #ffec00;
+}
+.status-pending
+{ 
+    color: white;
+    background: orange; 
+}
+.status-prepared
+{ 
+    color: white;
+    background:#1ed4be; 
+}
+.status-incomplete
+{
+    color: white;
+    background: grey; 
+}
+.status-not-responding
+{ 
+    color: white;
+    background: #7e218c; 
+}
+.status-hold
+{ 
+    color: white;
+    background: lightgreen; 
+}
+.status-confirmed
+{ 
+    color: white;
+    background: #2828bd; 
+}
+.status-dispatched
+{
+    color: white;
+    background: green; 
+}
+.status-deleted,.status-cancel,.status-return
+{
+    color: white;
+    background: #ad1515; 
+}
 .nav {
   display: flex;
   flex-wrap: wrap;
@@ -5051,14 +5104,17 @@ li.nav-item {
 .navbar-dark .navbar-text a:focus {
   color: #fff;
 }
-
+.edit-img-box
+{
+    height:100px;
+}
 .card {
   position: relative;
   display: flex;
   flex-direction: column;
   min-width: 0;
   word-wrap: break-word;
-  background-color: #fff;
+  background-color: transparent;
   background-clip: border-box;
   border: 0px solid rgba(0, 0, 0, 0.125);
   border-radius: 0.25rem;
@@ -7152,7 +7208,7 @@ button.bg-danger:focus {
 }
 
 .bg-light {
-  background-color: #f8f9fa !important;
+  background-color: transparent !important;
 }
 
 a.bg-light:hover,

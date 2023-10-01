@@ -90,20 +90,16 @@ class ManualOrdersController extends Controller
         $order_by = $request->order_by;
         $date_from = $request->date_from;
         $date_to =  $request->date_to;
-        // $date_from =  Carbon::parse($request->date_from)->format('Y-m-d h:i:s');
-        // $date_to =  Carbon::parse($request->date_to)->format('Y-m-d h:i:s');
+        
         $date_by = 'created_at';
         $query = ManualOrders::query();
         $query = $query
         ->leftJoin('customers', 'manual_orders.customers_id', '=', 'customers.id')
         ->leftJoin('users', 'manual_orders.created_by', '=', 'users.id') 
         ->leftJoin('users as t', 'manual_orders.updated_by', '=', 't.id') 
-        ->select($this->OrderFieldList());
-        //dd($request);
-        // dd(Carbon::parse($date_from)->format('Y-m-d h:i:s'),$date_to);
+        ->select($this->OrderFieldList()); 
         if($order_id != '')
-        {
-            echo '1';
+        { 
             $query = $query->where('manual_orders.id',$order_id);
         }
         else if($search_text != '')

@@ -568,18 +568,6 @@ var container = "";
      
             <div class="form-group">
                 <div class="input-group">
-                    <div class="input-group-text"> 
-                        <input onclick="mobile_view()" id="mobile_checkbox" type="checkbox">
-                    </div> 
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" >Mobile View</span> 
-                    </div>
-                    <div class="input-group-text"> 
-                        <input onclick="demand_view()" id="demand_checkbox" type="checkbox">
-                    </div> 
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="inputGroup-sizing-sm">Demand View</span> 
-                    </div>
                     
                     <input class="input-group-text" type="search" name="search_order_id" placeholder="Search by Order id #" aria-label="Search">
                     <input class="input-group-text" type="search" name="search_text" placeholder="Name OR Number" aria-label="Search">
@@ -616,7 +604,7 @@ var container = "";
                     </select>
                     <input class="input-group-text" type="date" name="date_to" id="date_to">
                     <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="submit">Search</button>
+                        <button class="btn btn-primary" type="submit">Search</button>
                     </div>
                 </div>
             </div>  
@@ -625,9 +613,21 @@ var container = "";
 
 
     <div class="col-sm-12 "> 
-        <form class="form-inline float-right" method="post"  target="_blank" action="{{ route('ManualOrders.order.action') }}">
+        <form class="form-inline float-left" method="post"  target="_blank" action="{{ route('ManualOrders.order.action') }}">
             @csrf
             <div class="input-group">
+                <div class="input-group-text"> 
+                    <input onclick="mobile_view()" id="mobile_checkbox" type="checkbox">
+                </div> 
+                <div class="input-group-prepend">
+                    <span class="input-group-text" >Mobile View</span> 
+                </div>
+                <div class="input-group-text"> 
+                    <input onclick="demand_view()" id="demand_checkbox" type="checkbox">
+                </div> 
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">Demand View</span> 
+                </div>
                 <select class="form-select" aria-label="Default select example" name="order_action" required>
                     <option selected >Select Action</option> 
                     <option value="pending">Pending</option>
@@ -647,7 +647,7 @@ var container = "";
                     <option value="print_pos_slips">Print Pos Slips</option>
                 </select> 
                 <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="submit">Submit</button> 
+                    <button class="btn btn-warning" type="submit">Submit</button> 
                 </div>
             </div>
             
@@ -735,6 +735,7 @@ var container = "";
                 </td>
                 <td >
                     <button class="btn btn-primary" onclick="UniversalImagesSlider(0,'{{$lists->images}}')">Images</button>
+                    <div id="order_images">
                     @if(!empty($lists->images)) 
                      <?php $count_image_index= 0;?>
                         @foreach(explode('|', $lists->images) as $image)   
@@ -743,6 +744,7 @@ var container = "";
                         <?php $count_image_index++;?>
                         @endforeach
                     @endif
+                    </div>
                 </td>
                 <td>{{$lists->consignment_id}}</td> 
                 <td>{{$lists->id}}</td>
