@@ -203,8 +203,8 @@ class ManualOrdersController extends Controller
         // dd($query->get());
         // dd(ManualOrders::find(1)->cities->id);
         // dd($list[0]->cities->name); 
-        
-        return view('client.orders.manual-orders.list')->with(['list'=>$list,'users'=>$users]); 
+        $statuses = get_active_order_status_list();
+        return view('client.orders.manual-orders.list')->with(['list'=>$list,'users'=>$users,'statuses'=>$statuses]); 
     }
     
     public function InActiveCustomers(Request $request)

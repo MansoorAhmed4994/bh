@@ -3,6 +3,7 @@
     use App\Models\ActivityLogs;
     use App\Models\Client\CustomerPayments;
     use App\Models\Client\ManualOrders;
+    use App\Models\Statuses;
 
     if(!function_exists('create_activity_log'))
     {
@@ -44,6 +45,22 @@
                 
                 return ['row_count'=>$query->count(),'status'=>''];
             }
+        }
+    }
+    
+    if(!function_exists('get_active_order_status_list'))
+    {
+        function get_active_order_status_list()
+        {
+            $query=Statuses::query();
+            $status = $query->where('status','active')->get(); 
+            // if($query->get()->count() > 0)
+            // {  
+                // dd($status);
+                return $status;
+            // } 
+            // es
+            // {}
         }
     }
 

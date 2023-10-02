@@ -13,10 +13,11 @@ class CreateStatus extends Migration
      */
     public function up()
     {
-        Schema::create('status', function (Blueprint $table) {
+        Schema::create('statuses', function (Blueprint $table) {
             $table->bigIncrements('id'); 
             $table->string('name'); 
-            $table->text('color')->nullable();     
+            $table->text('color')->nullable();   
+            $table->string('permission')->nullable();  
             $table->string('status')->nullable();   
         });
     }
