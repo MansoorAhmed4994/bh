@@ -55,9 +55,11 @@
         {
             $user_id = User::find(auth()->user()->id);
             // $user_roles = implode(',',$user_id->roles()->get()->pluck('name')->toArray());
+            
             $user_roles = $user_id->roles()->get()->pluck('name')->toArray();
-            $query=Statuses::query();
-            $status = $query->where(['status'=>'active','permission'=>$user_roles])->get(); 
+            $query=Statuses::query(); 
+            $status = $query->where(['status'=>'active'])->whereIn('permission',$user_roles)->get(); 
+            // dd($status);
             // if($query->get()->count() > 0)
             // {  
                 // dd($status);

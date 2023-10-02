@@ -634,7 +634,7 @@ class ManualOrdersController extends Controller
        
         if($order_action == 'print')
         {
-             
+            //  dd($order_ids);
             $explode_id = explode(',', $order_ids); 
             
             $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->whereIn('manual_orders.id',$explode_id)->get();
