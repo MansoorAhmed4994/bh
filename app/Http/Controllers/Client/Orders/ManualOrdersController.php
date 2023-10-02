@@ -806,18 +806,15 @@ class ManualOrdersController extends Controller
             $number = substr_replace($request->number, '', 0, 1);
             // dd($number);
             $query = $query->where('manual_orders.receiver_number','like','%'.$number);
+            $query = $query->where('manual_orders.status','!=','dispatched')->where('manual_orders.status','!=','confirmed')->where('manual_orders.status','!=','cancel')->where('manual_orders.status','!=','return');
             // where(function ($query) use ($number) {
-            //     $query->where('customers.first_name','like',$search_text.'%')
-            //         ->orWhere('customers.first_name','like','%'.$search_text.'%')
-            //         ->orWhere('customers.first_name','like','%'.$search_text)
-            //         ->orWhere('customers.last_name','like',$search_text.'%')
-            //         ->orWhere('customers.last_name','like','%'.$search_text.'%')
-            //         ->orWhere('customers.last_name','like','%'.$search_text)
-            //         ->orWhere('customers.number','like','%'.$search_text) 
-            //         ->orWhere('customers.number','like',$search_text.'%')
-            //         ->orWhere('customers.number','like','%'.$search_text.'%')
-            //         ->orWhere('manual_orders.id','like','%'.$search_text.'%')
-            //         ->orWhere('manual_orders.consignment_id','like','%'.$search_text.'%');
+            //     $query->Where('manual_orders.status','!=','dispatched')
+            //         ->orWhere('manual_orders.status','!=','confirmed');
+            // });
+            // where(function ($query) use ($number) {
+            //     $query
+            //         ->Where('manual_orders.status','not like','%dispatched%')
+            //         ->orWhere('manual_orders.status','not like','%confirmed%');
             // });
         }
         

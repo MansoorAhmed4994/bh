@@ -138,7 +138,7 @@ trait ManualOrderTraits {
                     //dd();
                     create_activity_log(['table_name'=>'manual_orders','ref_id'=>$manualorders_id,'activity_desc'=>'Order Updated successfully','created_by'=>Auth::id(),'method'=>'insert','route'=>route('ManualOrders.store')]);
     
-                    return 'Order id:  '.$status->id.'  Successfully Placed';
+                    return 'Order id:  '.$status->id.'  Successfully Added';
                 }
                 // dd($manual_orders->images);
             }
