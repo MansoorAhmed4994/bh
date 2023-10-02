@@ -4,6 +4,7 @@
     use App\Models\Client\CustomerPayments;
     use App\Models\Client\ManualOrders;
     use App\Models\Statuses;
+    use App\Models\User;
 
     if(!function_exists('create_activity_log'))
     {
@@ -52,8 +53,11 @@
     {
         function get_active_order_status_list()
         {
+            $user_id = User::find(auth()->user()->id);
+            // $user_roles = implode(',',$user_id->roles()->get()->pluck('name')->toArray());
+            $user_roles = $user_id->roles()->get()->pluck('name')->toArray();
             $query=Statuses::query();
-            $status = $query->where('status','active')->get(); 
+            $status = $query->where(['status'=>'active','permission'=>$user_roles])->get(); 
             // if($query->get()->count() > 0)
             // {  
                 // dd($status);

@@ -320,19 +320,12 @@
                         </select>
                         <select class="custom-select" aria-label="Default select example" name="order_status" id="order_status">
                             <option selected value="">Change Status</option>
-                            <option value="all">All</option>
-                            <option value="pending">Pending</option>
-                            <option value="duplicate">Dulicate</option>
-                            <option value="prepared">Prepared</option>
-                            <option value="confirmed">Confirmed</option>
-                            <option value="cancel">complete</option> 
-                            <option value="dispatched">Dispatched</option> 
-                            <option value="hold">Hold</option>
-                            <option value="incomplete">incomplete</option> 
-                            <option value="cancel">cancel</option> 
-                            <option value="return">return</option> 
-                            <option value="deleted">delete</option> 
-                            <option value="not responding"></option>  
+                            @foreach($statuses as $status)
+                        
+                                <option value="{{$status->name}}">{{$status->name}}</option>                
+                                
+                            @endforeach 
+                             
                         </select>
                         <!--<input class="input-group-text" type="date" name="date_from" id="date_from">-->
                         <!--<input class="input-group-text" type="date" name="date_to" id="date_to">-->

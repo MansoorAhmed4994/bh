@@ -584,17 +584,11 @@ var container = "";
                     <select class="custom-select" aria-label="Default select example" name="order_status">
                         <option selected value ="">Order Status</option>
                         <option value="all">All</option>
-                        <option value="pending">Pending</option>
-                        <option value="duplicate">Dulpicate</option>
-                        <option value="prepared">Prepared</option>
-                        <option value="confirmed">Confirmed</option>
-                        <option value="dispatched">Dispatched</option> 
-                        <option value="hold">Hold</option>
-                        <option value="not responding">Not Responding</option> 
-                        <option value="dc comming">Dc Comming</option> 
-                        <option value="incomplete">incomplete</option>  
-                        <option value="cancel">cancel</option>  
-                        <option value="return">return</option>  
+                        @foreach($statuses as $status)
+                        
+                            <option value="{{$status->name}}">{{$status->name}}</option>                
+                            
+                        @endforeach  
                     </select>
                     <input class="input-group-text" type="date" name="date_from" id="date_from">
                     <select class="custom-select" aria-label="Default select example" name="date_by" id="date_by"> 
@@ -630,16 +624,10 @@ var container = "";
                 </div>
                 <select class="form-select" aria-label="Default select example" name="order_action" required>
                     <option selected >Select Action</option> 
-                    <option value="pending">Pending</option>
-                    <option value="prepared">Prepared</option>
-                    <option value="confirmed">Confirmed</option>  
-                    <option value="dispatched">Dispatched</option> 
-                    @if(Auth::guard('admin')->check())
-                    <option value="cancel">Cancel</option> 
-                    @endif
-                    <option value="hold">Hold</option>
-                    <option value="incomplete">incomplete</option>  
-                    <option value="dc comming">Dc Comming</option> 
+                    @foreach($statuses as $status)
+                    
+                        <option value="{{$status->name}}">{{$status->name}}</option>
+                    @endforeach
                     <option value="print">Print </option>
                     <option value="duplicate_orders">Duplicate Orders</option>
                     <option value="print_mnp_slips">Print M&P Slips</option>
@@ -714,19 +702,20 @@ var container = "";
                             <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'pending')" class="dropdown-item" >Quick Edit</button>          
                             <a type="button" target="_blank" href="{{route('ManualOrders.show',$lists->id)}}" class="dropdown-item">view</a>
                             <a type="button" href="{{route('ManualOrders.print.order.slip',$lists->id)}}" class="dropdown-item">Print Slip</a> 
-                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'prepared');order_link ='{{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}';" class="dropdown-item">Prepared</button>
-                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'confirmed')" class="dropdown-item" >Confirmed</button>
-                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'dispatched')" class="dropdown-item" >Dispatch</button>
-                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'incomplete')" class="dropdown-item" >InComplete</button>
-                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'hold')" class="dropdown-item" >Hold</button>
-                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'dc comming')" class="dropdown-item" >dc comming</button>
-                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'not responding')" class="dropdown-item" >not responding</button>
+                            @foreach($statuses as $status)
+                        
+                                <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'{{$status->name}}')" class="dropdown-item" >{{$status->name}}</button>
+                    
+                            @endforeach
+                            <!--<button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'prepared');order_link ='{{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}';" class="dropdown-item">Prepared</button>-->
+                            <!--<button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'confirmed')" class="dropdown-item" >Confirmed</button>-->
+                            <!--<button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'dispatched')" class="dropdown-item" >Dispatch</button>-->
+                            <!--<button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'incomplete')" class="dropdown-item" >InComplete</button>-->
+                            <!--<button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'hold')" class="dropdown-item" >Hold</button>-->
+                            <!--<button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'dc comming')" class="dropdown-item" >dc comming</button>-->
+                            <!--<button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'not responding')" class="dropdown-item" >not responding</button>-->
                             <button type="button" onclick="check_pos_slip_duplication('{{route('ManualOrders.print.pos.slip',$lists->id)}}','{{$lists->id}}','list_<?=$count;?>')"class="dropdown-item" >Print Pos Slip</button>
-                            @if(Auth::guard('admin')->check()) 
-                            
-                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'cancel')" class="dropdown-item" >Cancel</button>
-                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'return')" class="dropdown-item" >Return</button>
-                            @endif
+ 
                             <!--<a type="button" href="{{route('ManualOrders.order.status',['hold',$lists->id])}}" class="dropdown-item">Hold</a> -->
                             <!--<a type="button" href="{{route('ManualOrders.order.status',['incomplete',$lists->id])}}" class="dropdown-item">Incomplete</a>-->
                             <!--<a type="button" href="{{route('ManualOrders.order.status',['cancel',$lists->id])}}" class="dropdown-item">Cancel</a>-->

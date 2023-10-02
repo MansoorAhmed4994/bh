@@ -362,9 +362,9 @@ class ManualOrdersController extends Controller
                 
             }
         }
+         $statuses = get_active_order_status_list();
         
-        
-        return view('client.orders.manual-orders.edit')->with(['ManualOrder'=>$ManualOrder, 'cities'=>$cities,'inventories'=>$inventory,'product_price'=>$this->updateorderprice($ManualOrder->id),'advance_payment_status'=>$advance_payment_status]);
+        return view('client.orders.manual-orders.edit')->with(['ManualOrder'=>$ManualOrder, 'cities'=>$cities,'inventories'=>$inventory,'product_price'=>$this->updateorderprice($ManualOrder->id),'advance_payment_status'=>$advance_payment_status,'statuses'=>$statuses]);
 
         // if($Manualorders != null)
         // {
@@ -1222,8 +1222,8 @@ class ManualOrdersController extends Controller
     
     public function QuickSearch()
     {
-        
-        return view('client.orders.manual-orders.quick_order_search');
+        $statuses = get_active_order_status_list();
+        return view('client.orders.manual-orders.quick_order_search')->with(['statuses'=>$statuses]);
     }
     
     public function QuickSearchActions(Request $request)

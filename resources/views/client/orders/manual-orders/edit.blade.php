@@ -661,25 +661,14 @@
                     
                          
                     <div class="form-group col-auto">   
-                    
+                    <label for="slect status">Select Order status</label>
                         <select class="form-control custom-select" aria-label="Default select example" name="order_status" id="order_status" required>
-                            <option selected value ="">Order Status</option>
-                            <option value="all">All</option>
-                            <option value="pending">Pending</option>
-                            <option value="prepared">Prepared</option>
-                            <option value="confirmed">Confirmed</option> 
-                            <option value="dispatched">Dispatched</option> 
-                            <option value="dc comming">Dc Comming</option> 
-                            <option value="addition">Addition</option> 
-                            <option value="hold">Hold</option>
-                            <option value="incomplete">incomplete</option> 
-                            @if(Auth::guard('admin')->check())
-                                <option value="deleted">delete</option> 
-                                <option value="cancel">cancel</option> 
-                                <option value="return">return</option> 
-                                <option value="duplicate">Dulicate</option>
-                                <option value="not responding"></option>  
-                            @endif
+                            <option  value ="" selected=selected>Select Order Status</option>
+                            @foreach($statuses as $status)
+                        
+                                <option value="{{$status->name}}">{{$status->name}}</option>                
+                                
+                            @endforeach 
                         </select>
                     </div>
                             
