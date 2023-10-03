@@ -78,8 +78,6 @@ var base_url = '<?php echo e(url('/')); ?>';
             });
         }
         
-        
-        
             
         function actionpaymentapproval(id,action)
         {
@@ -196,7 +194,7 @@ var base_url = '<?php echo e(url('/')); ?>';
             //     return;
             // }
             // return;
-            $("body").addClass("loading"); 
+                // $("body").addClass("loading"); 
                 $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -218,17 +216,17 @@ var base_url = '<?php echo e(url('/')); ?>';
                 { 
                     if (typeof e.success !== 'undefined') 
                     {
-                    
+                        // $("body").removeClass("loading");
                         alert(e.messege);
                     }
                     
                     if (typeof e.error !== 'undefined') 
                     {
-                    
+                        // $("body").removeClass("loading");
                         alert(e.messege);
                     }
                     
-                    $("body").removeClass("loading"); 
+                    // $("body").removeClass("loading"); 
                 },
                 error: function(response) {
                     alert(response); 

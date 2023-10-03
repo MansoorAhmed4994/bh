@@ -169,7 +169,11 @@ class CustomerPaymentController extends Controller
      */
     public function update(Request $request)
     { 
-        $action_status = CustomerPayments::where('id',$request->id)->update([
+        $amount = CustomerPayments::where('customer_payments.order_id',$request->order_id)->sum('amount');
+        $ManualOrder = ManualOrders::where('id',$request->order_id)->update(['advance_payment' => $amount]);
+        
+        $action_status = CustomerPayments::where('id',$request->id)->update
+            ([
             'order_id' => $request->order_id,
             'transaction_id' => $request->transaction_id,
             'sender_name' => $request->sender_name,
@@ -178,6 +182,7 @@ class CustomerPaymentController extends Controller
             'description' => $request->description,
             'updated_by' => Auth::id()
             ]);
+            
             if($action_status == 1)
             {
                 return response()->json(['success' => '1','messege'=>'Payment Updated successfully']); 

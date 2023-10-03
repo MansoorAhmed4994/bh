@@ -249,11 +249,11 @@ class ManualOrdersController extends Controller
         }
         else
         {
-        $search_test = $request->search_text;
-        $order_status = $request->order_status;
-        $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->
-        where(function ($query) use ($search_test) {
-            $query->where('customers.first_name','like',$search_test.'%')
+            $search_test = $request->search_text;
+            $order_status = $request->order_status;
+            $list = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->
+            where(function ($query) use ($search_test) {
+                $query->where('customers.first_name','like',$search_test.'%')
                     ->orWhere('customers.first_name','like','%'.$search_test.'%')
                     ->orWhere('customers.first_name','like','%'.$search_test)
                     ->orWhere('customers.last_name','like',$search_test.'%')
@@ -271,7 +271,8 @@ class ManualOrdersController extends Controller
             
         }
         //dd($list);
-        return view('client.orders.manual-orders.list')->with('list',$list);
+        $statuses = get_active_order_status_list();
+        return view('client.orders.manual-orders.list')->with(['list'=>$list,'statuses'=>$statuses]);
     }
     
     
@@ -878,7 +879,7 @@ class ManualOrdersController extends Controller
     
     public function status_order_list( Request $request)
     {
-        //dd($request->status);
+        //dd($request->status); 
         $status = $request->status;
         
         $list_order = 'ASC';
@@ -901,10 +902,11 @@ class ManualOrdersController extends Controller
         $query = $query->paginate(20);
         $users = User::select('*')->get();
             //dd($list);
-            //dd($list);
+            //dd($list);  
             //$list = $list->all();
             //dd($list->all());
-        return view('client.orders.manual-orders.list')->with(['list'=>$query,'duplicate_check' => $duplicate_check,'users'=>$users]);
+        $statuses = get_active_order_status_list();
+        return view('client.orders.manual-orders.list')->with(['list'=>$query,'duplicate_check' => $duplicate_check,'users'=>$users,'statuses'=>$statuses]);
         
     } 
     
@@ -1220,7 +1222,7 @@ class ManualOrdersController extends Controller
     public function QuickSearch()
     {
         $statuses = get_active_order_status_list();
-        return view('client.orders.manual-orders.quick_order_search')->with(['statuses'=>$statuses]);
+        return view('client.orders.manual-orders.quick_order_search')->width(['statuses'=>$statuses]);
     }
     
     public function QuickSearchActions(Request $request)
