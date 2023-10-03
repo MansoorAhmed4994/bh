@@ -12,6 +12,22 @@
              });
         }
         
+        $( document ).ready(function() {
+            $('#order_addition').on('change',function(e)
+            {
+                if($('#order_addition').val() == 'addition')
+                { 
+                    $("#order_id_field").css("display", "block"); 
+                }
+                else
+                {
+                    $("#order_id_field").css("display", "none"); 
+                }
+                $('#order_addition option[value="addition"]').attr("selected", "selected");
+            // alert(name+address);
+            });
+        });
+        
         function limit(element)
         {
             var max_chars = 11;
@@ -231,14 +247,14 @@
                 <div class="form-group ">
                     <label for="address">Order addtion</label>
                     <select class="form-control " id="order_addition"  name="order_addition" required>
-                        <option value="">Select addition</option>
+                        <option value="">Select Order type</option>
                         <option value="addition">Product Addition</option>
                         <option value="pending">New Order</option>
                     </select> 
                     <small id="order_addition_error" class="form-text text-danger">@if($errors->get('order_addition')) {{$errors->first('order_addition')}} @endif</small>
                 </div> 
     
-                <div class="form-group">
+                <div class="form-group" style="display:none;" id="order_id_field">
                     <label for="orderID">Order ID</label>
                     <input type="tel"  class="form-control"  id="order_id"  name="order_id" placeholder="Order ID" >
                     <small id="order_id_error" class="form-text text-danger">@if($errors->get('order_id')) {{$errors->first('order_id')}} @endif</small>

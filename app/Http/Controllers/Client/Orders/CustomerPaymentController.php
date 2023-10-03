@@ -269,15 +269,50 @@ class CustomerPaymentController extends Controller
         // dd('work');
         $data='';
         $customerPayments;
-        if($request->order_id == '')
+        $customerPayments = CustomerPayments::query();
+        if($request->search_order_id == '')
         {
-            $customerPayments = CustomerPayments::select('*')->where('customer_payments.status','approval pending')->orderBy('customer_payments.id', 'DESC')->get();
+            $customerPayments = $customerPayments->where('customer_payments.status','approval pending');
         }
         else
         {
-            $customerPayments = CustomerPayments::where('customer_payments.order_id',$request->order_id)->orderBy('customer_payments.id', 'DESC')->get();
             
+            $customerPayments = $customerPayments->where('customer_payments.order_id',$request->search_order_id);
         }
+        
+        if($request->search_transaction_id != '')
+        {
+            $customerPayments = $customerPayments->where('customer_payments.transaction_id',$request->search_transaction_id);
+        }
+        
+        if($request->search_sender_name != '')
+        {
+            $customerPayments = $customerPayments->where('customer_payments.sender_name','like','%'.$request->search_sender_name.'%');
+        }
+        
+        if($request->search_amount != '')
+        {
+            $customerPayments = $customerPayments->where('customer_payments.amount',$request->search_amount);
+        }
+        
+        if($request->search_date != '')
+        {
+            $customerPayments = $customerPayments->where('customer_payments.datetime',$request->search_date);
+        }
+        
+        if($request->search_transfer_to != '')
+        {
+            $customerPayments = $customerPayments->where('customer_payments.transfer_to',$request->search_transfer_to);
+        }
+        // dd($request->search_transfer_to);
+        if($request->search_payment_status != '')
+        {
+            $customerPayments = $customerPayments->where('customer_payments.status',$request->search_payment_status);
+        }
+        
+        
+        $customerPayments = $customerPayments->orderBy('customer_payments.id', 'DESC')->get();
+        // dd($customerPayments);
         // dd($customerPayments);
         // $ManualOrders = ManualOrders::where('customers.number',$request->number)->get();
         // dd($customerPayments);

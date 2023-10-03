@@ -208,9 +208,17 @@ tfoot tr td input {
                            
                         </tr> 
                         <tr>
-                            <td style="height:70px"> <h5>Price </h5></td>
+                            <td style="height:70px"> <h5>Product Price </h5></td>
                             <td> </td> 
-                        </tr>  
+                        </tr>
+                        <tr>
+                            <td style="height:70px"> <h5>Delivery Charges </h5></td>
+                            <td> </td> 
+                        </tr>   
+                        <tr>
+                            <td style="height:70px"> <h5>Packaging cost </h5></td>
+                            <td> </td> 
+                        </tr> 
                         <tr>
                             <td style="height:70px"><h5>Advance </h5></td>
                             <td> </td> 
@@ -219,6 +227,14 @@ tfoot tr td input {
                             <td style="height:70px"> <h5>Amount </h5></td>
                             <td> </td> 
                         </tr> 
+                        <tr>
+                            <td><h5>User: </h5></td>
+                            <td style="height:70px"><h4>{{$ManualOrder->users->first_name}}</h4></td> 
+                        </tr>
+                        <tr>
+                            <td><h5>Printed By: </h5></td>
+                            <td style="height:70px"><h4>{{Auth::user()->first_name}}</h4></td> 
+                        </tr>
                         <tr ><td colspan="2" style="height:300px;text-align: left!important;vertical-align: top;padding: 11px;font-weight: bold;">Note:</td></tr>
                     </tfoot>
                 </table>

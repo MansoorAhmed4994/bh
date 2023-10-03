@@ -106,9 +106,9 @@ padding: 0px;
                     
                 	<tr>
                 		<td colspan="2" rowspan="2" style="padding:5px; text-align:center;">
-                			<img src="{{ URL::to('/') }}/public/images/logo.png" alt="logo" width="125">
+                			<img src="{{ URL::to('/') }}/public/images/logo.png" alt="logo" width="100">
                 		</td>
-                		<td colspan="3" rowspan="2" style="text-align:center;padding:5px;font-size:12px;">
+                		<td colspan="3" rowspan="2" style="text-align:center;padding:0;font-size:12px;">
                 		    <img src="data:image/png;base64,<?php echo DNS1D::getBarcodePNG((string)$ManualOrder->id, 'C39') ?>" alt="barcode" width="200"  />
                 			<span class="notranslate"><p>{{$ManualOrder->id}}</p></span>
                         </td>
@@ -123,7 +123,7 @@ padding: 0px;
                     <tr>
                         <td colspan="2" rowspan="3" style="padding:5px; text-align:center;">
                 		 <div class="container mt-4">
-                        <div class="mb-3"><img src="data:image/png;base64,<?php echo DNS2D::getBarcodePNG((string)$ManualOrder->id, 'QRCODE') ?>" alt="barcode" width="100"  />
+                        <div class="mb-3"><img src="data:image/png;base64,<?php echo DNS2D::getBarcodePNG((string)$ManualOrder->id, 'QRCODE') ?>" alt="barcode" width="80"  />
                         </div></div>
                         </td>
                         <td rowspan="2" align="center">
@@ -184,10 +184,21 @@ padding: 0px;
                     <tr>
                 		<td style="font-size:8px;padding-top:0px;padding-bottom:0px;">Weight:</td>
                 		<td style="font-size:8px;text-align:center;padding-top:0px;padding-bottom:0px;">{{$ManualOrder->weight}}</td>
-                        <td colspan="4" rowspan="3"><b>Shipper Remarks: </b> </td></tr>
+                         
+                    </tr>
                     <tr>
                 		<td style="font-size:8px;padding-top:0px;padding-bottom:0px;">Insurance Value:</td>
                 		<td style="font-size:8px;text-align:center;padding-top:0px;padding-bottom:0px;">0</td>
+                    </tr>
+                    <tr>
+                		<td style="font-size:8px;padding-top:0px;padding-bottom:0px;">User:</td>
+                		<td style="font-size:8px;text-align:center;padding-top:0px;padding-bottom:0px;">{{$ManualOrder->users->first_name}}</td>
+                         
+                    </tr>
+                    <tr>
+                		<td style="font-size:8px;padding-top:0px;padding-bottom:0px;">Printed By:</td>
+                		<td style="font-size:8px;text-align:center;padding-top:0px;padding-bottom:0px;">{{Auth::user()->first_name}}</td>
+                        <td colspan="4" rowspan="3"><b>Shipper Remarks: </b> </td>
                     </tr>
                 	<tr>
                 		<td style="font-size:8px;padding-top:0px;padding-bottom:0px;">Printed On</td>

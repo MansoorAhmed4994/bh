@@ -4,6 +4,7 @@ namespace App\Models\Client;
 
 
 use App\Models\Orderpayments;
+use App\Models\User;
 // use App\Models\Client\Cities;
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,6 +13,11 @@ class ManualOrders extends Model
     public function customers()
     {
         return $this->belongsTo(Customers::class,'customers_id','id');
+    }
+    
+    public function users()
+    {
+        return $this->belongsTo(User::class,'created_by','id');
     }
     
     

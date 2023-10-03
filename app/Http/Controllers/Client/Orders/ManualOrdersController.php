@@ -638,7 +638,7 @@ class ManualOrdersController extends Controller
             //  dd($order_ids);
             $explode_id = explode(',', $order_ids); 
             
-            $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->whereIn('manual_orders.id',$explode_id)->get();
+            $ManualOrder = ManualOrders::select('*')->whereIn('manual_orders.id',$explode_id)->get();
             foreach($ManualOrder as $ManualOrders)
             {
                 create_activity_log(['table_name'=>'manual_orders','ref_id'=>$ManualOrders->id,'activity_desc'=>'Local Slip','created_by'=>Auth::id(),'method'=>'print','route'=>route('ManualOrders.order.action')]);
@@ -1262,7 +1262,7 @@ class ManualOrdersController extends Controller
                     dd('Parcel Status is '.$check_status['status'].' and parcel cannot print slip until parcel status is confirmed OR Dispatched');
                 }
             }
-            $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->whereIn('manual_orders.id',$order_ids)->get();
+            $ManualOrder = ManualOrders::select('*')->whereIn('manual_orders.id',$order_ids)->get();
             $ids = array();
             foreach($ManualOrder as $consignment_ids)
             {
@@ -1278,7 +1278,7 @@ class ManualOrdersController extends Controller
         elseif($print_slips == 'local')
         {
               
-            $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->whereIn('manual_orders.id',$order_ids)->get();
+            $ManualOrder = ManualOrders::select('*')->whereIn('manual_orders.id',$order_ids)->get();
             foreach($order_ids as $order_id)
             {
                 if(check_customer_advance_payment($order_id) > 0)

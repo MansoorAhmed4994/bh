@@ -143,14 +143,16 @@ class UserController extends Controller
         $status = $user->page_permission()->sync($page_user, false);
 
         // dd($status);
-        $user->roles()->sync($request->roles);
-
+        $user->roles()->sync($request->roles); 
         $user->first_name = $request->first_name;
         $user->last_name = $request->last_name;
         $user->phone = $request->phone;
         $user->address = $request->address;
         $user->email = $request->email;
-        $user->password = Hash::make($request->password); 
+        if($request->pasword_checkbox == 'pasword_checkbox')
+        { 
+            $user->password = Hash::make($request->password); 
+        }
         $user->remember_token = $request->_token;
         $user->save();
 

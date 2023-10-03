@@ -1,6 +1,30 @@
 @extends('layouts.'.Auth::getDefaultDriver())
 
 @section('content')
+<script>
+    var password = '{{$user->password }}'; 
+    $( document ).ready(function() {
+            $('#pasword_checkbox').on('click',function(e)
+            { 
+                if ($('#pasword_checkbox').is(':checked'))
+                {
+                    $("#password").attr("readonly", false); 
+                    $("#password-confirm").attr("readonly", false); 
+                    $("#password").val(''); 
+                    $("#password-confirm").val(''); 
+                } 
+                else
+                {   
+                    $("#password").attr("readonly", true); 
+                    $("#password-confirm").attr("readonly", true); 
+                    $("#password").val(password); 
+                    $("#password-confirm").val(password);  
+                }
+                $('#order_addition option[value="addition"]').attr("selected", "selected");
+            // alert(name+address);
+            });
+        });
+</script>
 <div class="container">
     <form method="POST" action="{{ route('admin.user.update' , $user) }}">
     <div class="row justify-content-center">
@@ -87,13 +111,15 @@
                             <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
 
                             <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" value ="{{$user->password }}" required autocomplete="new-password">
+                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror"  name="password" value ="{{$user->password }}" autocomplete="new-password" readonly>
 
                                 @error('password')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
+                            
+
                             </div>
                         </div>
 
@@ -101,7 +127,10 @@
                             <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password') }}</label>
 
                             <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" value="{{$user->password}}" required autocomplete="new-password">
+                                <input id="password-confirm" type="password" class="form-control"   name="password_confirmation" value="{{$user->password}}" required autocomplete="new-password" readonly>
+                                
+                                <input type="checkbox" id="pasword_checkbox" name="pasword_checkbox" value="pasword_checkbox">
+                            <label>Edit Password</label>
                             </div>
                         </div>
                         
