@@ -19,6 +19,7 @@ use App\Models\Client\Cities;
 use App\Models\Order_details;
 use App\Models\Client\Customers;
 use App\Models\ActivityLogs;
+use App\Models\Category;
 use App\Models\Client\CustomerPayments; 
 use App\Models\User; 
 
@@ -200,11 +201,11 @@ class ManualOrdersController extends Controller
         $users = User::select('*')->get();
         // dd($users);
         $list = $query->paginate(20);
-        // dd($query->get());
-        // dd(ManualOrders::find(1)->cities->id);
-        // dd($list[0]->cities->name); 
+        
+        
         $statuses = get_active_order_status_list();
-        return view('client.orders.manual-orders.list')->with(['list'=>$list,'users'=>$users,'statuses'=>$statuses]); 
+        $catgories = product_child_categories();
+        return view('client.orders.manual-orders.list')->with(['list'=>$list,'users'=>$users,'statuses'=>$statuses,'catgories'=>$catgories]); 
     }
     
     public function InActiveCustomers(Request $request)

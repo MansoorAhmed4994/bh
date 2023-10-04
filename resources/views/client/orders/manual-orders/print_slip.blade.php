@@ -131,7 +131,7 @@ padding: 0px;
                         </td>
                 
                         <td style="font-size:14px; font-weight:bold;padding: 5px;" colspan="2">
-                            {{$ManualOrder->first_name}}
+                            {{$ManualOrder->receiver_name}}
                         </td>
                         <td style="font-size:20px; font-weight:bold;text-align:center;;padding: 5px;">
                             {{$ManualOrder->receiver_number}} 

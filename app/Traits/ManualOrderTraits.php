@@ -52,8 +52,8 @@ trait ManualOrderTraits {
             $customers->address = $request->address;
             $customers->number = $request->number;
             $customers->whatsapp_number = $request->number;
-            $customers->created_by = '1';
-            $customers->updated_by = '1';
+            $customers->created_by = Auth::id();
+            $customers->updated_by = Auth::id();
             $customers->status = 'active'; 
             $customers->save();
             ///$customers = $customers->save();
@@ -79,8 +79,8 @@ trait ManualOrderTraits {
             $manual_orders->description = $request->description;
             $manual_orders->reference_number = '';
             $manual_orders->service_type = '';
-            $manual_orders->created_by = '1';
-            $manual_orders->updated_by = '1';
+            $manual_orders->created_by = Auth::id();
+            $manual_orders->updated_by = Auth::id();
             $manual_orders->status = $status;
             //$manual_orders = $manual_orders->save();
              $status = $customers->manual_orders()->save($manual_orders);

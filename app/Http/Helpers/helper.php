@@ -5,6 +5,7 @@
     use App\Models\Client\ManualOrders;
     use App\Models\Statuses;
     use App\Models\User;
+    use App\Models\Category;
 
     if(!function_exists('create_activity_log'))
     {
@@ -67,6 +68,15 @@
             // } 
             // es
             // {}
+        }
+    }
+    
+    if(!function_exists('product_child_categories'))
+    {
+        function product_child_categories()
+        {
+            $categories = Category::select('*')->get();
+            return $categories;
         }
     }
 

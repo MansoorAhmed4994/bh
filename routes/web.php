@@ -150,7 +150,13 @@ Route::group(['prefix' => 'admin/', 'namespace' => 'Admin', 'middleware' => 'aut
     //cron
     Route::get('crone_update_shipment_payments/', 'AccountsController@CroneUpdateShipmentPaymentStatuss')->name('crone.update.shipment.payment.status');
     Route::get('crone_update_shipment_tracking/', 'AccountsController@CroneUpdateShipmentTrackingStatus')->name('crone.update.shipment.tracking.status');
-    Route::get('crone_update_fare/', 'AccountsController@CroneUpdateFare')->name('crone.update.fare');
+    
+    //Product Demand
+    Route::get('product/demand/list/', 'ProductDemandController@index')->name('product.demand.list'); 
+    Route::post('product/demand/create/', 'ProductDemandController@create_product_demand')->name('create.product.demand');
+    Route::post('product/demand/destroy/{id}', 'ProductDemandController@destroy')->name('destroy.product.demand');  
+    
+    
      
 });
 
@@ -225,5 +231,7 @@ Route::group(['prefix' => 'riders', 'as'=> 'riders.'],function(){
     Route::post('/generate-loadsheet', 'LoadSheetController@generate_load_sheet')->name('generate.load.sheet'); 
     
 }); 
+
+
  
 URL::forceScheme('https');
