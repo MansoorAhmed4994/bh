@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;use PragmaRX\Countries\Package\Countries;
 use App\Models\Client\ManualOrders;
+use App\Models\User;
 use DB;
 use Carbon\Carbon;
 
@@ -20,42 +21,50 @@ class DashboardController extends Controller
     
     public function index(Request $request)
     {
-        // dd($request->date_from);
         $from_date= date('Y-m-01');
         $to_date = date('Y-m-t');
-        // dd( $from_date.' '.$to_date);
+
+         
         if($request->date_from)
         {
-            // dd($request->date_from.'  '.$request->date_to);
-            // $from_date = ;
             $from_date = $request->date_from;
             $to_date = $request->date_to;  
-            // dd($from_date.'  '.$to_date);
         }
-        // else
-        // { 
-        //     $from_date = Carbon::now()->subDays(30)->toDateTimeString();
-        //     $to_date = Carbon::now()->addDays(5)->toDateTimeString(); 
-        // }
-            $remaining_invertory = DB::table('remaining_inventories')
-                 ->select( DB::raw('sum(qty) as total'), DB::raw('sum(cost*qty) as amount'))
-                //  ->whereBetween('created_at', [$from_date, $to_date])
-                 ->get();
-        //  dd($remaining_invertory);
+        
+        $users = DB::table('users')->select('id','first_name')->get();
+            
+            
+            
+        $group_by_status = DB::table('manual_orders')
+             ->select('status', DB::raw('count(*) as total_orders'), DB::raw('sum(price) as total_amount'))
+             ->whereBetween('updated_at', [$from_date, $to_date])
+             ->groupBy('status')
+             ->get()->toArray(); 
+         
+        for($i=0; $i<sizeof($group_by_status); $i++)
+        {
+            $users_order_status = DB::table('manual_orders')
+            ->select('updated_by as id', DB::raw('count(*) as total_orders'),DB::raw('sum(price) as total_amount'))
+            ->leftJoin('users', 'manual_orders.created_by', '=', 'users.id') 
+            ->whereBetween('updated_at', [$from_date, $to_date])->where('status',$group_by_status[$i]->status)
+            ->groupBy('updated_by')
+            ->get()->toArray();  
+            $group_by_status[$i]->users = $users_order_status; 
+        } 
+
+        $remaining_invertory = DB::table('remaining_inventories')
+             ->select( DB::raw('sum(qty) as total'), DB::raw('sum(cost*qty) as amount'))
+             ->get();
+
+    
+        $inventory = DB::table('inventories')
+             ->select('stock_status', DB::raw('sum(qty) as qty'), DB::raw('sum(cost) as cost'), DB::raw('sum(sale) as sale'))
+             ->whereBetween('updated_at', [$from_date, $to_date])
+             ->groupBy('stock_status')
+             ->get(); 
+             
         
         
-            $inventory = DB::table('inventories')
-                 ->select('stock_status', DB::raw('sum(qty) as qty'), DB::raw('sum(cost) as cost'), DB::raw('sum(sale) as sale'))
-                 ->whereBetween('updated_at', [$from_date, $to_date])
-                 ->groupBy('stock_status')
-                 ->get(); 
-                 
-                //  dd($inventory);
-            $list = DB::table('manual_orders')
-                 ->select('status', DB::raw('count(*) as total'), DB::raw('sum(price) as amount'))
-                 ->whereBetween('updated_at', [$from_date, $to_date])
-                 ->groupBy('status')
-                 ->get(); 
                  
             $order_report_by_cities = ManualOrders::leftJoin('cities', 'manual_orders.cities_id', '=', 'cities.id')->
             select('cities.name', DB::raw('count(*) as total'))
@@ -139,7 +148,7 @@ class DashboardController extends Controller
         //   dd($shipment);
         //if ($result->count()) { }
         return view('admin.dashboard')->with([
-            'data'=>$list,
+            'data'=>$group_by_status,
             'shipment'=>$shipment,
             'shipmenttracking'=>$statusfinal,
             'date_from'=> $from_date,

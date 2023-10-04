@@ -167,7 +167,7 @@ class ManualOrdersController extends Controller
             $query = $query->whereBetween("manual_orders.".$date_by ,[$date_from,$date_to]);
             
         }
-        // dd('');
+        // dd(''); 
         $user_id = User::find(auth()->user()->id);
         // $user_roles = implode(',',$user_id->roles()->get()->pluck('name')->toArray());
         $user_roles = $user_id->roles()->get()->pluck('name')->toArray();
@@ -545,7 +545,7 @@ class ManualOrdersController extends Controller
                 {
                     dd('Parcel Status is '.$check_status['status'].' and parcel cannot print slip until parcel status is confirmed OR Dispatched');
                 }
-                $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.id',$ManualOrder->id)->get();
+                $ManualOrder = ManualOrders::select('*')->where('manual_orders.id',$ManualOrder->id)->get();
                 // foreach($ManualOrder as $ManualOrders)
                 // {
                 //     create_activity_log(['table_name'=>'manual_orders','ref_id'=>$ManualOrders->id,'activity_desc'=>'Local Slip','created_by'=>Auth::id(),'method'=>'print','route'=>route('ManualOrders.order.action')]);
@@ -970,7 +970,7 @@ class ManualOrdersController extends Controller
     
     public function print_order_slip($ManualOrder_id)
     {
-        $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.id',$ManualOrder_id)->get();
+        $ManualOrder = ManualOrders::select('*')->where('manual_orders.id',$ManualOrder_id)->get();
         //dd($ManualOrder);
         if(check_customer_advance_payment($ManualOrder_id) > 0)
         {
@@ -1222,7 +1222,7 @@ class ManualOrdersController extends Controller
     public function QuickSearch()
     {
         $statuses = get_active_order_status_list();
-        return view('client.orders.manual-orders.quick_order_search')->width(['statuses'=>$statuses]);
+        return view('client.orders.manual-orders.quick_order_search')->with(['statuses'=>$statuses]);
     }
     
     public function QuickSearchActions(Request $request)

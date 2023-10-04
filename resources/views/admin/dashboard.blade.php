@@ -1,7 +1,8 @@
 
 @extends('layouts.'.Auth::getDefaultDriver())
 
-@section('content')  
+@section('content') 
+
 <?php 
     
     $rand = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f');
@@ -9,8 +10,20 @@
     $color2 = '#'.$rand[rand(0,15)].$rand[rand(0,15)].$rand[rand(0,15)].$rand[rand(0,15)].$rand[rand(0,15)].$rand[rand(0,15)];
     
 ?>
-
-        
+<style>
+    table
+    {
+        background: white;
+        border-radius: 5px 5px;
+        width: 100%;
+    }
+    th, td {
+        border: 1px solid #f5f1f1;
+        font-size: 18px;    
+        text-align: left;
+        padding: 0 10px;
+    }
+</style>
 <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 <script type="text/javascript">
 window.onload = function () {
@@ -107,7 +120,7 @@ function toggleDataSeries(e) {
 
 }
 </script>
-<div class="container">
+<div class="col-sm-12">
     <div class="row">
         <form class="form-inline" method="post" action="{{ route('admin.dashboard.monthly') }}">
             @csrf
@@ -125,24 +138,43 @@ function toggleDataSeries(e) {
             <h2>Order All Order Status</h2><hr>
         </div> 
     
-    <?php $total_orders=0;?>
+    <?php $total_orders=0;$rows_division=0;?>
         @foreach($data as $list)
-        <?php
-            $color1 = '#'.$rand[rand(0,15)].$rand[rand(0,15)].$rand[rand(0,15)].$rand[rand(0,15)].$rand[rand(0,15)].$rand[rand(0,15)];
-            $color2 = '#'.$rand[rand(0,15)].$rand[rand(0,15)].$rand[rand(0,15)].$rand[rand(0,15)].$rand[rand(0,15)].$rand[rand(0,15)];
-        ?>
             <div class="col-sm-4 form-group">  
-                <div class="card" style="width: 18rem;"> 
+                <div class="card" style="width: 100%;"> 
                   <div class="card-body status-{!! str_replace(' ', '-', $list->status) !!} dashbord-card-body">
                     <h3>{{$list->status}}</h3>
-                    <h5 class="card-title">{{$list->total}}</h5> 
-                    <h5 class="card-title">{{$list->amount}}</h5>  
-                    
+                    <h5 class="card-title">{{$list->total_orders}}</h5> 
+                    <h5 class="card-title">{{$list->total_amount}}</h5>  
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                
+                                <th>Orders</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($list->users as $user)
+                                <tr>
+                                    <td>{{$user->id}}</td>
+                                    <?php
+                                        $tmp = \App\Models\User::find($user->id);
+                                    ?>
+                                    <td>{{ $tmp->first_name}}</td>
+                                    <td>{{$user->total_orders}}</td>
+                                    <td>{{$user->total_amount}}</td>
+                                </tr> 
+                            @endforeach
+                        </tbody>
+                    </table>
+                    <br>
                     <a href="{{route('ManualOrders.status.order.list',$list->status)}}" class="btn btn-primary">Go</a>
                   </div> 
                 </div>
             </div>
-            <?php $total_orders += $list->total; ?>
+            <?php $total_orders += $list->total_orders;$rows_division++ ?>
         @endforeach 
         
         <div class="col-sm-4 form-group">  
