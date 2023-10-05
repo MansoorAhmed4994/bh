@@ -14,12 +14,81 @@ var base_url = '<?php echo e(url('/')); ?>';
              
              
             
-             
+              
         }
+        
+        function delete_image(id)
+        {
+            $('#'+id).show();
+            $('#edit_images_box').hide();
+        //     const fileListArr = 
+        //   fileListArr.splice(index, 1)
+        //   console.log(fileListArr)
+        }
+        
+        function edit_readURL(input) {
+            // alert('working');
+            console.log(input.files.length);
+            
+            var imgages= '';
+            $('#edit_selected_img_card_body').html(imgages);
+            for(i=0; i<input.files.length; i++)
+            {
+                if (input.files && input.files[i]) {
+                    console.log(input.files[i]);
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        // console.log(reader.readAsDataURL(input.files[i]));
+                //   $('#selected_images')
+                //     .attr('src', e.target.result)
+                //     .width(150)
+                //     .height(200);
+                    imgages = $('#edit_selected_img_card_body').html()+'<img class="card-img-top col-sm-3" src="'+e.target.result+'" alt="Card image cap" >';
+                    $('#edit_selected_img_card_body').html(imgages);
+                    
+                    };
+                    
+                }
+              
+                reader.readAsDataURL(input.files[i]);
+            }
+            $('#edit_images_box').show();
+            
+        }
+        
+        function readURL(input) {
+            // alert('working');
+            console.log(input.files.length);
+            var imgages= '';
+            for(i=0; i<input.files.length; i++)
+            {
+                if (input.files && input.files[i]) {
+                    console.log(input.files[i]);
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        // console.log(reader.readAsDataURL(input.files[i]));
+                //   $('#selected_images')
+                //     .attr('src', e.target.result)
+                //     .width(150)
+                //     .height(200);
+                    imgages = $('#selected_img_card_body').html()+'<img class="card-img-top col-sm-3" src="'+e.target.result+'" alt="Card image cap" >';
+                    $('#selected_img_card_body').html(imgages);
+                    
+                    };
+                    
+                }
+              
+                reader.readAsDataURL(input.files[i]);
+            }
+            
+        }
+
         $( document ).ready(function() {
+            
+            
             $('#add_payment').on('click',function(e)
             {  
-                 alert('w');
+                //  alert('w');
                 $('#add_payment_modal').modal('show');
                 
             });
@@ -63,6 +132,42 @@ var base_url = '<?php echo e(url('/')); ?>';
                 $('#payment_image_zoom').modal('hide');
             });
             
+            
+            
+            
+            $('#image-upload-btn').on('click',function(e) {
+                $("body").addClass("loading"); 
+               e.preventDefault();
+               let formData = new FormData(document.getElementById("edit_form")); 
+      
+               $.ajax({
+                    type:'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: base_url + '/client/orders/CustomerPayment/update_payment',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: (response) => {
+                        if (typeof response.success !== 'undefined') 
+                        {
+                        // $("body").removeClass("loading");
+                            alert(response.messege);
+                        }
+                        
+                        if (typeof response.error !== 'undefined') 
+                        {
+                        // $("body").removeClass("loading");
+                            alert(response.messege);
+                        }
+                        $("body").removeClass("loading"); 
+                    },
+                    error: function(response){
+                    //         $('#image-input-error').text(response.responseJSON.message);
+                    }
+                   });
+            });
             
         });
         
@@ -175,6 +280,8 @@ var base_url = '<?php echo e(url('/')); ?>';
                     $('#edit_transfer_to').val(e.data['transfer_to']);
                     $('#edit_description').val(e.data['description']); 
                     $('#edit_customer_payment_id').val(e.data['id']); 
+                    $('#customer_payment_image').attr('src','{{asset("")}}'+e.data["images"]);
+                    console.log(e.data['images']);
                     // var images ='';
                     // var str_array = e.messege.images.split('|'); 
                     // for(var i = 0; i < str_array.length; i++) 
@@ -193,6 +300,8 @@ var base_url = '<?php echo e(url('/')); ?>';
                 }
             });
         }
+        
+         
      
     
         function update_customer_payment()
@@ -205,6 +314,9 @@ var base_url = '<?php echo e(url('/')); ?>';
             var edit_sender_name = $('#edit_sender_name').val();
             var edit_transfer_to = $('#edit_transfer_to').val();
             var edit_description = $('#edit_description').val(); 
+            var edit_images = $('#edit_images').files;
+            console.log(edit_images);
+            let formData = new FormData($('#edit_form'));
              
             // if(edit_order_id == '' || edit_transaction_id == '' || edit_amount == '' || edit_amount == '' || edit_datetime == '' || edit_sender_name == '' || edit_transfer_to == '' || edit_description == '')
             // {
@@ -220,16 +332,20 @@ var base_url = '<?php echo e(url('/')); ?>';
                 url: base_url + '/client/orders/CustomerPayment/update_payment',
                 type:"POST",
                 dataType: 'json',
-                data:{
-                    id:edit_customer_payment_id,
-                    order_id:edit_order_id,
-                    transaction_id:edit_transaction_id,
-                    amount:edit_amount,
-                    datetime:edit_datetime,
-                    sender_name:edit_sender_name,
-                    transfer_to:edit_transfer_to,
-                    description:edit_description,
-                },
+                // data:{
+                //     id:edit_customer_payment_id,
+                //     order_id:edit_order_id,
+                //     transaction_id:edit_transaction_id,
+                //     amount:edit_amount,
+                //     datetime:edit_datetime,
+                //     sender_name:edit_sender_name,
+                //     transfer_to:edit_transfer_to,
+                //     description:edit_description,
+                //     images:edit_images
+                // },
+                
+                // data:$('#edit_form').serialize(),
+                data:formData,
                 success:function(response)
                 { 
                     if (typeof e.success !== 'undefined') 
@@ -283,14 +399,34 @@ var base_url = '<?php echo e(url('/')); ?>';
                 
                 <form method="post" action="{{ route('customer.payments.store') }}" enctype="multipart/form-data" class="dropzone" id="dropzone">
                     @csrf
-        
-                    <div class="form-group">
-                        <div class="file btn btn-lg btn-primary">Upload
-                            <input type="file" name="images[]" multiple  required/>
+         
+                            <!--<input type="file" name="images" id="images"   required/>-->
                             
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
                         </div>
-                        <small id="images_error" class="form-text text-danger"></small>
-                    </div> 
+                        
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" onchange="readURL(this)" name="images[]"  id="images" 
+                            aria-describedby="inputGroupFileAddon01">
+                            <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                        </div>
+                        
+                        
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="card card-box-custom" id="imagebox" >
+                            
+                            <div class="card-body" id="selected_img_card_body">
+                                
+                                
+                                <!--<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>-->
+                                
+                            </div> 
+                        </div>
+                    </div>
         
                     <div class="form-group">
                         <label for="orderid">Order ID</label>
@@ -365,9 +501,37 @@ var base_url = '<?php echo e(url('/')); ?>';
                 <h5 class="modal-title">Edit Customer Payment</h5>   
             </div>
             <div class="modal-body">
-                 
+                <form method="post" name="edit_form" id="edit_form" enctype="multipart/form-data">
                     <input type="hidden" name="edit_customer_payment_id" id="edit_customer_payment_id" >
-        
+                    
+                    <div class="input-group"  id="edit_image_input_box" style="display:none">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+                        </div>
+                        
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" onchange="edit_readURL(this)" name="edit_images[]" id="edit_images" accept="image/png, image/gif, image/jpeg" multiple>
+                            <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                        </div>
+                        
+                        
+                    </div>
+                    
+                    <div class="form-group" id="edit_images_box">
+                        <div class="card card-box-custom" id="imagebox" >
+                            
+                            <div class="card-body" id="edit_selected_img_card_body">
+                                   <img src="" id="customer_payment_image" width=200>
+                                <!--<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>-->
+                                
+                            </div> 
+                            
+                            <div class="card-footer"> 
+                                <a onclick="delete_image('edit_image_input_box')" class="btn btn-primary">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="form-group">
                         <label for="edit_orderid">Order ID</label>
                         <input type="number"  class="form-control" onchange="get_payments()" id="edit_order_id"  name="edit_order_id" placeholder="order id" required>
@@ -421,9 +585,9 @@ var base_url = '<?php echo e(url('/')); ?>';
                     </div> 
         
                     <div class="form-group">
-                        <button type="button"  onclick="update_customer_payment()" class="btn btn-primary">Save</button>
+                        <button  button="button" id="image-upload-btn" class="btn btn-primary">Save</button>
                     </div> 
-                  
+                </form>
             </div>
             <div class="modal-footer">  
                 <button type="button" class="btn btn-secondary" id="edit_customer_payment_close" data-dismiss="modal">Close</button>

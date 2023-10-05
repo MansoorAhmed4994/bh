@@ -71,6 +71,15 @@ tfoot tr td input {
     float: left; 
     margin-top: 5px;
 }
+.label1 th h5, .label1 td h4, .label1 td h5
+{
+    font-size:15px;
+}
+.label1
+{
+    height:25px;
+}
+
 @page {
   size: A4;
   margin: 0;
@@ -142,31 +151,39 @@ tfoot tr td input {
                                 <img src="data:image/png;base64,{{ base64_encode($generatorPNG->getBarcode($ManualOrder->id, $generatorPNG::TYPE_CODE_128)) }}" style="width:80%">
                     			<span class="notranslate"><h3>{{$ManualOrder->id}}</h3></span></tr>
                             </td>
-                        <tr >
+                        <tr class="label1">
                             <td><h5>Name: </h5></td>
                             <td style="padding: 10px 0px;"><h4>{{$ManualOrder->receiver_name}}</h4></td> 
                         </tr>
-                        <tr>
+                        <tr class="label1">
                             <td><h5>Number: </h5></td>
                             <td style="padding: 10px 0px;"><h4>{{$ManualOrder->receiver_number}}</h4></td> 
                         </tr>
-                        <tr>
+                        <tr class="label1">
                             <td><h5>Address: </h5></td>
                             <td style="padding: 10px 0px;"><h4>{{$ManualOrder->reciever_address}}</h4></td> 
                         </tr>
-                        <tr>
+                        <tr class="label1">
                             <td><h5>City: </h5></td>
-                            <td style="height:70px"><h4>@if($ManualOrder->cities != null) : {{$ManualOrder->cities->name}} @endif</h4></td> 
+                            <td ><h4>@if($ManualOrder->cities != null) : {{$ManualOrder->cities->name}} @endif</h4></td> 
                         </tr>
-                        <tr>
+                        <tr class="label1">
                             <td><h5>Pieces: </h5></td>
-                            <td style="height:70px"><h4>{{$ManualOrder->total_pieces}}</h4></td> 
+                            <td ><h4>{{$ManualOrder->total_pieces}}</h4></td> 
                         </tr>
-                        <tr>
+                        <tr class="label1">
                             <td><h5>Weight: </h5></td>
-                            <td style="height:70px"><h4>{{$ManualOrder->weight}}</h4></td> 
+                            <td><h4>{{$ManualOrder->weight}}</h4></td> 
                         </tr>
-                        <tr>
+                        <tr class="label1">
+                            <td><h5>Created Date: </h5></td>
+                            <td ><h4>{{$ManualOrder->created_at}}</h4></td> 
+                        </tr>
+                        <tr class="label1">
+                            <td><h5>Updated Date: </h5></td>
+                            <td ><h4>{{$ManualOrder->updated_at}}</h4></td> 
+                        </tr>
+                        <tr  class="label1">
                             <td><h5>Printed Date: </h5></td>
                             <?php
                                 $date = new DateTime();
@@ -175,7 +192,15 @@ tfoot tr td input {
                                 
                                 $current_date = $date->format('Y-m-d H:i:s');
                             ?>
-                            <td style="height:70px"><h4>{{$current_date}}</h4></td> 
+                            <td><h4>{{$current_date}}</h4></td> 
+                        </tr>
+                        <tr class="label1">
+                            <td><h5>User: </h5></td>
+                            <td  ><h4>{{$ManualOrder->users->first_name}}</h4></td> 
+                        </tr>
+                        <tr class="label1">
+                            <td><h5>Printed By: </h5></td>
+                            <td ><h4>{{Auth::user()->first_name}}</h4></td> 
                         </tr>
                     </tbody>
                     <tfoot> 
@@ -203,7 +228,7 @@ tfoot tr td input {
                         <!--    <td style="height:40px"> <input type="checkbox"> <h5>Confirmed </h5></td>-->
                         <!--    <td> </td> -->
                         <!--</tr>  -->
-                        <tr>
+                        <tr >
                             <td colspan="2" style="height:40px;"><h5 style="width:100%;text-align:center!important;">Payment Details </h5></td>
                            
                         </tr> 
@@ -227,14 +252,6 @@ tfoot tr td input {
                             <td style="height:70px"> <h5>Amount </h5></td>
                             <td> </td> 
                         </tr> 
-                        <tr>
-                            <td><h5>User: </h5></td>
-                            <td style="height:70px"><h4>{{$ManualOrder->users->first_name}}</h4></td> 
-                        </tr>
-                        <tr>
-                            <td><h5>Printed By: </h5></td>
-                            <td style="height:70px"><h4>{{Auth::user()->first_name}}</h4></td> 
-                        </tr>
                         <tr ><td colspan="2" style="height:300px;text-align: left!important;vertical-align: top;padding: 11px;font-weight: bold;">Note:</td></tr>
                     </tfoot>
                 </table>

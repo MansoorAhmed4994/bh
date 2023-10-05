@@ -169,21 +169,50 @@ class CustomerPaymentController extends Controller
      */
     public function update(Request $request)
     { 
-        $amount = CustomerPayments::where('customer_payments.order_id',$request->order_id)->sum('amount');
-        $ManualOrder = ManualOrders::where('id',$request->order_id)->update(['advance_payment' => $amount]);
+        $amount = CustomerPayments::where('customer_payments.order_id',$request->edit_order_id)->sum('amount');
+        $ManualOrder = ManualOrders::where('id',$request->edit_order_id)->update(['advance_payment' => $amount]);
         
-        $action_status = CustomerPayments::where('id',$request->id)->update
-            ([
-            'order_id' => $request->order_id,
-            'transaction_id' => $request->transaction_id,
-            'sender_name' => $request->sender_name,
-            'amount' => $request->amount,
-            'transfer_to' => $request->transfer_to,
-            'description' => $request->description,
-            'updated_by' => Auth::id()
-            ]);
+        // dd($request->file('edit_images'));
+        $images=array();
+            if($files=$request->file('edit_images')){
+                foreach($files as $file){
+                    $name=$file->getClientOriginalName();
+                    
+                    $file->move($this->images_path,$name);
+                    $images[]=$this->images_path.$name;
+                }
+            }
+            // dd($images);
+            // if($images != null)
+            // {
+                
+            // }
+        $CustomerPayments = CustomerPayments::find($request->edit_customer_payment_id);
             
-            if($action_status == 1)
+            $CustomerPayments->order_id =$request->edit_order_id;
+            $CustomerPayments->transaction_id =$request->edit_transaction_id;
+            $CustomerPayments->sender_name = $request->edit_sender_name;
+            $CustomerPayments->amount = $request->edit_amount;
+            $CustomerPayments->datetime =$request->edit_datetime; 
+            $CustomerPayments->transfer_to = $request->edit_transfer_to;
+            $CustomerPayments->description = $request->edit_description;
+            if(!empty($images))
+            {
+                // dd($images);
+                $CustomerPayments->images = $images[0];
+            }
+            $CustomerPayments->updated_by = Auth::id();
+            $CustomerPayments->save(); 
+            // if(!empty($CustomerPayments))
+            // {
+            //     dd($CustomerPayments);
+            // }
+            // else
+            // {
+            //     dd('not working');
+            // }
+            
+            if(!empty($CustomerPayments))
             {
                 return response()->json(['success' => '1','messege'=>'Payment Updated successfully']); 
                 
