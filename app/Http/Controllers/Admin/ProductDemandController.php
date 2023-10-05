@@ -91,7 +91,18 @@ class ProductDemandController extends Controller
      */
     public function destroy($id)
     {
-        dd($id);
+        $ProductDemand=ProductDemand::find($id);
+        $status = $ProductDemand->delete(); 
+        if($status)
+        {
+            return response()->json(['success'=>'1','messege' => 'successfully deleted']); 
+        }
+        else
+        {
+            return response()->json(['error'=>'1','messege' => 'successfully deleted']); 
+        }
+        
+        // dd($id);
         //
     }
     
@@ -101,6 +112,8 @@ class ProductDemandController extends Controller
         $product_demand = new ProductDemand;
         $product_demand->name = $request->category;
         $product_demand->image = $request->img_src;
+        $product_demand->ref_id = $request->order_id;
+        $product_demand->table_name = 'manual_orders';
         $product_demand->created_by = Auth::id();
         $product_demand->updated_by = Auth::id();
         $product_demand->status = 'pending';
@@ -108,7 +121,14 @@ class ProductDemandController extends Controller
         $product_demand->save(); 
         
         
-        dd("demand sent done");
+        if($status)
+        {
+            return response()->json(['success'=>'1','messege' => 'successfully deleted']); 
+        }
+        else
+        {
+            return response()->json(['error'=>'1','messege' => 'successfully deleted']); 
+        }
         //
     }
 }

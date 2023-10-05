@@ -46,7 +46,7 @@
 
 
 <script   type="application/javascript">
-
+ var order_id_for_demand = '';
     function send_product_demand(id)
     {
         var base_url = '<?php echo e(url('/')); ?>';
@@ -65,6 +65,7 @@
               data:{
                 img_src:img_src,
                 category:category,
+                order_id:order_id_for_demand,
               },
               success:function(response){
                 console.log(response);
@@ -85,8 +86,9 @@
         // alert(image);
     }
     
-    function UniversalImagesBoxes(image_index,images)
+    function UniversalImagesBoxes(image_index,images,order_id)
     {
+        order_id_for_demand = order_id;
         var UCSIM = document.getElementById('universal_carousel_box_inner_images');
         const images_array = images.split("|");
         var active_image_index = '';
@@ -102,39 +104,42 @@
                 active_image_index = '';
             }
             
-            slider_imgage_src +='<div class="col-sm-4">';
+            slider_imgage_src +='<div class="col-sm-4">'; 
                 slider_imgage_src +='<div class="card col-sm-12" id="imagebox" >';
                 
                     
                     slider_imgage_src+='<div class="card-body" style="height:300px">';
                     
-                        slider_imgage_src +='<img class="card-img-top "  title="'+images_array[i]+'" id="image_src_id_'+i+'" src="{{  url('') }}/'+images_array[i]+'" alt="Card image cap" >';
+                        slider_imgage_src +='<img class="card-img-top "  style="max-height: 260px;" title="'+images_array[i]+'" id="image_src_id_'+i+'" src="{{  url('') }}/'+images_array[i]+'" alt="Card image cap" >';
             
                     slider_imgage_src +='</div>';
                     
                     slider_imgage_src+='<div class="card-footer">';
                     
-                        slider_imgage_src +='<div class="form-group">';
-                        
-                            slider_imgage_src +='<div class="input-group">';
-                                slider_imgage_src +='<select class="custom-select" id="cetogery_image_id_'+i+'">';
-                                    slider_imgage_src +='<option value=""></option>';
-                                    @if(isset($catgories))
-                                    
-                                    @foreach($catgories as $catgory)
-                                    slider_imgage_src +='<option value="{{$catgory->name}}">{{$catgory->name}}</option>';
-                                        @endforeach
+                        slider_imgage_src +='<form class="form-inline">';
+                    
+                            slider_imgage_src +='<div class="form-group">';
+                            
+                                slider_imgage_src +='<div class="input-group">';
+                                    slider_imgage_src +='<select class="custom-select" style="max-width:150px" id="cetogery_image_id_'+i+'">';
+                                        slider_imgage_src +='<option value="">Select Category</option>';
+                                        @if(isset($catgories))
                                         
-                                    @endif
-                        
-                                slider_imgage_src +='</select>';
-                            slider_imgage_src +='</div>';
+                                        @foreach($catgories as $catgory)
+                                        slider_imgage_src +='<option value="{{$catgory->name}}">{{$catgory->name}}</option>';
+                                            @endforeach
+                                            
+                                        @endif
                             
-                            slider_imgage_src +='<div class="input-group-append">';
-                                slider_imgage_src +='<button class="btn btn-primary" type="button" onclick="send_product_demand('+i+')">Send Demand</button>';
-                            slider_imgage_src +='</div>'; 
-                            
-                        slider_imgage_src += '</div>';                    
+                                    slider_imgage_src +='</select>';
+                                slider_imgage_src +='</div>';
+                                
+                                slider_imgage_src +='<div class="input-group-append">';
+                                    slider_imgage_src +='<button class="btn btn-primary" type="button" onclick="send_product_demand('+i+')">Send Demand</button>';
+                                slider_imgage_src +='</div>'; 
+                                
+                            slider_imgage_src += '</div>';          
+                        slider_imgage_src += '</form>';      
                     
                     slider_imgage_src+='</div>';
                 slider_imgage_src +='</div>';

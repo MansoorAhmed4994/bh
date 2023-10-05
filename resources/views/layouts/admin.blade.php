@@ -117,7 +117,7 @@
                                 <li> <a class="dropdown-item" href="{{route('ManualOrders.details')}}"> details (View Order)</a></li> 
                                 <li> <a class="dropdown-item" href="{{route('customer.payments.index')}}">Customer Payment</a></li> 
                                 <li> <a class="dropdown-item" href="{{route('ManualOrders.print.slip.by.scan')}}">Price Slip By Scan</a></li>
-                                <li> <a class="dropdown-item" href="{{route('product.demand.list')}}">Price Slip By Scan</a></li>
+                                <li> <a class="dropdown-item" href="{{route('product.demand.list')}}">Demand</a></li>
                 
                             </ul>
                         

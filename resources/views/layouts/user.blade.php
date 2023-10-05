@@ -121,7 +121,7 @@
                                 <li> <a class="dropdown-item" href="{{route('customer.payments.index')}}">Customer Payment</a></li> 
                                 <li> <a class="dropdown-item" href="{{route('manualOrders.quick.search')}}">Quick Order Actions</a></li> 
                                 
-                                <li> <a class="dropdown-item" href="{{route('product.demand.list')}}">Price Slip By Scan</a></li>
+                                <li> <a class="dropdown-item" href="{{route('product.demand.list')}}">Demand</a></li>
                             </ul> 
                         <li class="nav-item dropdown" id="myDropdown">
                             <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Loadsheets</a>

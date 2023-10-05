@@ -723,13 +723,13 @@ var container = "";
                      </div>
                 </td>
                 <td >
-                    <button class="btn btn-primary" onclick="UniversalImagesBoxes(0,'{{$lists->images}}')">Images</button>
+                    <button class="btn btn-primary" onclick="UniversalImagesBoxes(0,'{{$lists->images}}',{{$lists->id}})">Images</button>
                     <div id="order_images">
                     @if(!empty($lists->images)) 
                      <?php $count_image_index= 0;?>
                         @foreach(explode('|', $lists->images) as $image)   
                         
-                        <img class="pop rounded imgaes-demand" style="margin-right: 5px;display:none" src="{{asset($image)}}" onclick="UniversalImagesBoxes(<?=$count_image_index;?>,'{{$lists->images}}')" width="25" />
+                        <img class="pop rounded imgaes-demand" style="margin-right: 5px;display:none" src="{{asset($image)}}" onclick="UniversalImagesBoxes(<?=$count_image_index;?>,'{{$lists->images}}',{{$lists->id}})" width="25" />
                         <?php $count_image_index++;?>
                         @endforeach
                     @endif

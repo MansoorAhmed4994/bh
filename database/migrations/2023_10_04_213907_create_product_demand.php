@@ -17,6 +17,8 @@ class CreateProductDemand extends Migration
             $table->bigIncrements('id'); 
             $table->string('name');    
             $table->text('image')->nullable();  
+            $table->text('table_name')->nullable(); 
+            $table->bigInteger('ref_id')->nullable();
             $table->timestamps();
             $table->bigInteger('created_by');
             $table->bigInteger('updated_by');
