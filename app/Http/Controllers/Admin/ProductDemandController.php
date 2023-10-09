@@ -118,16 +118,16 @@ class ProductDemandController extends Controller
         $product_demand->updated_by = Auth::id();
         $product_demand->status = 'pending';
         
-        $product_demand->save(); 
+        $status = $product_demand->save(); 
         
         
         if($status)
         {
-            return response()->json(['success'=>'1','messege' => 'successfully deleted']); 
+            return response()->json(['success'=>'1','messege' => 'Demand successfully Created']); 
         }
         else
         {
-            return response()->json(['error'=>'1','messege' => 'successfully deleted']); 
+            return response()->json(['error'=>'1','messege' => 'Demand not created']); 
         }
         //
     }

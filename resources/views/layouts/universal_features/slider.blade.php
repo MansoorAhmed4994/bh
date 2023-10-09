@@ -49,11 +49,18 @@
  var order_id_for_demand = '';
     function send_product_demand(id)
     {
+        $("body").addClass("loading");
         var base_url = '<?php echo e(url('/')); ?>';
         var img_src = $('#image_src_id_'+id).attr('title');
         var category = $('#cetogery_image_id_'+id).val();
         // var route= base_url+'/admin/product/demand/create/'+category+'/'+img_src;
         // window.open(route, '_blank');
+        if(category == '')
+        {
+            alert('please select category');
+            $("body").removeClass("loading");
+            return;
+        }
         console.log(category+'   |   '+img_src);
         $.ajax({
               url: base_url+'/admin/product/demand/create',
@@ -68,11 +75,24 @@
                 order_id:order_id_for_demand,
               },
               success:function(response){
-                console.log(response);
+                  if (typeof response.success !== 'undefined') 
+                  {
+                      alert(response.messege);
+                  }
+                  else
+                  {
+                      alert(response.messege);
+                  }
+                  
+                  
+                $("body").removeClass("loading");
+                // console.log(response);
                 //console.log(response);
               },
               error: function(response) {
                     console.log(response); 
+                    
+            $("body").removeClass("loading");
                     // $("body").removeClass("loading");
                 // $('#nameErrorMsg').text(response.responseJSON.errors.name);
                 // $('#emailErrorMsg').text(response.responseJSON.errors.email);
