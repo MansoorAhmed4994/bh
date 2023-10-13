@@ -683,10 +683,7 @@ var container = "";
             <tr> 
                 <th scope="col" class="delete_btn_class"><input type="checkbox" onclick="checkAll(this)" ></th>
                 <th scope="col">#</th> 
-                <th scope="col">Act</th>
-                @if(Auth::guard('admin')->check())
-                    <th scope="col">Assign To</th>
-                @endif
+                <th scope="col">Act</th> 
                 <th scope="col">Img.</th>
                 <th scope="col">Consignment.Id</th>
                 <th scope="col">Ord.ID</th>
@@ -738,40 +735,30 @@ var container = "";
                             <a type="button" target="_blank" href="{{route('ManualOrders.show',$lists->id)}}" class="dropdown-item">view</a>
                             <a type="button" href="{{route('ManualOrders.print.order.slip',$lists->id)}}" class="dropdown-item">Print Slip</a> 
                             @foreach($statuses as $status)
-                        
                                 <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'{{$status->name}}')" class="dropdown-item" >{{$status->name}}</button>
-                    
-                            @endforeach
-                            <!--<button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'prepared');order_link ='{{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}';" class="dropdown-item">Prepared</button>-->
-                            <!--<button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'confirmed')" class="dropdown-item" >Confirmed</button>-->
-                            <!--<button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'dispatched')" class="dropdown-item" >Dispatch</button>-->
-                            <!--<button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'incomplete')" class="dropdown-item" >InComplete</button>-->
-                            <!--<button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'hold')" class="dropdown-item" >Hold</button>-->
-                            <!--<button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'dc comming')" class="dropdown-item" >dc comming</button>-->
-                            <!--<button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'not responding')" class="dropdown-item" >not responding</button>-->
+                            @endforeach 
                             <button type="button" onclick="check_pos_slip_duplication('{{route('ManualOrders.print.pos.slip',$lists->id)}}','{{$lists->id}}','list_<?=$count;?>')"class="dropdown-item" >Print Pos Slip</button>
- 
-                            <!--<a type="button" href="{{route('ManualOrders.order.status',['hold',$lists->id])}}" class="dropdown-item">Hold</a> -->
-                            <!--<a type="button" href="{{route('ManualOrders.order.status',['incomplete',$lists->id])}}" class="dropdown-item">Incomplete</a>-->
-                            <!--<a type="button" href="{{route('ManualOrders.order.status',['cancel',$lists->id])}}" class="dropdown-item">Cancel</a>-->
                         </div>
-                     </div>
+                    
+                        @if(Auth::guard('admin')->check())
+                        <div class="btn-group " role="group">
+                            <select class=" form-control @if($errors->get('assign_to')) is-invalid @endif assign_to_dropdown city btn-group" style="width:120px" onchange="assign_to('{{$lists->id}}',this.value)" id="assign_to"  name="assign_to">
+                                <option value="">Select Assign To</option>
+                                
+                                @foreach($users as $user)
+                                         
+                                    <option value="{{$user->id}}" {{ ($user->id == $lists->assign_to) ? 'selected="selected"' : '' }}>{{$user->first_name}} {{$user->last_name}}</option>
+                                    
+                                @endforeach
+                                
+                                
+                            </select>
+                        </div>
+                        @endif
+                    </div>
+                    
                 </td>
-                @if(Auth::guard('admin')->check())
-                <td class>
-                    <select class="form-control @if($errors->get('assign_to')) is-invalid @endif assign_to_dropdown city" onchange="assign_to('{{$lists->id}}',this.value)" id="assign_to"  name="assign_to">
-                        <option value="">Select Assign To</option>
-                        
-                        @foreach($users as $user)
-                                 
-                            <option value="{{$user->id}}" {{ ($user->id == $lists->assign_to) ? 'selected="selected"' : '' }}>{{$user->first_name}} {{$user->last_name}}</option>
-                            
-                        @endforeach
-                        
-                        
-                    </select> 
-                </td>
-                @endif
+                
                 <td >
                     <button class="btn btn-primary" onclick="UniversalImagesBoxes(0,'{{$lists->images}}',{{$lists->id}})">Images</button>
                     <div id="order_images">
