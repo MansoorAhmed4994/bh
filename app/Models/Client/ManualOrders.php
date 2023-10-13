@@ -21,7 +21,12 @@ class ManualOrders extends Model
         return $this->belongsTo(User::class,'created_by','id');
     }
     
-    public function assign_to()
+    public function UsersUpdatedBy()
+    {
+        return $this->belongsTo(User::class,'updated_by','id');
+    }
+    
+    public function AssignTo()
     {
         return $this->belongsTo(User::class,'assign_to','id');
     }

@@ -211,8 +211,16 @@ tfoot tr td input {
                             <td><h4>{{$current_date}}</h4></td> 
                         </tr>
                         <tr class="label1">
-                            <td><h5>User: </h5></td>
-                            <td  ><h4>{{$ManualOrder->users->first_name}}</h4></td> 
+                            <td><h5>Crtd By: </h5></td>  
+                            <td><h4>{{$ManualOrder->users->first_name}}</h4></td> 
+                        </tr>
+                        <tr class="label1">
+                            <td><h5>Updt By: </h5></td>  
+                            <td><h4>{{$ManualOrder->UsersUpdatedBy->first_name}}</h4></td> 
+                        </tr>
+                        <tr class="label1">
+                            <td><h5>Assigned To: </h5></td>  
+                            <td><h4>{{$ManualOrder->AssignTo->first_name}}</h4></td> 
                         </tr>
                         <tr class="label1">
                             <td><h5>Printed By: </h5></td>

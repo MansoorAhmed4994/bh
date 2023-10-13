@@ -135,63 +135,47 @@ class ManualOrdersController extends Controller
             $query = $query->
             where(function ($query) use ($search_text) {
                 $query->where('manual_orders.status','like','%%');
-            });
-            // $query = $query->where('manual_orders.status','pending');
+            }); 
         } 
+        
         if($request->date_by != '')
         { 
             $date_by = $request->date_by;
         }
         
         if($date_from != '' && $date_to == '')
-        {
-        // echo '3'."manual_orders.".$date_by ,$date_from;
+        { 
         
-            $query = $query->where(DB::raw("(DATE_FORMAT(manual_orders.".$date_by.",'%Y-%m-%d'))") ,$date_from);
-            // $query = $query->where("manual_orders.".$date_by ,'<>',$date_from);
-            // dd($query->toSql());
+            $query = $query->where(DB::raw("(DATE_FORMAT(manual_orders.".$date_by.",'%Y-%m-%d'))") ,$date_from); 
         }
         elseif($date_from == '' && $date_to != '')
-        {
-        // echo '4';
+        { 
             $query = $query->where(DB::raw("(DATE_FORMAT(manual_orders.".$date_by.",'%Y-%m-%d'))"),$date_to);
             
             
         }
         elseif($date_from != '' && $date_to != '' && $date_from == $date_to )
         { 
-        // echo '5'."manual_orders.".$date_by ,$date_from;
             $query = $query->where(DB::raw("(DATE_FORMAT(manual_orders.".$date_by.",'%Y-%m-%d'))"),$date_to);
             
         }
         elseif($date_from != '' && $date_to != '')
         {
-        // echo '6';
             $query = $query->whereBetween("manual_orders.".$date_by ,[$date_from,$date_to]);
             
         }
-        // dd(''); 
         $user_id = User::find(auth()->user()->id);
-        // $user_roles = implode(',',$user_id->roles()->get()->pluck('name')->toArray());
         $user_roles = $user_id->roles()->get()->pluck('name')->toArray();
-        // dd($user_id->roles()->get()->pluck('name')->toArray());
-        
+
         
         if(in_array('author', $user_roles) || in_array('admin', $user_roles))
         { 
-            // echo 'available';
         } 
         elseif(in_array('user', $user_roles))
         { 
-            // echo 'user available';
             $query = $query->where("manual_orders.assign_to" ,$user_id->id);
         }
-        // dd('working');
-        // elseif(in_array('user', $user_roles))
-        // {
-        //     echo 'available';
-        // }
-        // dd($user_roles);
+        
         if($order_by != '')
         {
             $query = $query->orderBy($order_by, 'ASC');
@@ -200,13 +184,12 @@ class ManualOrdersController extends Controller
         {
             $query = $query->orderBy('manual_orders.id', 'DESC');
         }
-        $users = User::select('*')->get();
-        // dd($users);
-        $list = $query->paginate(20);
         
-        // dd($users);
+        $users = User::select('*')->get();
+        $list = $query->paginate(20); 
         $statuses = get_active_order_status_list();
         $catgories = product_child_categories();
+        
         return view('client.orders.manual-orders.list')->with(['list'=>$list,'users'=>$users,'statuses'=>$statuses,'catgories'=>$catgories]); 
     }
     
