@@ -169,8 +169,6 @@ class CustomerPaymentController extends Controller
      */
     public function update(Request $request)
     { 
-        $amount = CustomerPayments::where('customer_payments.order_id',$request->edit_order_id)->sum('amount');
-        $ManualOrder = ManualOrders::where('id',$request->edit_order_id)->update(['advance_payment' => $amount]);
         
         // dd($request->file('edit_images'));
         $images=array();
@@ -203,6 +201,10 @@ class CustomerPaymentController extends Controller
             }
             $CustomerPayments->updated_by = Auth::id();
             $CustomerPayments->save(); 
+            
+            
+            $amount = CustomerPayments::where('customer_payments.order_id',$request->edit_order_id)->sum('amount');
+            $ManualOrder = ManualOrders::where('id',$request->edit_order_id)->update(['advance_payment' => $amount]);
             // if(!empty($CustomerPayments))
             // {
             //     dd($CustomerPayments);
@@ -222,6 +224,7 @@ class CustomerPaymentController extends Controller
                 return response()->json(['error' => '1','messege'=>'Payment not saved please contact admin']);
             }
             // dd($action_status);
+            
         //
     }
 

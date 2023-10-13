@@ -61,6 +61,7 @@ class DashboardController extends Controller
                  
         $remaining_invertory = DB::table('remaining_inventories')
                  ->select( DB::raw('sum(qty) as total'), DB::raw('sum(cost*qty) as amount'))
+                //  ->where('assign_to',Auth::id())
                 //  ->whereBetween('created_at', [$from_date, $to_date])
                  ->get();   
                  
@@ -90,6 +91,7 @@ class DashboardController extends Controller
             $list = DB::table('manual_orders')
                  ->select('status', DB::raw('count(*) as total'), DB::raw('sum(price) as amount'))
                  ->whereBetween('updated_at', [$from_date, $to_date])
+                 ->where('assign_to',Auth::id())
                  ->groupBy('status')
                  ->get(); 
                  

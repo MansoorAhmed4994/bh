@@ -87,20 +87,25 @@ class LoadSheetController extends Controller
     
     public function generate_load_sheet(Request $request)
     {
-        $error_messege = array();
-        foreach( $request->order_ids as $order_id)
+        // dd($request->order_ids);
+        $error_messege = array(); 
+        foreach($request->order_ids as $order_id)
         {
             if(check_customer_advance_payment($order_id) > 0)
             {
+                
                 array_push($error_messege, 'Payment Not Approved for id #: '.$order_id); 
+            }
+            else
+            {
+                // echo $order_id;
             }
         }
         // dd(sizeof($error_messege));
-        if($error_messege > 0)
+        if(sizeof($error_messege) > 0)
         { 
             return response()->json(['error' => 1, 'messege' => $error_messege]); 
         }
-        // dd($error);
         $action_status = ManualOrders::whereIn('id',$request->order_ids)->update(['status' => 'dispatched', 'riders_id'=> $request->riders]);
         if($action_status)
         {

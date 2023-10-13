@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ManualOrders extends Model
 {
+    protected $guarded = [];  
     public function customers()
     {
         return $this->belongsTo(Customers::class,'customers_id','id');
@@ -18,6 +19,11 @@ class ManualOrders extends Model
     public function users()
     {
         return $this->belongsTo(User::class,'created_by','id');
+    }
+    
+    public function assign_to()
+    {
+        return $this->belongsTo(User::class,'assign_to','id');
     }
     
     

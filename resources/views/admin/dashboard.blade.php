@@ -23,6 +23,12 @@
         text-align: left;
         padding: 0 10px;
     }
+    .total_user_order_card
+    {
+        width: 100%;
+        background: #8a16d9;
+        color: white;
+    }
 </style>
 <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 <script type="text/javascript">
@@ -162,7 +168,11 @@ function toggleDataSeries(e) {
                                     <?php
                                         $tmp = \App\Models\User::find($user->id);
                                     ?>
-                                    <td>{{ $tmp->first_name}}</td>
+                                    @if($tmp)
+                                        <td>{{ $tmp->first_name}}</td>
+                                    @else
+                                        <td class="text-danger">No User Assigned</td>
+                                    @endif
                                     <td>{{$user->total_orders}}</td>
                                     <td>{{$user->total_amount}}</td>
                                 </tr> 
@@ -175,14 +185,44 @@ function toggleDataSeries(e) {
                 </div>
             </div>
             <?php $total_orders += $list->total_orders;$rows_division++ ?>
+            
+            
         @endforeach 
+         
+       
         
-        <div class="col-sm-4 form-group">  
-            <div class="card" style="width: 18rem;"> 
+        <div class="col-sm-6 form-group">  
+            <div class="card total_user_order_card"> 
               <div class="card-body">
-                  
+         
                     <h3>Total Order</h3>
-                <h5 class="card-title"><?php echo $total_orders;?></h5>
+                    <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    
+                                    <th>Orders</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($users_totla_orders as $users_totla_order)
+                                    <tr>
+                                        <td>{{$users_totla_order->id}}</td>
+                                        <?php
+                                            $tmp = \App\Models\User::find($users_totla_order->id);
+                                        ?>
+                                        @if($tmp)
+                                        <td>{{ $tmp->first_name}}</td>
+                                        @else
+                                        <td class="text-danger">No User Assigned</td>
+                                        @endif
+                                        <td>{{$users_totla_order->total_orders}}</td>
+                                        <td>{{$users_totla_order->total_amount}}</td>
+                                    </tr> 
+                                @endforeach
+                            </tbody>
+                        </table>
                  
               </div> 
             </div>

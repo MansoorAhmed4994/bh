@@ -125,10 +125,27 @@
                         </div>  
             
                         <div class="form-group col-auto">
+                            <label for="qty">Qty</label>
+                            <input type="number" class="form-control @if($errors->get('qty')) is-invalid @endif" value="{{old('qty')}}@if(isset($inventory)){{$inventory->qty}}@endif" id="qty"  name="qty" placeholder="Qty" >
+                            @if($errors->get('qty')) <small id="qty_error" class="form-text text-danger">{{$errors->first('qty')}} </small>@endif
+                        </div> 
+            
+                        <div class="form-group col-auto">
                             <label for="discount_price">Dicount Price</label>
                             <input type="number" class="form-control @if($errors->get('discount_price')) is-invalid @endif" value="{{old('discount_price')}}@if(isset($inventory)){{$inventory->products->discount_price}}@endif" id="discount_price"  name="discount_price" placeholder="Sale Price" >
                             @if($errors->get('discount_price')) <small id="discount_price_error" class="form-text text-danger">{{$errors->first('discount_price')}} </small>@endif
                         </div> 
+                        
+                        <div class="form-group">
+                            <label for="stock_status">Stock Status</label>
+                            <select class="form-select" aria-label="Default select example" id ="stock_status" name="stock_status" >
+                                <option selected value ="">Select Type</option> 
+                                <option value="in">In</option>
+                                <!--<option value="out">Out</option>   -->
+                            </select> 
+                            <!--<input type="text" class="form-control" id="stock_status"  name="stock_status" placeholder="Reciever Number" required>-->
+                            <small id="units_error" class="form-text text-danger"></small>
+                        </div>
                          
                     </div>
                     

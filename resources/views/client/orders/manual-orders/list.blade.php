@@ -156,6 +156,35 @@ var container = "";
         let cod_amount = $('#cod_amount').val(price-advance_payment);
         
     }
+    function assign_to(order_id,user_id)
+    {
+            $("body").addClass("loading");
+        //console.log(status_reason);
+            $.ajax({
+              url: base_url + '/client/orders/ManualOrders/assign-to/'+order_id+'/'+user_id,
+              headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+              type:"POST",
+              dataType: 'json',
+              success:function(response){
+                //$('#successMsg').show();
+                 
+                    alert(response.messege);
+                 
+                $("body").removeClass("loading");
+                //console.log(response);
+              },
+              error: function(response) {
+                    alert(response); 
+                    $("body").removeClass("loading");
+                // $('#nameErrorMsg').text(response.responseJSON.errors.name);
+                // $('#emailErrorMsg').text(response.responseJSON.errors.email);
+                // $('#mobileErrorMsg').text(response.responseJSON.errors.mobile);
+                // $('#messageErrorMsg').text(response.responseJSON.errors.message);
+              },
+          });
+        }
         
     $( document ).ready(function() { 
         // $('.pop').on('click', function() {
@@ -163,6 +192,9 @@ var container = "";
         //     $('.imagepreview').attr('src', $(this).attr('src'));
         //     $('#imagemodal').modal('show');   
         // });   
+        
+        
+        
         
         $('#order_status_edit_close').on('click',function(){
             $('#order_status_edit').modal('hide');
@@ -228,7 +260,7 @@ var container = "";
                         {
                             receiver_number = "+92"+receiver_number;
                         }
-                        var link = "https://api.whatsapp.com/send?phone="+receiver_number+"&text=Assalamualaikum, "+receiver_name+", I am from Brandhub, i just want to inform you that your parcel has been cancelled due to unavailable of iterm, please contact here for more details 03362240865";
+                        var link = "https://api.whatsapp.com/send?phone="+receiver_number+"&text=Assalamualaikum, "+receiver_name+", I am from Brandhub, i just want to inform you that your parcel has been cancelled due to unavailable of item, please contact here for more details 03362240865";
                         $("#dispatch-succes-noti").css("display", "block");
                         window.open(link, '_blank');
                     }
@@ -652,6 +684,9 @@ var container = "";
                 <th scope="col" class="delete_btn_class"><input type="checkbox" onclick="checkAll(this)" ></th>
                 <th scope="col">#</th> 
                 <th scope="col">Act</th>
+                @if(Auth::guard('admin')->check())
+                    <th scope="col">Assign To</th>
+                @endif
                 <th scope="col">Img.</th>
                 <th scope="col">Consignment.Id</th>
                 <th scope="col">Ord.ID</th>
@@ -722,6 +757,21 @@ var container = "";
                         </div>
                      </div>
                 </td>
+                @if(Auth::guard('admin')->check())
+                <td class>
+                    <select class="form-control @if($errors->get('assign_to')) is-invalid @endif assign_to_dropdown city" onchange="assign_to('{{$lists->id}}',this.value)" id="assign_to"  name="assign_to">
+                        <option value="">Select Assign To</option>
+                        
+                        @foreach($users as $user)
+                                 
+                            <option value="{{$user->id}}" {{ ($user->id == $lists->assign_to) ? 'selected="selected"' : '' }}>{{$user->first_name}} {{$user->last_name}}</option>
+                            
+                        @endforeach
+                        
+                        
+                    </select> 
+                </td>
+                @endif
                 <td >
                     <button class="btn btn-primary" onclick="UniversalImagesBoxes(0,'{{$lists->images}}',{{$lists->id}})">Images</button>
                     <div id="order_images">

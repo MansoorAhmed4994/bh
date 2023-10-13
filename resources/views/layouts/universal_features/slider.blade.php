@@ -128,9 +128,9 @@
                 slider_imgage_src +='<div class="card col-sm-12" id="imagebox" >';
                 
                     
-                    slider_imgage_src+='<div class="card-body" style="height:300px">';
+                    slider_imgage_src+='<div class="card-body" >';
                     
-                        slider_imgage_src +='<img class="card-img-top "  style="max-height: 260px;" title="'+images_array[i]+'" id="image_src_id_'+i+'" src="{{  url('') }}/'+images_array[i]+'" alt="Card image cap" >';
+                        slider_imgage_src +='<img class="card-img-top "  style="width: 100%;" title="'+images_array[i]+'" id="image_src_id_'+i+'" src="{{  url('') }}/'+images_array[i]+'" alt="Card image cap" >';
             
                     slider_imgage_src +='</div>';
                     

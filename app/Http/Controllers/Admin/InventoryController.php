@@ -115,8 +115,9 @@ class InventoryController extends Controller
             return $products;
     }
     
-    public function create_inventory_products($sku,$stock_status,$reference_id,$qty,$cost,$stock_type,$products,$sale,$warehouse_id)
+    public function create_inventory_products($sku='0',$stock_status='',$reference_id='0',$qty='0',$cost=0,$stock_type,$products=0,$sale=0,$warehouse_id=1)
     {
+        
         $inventory = $products->inventory()->create([
         'sku' => $sku,
         'warehouse_id' => $warehouse_id, 
@@ -138,7 +139,7 @@ class InventoryController extends Controller
     {
         $products = Products::where('sku',$request->sku)->first();
         $error="0";
-        // dd($products);
+        // dd($request->qty);
         if($products == null)
         {
             // dd($products);
@@ -274,12 +275,14 @@ class InventoryController extends Controller
         
         $error=0;
         $inventory = Inventory::find($inventory_id);
-        $check_duplicate_permission = ManualOders::find($inventory->reference_id);
+        // dd(ManualOders::find($inventory->reference_id);
+        $ManualOrders = ManualOrders::find($inventory->reference_id)->first();
+        // dd($check_duplicate_permission->status);
         $check_duplicate_permission = true;
-        if($check_duplicate_permission->status == 'dipatched')
+        if($ManualOrders->status == 'dipatched')
         {
             if(Auth::guard('admin')->check())
-            {
+            { 
                 $check_duplicate_permission = true;
             }
             else
@@ -353,7 +356,22 @@ class InventoryController extends Controller
      */
     public function update(Request $request, Inventory $inventory)
     {
-        // dd($request->slug);
+        // dd($inventory->warehouse_id);
+        $old_qty = 0;
+        $old_qty = ($request->qty)-($inventory->qty);
+        // if($inventory->qty > $request->qty)
+        // {
+        //     $old_qty = ($inventory->qty)-($request->qty);
+        // }
+        // else
+        // {
+        //     $old_qty = ($request->qty)-($inventory->qty);
+        // }
+        // dd($old_qty);
+        $remaining_inventory = remaining_inventories::where('id','=',$inventory->warehouse_id)->first();
+        // dd($remaining_inventory);
+        $remaining_inventory->qty = $remaining_inventory->qty+$old_qty;
+        $remaining_inventory->save(); 
         $products_update = $inventory->products->update([
             'sku' => $request->sku,
             'slug'=>$request->slug,
@@ -362,7 +380,8 @@ class InventoryController extends Controller
             'weight' => $request->weight, 
             'weight_type' =>$request->weight_type, 
             'sale_price' => $request->sale_price, 
-            'discount_price' => $request->discount_price
+            'discount_price' => $request->discount_price,
+            'status' => 'active'
         ]); 
             // dd($inventory->products()->first()->id);
             // $products_update = $inventory->products()->first(); 
@@ -385,7 +404,10 @@ class InventoryController extends Controller
         'stock_type' => $request->stock_type,
         'cost' => $request->inventory_cost,
         'sale' => $request->inventory_sale,
-        'discount' => 0
+        'discount' => $request->discount_price,
+        'qty' => $request->qty,
+        'stock_status' => $request->stock_status,
+        'status' => 'active'
         // 'products_id','warehouse_id','customer_id','stock_status','qty','reference_id','stock_type','cost','discount',
         ]);
         

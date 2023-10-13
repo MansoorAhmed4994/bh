@@ -116,12 +116,47 @@ var order_link='';
             // alert($(this).attr('src'));
             $('.imagepreview').attr('src', $(this).attr('src'));
             $('#imagemodal').modal('show');   
-        });   
-                 
+        });  
         
-        $('#add_new_inventory').on('click',function(){
-            $("body").addClass("loading"); 
+        $('#createinventorymodalbtn').on('click',function(){
+            
+            $('#createinventorymodal').modal('show');
+        });
+         
+        
+        $('#add_new_inventory_close').on('click',function(){
+            
             $('#createinventorymodal').modal('hide');
+        });
+        
+        $('#sku').on('keypress',function(e) {
+            if(e.which == 13) {
+                add_new_inventory();
+            }
+        });
+        
+        $('#cost').on('keypress',function(e) {
+            if(e.which == 13) {
+                add_new_inventory();
+            }
+        });
+        
+        $('#sale').on('keypress',function(e) {
+            if(e.which == 13) {
+                add_new_inventory();
+            }
+        });
+        
+        
+                 
+         
+                
+    });
+    
+    function add_new_inventory()
+        {
+            $("body").addClass("loading"); 
+            
             var sku = $('#sku').val();
             var category_id = $('#category_id').val();
             var name = $('#name').val();
@@ -133,7 +168,7 @@ var order_link='';
             var cost = $('#cost').val();  
             
             // console.log(sku+'\n'+units+'\n'+unit_type+'\n'+sale+'\n'+cost+'\n');
-            if(sku !=''&& name !='' && stock_status !='' && qty !='' && sale > 0 && cost > 0)
+            if(sku !='' && sale > 0 && cost > 0)
             {
                 $.ajax({
                     url: base_url + '/admin/inventory/store', 
@@ -158,8 +193,17 @@ var order_link='';
                         if(response.messege)
                         {
                            alert(response.messege);
+                           $('#sku').val('');
+                            $('#category_id').val('');
+                            $('#name').val('');
+                            $('#sale').val('');
+                            
+                            $('#products_id').val('');
+                            $('#stock_status').val('');
+                            $('#qty').val(''); 
+                            $('#cost').val(''); 
                            
-                        $("body").removeClass("loading");
+                            $("body").removeClass("loading");
                             
                         }
                     console.log(response);
@@ -178,11 +222,9 @@ var order_link='';
             else
             {
                 alert('please fill all the fields');
+                $("body").removeClass("loading");
             }
-    
-        }); 
-                
-    });
+        }
     
     
     
@@ -276,10 +318,7 @@ var order_link='';
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
             <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
+            <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5> 
             </div>
             <div class="modal-body">
                 <div class="col-sm-12">
@@ -289,9 +328,21 @@ var order_link='';
                         
                         <div class="form-group">
                             <label for="SKU">SKU</label>
-                            <input type="text" class="form-control" value="" id="sku"  name="sku" placeholder="SKU" required>
+                            <input type="text" class="form-control" value="" id="sku"  name="sku" placeholder="SKU" >
                             <small id="sku_error" class="form-text text-danger"></small>
+                        </div>  
+            
+                        <div class="form-group">
+                            <label for="cost">cost</label>
+                            <input type="number" class="form-control" value="0" id="cost"  name="cost" placeholder="cost" >
+                            <small id="cost_error" class="form-text text-danger"></small>
                         </div> 
+            
+                        <div class="form-group">
+                            <label for="sale">sale</label>
+                            <input type="number" class="form-control" value="0" id="sale"  name="sale" placeholder="sale" >
+                            <small id="sale_error" class="form-text text-danger"></small>
+                        </div>
                         
                         <div class="form-group">
                             <label for="Type">Category</label>
@@ -307,7 +358,7 @@ var order_link='';
                         
                         <div class="form-group">
                             <label for="name">Name</label>
-                            <input type="text" class="form-control" value="" id="name"  name="name" placeholder="Product Name" required>
+                            <input type="text" class="form-control" value="" id="name"  name="name" placeholder="Product Name" >
                             <small id="name_error" class="form-text text-danger"></small>
                         </div>
                         
@@ -320,19 +371,13 @@ var order_link='';
                         <!--    </select> -->
                         <!--    <small id="unit_type_error" class="form-text text-danger"></small>-->
                         <!--</div> -->
-            
-                        <div class="form-group">
-                            <label for="sale">sale</label>
-                            <input type="number" class="form-control" value="0" id="sale"  name="sale" placeholder="sale" required>
-                            <small id="sale_error" class="form-text text-danger"></small>
-                        </div>
                          
                         
                         <div class="form-group">
                             <label for="stock_status">Stock Status</label>
-                            <select class="form-select" aria-label="Default select example" id ="stock_status" name="stock_status" required>
+                            <select class="form-select" aria-label="Default select example" id ="stock_status" name="stock_status" >
                                 <option selected value ="">Select Type</option> 
-                                <option value="in">In</option>
+                                <option value="in" selected>In</option>
                                 <!--<option value="out">Out</option>   -->
                             </select> 
                             <!--<input type="text" class="form-control" id="stock_status"  name="stock_status" placeholder="Reciever Number" required>-->
@@ -341,21 +386,15 @@ var order_link='';
                         
                         <div class="form-group">
                             <label for="units">Quantity</label>
-                            <input type="number" class="form-control" id="qty"  name="qty" placeholder="qty" required>
+                            <input type="number" class="form-control" id="qty" value="0" name="qty" placeholder="qty" >
                             <small id="qty_error" class="form-text text-danger"></small>
-                        </div> 
-            
-                        <div class="form-group">
-                            <label for="cost">cost</label>
-                            <input type="number" class="form-control" value="0" id="cost"  name="cost" placeholder="cost" required>
-                            <small id="cost_error" class="form-text text-danger"></small>
-                        </div>    
+                        </div>   
                     </div>
         
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="add_new_inventory">Save changes</button>
+                <button type="button" class="btn btn-secondary" id="add_new_inventory_close">Close</button>
+                <button type="button" class="btn btn-primary" onclick="add_new_inventory()">Save changes</button>
             </div>
         </div>
     </div>
@@ -419,7 +458,7 @@ var order_link='';
                 <button class="btn btn-outline-secondary" type="submit">Search</button>
             </div>
             <div class="input-group-append">
-            <button class="btn btn-outline-secondary" data-toggle="modal" data-target="#createinventorymodal" type="button">Add New inventory</button>
+            <button class="btn btn-outline-secondary" id="createinventorymodalbtn" type="button">Add New inventory</button>
             </div>
         </div>
     </div>

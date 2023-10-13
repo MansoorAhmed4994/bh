@@ -73,11 +73,27 @@ tfoot tr td input {
 }
 .label1 th h5, .label1 td h4, .label1 td h5
 {
-    font-size:15px;
+    font-size:20px;
+    padding:5px 0;
 }
 .label1
 {
-    height:25px;
+    height: auto!important;
+    
+}
+.label2 th h5, .label2 td h4, .label2 td h5
+{
+    font-size:25px!important;
+    word-break: break-all;
+    padding:10px 0;
+}
+.label2 
+{
+    height: auto!important;
+}
+.barcode-text
+{
+    font-size:25px;
 }
 
 @page {
@@ -149,21 +165,21 @@ tfoot tr td input {
                                 ?>
                                 <!--alt="barcode" width="200"  />-->
                                 <img src="data:image/png;base64,{{ base64_encode($generatorPNG->getBarcode($ManualOrder->id, $generatorPNG::TYPE_CODE_128)) }}" style="width:80%">
-                    			<span class="notranslate"><h3>{{$ManualOrder->id}}</h3></span></tr>
+                    			<span class="notranslate barcode-text"><h3>{{$ManualOrder->id}}</h3></span></tr>
                             </td>
-                        <tr class="label1">
+                        <tr class="label2">
                             <td><h5>Name: </h5></td>
-                            <td style="padding: 10px 0px;"><h4>{{$ManualOrder->receiver_name}}</h4></td> 
+                            <td><h4>{{$ManualOrder->receiver_name}}</h4></td> 
                         </tr>
-                        <tr class="label1">
+                        <tr class="label2">
                             <td><h5>Number: </h5></td>
-                            <td style="padding: 10px 0px;"><h4>{{$ManualOrder->receiver_number}}</h4></td> 
+                            <td ><h4>{{$ManualOrder->receiver_number}}</h4></td> 
                         </tr>
-                        <tr class="label1">
+                        <tr class="label2">
                             <td><h5>Address: </h5></td>
-                            <td style="padding: 10px 0px;"><h4>{{$ManualOrder->reciever_address}}</h4></td> 
+                            <td><h4>{{$ManualOrder->reciever_address}}</h4></td> 
                         </tr>
-                        <tr class="label1">
+                        <tr class="label2">
                             <td><h5>City: </h5></td>
                             <td ><h4>@if($ManualOrder->cities != null) : {{$ManualOrder->cities->name}} @endif</h4></td> 
                         </tr>
@@ -176,15 +192,15 @@ tfoot tr td input {
                             <td><h4>{{$ManualOrder->weight}}</h4></td> 
                         </tr>
                         <tr class="label1">
-                            <td><h5>Created Date: </h5></td>
+                            <td><h5>Crtd Date: </h5></td>
                             <td ><h4>{{$ManualOrder->created_at}}</h4></td> 
                         </tr>
                         <tr class="label1">
-                            <td><h5>Updated Date: </h5></td>
+                            <td><h5>Updt Date: </h5></td>
                             <td ><h4>{{$ManualOrder->updated_at}}</h4></td> 
                         </tr>
                         <tr  class="label1">
-                            <td><h5>Printed Date: </h5></td>
+                            <td><h5>Prnt Date: </h5></td>
                             <?php
                                 $date = new DateTime();
                                 $date->setTimezone(new DateTimeZone('UTC'));

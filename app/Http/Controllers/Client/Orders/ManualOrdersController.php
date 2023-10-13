@@ -182,7 +182,7 @@ class ManualOrdersController extends Controller
         elseif(in_array('user', $user_roles))
         { 
             // echo 'user available';
-            $query = $query->where("manual_orders.updated_by" ,$user_id->id);
+            $query = $query->where("manual_orders.assign_to" ,$user_id->id);
         }
         // dd('working');
         // elseif(in_array('user', $user_roles))
@@ -202,7 +202,7 @@ class ManualOrdersController extends Controller
         // dd($users);
         $list = $query->paginate(20);
         
-        
+        // dd($users);
         $statuses = get_active_order_status_list();
         $catgories = product_child_categories();
         return view('client.orders.manual-orders.list')->with(['list'=>$list,'users'=>$users,'statuses'=>$statuses,'catgories'=>$catgories]); 
@@ -286,8 +286,11 @@ class ManualOrdersController extends Controller
      */
     public function store(Request $request)
     { 
+        
         $status = $this->CreateOrder($request);
-        return redirect()->route('ManualOrders.create')->with('success', $status);
+        toastr()->success('Order has been saved successfully!');
+        return back();
+        // return redirect()->route('ManualOrders.create')->with('success', $status);
     }
 
     /**
@@ -1580,6 +1583,25 @@ class ManualOrdersController extends Controller
         
         dd($resp);
     }
+    
+    public function UpdateAssignTo(ManualOrders $id, $assig_to)
+    {
+        // dd($id);
+        $ManualOrder = $id->update(['assign_to' => $assig_to]);
+        // dd($ManualOrder);
+        if($ManualOrder)
+        { 
+            return response()->json(['status' => '1', 'messege' => 'Order Assign to User ID:'.$assig_to]);
+            // return response()->json(['messege' => 'no order found']);
+        }
+        else
+        {
+            
+            return response()->json(['error' => '1', 'messege' => 'order not updated please contact admin'.$ManualOrder]);
+        }
+    }
+        
+    
     
  
 }

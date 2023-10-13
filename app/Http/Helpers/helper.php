@@ -20,6 +20,7 @@
         function check_customer_advance_payment($order_id)
         {
             $status = CustomerPayments::where(['order_id'=>$order_id,'status'=>'approval pending'])->get();
+            // dd($status);
             return $status->count();
         }
     }
@@ -36,6 +37,7 @@
             //         ->orwhere('manual_orders.status','!=','confirmed') ;
             // });
             // dd($query->get());
+            
             if($query->get()->count() > 0)
             { 
                 $query = $query->first();

@@ -104,8 +104,10 @@
                                     $("body").removeClass("loading");
                                 
                             }
-                            else
+                            if(typeof(e.error) != 'undefined')
+                            
                             {
+                                
                                  alert(e.messege);
                                  $("body").removeClass("loading");
                             }

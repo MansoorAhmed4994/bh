@@ -136,3 +136,12 @@ Stack trace:
 [18-Sep-2023 21:40:02 UTC] PHP Fatal error:  Cannot use isset() on the result of an expression (you can use "null !== expression" instead) in /home/desenado/manualordersstaging.brandhub.com.pk/storage/framework/views/5fc9ba5b2b1a748ea325c3d178f57b53d21ce567.php on line 383
 [18-Sep-2023 21:40:21 UTC] PHP Fatal error:  Cannot use isset() on the result of an expression (you can use "null !== expression" instead) in /home/desenado/manualordersstaging.brandhub.com.pk/storage/framework/views/5fc9ba5b2b1a748ea325c3d178f57b53d21ce567.php on line 383
 [18-Sep-2023 21:40:26 UTC] PHP Fatal error:  Cannot use isset() on the result of an expression (you can use "null !== expression" instead) in /home/desenado/manualordersstaging.brandhub.com.pk/storage/framework/views/5fc9ba5b2b1a748ea325c3d178f57b53d21ce567.php on line 383
+[11-Oct-2023 06:26:10 Asia/Karachi] PHP Fatal error:  During class fetch: Uncaught ParseError: syntax error, unexpected '->' (T_OBJECT_OPERATOR), expecting ')' in /home/desenado/manualordersstaging.brandhub.com.pk/app/Traits/ManualOrderTraits.php:209
+Stack trace:
+#0 /home/desenado/manualordersstaging.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#1 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Manu...')
+#2 /home/desenado/manualordersstaging.brandhub.com.pk/app/Http/Controllers/Client/Orders/ManualOrdersController.php(35): spl_autoload_call('App\\Traits\\Manu...')
+#3 /home/desenado/manualordersstaging.brandhub.com.pk/vendor/composer/ClassLoader.php(571): include('/home/desenado/...')
+#4 /home/desenado/manualordersstaging.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#5 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Http\\Contro...')
+#6 [internal function]: spl_autoload_call('App\\Http\\Contro... in /home/desenado/manualordersstaging.brandhub.com.pk/app/Http/Controllers/Client/Orders/ManualOrdersController.php on line 35

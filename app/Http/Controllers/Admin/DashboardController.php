@@ -44,10 +44,10 @@ class DashboardController extends Controller
         for($i=0; $i<sizeof($group_by_status); $i++)
         {
             $users_order_status = DB::table('manual_orders')
-            ->select('updated_by as id', DB::raw('count(*) as total_orders'),DB::raw('sum(price) as total_amount'))
-            ->leftJoin('users', 'manual_orders.created_by', '=', 'users.id') 
+            ->select('assign_to as id', DB::raw('count(*) as total_orders'),DB::raw('sum(price) as total_amount'))
+            ->leftJoin('users', 'manual_orders.assign_to', '=', 'users.id') 
             ->whereBetween('updated_at', [$from_date, $to_date])->where('status',$group_by_status[$i]->status)
-            ->groupBy('updated_by')
+            ->groupBy('assign_to')
             ->get()->toArray();  
             $group_by_status[$i]->users = $users_order_status; 
         } 
@@ -55,7 +55,16 @@ class DashboardController extends Controller
         $remaining_invertory = DB::table('remaining_inventories')
              ->select( DB::raw('sum(qty) as total'), DB::raw('sum(cost*qty) as amount'))
              ->get();
-
+             
+        $users_totla_orders = DB::table('manual_orders')
+        ->select('assign_to as id', DB::raw('count(*) as total_orders'),DB::raw('sum(price) as total_amount'))
+        ->leftJoin('users', 'manual_orders.assign_to', '=', 'users.id') 
+        ->whereBetween('updated_at', [$from_date, $to_date])
+        ->groupBy('assign_to')->get();
+            
+        // dd($users_totla_orders->assign_to);
+        
+        // dd($users_totla_orders);
     
         $inventory = DB::table('inventories')
              ->select('stock_status', DB::raw('sum(qty) as qty'), DB::raw('sum(cost) as cost'), DB::raw('sum(sale) as sale'))
@@ -157,6 +166,7 @@ class DashboardController extends Controller
             'inventories'=>$inventory,
             'cities_name'=>$cities_name,
             'total_city_orders'=>$total_city_orders,
+            'users_totla_orders'=>$users_totla_orders
             ]);
         // return view('admin.dashboard');
         

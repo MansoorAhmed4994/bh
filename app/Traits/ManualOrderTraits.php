@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Pagination\LengthAwarePaginator; 
+
+use App\Models\User;
 use Carbon\Carbon;
 use DB;
 
@@ -16,6 +18,8 @@ trait ManualOrderTraits {
     
     public function CreateOrder(Request $request)
     { 
+        
+        
         $status = $request->order_addition;
         $customer_id = '';
         $manualorders_id = '';
@@ -27,7 +31,7 @@ trait ManualOrderTraits {
             'address' => 'required', 
 
         ]);
-        
+        // dd($this->AssignOrderToUser());
         
         $customer_id = Customers::where('number',$request->number);
         //dd($customer_id);
@@ -79,6 +83,8 @@ trait ManualOrderTraits {
             $manual_orders->description = $request->description;
             $manual_orders->reference_number = '';
             $manual_orders->service_type = '';
+            $manual_orders->assign_to = $this->AssignOrderToUser();
+            
             $manual_orders->created_by = Auth::id();
             $manual_orders->updated_by = Auth::id();
             $manual_orders->status = $status;
@@ -164,8 +170,9 @@ trait ManualOrderTraits {
                 $manual_orders->description = $request->description;
                 $manual_orders->reference_number = '';
                 $manual_orders->service_type = '';
-                $manual_orders->created_by = '1';
-                $manual_orders->updated_by = '1';
+                $manual_orders->created_by = Auth::id();
+                $manual_orders->updated_by = Auth::id(); 
+                $manual_orders->assign_to = $this->AssignOrderToUser();
                 $manual_orders->status = $status;
                 //$manual_orders = $manual_orders->save();
                 $status = $customer_id->first()->manual_orders()->save($manual_orders);
@@ -181,6 +188,26 @@ trait ManualOrderTraits {
                 }
             }
         }
+    }
+    
+    public function AssignOrderToUser()
+    {
+        $users_parcel  = array();
+        $Users = User::whereHas(
+            'roles', function($q){
+                $q->where('name', 'calling');
+            }
+        )->get()->pluck('id')->toArray();
+        
+        $user_ids = implode(', ', $Users);
+        $data = DB::select('select `users`.`id` as `id`, (SELECT COUNT(*)  FROM manual_orders where manual_orders.assign_to = users.id) as `items` from `users` where `users`.`id` in ('.$user_ids.') order by items ASC ');
+        
+        // dd($data);
+    
+        return ($data[0]->id);
+        
+        
+                 
     }
         
     public function GetOrdersByIds($order_ids)
