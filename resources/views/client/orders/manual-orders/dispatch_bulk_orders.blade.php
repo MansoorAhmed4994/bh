@@ -29,20 +29,26 @@
             $('#field_total_parcels').val(total_parcels);
         }
         
-        function removeElementsByClass(className){
+        function removeElementsByClass(className)
+        {
             const elements = document.getElementsByClassName(className);
-            while(elements.length > 0){
+            while(elements.length > 0)
+            {
                 elements[0].parentNode.removeChild(elements[0]);
             }
         }
+
+
         
         function PrintElem()
         {
             removeElementsByClass('delete_btn_class');
             var mywindow = window.open('', 'PRINT', 'height=400,width=600');
         
-            mywindow.document.write('<html><head><title>' + document.title  + '</title>');
-            mywindow.document.write('<head><style></style><link href="{{ asset("public/css/app.css") }}" rel="stylesheet"><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous"></head><body >');
+            mywindow.document.write('<html>'); 
+            mywindow.document.write('<title>' + document.title  + '</title>'); 
+            mywindow.document.write('<link href="{{ asset("public/css/app.css") }}" rel="stylesheet"/>'); 
+            mywindow.document.write('<body>');
             mywindow.document.write('<h1>Load Sheet</h1>');
             mywindow.document.write(document.getElementById('print_loadsheet').innerHTML);
             mywindow.document.write('</body></html>');

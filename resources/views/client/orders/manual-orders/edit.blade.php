@@ -12,6 +12,13 @@
     $( document ).ready(function() {
         
         
+        
+        
+        
+        $('#ImageDeleteModalClose').on('click',function(){
+            $('#ImageDeleteModal').modal('hide');
+        });
+        
         var cities =@json($cities);
         $('.cities_dropdown').select2();
         
@@ -30,7 +37,7 @@
                 get_products_by_sku();
             }
         });
-        });
+    });
         
     function delete_row(id,inventory_id)
     {
@@ -46,20 +53,24 @@
             dataType: 'json',
             success: function(e)
             { 
+                
+                
+                
                 if (typeof e.success !== 'undefined') {
                     var row = document.getElementById(id);
                     row.parentNode.removeChild(row);
                     $('#product_price').val(e.price);
                     
                     $("#total_amount").html(e.price);
-                    
+                    toastr["success"](e.messege, 'Customer Product Minise');
                     
                     get_fare_list();
                     onchangeprice();
                 } 
                 else if(typeof e.error !== 'undefined')
                 {
-                    alert(e.messege);
+                    toastr(e.messege, 'Error');
+                    // alert(e.messege);
                 }
                 $("body").removeClass("loading");
             },
@@ -167,6 +178,7 @@
             delete_image_path=image_path;
             image_box_id=box_id;  
             document.getElementById("delete_image").disabled = false;
+            $('#ImageDeleteModal').modal('show');
             //all_images = all_images.filter(e => e !== delete_image_path); 
             //consle.log(all_images);
         }  
@@ -212,6 +224,21 @@
                         console.log(e);
                         
                         myFunction(); 
+                        if(typeof e.success !== 'undefined')
+                        {
+                            $("body").removeClass("loading");
+                            toastr(e.messege);
+                        } 
+                        else if(typeof e.error !== 'undefined')
+                        {
+                            $("body").removeClass("loading");
+                            toastr.error(e.messege,'Error');
+                        }
+                        else
+                        {
+                            toastr.warning(e.messege,'Warning');
+                        }
+                        $('#ImageDeleteModal').modal('hide');
                         $("body").removeClass("loading"); 
                     },
                     error: function(e) {
@@ -387,25 +414,44 @@
     </style>  
 </head>
 
-<div class="modal fade" id="customerpaymentiframe" tabindex="-1" role="dialog" aria-labelledby="customerpaymentiframe" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-xl" style="height:80%" role="document">
-    <div class="modal-content"  style="height:100%">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Customer Payment</h5>
-        <button type="button" class="close" data-dismiss="modal" id="btnclose2customerpaymentiframe" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-          <iframe src="{{route('customer.payments.index')}}" style="width:100%;height:100%" title="W3Schools Free Online Web Tutorials"></iframe>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" id="btnclosecustomerpaymentiframe" data-dismiss="modal">Close</button>
+    <div class="modal fade" id="customerpaymentiframe" tabindex="-1" role="dialog" aria-labelledby="customerpaymentiframe" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-xl" style="height:80%" role="document">
+        <div class="modal-content"  style="height:100%">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Customer Payment</h5>
+            <button type="button" class="close" data-dismiss="modal" id="btnclose2customerpaymentiframe" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+              <iframe src="{{route('customer.payments.index')}}" style="width:100%;height:100%" title="W3Schools Free Online Web Tutorials"></iframe>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="btnclosecustomerpaymentiframe" data-dismiss="modal">Close</button>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
+
+
+
+    <div class="modal fade" id="ImageDeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5> 
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this image?</p>
+            </div>
+            <div class="modal-footer"> 
+                <button type="button" id="delete_image" class="btn btn-primary" >Yes</button>
+                <button type="button" class="btn btn-secondary" id="ImageDeleteModalClose">Close</button>
+            </div>
+            </div>
+        </div>
+    </div>
 
     <div class="row mb-3">
         <div class="col-lg-12 margin-tb">
@@ -464,7 +510,7 @@
                                 <img class="card-img-top edit-img-box" src="{{asset($image)}}" alt="Card image cap" >
                                 <div class="card-body">
                                     <!--<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>-->
-                                    <a onclick="delete_image('{{$image}}','imagebox{{$count}}')" class="btn btn-primary"  data-toggle="modal" data-target="#exampleModal">Delete</a>
+                                    <a onclick="delete_image('{{$image}}','imagebox{{$count}}')" class="btn btn-primary" >Delete</a>
                                 </div>
                             </div>
                         </div>
@@ -748,26 +794,6 @@
             
             
         </form>
-
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>Are you sure you want to delete this image?</p>
-                </div>
-                <div class="modal-footer"> 
-                    <button type="button" id="delete_image" class="btn btn-primary" >Yes</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-                </div>
-            </div>
-        </div>
     </div>
     
 <script>

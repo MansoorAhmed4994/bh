@@ -180,7 +180,12 @@ function toggleDataSeries(e) {
                         </tbody>
                     </table>
                     <br>
-                    <a href="{{route('ManualOrders.status.order.list',$list->status)}}" class="btn btn-primary">Go</a>
+                    <form action="{{route('ManualOrders.index')}}" method="post">
+                        @csrf
+                        <input type="hidden" name="order_status"  value="{{$list->status}}">
+                    <button type="submit" class="btn btn-primary">Go</button>
+                    </form>
+                    <!--<a href="{{route('ManualOrders.status.order.list',$list->status)}}" class="btn btn-primary">Go</a>-->
                   </div> 
                 </div>
             </div>

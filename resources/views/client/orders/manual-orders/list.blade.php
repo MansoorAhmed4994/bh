@@ -158,33 +158,40 @@ var container = "";
     }
     function assign_to(order_id,user_id)
     {
-            $("body").addClass("loading");
-        //console.log(status_reason);
-            $.ajax({
-              url: base_url + '/client/orders/ManualOrders/assign-to/'+order_id+'/'+user_id,
-              headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-              type:"POST",
-              dataType: 'json',
-              success:function(response){
+        
+        $("body").addClass("loading");
+        $.ajax
+        ({
+            url: base_url + '/client/orders/ManualOrders/assign-to/'+order_id+'/'+user_id,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            type:"POST",
+            dataType: 'json',
+            success:function(response)
+            {
                 //$('#successMsg').show();
-                 
-                    alert(response.messege);
+                if(typeof response.success !== 'undefined')
+                {
+                    toastr["success"](response.messege, 'Assigning Order');
+                } 
+                else 
+                {
+                    toastr.error(response.messege,'Error');
+                }
+                    // alert(response.messege);
                  
                 $("body").removeClass("loading");
                 //console.log(response);
-              },
-              error: function(response) {
-                    alert(response); 
-                    $("body").removeClass("loading");
-                // $('#nameErrorMsg').text(response.responseJSON.errors.name);
-                // $('#emailErrorMsg').text(response.responseJSON.errors.email);
-                // $('#mobileErrorMsg').text(response.responseJSON.errors.mobile);
-                // $('#messageErrorMsg').text(response.responseJSON.errors.message);
-              },
-          });
-        }
+            },
+            error: function(response) 
+            {
+                // alert(response); 
+                toastr.error(response);
+                $("body").removeClass("loading");
+            },
+      });
+    }
         
     $( document ).ready(function() { 
         // $('.pop').on('click', function() {
@@ -250,8 +257,19 @@ var container = "";
               },
               success:function(response){
                 //$('#successMsg').show();
+                if(typeof response.success !== 'undefined')
+                {
+                    $("body").removeClass("loading");
+                    toastr["success"](response.messege, 'Assigning Order');
+                } 
+                else 
+                {
+                    $("body").removeClass("loading");
+                    toastr.error(response.messege,'Error');
+                }
                 if(response.messege == true)
                 {
+                    $("body").removeClass("loading");
                     if(order_status == "cancel")
                     {
                         
@@ -279,7 +297,10 @@ var container = "";
                     $("#dispatch-succes-noti").css("display", "block");
                     
                 }
+                
+                $('#order_status_edit').modal('hide');
                 $("body").removeClass("loading");
+                
                 //console.log(response);
               },
               error: function(response) {
@@ -413,8 +434,7 @@ var container = "";
 
                 }
                 
-                $('#receiver_name').val(e.messege.receiver_name);
-                // $('#imagemodal').val(e.messege.id);
+                $('#receiver_name').val(e.messege.receiver_name); 
                 $('#receiver_number').val(e.messege.receiver_number);
                 $('#reciever_address').val(e.messege.reciever_address);
                 $('#price').val(e.messege.price);

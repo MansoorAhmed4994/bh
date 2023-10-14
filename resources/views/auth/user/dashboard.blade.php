@@ -10,8 +10,12 @@
                 <div class="card" style="width: 18rem;"> 
                   <div class="card-body">
                     <h3>{{$list->status}}</h3>
-                    <h5 class="card-title">{{$list->total}}</h5>  
-                    <a href="{{route('ManualOrders.status.order.list',$list->status)}}" class="btn btn-primary">Go</a>
+                    <h5 class="card-title">{{$list->total}}</h5> 
+                    <form action="{{route('ManualOrders.index')}}" method="post">
+                        @csrf
+                        <input type="hidden" name="order_status"  value="{{$list->status}}">
+                    <button type="submit" class="btn btn-primary">Go</button>
+                    </form>
                   </div> 
                 </div>
             </div>

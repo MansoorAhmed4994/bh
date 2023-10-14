@@ -10,6 +10,20 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    
+    <!--Toaster css--> 
+    <link href="{{ asset('public/css/toastr.css') }}" rel="stylesheet"> 
+    <!--<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" rel="stylesheet"> -->
+    
+    <!--Toaster js--> 
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>-->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.js"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"></script>
+    
+    
+    
+    
     <link rel="icon" href="https://scontent.fkhi6-2.fna.fbcdn.net/v/t39.30808-6/271851970_797859254942923_8384634057214477174_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=T_JF1ooZlfIAX8VAMOF&tn=qbJWCDzG88tDUCIH&_nc_ht=scontent.fkhi6-2.fna&oh=00_AT-PmcdiG8euvrHKf0u_aI6qtr6g2VjhlGuWaI8Ks1I_fA&oe=630B15D5">
     <title>{{ config('app.name', 'Brandhub') }}</title>
 
@@ -111,7 +125,7 @@
                     </ul>
                 @else
                     <ul class="navbar-nav">
-                        <li class="nav-item active"> <a class="nav-link" href="{{route('dashboard')}}">dashboard </a> </li> 
+                        <li class="nav-item active"> <a class="nav-link" href="{{route('user.dashboard')}}">dashboard </a> </li> 
                         <li class="nav-item dropdown" id="myDropdown">
                             <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Manual Orders</a>
                             <ul class="dropdown-menu">

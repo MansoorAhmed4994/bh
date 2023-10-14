@@ -170,6 +170,7 @@ class ManualOrdersController extends Controller
         
         if(in_array('author', $user_roles) || in_array('admin', $user_roles))
         { 
+            // dd('');
         } 
         elseif(in_array('user', $user_roles))
         { 
@@ -189,6 +190,7 @@ class ManualOrdersController extends Controller
         $list = $query->paginate(20); 
         $statuses = get_active_order_status_list();
         $catgories = product_child_categories();
+        // dd($catgories);
         
         return view('client.orders.manual-orders.list')->with(['list'=>$list,'users'=>$users,'statuses'=>$statuses,'catgories'=>$catgories]); 
     }
@@ -308,6 +310,25 @@ class ManualOrdersController extends Controller
      
     public function edit($ManualOrder)
     { 
+        $user_id = User::find(auth()->user()->id);
+        $user_roles = $user_id->roles()->get()->pluck('name')->toArray();
+
+        // dd((ManualOrders::find($ManualOrder)->assign_to),'==========',auth()->user()->id);
+        if(in_array('author', $user_roles) || in_array('admin', $user_roles) || Auth::guard('admin')->check())
+        { 
+            // dd('');
+        } 
+        elseif(auth()->user()->id == (ManualOrders::find($ManualOrder)->assign_to))
+        { 
+            
+            
+        }
+        else
+        { 
+            toastr()->error('You Dont Have Permission to edit this order');
+            return back();
+        }
+        
         $cities = $this->get_trax_cities();
         $order_id = $ManualOrder;
         $this->UpdateReferenceNumberByOrderIds([$ManualOrder]);
@@ -416,7 +437,17 @@ class ManualOrdersController extends Controller
         $ManualOrder->reciever_address = $request->reciever_address;  
         if($images != null)
         {
-            $ManualOrder->images = $ManualOrder->images.'|'.(implode("|",$images));
+            if($ManualOrder->images != null)
+            { 
+                $ManualOrder->images = $ManualOrder->images.'|'.(implode("|",$images));
+            }
+            else
+            {
+                $ManualOrder->images = (implode("|",$images));
+                
+            }
+            // dd($ManualOrder->images);
+            // dd($ManualOrder->images.'|'.(implode("|",$images)));
         }      
         //payment details
         $ManualOrder->product_price = $request->product_price;
@@ -594,12 +625,13 @@ class ManualOrdersController extends Controller
                 $status =$manual_orders->save();
                 if($status)
                 {
-                    return response()->json(['messege' => 'successfully deleted']); 
+                    return response()->json(['success'=>'1','messege' => 'successfully deleted']); 
                 }
             }  
             else
             {
-                return 'Some thing went wrong';
+                return response()->json(['error'=>'1','messege' => 'Image not removed from server please check'.File::delete($request->delete_path)]); 
+                // return 'Some thing went wrong';
             } 
         }
         else
@@ -612,7 +644,11 @@ class ManualOrdersController extends Controller
              $status =$manual_orders->save();
                 if($status)
                 {
-                    return response()->json(['messege' => 'successfully deleted']); 
+                    return response()->json(['success'=>'1','messege' => 'Order Image successfully deleted']); 
+                }
+                else
+                {
+                    return response()->json(['error'=>'1','messege' => 'Order Image not  deleted']); 
                 }
         }   
     }
@@ -953,8 +989,16 @@ class ManualOrdersController extends Controller
         
         $status = $ManualOrder->save();
         
-        
-        return response()->json(['messege' => $status]);
+        if($status)
+        {
+            
+            return response()->json(['success'=>'1','messege' => 'Record Successfully updated']);
+        }
+        else
+        {
+            
+            return response()->json(['error'=>'1','messege' => 'Record not updated Please Contact Admin']);
+        }
     }
     
     public function print_order_slip($ManualOrder_id)
@@ -1576,7 +1620,7 @@ class ManualOrdersController extends Controller
         // dd($ManualOrder);
         if($ManualOrder)
         { 
-            return response()->json(['status' => '1', 'messege' => 'Order Assign to User ID:'.$assig_to]);
+            return response()->json(['success' => '1', 'messege' => 'Order Assign to User ID:'.$assig_to]);
             // return response()->json(['messege' => 'no order found']);
         }
         else
