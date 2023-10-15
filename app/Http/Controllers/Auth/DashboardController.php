@@ -87,13 +87,23 @@ class DashboardController extends Controller
                  ->groupBy('stock_status')
                  ->get(); 
                  
-                //  dd($inventory);
-            $list = DB::table('manual_orders')
-                 ->select('status', DB::raw('count(*) as total'), DB::raw('sum(price) as amount'))
-                 ->whereBetween('updated_at', [$from_date, $to_date])
-                 ->where('assign_to',Auth::id())
-                 ->groupBy('status')
-                 ->get(); 
+                
+            // Orders Dashboard Tab
+            $orders_dashboard_query = ManualOrders::query();
+            $orders_dashboard_query = $orders_dashboard_query->select('status', DB::raw('count(*) as total_orders'), DB::raw('sum(price) as total_amount'))->whereBetween('updated_at', [$from_date, $to_date]);
+            $user_id = User::find(auth()->user()->id);
+            $user_roles = $user_id->roles()->get()->pluck('name')->toArray();
+            if(in_array('author', $user_roles) || in_array('admin', $user_roles))
+            { 
+                // dd('');
+            } 
+            elseif(in_array('user', $user_roles))
+            {
+                $orders_dashboard_query = $orders_dashboard_query->where('assign_to',Auth::id());
+            }
+            
+                 
+             $orders_dashboard_query = $orders_dashboard_query->groupBy('status')->get(); 
                  
             $order_report_by_cities = ManualOrders::leftJoin('cities', 'manual_orders.cities_id', '=', 'cities.id')->
             select('cities.name', DB::raw('count(*) as total'))
@@ -177,7 +187,7 @@ class DashboardController extends Controller
         //   dd($shipment);
         //if ($result->count()) { }
         return view('auth.user.dashboard')->with([
-            'data'=>$list,
+            'data'=>$orders_dashboard_query,
             'shipment'=>$shipment,
             'shipmenttracking'=>$statusfinal,
             'date_from'=> $from_date,
@@ -188,7 +198,7 @@ class DashboardController extends Controller
             'total_city_orders'=>$total_city_orders,
             ]);
         // return view('admin.dashboard');
-        $list = User::all();
-        return view('auth.user.dashboard')->with('users',$list);
+        // $users = User::all();
+        // return view('auth.user.dashboard')->with('users',$users);
     }
 } 
