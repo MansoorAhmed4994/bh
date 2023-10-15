@@ -8,8 +8,7 @@ var base_url = '<?php echo e(url('/')); ?>';
         {
             $( document ).ready(function() {
                 $('#first_name').val(name);
-                $('#address').val(address);
-            // alert(name+address);
+                $('#address').val(address); 
              });
              
              
@@ -19,6 +18,7 @@ var base_url = '<?php echo e(url('/')); ?>';
         
         function delete_image(id)
         {
+            
             $('#'+id).show();
             $('#edit_images_box').hide();
         //     const fileListArr = 
@@ -26,8 +26,7 @@ var base_url = '<?php echo e(url('/')); ?>';
         //   console.log(fileListArr)
         }
         
-        function edit_readURL(input) {
-            // alert('working');
+        function edit_readURL(input) { 
             console.log(input.files.length);
             
             var imgages= '';
@@ -57,7 +56,7 @@ var base_url = '<?php echo e(url('/')); ?>';
         }
         
         function readURL(input) {
-            // alert('working');
+            
             console.log(input.files.length);
             var imgages= '';
             for(i=0; i<input.files.length; i++)
@@ -87,8 +86,7 @@ var base_url = '<?php echo e(url('/')); ?>';
             
             
             $('#add_payment').on('click',function(e)
-            {  
-                //  alert('w');
+            {   
                 $('#add_payment_modal').modal('show');
                 
             });
@@ -99,6 +97,15 @@ var base_url = '<?php echo e(url('/')); ?>';
                 $('#add_payment_modal').modal('hide');
                 
             });
+            
+            $('#ConfirmationDeleteCustomerModalClose').on('click',function(e)
+            {  
+                 
+                $('#ConfirmationDeleteCustomerModal').modal('hide');
+                
+            });
+            
+            
         });
         
         function limit(element)
@@ -119,21 +126,16 @@ var base_url = '<?php echo e(url('/')); ?>';
                 
             });
             
-            
-            // $('.payment_image_src').on('click',function(e)
-            // {   
-            //      $(".payment_image_src").attr("src",$('payment_image').attr('src'));
-            //     $('#payment_image_zoom').modal('show');
-                
-            // });
-            
             $('#payment_image_zoom_close').on('click',function(e)
             {   
                 $('#payment_image_zoom').modal('hide');
             });
             
-            
-            
+            $('#search_order_id, #search_transaction_id, #search_sender_name, #search_transfer_to, #search_amount, #search_date, #search_payment_status').on('keypress',function(e) {
+                if(e.which == 13) {
+                    get_payments();
+                }
+            });
             
             $('#image-upload-btn').on('click',function(e) {
                 $("body").addClass("loading"); 
@@ -149,19 +151,24 @@ var base_url = '<?php echo e(url('/')); ?>';
                     data: formData,
                     contentType: false,
                     processData: false,
-                    success: (response) => {
-                        if (typeof response.success !== 'undefined') 
+                    success: (e) => {
+                        
+                        if (typeof e.success !== 'undefined') 
                         {
-                        // $("body").removeClass("loading");
-                            alert(response.messege);
+                            // $("body").removeClass("loading");
+                            $("body").removeClass("loading");
+                            $('#edit_customer_payment').modal('hide');
+                            toastr.success(e.messege, 'Payment');
                         }
                         
-                        if (typeof response.error !== 'undefined') 
+                        if (typeof e.error !== 'undefined') 
                         {
-                        // $("body").removeClass("loading");
-                            alert(response.messege);
+                            // $("body").removeClass("loading");
+                            $("body").removeClass("loading");
+                            toastr.success(e.messege, 'Payment');
                         }
-                        $("body").removeClass("loading"); 
+                        
+                         
                     },
                     error: function(response){
                     //         $('#image-input-error').text(response.responseJSON.message);
@@ -172,8 +179,7 @@ var base_url = '<?php echo e(url('/')); ?>';
         });
         
         function open_image_modal(id)
-        { 
-            // alert(id);
+        {  
             $("#payment_image_src").attr("src",$("#"+id).attr("src"));
             $('#payment_image_zoom').modal('show'); 
             
@@ -181,6 +187,7 @@ var base_url = '<?php echo e(url('/')); ?>';
         
         function get_payments()
         {
+            $("body").addClass("loading"); 
             var data = $('#search_customer_form').serialize(); 
             $.ajax({
                 headers: {
@@ -192,8 +199,8 @@ var base_url = '<?php echo e(url('/')); ?>';
                 dataType: 'json',
                 success: function(e)
                 { 
-                    $('#previouse_order_detail').html(e.messege); 
-                    // alert(e.messege); 
+                    $("body").removeClass("loading"); 
+                    $('#previouse_order_detail').html(e.messege);  
                 },
                 error: function(e) {
                     console.log(e.responseText);
@@ -201,19 +208,33 @@ var base_url = '<?php echo e(url('/')); ?>';
             });
         }
         
+        function delete_customer_payment_confirmation(id,action)
+        {
+            
+            $('#ConfirmationDeleteCustomerModal').modal('show');
+            
+            $('#ConfirmationDeleteCustomerModalYesOnclick').attr('onclick',"actionpaymentapproval("+id+",'delete')");
+        }
             
         function actionpaymentapproval(id,action)
         {
-            //  alert(id);
-             var ur = '';
+            $("body").addClass("loading");
+             var url = '';
             if(action == 'delete')
             {
                 url = '/client/orders/CustomerPayment/delete/'+id;
+                
+            }
+            if(action == 'delete_confirmation')
+            {
+                delete_customer_payment_confirmation(id,action);
+                $("body").removeClass("loading"); 
+                return;
             }
             if(action == 'edit')
-            {
-                $('#edit_customer_payment').modal('show');
-                get_customer_payment(id);
+            { 
+                $('#edit_customer_payment').modal('show'); 
+                get_customer_payment(id); 
                 return;
             }
             else if(action == 'approved')
@@ -225,7 +246,8 @@ var base_url = '<?php echo e(url('/')); ?>';
             {
                 url = '/client/orders/CustomerPayment/ChangeStatus/'+id+'/approval pending';
                 
-            }
+            } 
+            // return;
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -235,25 +257,29 @@ var base_url = '<?php echo e(url('/')); ?>';
                     payment_id:  id, 
                     action:  action, 
                 },
-                type: 'GET',
+                type: 'POST',
                 dataType: 'json',
                 success: function(e)
                 { 
-                    if(e.error == 1)
+                    $("body").removeClass("loading");
+                    // console.log(e);
+                    if(typeof e.success !== 'undefined')
                     {
-                        alert(e.messege);
-                    }
-                    else
+                        $("body").removeClass("loading");
+                        toastr.success(e.messege, 'Payment');
+                    } 
+                    else 
                     {
-                        alert(e.messege); 
+                        $("body").removeClass("loading");
+                        toastr.error(e.messege,'Error');
                     }
-                    // alert(e.messege); 
                 },
                 error: function(e) {
                     console.log(e.responseText);
                 }
             });
         }
+        
             
         function get_customer_payment(id) 
         {   
@@ -281,7 +307,7 @@ var base_url = '<?php echo e(url('/')); ?>';
                     $('#edit_description').val(e.data['description']); 
                     $('#edit_customer_payment_id').val(e.data['id']); 
                     $('#customer_payment_image').attr('src','{{asset("")}}'+e.data["images"]);
-                    console.log(e.data['images']);
+                    // console.log(e.data['images']);
                     // var images ='';
                     // var str_array = e.messege.images.split('|'); 
                     // for(var i = 0; i < str_array.length; i++) 
@@ -302,75 +328,6 @@ var base_url = '<?php echo e(url('/')); ?>';
         }
         
          
-     
-    
-        function update_customer_payment()
-        {
-            var edit_customer_payment_id = $('#edit_customer_payment_id').val();
-            var edit_order_id = $('#edit_order_id').val();
-            var edit_transaction_id = $('#edit_transaction_id').val();
-            var edit_amount = $('#edit_amount').val();
-            var edit_datetime = $('#edit_datetime').val();
-            var edit_sender_name = $('#edit_sender_name').val();
-            var edit_transfer_to = $('#edit_transfer_to').val();
-            var edit_description = $('#edit_description').val(); 
-            var edit_images = $('#edit_images').files;
-            console.log(edit_images);
-            let formData = new FormData($('#edit_form'));
-             
-            // if(edit_order_id == '' || edit_transaction_id == '' || edit_amount == '' || edit_amount == '' || edit_datetime == '' || edit_sender_name == '' || edit_transfer_to == '' || edit_description == '')
-            // {
-            //     aler('please fill all the fields');
-            //     return;
-            // }
-            // return;
-                // $("body").addClass("loading"); 
-                $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                url: base_url + '/client/orders/CustomerPayment/update_payment',
-                type:"POST",
-                dataType: 'json',
-                // data:{
-                //     id:edit_customer_payment_id,
-                //     order_id:edit_order_id,
-                //     transaction_id:edit_transaction_id,
-                //     amount:edit_amount,
-                //     datetime:edit_datetime,
-                //     sender_name:edit_sender_name,
-                //     transfer_to:edit_transfer_to,
-                //     description:edit_description,
-                //     images:edit_images
-                // },
-                
-                // data:$('#edit_form').serialize(),
-                data:formData,
-                success:function(response)
-                { 
-                    if (typeof e.success !== 'undefined') 
-                    {
-                        // $("body").removeClass("loading");
-                        alert(e.messege);
-                    }
-                    
-                    if (typeof e.error !== 'undefined') 
-                    {
-                        // $("body").removeClass("loading");
-                        alert(e.messege);
-                    }
-                    
-                    // $("body").removeClass("loading"); 
-                },
-                error: function(response) {
-                    alert(response); 
-                    $("body").removeClass("loading"); 
-                },
-            });
-        
-        }
-         
-                
     
     
     </script>
@@ -388,6 +345,30 @@ var base_url = '<?php echo e(url('/')); ?>';
 
     </style>
     
+    
+    
+    <div class="modal fade" id="ConfirmationDeleteCustomerModal" tabindex="-1" role="dialog" aria-labelledby="ConfirmationDeleteCustomerModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                
+                <div class="modal-body">
+                    <p>Are you Sure you want to delete?</p>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="ConfirmationDeleteCustomerModalYesOnclick" onclick="">Yes</button>
+                    <button type="button" class="btn btn-secondary" id="ConfirmationDeleteCustomerModalClose">Close</button>
+                </div>
+                
+            </div>
+        </div>
+    </div>
     
     <div class="modal fade" id="add_payment_modal" tabindex="-1" role="dialog" aria-labelledby="add_payment_modal" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
@@ -534,7 +515,7 @@ var base_url = '<?php echo e(url('/')); ?>';
                     
                     <div class="form-group">
                         <label for="edit_orderid">Order ID</label>
-                        <input type="number"  class="form-control" onchange="get_payments()" id="edit_order_id"  name="edit_order_id" placeholder="order id" required>
+                        <input type="number"  class="form-control" id="edit_order_id"  name="edit_order_id" placeholder="order id" required>
                         <small id="edit_order_id_error" class="form-text text-danger"> </small>
                     </div> 
         

@@ -221,7 +221,7 @@ class CustomerPaymentController extends Controller
             }
             else
             {
-                return response()->json(['error' => '1','messege'=>'Payment not saved please contact admin']);
+                return response()->json(['error' => '1','messege'=>'Payment not Updated please contact admin']);
             }
             // dd($action_status);
             
@@ -234,7 +234,7 @@ class CustomerPaymentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $delete_query = CustomerPayments::find($id);
         $order_id = $delete_query->order_id;
@@ -251,8 +251,8 @@ class CustomerPaymentController extends Controller
         {
             $update_status = false;
             return response()->json([
-                'messege' => 'Order is dispatched! Only Admin can delete this payment',
-                'error' => 1
+                'error' => '1',
+                'messege' => 'Order is dispatched! Only Admin can delete this payment', 
                 ]);
         }
         elseif($status == 'dispatched' && Auth::guard('admin')->check())
@@ -270,23 +270,23 @@ class CustomerPaymentController extends Controller
                 if($ManualOrder)
                 {
                     return response()->json([
-                    'messege' => 'deleted',
-                    'error' => 0
+                    'success' => '1',
+                    'messege' => 'Payment Successfully deleted', 
                     ]);
                 }
                 else
                 {
                     return response()->json([
-                    'messege' => 'Manualorders payment not updated',
-                    'error' => 1
+                    'error' => '1',
+                    'messege' => 'Manualorders payment not Updated please contact admin', 
                     ]);
                 }
             }
             else
             {
                 return response()->json([
-                'messege' => 'Customer payment not deleted',
-                'error' => 1
+                'error' => '1',
+                'messege' => 'Customer payment not deleted please contact admin', 
                 ]);
             }   
         }
@@ -302,44 +302,49 @@ class CustomerPaymentController extends Controller
         $data='';
         $customerPayments;
         $customerPayments = CustomerPayments::query();
-        if($request->search_order_id == '')
-        {
-            $customerPayments = $customerPayments->where('customer_payments.status','approval pending');
+        
+        
+        if($request->search_payment_status != '' || $request->search_transfer_to != '' ||  $request->search_date != '' || $request->search_amount != '' ||  $request->search_sender_name != '' || $request->search_transaction_id != '' || $request->search_order_id != '')
+        { 
+            if($request->search_order_id != '')
+            {
+                $customerPayments = $customerPayments->where('customer_payments.order_id',$request->search_order_id);
+            }
+            
+            if($request->search_transaction_id != '')
+            {
+                $customerPayments = $customerPayments->where('customer_payments.transaction_id',$request->search_transaction_id);
+            }
+            
+            if($request->search_sender_name != '')
+            {
+                $customerPayments = $customerPayments->where('customer_payments.sender_name','like','%'.$request->search_sender_name.'%');
+            }
+            
+            if($request->search_amount != '')
+            {
+                $customerPayments = $customerPayments->where('customer_payments.amount',$request->search_amount);
+            }
+            
+            if($request->search_date != '')
+            {
+                $customerPayments = $customerPayments->where('customer_payments.datetime',$request->search_date);
+            }
+            
+            if($request->search_transfer_to != '')
+            {
+                $customerPayments = $customerPayments->where('customer_payments.transfer_to',$request->search_transfer_to);
+            }
+            // dd($request->search_transfer_to);
+            if($request->search_payment_status != '')
+            {
+                $customerPayments = $customerPayments->where('customer_payments.status',$request->search_payment_status);
+            }
         }
         else
         {
+            $customerPayments = $customerPayments->where('customer_payments.status','approval pending');
             
-            $customerPayments = $customerPayments->where('customer_payments.order_id',$request->search_order_id);
-        }
-        
-        if($request->search_transaction_id != '')
-        {
-            $customerPayments = $customerPayments->where('customer_payments.transaction_id',$request->search_transaction_id);
-        }
-        
-        if($request->search_sender_name != '')
-        {
-            $customerPayments = $customerPayments->where('customer_payments.sender_name','like','%'.$request->search_sender_name.'%');
-        }
-        
-        if($request->search_amount != '')
-        {
-            $customerPayments = $customerPayments->where('customer_payments.amount',$request->search_amount);
-        }
-        
-        if($request->search_date != '')
-        {
-            $customerPayments = $customerPayments->where('customer_payments.datetime',$request->search_date);
-        }
-        
-        if($request->search_transfer_to != '')
-        {
-            $customerPayments = $customerPayments->where('customer_payments.transfer_to',$request->search_transfer_to);
-        }
-        // dd($request->search_transfer_to);
-        if($request->search_payment_status != '')
-        {
-            $customerPayments = $customerPayments->where('customer_payments.status',$request->search_payment_status);
         }
         
         
@@ -406,7 +411,7 @@ class CustomerPaymentController extends Controller
                 '<td><select class="btn btn-primary" onchange="actionpaymentapproval('.$customerPayment->id.',this.value)">';
                 
                 $data .=  '<option value="">Select Action</option>';
-                $data .=  '<option value="delete">Delete</option>';
+                $data .=  '<option value="delete_confirmation">Delete</option>';
                 if(Auth::guard('admin')->check())
                 {
                     $data .=  '<option value="approval pending">Remove Approval</option>';
@@ -437,12 +442,12 @@ class CustomerPaymentController extends Controller
         // dd($id,$status);
         if(Auth::guard('admin')->check())
         { 
-            $status = CustomerPayments::where('id',$id)->update(['status' => $status]); 
-            if($status)
+            $update_status = CustomerPayments::where('id',$id)->update(['status' => $status]); 
+            if($update_status)
             {
                 return response()->json([
-                'messege' => 'updated status to '.$status,
-                'error' => 0
+                'messege' => 'Payment Status updated Successfully to '.$status,
+                'success' => 0
                 ]);
             }
         }

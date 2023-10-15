@@ -41,8 +41,8 @@
             removeElementsByClass('delete_btn_class');
             var mywindow = window.open('', 'PRINT', 'height=400,width=600');
         
-            mywindow.document.write('<html><head><title>' + document.title  + '</title>');
-            mywindow.document.write('<head><style></style><link href="{{ asset("public/css/app.css") }}" rel="stylesheet"><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous"></head><body >');
+            mywindow.document.write('<html><title>' + document.title  + '</title>');
+            mywindow.document.write('<style></style><link href="{{ asset("public/css/app.css") }}" rel="stylesheet"><body >');
             mywindow.document.write('<h1>Load Sheet</h1>');
             mywindow.document.write(document.getElementById('print_loadsheet').innerHTML);
             mywindow.document.write('</body></html>');
