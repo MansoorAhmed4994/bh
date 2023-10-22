@@ -68,6 +68,11 @@
                     dataType: 'json',
                     success: function(e)
                     {
+                        if (typeof e.error !== 'undefined') 
+                        {
+                            toastr.warning(e.messege, 'No Record found');
+                            return;   
+                        }
                         // alert(e.city);
                         $('#first_name').val(e.field_values['receiver_name']);
                         $('#address').val(e.address);

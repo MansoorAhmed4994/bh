@@ -62,6 +62,7 @@ class ManualOrdersController extends Controller
             'customers.last_name',
             'customers.number',
             'customers.address',
+            'customers.loyality_count',
             'manual_orders.consignment_id',
             'manual_orders.advance_payment',
             'manual_orders.cod_amount',
@@ -120,24 +121,11 @@ class ManualOrdersController extends Controller
                     ->orWhere('customers.number','like','%'.$search_text.'%')
                     ->orWhere('manual_orders.id','like','%'.$search_text.'%')
                     ->orWhere('manual_orders.consignment_id','like','%'.$search_text.'%');
-            })->where('manual_orders.status','like',$order_status.'%');
+            });
             
         }
-        else if($order_status != '')
-        {
-            if($order_status != 'all')
-            {
-                $query = $query->where('manual_orders.status',$order_status);
-            }  
-        }
-        else
-        {
-            $query = $query->
-            where(function ($query) use ($search_text) {
-                $query->where('manual_orders.status','like','%%');
-            }); 
-        } 
         
+        //========================filter on date
         if($request->date_by != '')
         { 
             $date_by = $request->date_by;
@@ -164,10 +152,14 @@ class ManualOrdersController extends Controller
             $query = $query->whereBetween("manual_orders.".$date_by ,[$date_from,$date_to]);
             
         }
+        
+        
+        //========================get user roles
         $user_id = User::find(auth()->user()->id);
         $user_roles = $user_id->roles()->get()->pluck('name')->toArray();
 
         
+        //========================filter on assign column
         if(in_array('author', $user_roles) || in_array('admin', $user_roles))
         { 
             // dd('');
@@ -185,6 +177,38 @@ class ManualOrdersController extends Controller
         {
             $query = $query->orderBy('manual_orders.id', 'DESC');
         }
+        
+        
+        
+        //========================filter on status column
+        if($order_status != '')
+        {
+            // dd(in_array('calling', $user_roles));
+            if(in_array('calling', $user_roles))
+            {
+                $query->where('manual_orders.status','!=','pending'); 
+            } 
+            elseif($order_status == 'all')
+            {
+                $query->where('manual_orders.status','like','%%'); 
+            }  
+            else
+            {
+                $query = $query->where('manual_orders.status',$order_status);
+            } 
+        }
+        elseif($order_status == 'all')
+        {
+            if(in_array('calling', $user_roles))
+            {
+                $query->where('manual_orders.status','!=','pending'); 
+            } 
+            else
+            {
+                $query->where('manual_orders.status','like','%%'); 
+            }
+        }
+        
         
         $users = User::select('*')->get();
         $list = $query->paginate(20); 
@@ -313,7 +337,19 @@ class ManualOrdersController extends Controller
         $user_id = User::find(auth()->user()->id);
         $user_roles = $user_id->roles()->get()->pluck('name')->toArray();
 
-        // dd((ManualOrders::find($ManualOrder)->assign_to),'==========',auth()->user()->id);
+        if(ManualOrders::find($ManualOrder)->status == 'dispatched')
+        {
+            if(Auth::guard('admin')->check())
+            {
+                
+            }
+            else
+            {
+                toastr()->error('Parcel is dispatched only admin can edit this order');
+                return back();
+            }
+        }
+
         if(in_array('author', $user_roles) || in_array('admin', $user_roles) || Auth::guard('admin')->check())
         { 
             // dd('');
@@ -325,7 +361,7 @@ class ManualOrdersController extends Controller
         }
         else
         { 
-            toastr()->error('You Dont Have Permission to edit this order');
+            toastr()->error('This is not your parcel, You Dont Have Permission to edit this order, contact Admin');
             return back();
         }
         
@@ -532,8 +568,10 @@ class ManualOrdersController extends Controller
                     $check_status = check_order_status_for_print($order_id); 
                     if( $check_status['row_count'] > 0)
                     {
-                        // echo '5';
-                        dd('Parcel Status is '.$check_status['status'].' and parcel cannot print slip until parcel status is confirmed OR Dispatched');
+                        // echo '5'; re
+                        toastr()->error('Parcel Status is '.$check_status['status'].' and parcel cannot print slip until parcel status is confirmed OR Dispatched','Error');
+                        return back();
+                        // dd();
                     }
                     
                     $slips = $this->print_trax_slips($id);
@@ -541,7 +579,8 @@ class ManualOrdersController extends Controller
                 }
                 else
                 {
-                    dd('These shipments not created',$ApiResponse); 
+                    toastr()->error('These shipments not created! Please contact Admin','Error');
+                    return back(); 
                 }
                 
             }
@@ -551,7 +590,9 @@ class ManualOrdersController extends Controller
                 $ManualOrder->status = 'dispatched';
                 if(check_customer_advance_payment($order_id) > 0)
                 {
-                    dd('payment not approved');
+                    toastr()->error('payment not approved','Error');
+                    return back(); 
+                    // dd('payment not approved');
                 }
                 
                 
@@ -563,7 +604,8 @@ class ManualOrdersController extends Controller
                 $check_status = check_order_status_for_print($order_id); 
                 if( $check_status['row_count'] > 0)
                 {
-                    dd('Parcel Status is '.$check_status['status'].' and parcel cannot print slip until parcel status is confirmed OR Dispatched');
+                    toastr()->error('Parcel Status is '.$check_status['status'].' and parcel cannot print slip until parcel status is confirmed OR Dispatched','Error');
+                    return back(); 
                 }
                 $ManualOrder = ManualOrders::select('*')->where('manual_orders.id',$ManualOrder->id)->get();
                 // foreach($ManualOrder as $ManualOrders)
@@ -578,7 +620,6 @@ class ManualOrdersController extends Controller
             }
         }
         
-        //dd($ManualOrder);c
 
         // return redirect()->route('ManualOrders.index')->with('success', 'Order Updated Successfully');
     }
@@ -591,19 +632,15 @@ class ManualOrdersController extends Controller
      */
     public function destroy(ManualOrders $ManualOrder)
     { 
-        //dd($ManualOrder);
         $ManualOrder->status = 'deleted';
         $ManualOrder->save();
-        //dd($manual_orders);
         return redirect()->route('ManualOrders.index')->with('success', 'Order Deleted');
         //
     }
     public function order_status($status, ManualOrders $ManualOrder)
     { 
-        //dd($ManualOrder);
         $ManualOrder->status = $status;
         $ManualOrder->save();
-        //dd($manual_orders);
         return redirect()->route('ManualOrders.index')->with('success', 'Order '.$status);
         //
     }
@@ -613,14 +650,12 @@ class ManualOrdersController extends Controller
     public function delete_order_image(Request $request)
     {  
         //File::delete($request->delete_path);
-        //dd(file_exists($request->delete_path));
         // File::delete($request->delete_path)
         if(file_exists($request->delete_path))
         {
             if(File::delete($request->delete_path))
             {
                 $manual_orders = ManualOrders::find($request->order_id); 
-                //dd($manual_orders);
                 $manual_orders->images = $request->images;
                 $status =$manual_orders->save();
                 if($status)
@@ -636,11 +671,9 @@ class ManualOrdersController extends Controller
         }
         else
         {
-            // dd('working');
             $manual_orders = ManualOrders::find($request->order_id); 
             
             $manual_orders->images = $request->images;
-            //dd($manual_orders->save());
              $status =$manual_orders->save();
                 if($status)
                 {
@@ -660,23 +693,24 @@ class ManualOrdersController extends Controller
        
         if($order_action == 'print')
         {
-            //  dd($order_ids);
             $explode_id = explode(',', $order_ids); 
             
             $ManualOrder = ManualOrders::select('*')->whereIn('manual_orders.id',$explode_id)->get();
+            if(check_customer_advance_payment($ManualOrders->id) > 0)
+            {
+                toastr()->error('payment not approved','Error');
+                return back();
+            }
+            $check_status = check_order_status_for_print($ManualOrders->id); 
+            if( $check_status['row_count'] > 0)
+            { 
+                toastr()->error('Parcel Status is '.$check_status['status'].' and parcel cannot print slip until parcel status is confirmed OR Dispatched','Error');
+                return back(); 
+            }
             foreach($ManualOrder as $ManualOrders)
             {
                 create_activity_log(['table_name'=>'manual_orders','ref_id'=>$ManualOrders->id,'activity_desc'=>'Local Slip','created_by'=>Auth::id(),'method'=>'print','route'=>route('ManualOrders.order.action')]);
     
-            }
-            if(check_customer_advance_payment($ManualOrders->id) > 0)
-            {
-                dd('payment not approved');
-            }
-            $check_status = check_order_status_for_print($ManualOrders->id); 
-            if( $check_status['row_count'] > 0)
-            {
-                dd('Parcel Status is '.$check_status['status'].' and parcel cannot print slip until parcel status is confirmed OR Dispatched');
             }
             return view('client.orders.manual-orders.print_slip')->with('ManualOrders',$ManualOrder);
                 //dd($order_ids);
@@ -737,6 +771,22 @@ class ManualOrdersController extends Controller
             //dd($explode_id);
             $ManualOrders = ManualOrders::whereIn('id',$explode_id)->update(['manual_orders.reference_number' => DB::raw("concat('(',`id`,')(',`updated_at`,')')")]);
             $ManualOrders = ManualOrders::whereIn('id',$explode_id)->get();
+            foreach($ManualOrders as $ManualOrder)
+            {
+                if($ManualOrder->status == 'dispatched')
+                {
+                    if(Auth::guard('admin')->check())
+                    {
+                        
+                    }
+                    else
+                    {
+                        
+                        toastr()->error('Order Id: '.$ManualOrder->id.' is already dispacthed only admin can print this slip');
+                        return back();
+                    }
+                }
+            }
             $cities = $this->get_mnp_cities();
             //$ManualOrder = ManualOrders::whereIn('id',$explode_id)->update(['status' => 'dispatched']);
             return view('client.orders.manual-orders.mnp.create')->with(['ManualOrders'=>$ManualOrders, 'cities'=>$cities]);
@@ -750,6 +800,23 @@ class ManualOrdersController extends Controller
             $explode_id = explode(',', $order_ids);
             $this->UpdateReferenceNumberByOrderIds($explode_id);
             $ManualOrders = $this->GetOrdersByIds($explode_id);
+            
+            foreach($ManualOrders as $ManualOrder)
+            {
+                if($ManualOrder->status == 'dispatched')
+                {
+                    if(Auth::guard('admin')->check())
+                    {
+                        
+                    }
+                    else
+                    {
+                        
+                        toastr()->error('Order Id: '.$ManualOrder->id.' is already dispacthed only admin can print this slip');
+                        return back();
+                    }
+                }
+            }
             $cities = $this->get_trax_cities();
             
             return view('client.orders.manual-orders.trax.create')->with(['ManualOrders'=>$ManualOrders, 'cities'=>$cities]);
@@ -760,15 +827,35 @@ class ManualOrdersController extends Controller
         }
         elseif($order_action == 'print_pos_slips')
         {
+            
             $explode_id = explode(',', $order_ids); 
-            $ManualOrder = Manualorders::whereIn('manual_orders.id',$explode_id)->get();
-            foreach($ManualOrder as $ManualOrders)
+            $ManualOrders = Manualorders::whereIn('manual_orders.id',$explode_id)->get();
+            // dd('w');
+            // dd($ManualOrders);
+            foreach($ManualOrders as $ManualOrder)
             {
-                create_activity_log(['table_name'=>'manual_orders','ref_id'=>$ManualOrders->id,'activity_desc'=>'pos slip','created_by'=>Auth::id(),'method'=>'print','route'=>route('ManualOrders.order.action')]);
+                if($ManualOrder->status == 'dispatched')
+                {
+                    if(Auth::guard('admin')->check())
+                    {
+                        
+                    }
+                    else
+                    {
+                        
+                        toastr()->error('Order Id: '.$ManualOrder->id.' is already dispacthed only admin can print this slip');
+                        return back();
+                    }
+                }
+            }
+            
+            foreach($ManualOrders as $ManualOrder)
+            {
+                create_activity_log(['table_name'=>'manual_orders','ref_id'=>$ManualOrder->id,'activity_desc'=>'pos slip','created_by'=>Auth::id(),'method'=>'print','route'=>route('ManualOrders.order.action')]);
     
             }
             
-            return view('client.orders.manual-orders.print_pos_slips')->with('ManualOrders',$ManualOrder);
+            return view('client.orders.manual-orders.print_pos_slips')->with('ManualOrders',$ManualOrders);
                 //dd($order_ids);
         }
         
@@ -848,8 +935,16 @@ class ManualOrdersController extends Controller
         $ManualOrders = $query->orderBy('manual_orders.id', 'DESC')->get();
         // $ManualOrders = ManualOrders::where('customers.number',$request->number)->get();
  
-        // dd($ManualOrders);
         
+        if($ManualOrders->isEmpty())
+        {
+            return response()->json([
+            'error' => '1',
+            'messege' => 'no record', 
+            ]); 
+            // dd($ManualOrders);
+        } 
+        // dd($ManualOrders->first());
         $city = '';
         if($ManualOrders->first()->cities != null)
         {
@@ -1002,14 +1097,17 @@ class ManualOrdersController extends Controller
     }
     
     public function print_order_slip($ManualOrder_id)
-    {
+    { 
         $ManualOrder = ManualOrders::select('*')->where('manual_orders.id',$ManualOrder_id)->get();
         //dd($ManualOrder);
         if(check_customer_advance_payment($ManualOrder_id) > 0)
         {
-            dd('payment not approved');
+            toastr()->error('payment not approved','Error');
+            return back(); 
+            // dd('payment not approved'); 
         }
         $check_status = check_order_status_for_print($ManualOrder_id); 
+        // dd($check_status);
         if( $check_status['row_count'] > 0)
         {
             dd('Parcel Status is '.$check_status['status'].' and parcel cannot print slip until parcel status is confirmed OR Dispatched');
@@ -1449,6 +1547,12 @@ class ManualOrdersController extends Controller
         // $order_id = $id; 
         $ManualOrder = Manualorders::where('manual_orders.id',$ManualOrder)->get();
         $ManualOrders = $ManualOrder->first();
+        
+        if($ManualOrders->status == 'dispatched' || $ManualOrders->status == 'confirmed')
+        {
+            toastr()->error('Parcel Status is '.$ManualOrders->status.' and cannot print pos slip cause parcel status is Dispatched','Error');
+            return back();
+        }
         if($ManualOrders->status == 'pending' || $ManualOrders->status == 'addition')
         {
             $ManualOrders->status = 'prepared';

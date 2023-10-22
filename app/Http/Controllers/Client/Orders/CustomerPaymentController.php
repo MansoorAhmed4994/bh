@@ -185,6 +185,8 @@ class CustomerPaymentController extends Controller
             // {
                 
             // }
+            
+            
         $CustomerPayments = CustomerPayments::find($request->edit_customer_payment_id);
             
             $CustomerPayments->order_id =$request->edit_order_id;
@@ -202,6 +204,10 @@ class CustomerPaymentController extends Controller
             $CustomerPayments->updated_by = Auth::id();
             $CustomerPayments->save(); 
             
+            
+            $old_order_id =$request->edit_order_id;
+            $amount = CustomerPayments::where('customer_payments.order_id',$old_order_id)->sum('amount');
+            $ManualOrder = ManualOrders::where('id',$old_order_id)->update(['advance_payment' => $amount]);
             
             $amount = CustomerPayments::where('customer_payments.order_id',$request->edit_order_id)->sum('amount');
             $ManualOrder = ManualOrders::where('id',$request->edit_order_id)->update(['advance_payment' => $amount]);

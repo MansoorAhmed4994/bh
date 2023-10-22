@@ -58,6 +58,7 @@ trait ManualOrderTraits {
             $customers->whatsapp_number = $request->number;
             $customers->created_by = Auth::id();
             $customers->updated_by = Auth::id();
+            $customers->loyality_count = 1;
             $customers->status = 'active'; 
             $customers->save();
             ///$customers = $customers->save();
@@ -87,7 +88,7 @@ trait ManualOrderTraits {
             
             $manual_orders->created_by = Auth::id();
             $manual_orders->updated_by = Auth::id();
-            $manual_orders->status = $status;
+            $manual_orders->status = 'pending';
             //$manual_orders = $manual_orders->save();
              $status = $customers->manual_orders()->save($manual_orders);
             $manualorders_id = $status->id;
@@ -122,6 +123,11 @@ trait ManualOrderTraits {
                 $order_id = $request->order_id;
                 $manual_orders = ManualOrders::find($order_id);
                 // dd($manual_orders);
+                if($manual_orders->status == 'dispatched' ||  $manual_orders->status == 'confirmed')
+                {
+                    toastr()->error('Order cannot convert to dispatch!');
+                    return back();
+                }
                 if($images != null)
                 {
                     $manual_orders->images = $manual_orders->images.'|'.(implode("|",$images));
@@ -150,6 +156,8 @@ trait ManualOrderTraits {
             }
             else
             {
+                // $manual_orders = ManualOrders::where('receiver_number',$request->number)->where('status');
+                
                 $manual_orders = new ManualOrders();
                 //$manual_orders->customer_id = $customers->id;
                 $manual_orders->receiver_name = $request->first_name;
@@ -173,11 +181,15 @@ trait ManualOrderTraits {
                 $manual_orders->created_by = Auth::id();
                 $manual_orders->updated_by = Auth::id(); 
                 $manual_orders->assign_to = $this->AssignOrderToUser();
-                $manual_orders->status = $status;
+                $manual_orders->status = 'pending';
                 //$manual_orders = $manual_orders->save();
                 $status = $customer_id->first()->manual_orders()->save($manual_orders);
+                $customers_update = $customer_id->first();
+                $customers_update->loyality_count = $customers_update->loyality_count+1;
+                // dd(->update(['loyality_count' => $order_status]));
                  //dd(); 
                 $manualorders_id = $status->id; 
+                $customers_update->save();
                  
                 if($status->id)
                 {

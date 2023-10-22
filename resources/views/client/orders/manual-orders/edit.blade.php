@@ -719,8 +719,23 @@
                     </div>
                             
                         <div class="form-group col-auto">
-                            <button type="submit" class="btn btn-primary" name="submit" id="save" value="save">Save</button>
-                            <button type="submit" class="btn btn-primary" name="submit" id="saveandprint" value="saveandprint">Save & Print Slip</button>
+                            {{$ManualOrder->status}}
+                            @if($ManualOrder->status == 'dispatched')
+                                @if(Auth::guard('admin')->check())
+                                    <button type="submit" class="btn btn-primary" name="submit" id="save" value="save">Save</button>
+                                    <button type="submit" class="btn btn-primary" name="submit" id="saveandprint" value="saveandprint">Save & Print Slip</button>
+                                    
+                                @else
+                                
+                                    <button type="button"class="btn btn-warning">Parcel is Distached, only admin can retype this parcel</p>
+                                @endif
+                            @else
+                                <button type="submit" class="btn btn-primary" name="submit" id="save" value="save">Save</button>
+                                <button type="submit" class="btn btn-primary" name="submit" id="saveandprint" value="saveandprint">Save & Print Slip</button>
+                            @endif
+                            
+                            
+                            
                         </div>
                         
                     </div>

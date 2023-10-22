@@ -774,6 +774,14 @@ var container = "";
                                 
                             </select>
                         </div>
+                        @else
+                        <div class="input-group-text" id="btnGroupAddon">
+                        @foreach($users as $user)
+                                         
+                             {{ ($user->id == $lists->assign_to) ? ($user->first_name." ".$user->last_name)  : '' }}
+                                    
+                        @endforeach
+                        </div>
                         @endif
                     </div>
                     
@@ -794,7 +802,7 @@ var container = "";
                 </td>
                 <td>{{$lists->consignment_id}}</td> 
                 <td>{{$lists->id}}</td>
-                <td>{{$lists->first_name}}</td>   
+                <td>{{$lists->first_name}}<p>{{$lists->loyality_count}}</p><i class='far fa-user'></i></td>   
                 <?php 
                 $number = $lists->number;
                 $reciever_number = $lists->receiver_number;

@@ -32,11 +32,11 @@
             $query=ManualOrders::query();
             $status = $query->where(['id'=>$order_id]);
             $query = $query->where('manual_orders.status','!=','dispatched')->where('manual_orders.status','!=','confirmed');
-            // where(function ($query) {
+            // $query = $query->where(function ($query) {
             //     $query->where('manual_orders.status','!=','dispatched')
             //         ->orwhere('manual_orders.status','!=','confirmed') ;
             // });
-            // dd($query->get());
+            // dd($query->get()->count());
             
             if($query->get()->count() > 0)
             { 
