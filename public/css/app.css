@@ -4513,6 +4513,12 @@ input[type=button].btn-block {
     color: white;
     background: #7e218c; 
 }
+.status-not-responding
+{ 
+    color: white;
+    background: #4bf34f; 
+}
+
 .status-hold
 { 
     color: white;

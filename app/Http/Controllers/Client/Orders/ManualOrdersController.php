@@ -912,11 +912,39 @@ class ManualOrdersController extends Controller
     
     public function previouse_order_history(Request $request)
     { 
-        $query = ManualOrders::query();
-        $number = $request->receiver_number;
-        if($request->number[0] == '0')
+        // dd($request->number);
+        // dd(date('Y-m-d h:i:s', strtotime("-3 days")));
+        if(Auth::guard('admin')->check())
         {
-            $number = substr_replace($request->number, '', 0, 1);
+            
+        }
+        else
+        {
+            $findpreviouseorder = ManualOrders::select('created_at as date','id')
+            ->where('receiver_number',$request->number)
+            ->where( 'created_at', '>', (date('Y-m-d h:i:s', strtotime("-3 days"))))
+            ->first();
+            // dd($findpreviouseorder);
+            // if(!$findpreviouseorder->isEmpty())
+            
+            if($findpreviouseorder != null)
+            {
+                // dd($findpreviouseorder->id);
+                return response()->json([
+                'error' => '2',
+                'messege' => 'Order already placed at date:'.$findpreviouseorder->date.' and order ID: '.$findpreviouseorder->id, 
+                ]);  
+            } 
+                
+        }
+           
+        
+        $query = ManualOrders::query();
+        $number = $request->number;
+        $order_add;
+        // if($request->number[0] == '0')
+        // {
+        //     $number = substr_replace($request->number, '', 0, 1);
             // dd($number);
             $query = $query->where('manual_orders.receiver_number','like','%'.$number);
             $query = $query->where('manual_orders.status','!=','dispatched')->where('manual_orders.status','!=','confirmed')->where('manual_orders.status','!=','cancel')->where('manual_orders.status','!=','return');
@@ -929,7 +957,7 @@ class ManualOrdersController extends Controller
             //         ->Where('manual_orders.status','not like','%dispatched%')
             //         ->orWhere('manual_orders.status','not like','%confirmed%');
             // });
-        }
+        // }
         
         $data='';
         $ManualOrders = $query->orderBy('manual_orders.id', 'DESC')->get();
@@ -940,7 +968,7 @@ class ManualOrdersController extends Controller
         {
             return response()->json([
             'error' => '1',
-            'messege' => 'no record', 
+            'messege' => 'no record Found', 
             ]); 
             // dd($ManualOrders);
         } 
@@ -967,6 +995,7 @@ class ManualOrdersController extends Controller
                 foreach($ManualOrders as $ManualOrder)
                 {
                     // dd($ManualOrder);
+                    
                     $onclick = "'".$ManualOrder->first_name."','".$ManualOrder->reciever_address."'";
                     $data .= '<tr><td>';
                     
@@ -992,7 +1021,7 @@ class ManualOrdersController extends Controller
             'messege' => $data,
             'field_values'=> $ManualOrders->first(),
             'address'=>$ManualOrders->first()->customers->address,
-            'city'=>$city
+            'city'=>$city,
             ]); 
         // return view('client.orders.manual-orders.view')->with('ManualOrder',$ManualOrder);
     }
@@ -1056,6 +1085,48 @@ class ManualOrdersController extends Controller
         }
          
     }
+    
+    
+    public function ChangeOrderStatus(Request $request)
+    {
+        $manualorder = ManualOrders::find($request->order_id);
+        if($manualorder->status == 'dispatched')
+        {
+            if(Auth::guard('admin')->check())
+            {
+                $manualorder->status = $request->status;
+                $update_status = $manualorder->save();
+                if($update_status)
+                {
+                    return response()->json(['success'=>'1','messege' => 'Order Status changed to '.$request->status]);
+                }
+                else
+                {
+                    return response()->json(['error'=>'1','messege' => 'Cant change the order status please contact admin']);
+                }
+                // $action_status = ManualOrders::where('id',$order_id)->update(['status' => 'dispatched', 'riders_id'=> $request->riders]);
+            }
+            else
+            {
+                return response()->json(['error'=>'1','messege' => 'You dont have permission to change status']);
+            }
+        }
+        else
+        {
+            $manualorder->status = $request->status;
+            $update_status = $manualorder->save();
+            if($update_status)
+            {
+                return response()->json(['success'=>'1','messege' => 'Order Status changed to '.$request->status]);
+            }
+            else
+            {
+                return response()->json(['error'=>'1','messege' => 'Cant change the order status please contact admin']);
+            }
+        }
+        
+    }
+    
     
     public function popup_dispatch_edit($ManualOrder)
     { 

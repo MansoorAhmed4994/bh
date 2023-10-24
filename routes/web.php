@@ -55,6 +55,8 @@ Route::group(['prefix' => 'client/orders/', 'namespace' => 'Client\Orders', 'mid
     Route::any('ManualOrders/update/{ManualOrder}', 'ManualOrdersController@update')->name('ManualOrders.update');
     Route::post('ManualOrders/add-image', 'ManualOrdersController@add_order_image')->name('ManualOrders.add.order.image');
     Route::get('ManualOrders/dispatch-order-edit/{ManualOrder}', 'ManualOrdersController@popup_dispatch_edit')->name('ManualOrders.dispatch.order.edit');
+    Route::post('ManualOrders/ChangeOrderStatus/', 'ManualOrdersController@ChangeOrderStatus')->name('ManualOrders.change.status');
+     
     Route::post('ManualOrders/dispatch-order-edit/{ManualOrder}', 'ManualOrdersController@popup_dispatch_update')->name('ManualOrders.dispatch.order.update');
     Route::post('ManualOrders/assign-to/{id}/{assig_to}', 'ManualOrdersController@UpdateAssignTo')->name('ManualOrders.update.assign.to');
     

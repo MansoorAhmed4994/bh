@@ -461,6 +461,44 @@ var container = "";
     }
     
     
+    function ChangeOrderStatus(id) 
+    {   
+        var status = $('#ChnageOrderStatusId_'+id).val();
+        $("body").addClass("loading"); 
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: '{{route("ManualOrders.change.status")}}',
+            
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                order_id:id,
+                status:status
+            },
+            success: function(e) 
+            {
+                if(typeof e.success !== 'undefined')
+                {
+                    toastr.success(e.messege, 'Error');
+
+                }
+                else
+                {
+                    toastr.success(e.messege, 'Error');
+                }
+                $("body").removeClass("loading");
+                 
+                
+            },
+            error: function(e) {
+                console.log(e.responseText);
+            }
+        });
+    }
+    
+    
     
     function get_checked_values()
     {
@@ -704,23 +742,21 @@ var container = "";
                 <th scope="col" class="delete_btn_class"><input type="checkbox" onclick="checkAll(this)" ></th>
                 <th scope="col">#</th> 
                 <th scope="col">Act</th> 
+                <th scope="col">Status</th>
+                <th scope="col">Status Reason</th>
                 <th scope="col">Img.</th>
                 <th scope="col">Consignment.Id</th>
                 <th scope="col">Ord.ID</th>
                 <th scope="col">F.Name</th> 
-                <th scope="col">Rec.Phone</th>
-                <th scope="col">Cus.Phone</th>  
-                <th scope="col">Send Msg</th> 
-                <th scope="col">Description</th>
+                <th scope="col">Rec.Phone</th> 
+                <th scope="col"> Whatsapp</th> 
+                <th scope="col">Desc.</th>
                 <th scope="col">Address</th>
                 <th scope="col">Price</th>
-                <th scope="col">Adv.Payment</th>
-                <th scope="col">COD</th>
-                <th scope="col">OD Y/N</th>
+                <th scope="col">Adv.Pay</th>
+                <th scope="col">COD</th> 
                 <th scope="col">cr.Date</th>
                 <th scope="col">Up.Date</th>
-                <th scope="col">Status</th>
-                <th scope="col">Status Reason</th>
                 <th scope="col">Updated by</th>
                 <th scope="col">created by</th>
             </tr>
@@ -729,17 +765,8 @@ var container = "";
             <?php $count=1;?>
             @foreach($list as $lists)
             
-            <tr class="list_<?=$count;?>" style="
-            @if($lists->status == 'deleted') background-color:red;color: white;
-            @elseif($lists->status == 'pending') background-color:orange ;
-            @elseif($lists->status == 'addition') background-color:yellow ;
-            @elseif($lists->status == 'prepared') background-color:#90f9ec;
-            @elseif($lists->status == 'confirmed') background-color:blue ;color: white;
-            @elseif($lists->status == 'dispatched') background-color:green ;color: white;
-            @elseif($lists->status == 'deleted') background-color:pink ;
-            @elseif($lists->status == 'incomplete') background-color:grey;color: white; 
-            @elseif($lists->status == 'incomplete') background-color:lightgrey; 
-            @else background-color:white; @endif">
+            <tr class="list_<?=$count;?> status-{!! str_replace(' ', '-', $lists->status) !!}
+            ">
                 <td ><input type="checkbox" id="order_checkbox" class="order_checkbox_class" name="order_checkbox" onclick="get_checked_values()" value="{{$lists->id}}"></td>
                 
                 <td scope="row"><?=$count?></td> 
@@ -754,9 +781,6 @@ var container = "";
                             <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'pending')" class="dropdown-item" >Quick Edit</button>          
                             <a type="button" target="_blank" href="{{route('ManualOrders.show',$lists->id)}}" class="dropdown-item">view</a>
                             <a type="button" href="{{route('ManualOrders.print.order.slip',$lists->id)}}" class="dropdown-item">Print Slip</a> 
-                            @foreach($statuses as $status)
-                                <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'{{$status->name}}')" class="dropdown-item" >{{$status->name}}</button>
-                            @endforeach 
                             <button type="button" onclick="check_pos_slip_duplication('{{route('ManualOrders.print.pos.slip',$lists->id)}}','{{$lists->id}}','list_<?=$count;?>')"class="dropdown-item" >Print Pos Slip</button>
                         </div>
                     
@@ -786,6 +810,16 @@ var container = "";
                     </div>
                     
                 </td>
+                <td>
+                    <select class="form-control" onchange="ChangeOrderStatus('{{$lists->id}}')" id="ChnageOrderStatusId_{{$lists->id}}" style="width:auto;">
+                        <option selected >Select Status</option> 
+                        @foreach($statuses as $status) 
+                            <option value="{{$status->name}}" {{ ($status->name == $lists->status) ? 'selected="selected"' : '' }}>{{$status->name}}</option>
+                        @endforeach  
+                
+                    </select> 
+                </td>
+                <td>{{$lists->status_reason}}</td>
                 
                 <td >
                     <button class="btn btn-primary" onclick="UniversalImagesBoxes(0,'{{$lists->images}}',{{$lists->id}})">Images</button>
@@ -825,26 +859,41 @@ var container = "";
                 
                 
                 ?>
-                <td><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualikum {{$lists->first_name}},%0a I am from Brandhub,%0a Please confirm your order,%0a click on the link to and check your articles and press confirmed button. %0alink: {{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}"><?=$reciever_number?></a></td> 
-                <td><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$number?>&text=Assalamualaikum, {{$lists->first_name}},%0a I am from Brandhub,%0a Please confirm your order,%0a click on the link to and check your articles and press confirmed button. %0alink: {{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}"><?=$number?></a></td> 
                 <td>
-                    <select class="form-select">
-                        <option value="">Select</option>
-                        <option>
-                            <a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualaikum {{$lists->first_name}},%0aI am from Brandhub, check the details and verify.%0aName: {{$lists->first_name}}%0aNumber: {{$lists->receiver_number}}%0aAddress: {{$lists->reciever_address}}%0acity: @if(isset($lists->cities->name))?$lists->cities->name@else '' @endif %0aCOD: {{$lists->cod_amount}}">Send Confirmation msg</a>
-                        </option>
-                    </select>
+                    <p><?=$reciever_number?></p>
+                    <p><?=$number?></p> 
+                </td>  
+                
+                <td>
+                    <div class="btn-group" role="group">
+                        <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" style="background:white;border:2px solid #4ac95a;color:black;padding: 0 11px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/WhatsApp_icon.png/640px-WhatsApp_icon.png" width=30 style="margin-right: 5px;">Start msg
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">            
+                            <a target="_blank" class="dropdown-item" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualaikum {{$lists->first_name}},%0aI am from Brandhub, check the details and verify.%0aName: {{$lists->first_name}}%0aNumber: {{$lists->receiver_number}}%0aAddress: {{$lists->reciever_address}}%0acity: @if(isset($lists->cities->name))?$lists->cities->name@else '' @endif %0aCOD: {{$lists->cod_amount}}">Send Confirmation msg</a>
+                            <a target="_blank" class="dropdown-item" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualaikum {{$lists->first_name}},%0aI am from Brandhub, %0aplease track your order %0aHere is your tracking ID: {{$lists->consignment_id}} %0aHere is your Order ID: {{$lists->id}}  %0aThank you %0alink: https://manualordersstaging.brandhub.com.pk/trackorder">Send Tracking</a> 
+                        </div>
+                    </div>
                 </td> 
-                <td style="position:relative"><p class="text-hidden-ellipsis-nowrap" id="{{$lists->id}}_description" >{{$lists->description}}</p><a class="copy-to-clipboard-btn" onclick="copy_clipboard_by_id('{{$lists->id}}_description')">Copy</a></td> 
-                <td style="position:relative"><p class="text-hidden-ellipsis-nowrap" id="{{$lists->id}}_address" >{{$lists->reciever_address}}<p><a class="copy-to-clipboard-btn" onclick="copy_clipboard_by_id('{{$lists->id}}_address')">Copy</a></td>
+                
+                <!--============copy Description-->
+                <td style="position:relative">
+                    <p class="text-hidden-ellipsis-nowrap" id="{{$lists->id}}_description" >{{$lists->description}}</p>
+                    <a class="copy-to-clipboard-btn" onclick="copy_clipboard_by_id('{{$lists->id}}_description')">Copy</a>
+                </td> 
+                
+                <!--============copy Address-->
+                <td style="position:relative">
+                    <p class="text-hidden-ellipsis-nowrap" id="{{$lists->id}}_address" >{{$lists->reciever_address}}</p>
+                    <a class="copy-to-clipboard-btn" onclick="copy_clipboard_by_id('{{$lists->id}}_address')">Copy</a>
+                </td>
+                
                 <td>{{$lists->price}}</td>  
                 <td>{{$lists->advance_payment}}</td> 
-                <td>{{$lists->cod_amount}}</td> 
-                <td><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$number?>&text=Assalamualaikum, {{$lists->first_name}}, Mam did you recieve your order, please click on link to Track your Order {{route('ManualOrders.confirm.order.by.customer.show',$lists->id)}}">Get Status</a></td> 
+                <td>{{$lists->cod_amount}}</td>   
                 <td style="font-size: 10px;">{{date('d-M-y', strtotime($lists->created_at))}} <br> {{date('G:i a', strtotime($lists->created_at))}}</td>
                 <td style="font-size: 10px;">{{date('d-M-y', strtotime($lists->updated_at))}} <br> {{date('G:i a', strtotime($lists->updated_at))}}</td> 
-                <td>{{$lists->status}}</td>
-                <td>{{$lists->status_reason}}</td>
+                
                 <td>{{$lists->updated_by}}</td>
                 <td>{{$lists->created_by}}</td>
             </tr>

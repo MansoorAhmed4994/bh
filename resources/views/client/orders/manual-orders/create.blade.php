@@ -41,6 +41,7 @@
             
             $('#number').focusout('click',function(e)
             {  
+                $("body").addClass("loading"); 
                 var number = $('#number').val();
                 const firstTwoChars = number.slice(0, 2);
                 if(firstTwoChars == '92')
@@ -68,17 +69,34 @@
                     dataType: 'json',
                     success: function(e)
                     {
+                         $("body").removeClass("loading");
                         if (typeof e.error !== 'undefined') 
                         {
-                            toastr.warning(e.messege, 'No Record found');
-                            return;   
+                            if(e.error == '2')
+                            {
+                                $("#order_save_btn").hide();
+                                toastr.warning(e.messege, 'Error');
+                                return;
+                            }
+                            else
+                            {
+                                $("#order_save_btn").show();
+                                toastr.warning(e.messege, 'Error');
+                                return;  
+                            } 
                         }
+                        else
+                        {
+                            $('#first_name').val(e.field_values['receiver_name']);
+                            $('#address').val(e.address);
+                            $('#previouse_order_detail').html(e.messege),  
+                            $('#city').val(e.city), 
+                            $("#order_save_btn").show();
+                            console.log(e.messege);
+                        }
+                        
                         // alert(e.city);
-                        $('#first_name').val(e.field_values['receiver_name']);
-                        $('#address').val(e.address);
-                        $('#previouse_order_detail').html(e.messege),  
-                        $('#city').val(e.city),   
-                        console.log(e.messege);
+                        
                         
                         
                     },
@@ -249,12 +267,12 @@
                     <small id="description_error" class="form-text text-danger">@if($errors->get('description')) {{$errors->first('description')}} @endif</small>
                 </div>  
                 
-                <div class="form-group ">
+                <div class="form-group " style="display:none;">
                     <label for="address">Order addtion</label>
                     <select class="form-control " id="order_addition"  name="order_addition" required>
                         <option value="">Select Order type</option>
                         <option value="addition">Product Addition</option>
-                        <option value="pending">New Order</option>
+                        <option value="pending" selected>New Order</option>
                     </select> 
                     <small id="order_addition_error" class="form-text text-danger">@if($errors->get('order_addition')) {{$errors->first('order_addition')}} @endif</small>
                 </div> 
@@ -266,7 +284,7 @@
                 </div> 
                 
     
-                <div class="form-group">
+                <div class="form-group" id="order_save_btn">
                     <button type="submit" onclick="validateForm()" class="btn btn-primary">Save</button>
                 </div>
                     
