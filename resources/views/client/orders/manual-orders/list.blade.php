@@ -151,9 +151,9 @@ var container = "";
     
     function change_price_popup_status()
     {
-        let price = $('#price').val();
-        let advance_payment = $('#advance_payment').val();
-        let cod_amount = $('#cod_amount').val(price-advance_payment);
+        let price = $('#QuickEdit_price').val();
+        let advance_payment = $('#QuickEdit_advance_payment').val();
+        let cod_amount = $('#QuickEdit_cod_amount').val(price-advance_payment);
         
     }
     function assign_to(order_id,user_id)
@@ -213,61 +213,52 @@ var container = "";
                  
         
         
-        $('#save_order_status_and_price').on('click',function(){
-            let receiver_name = $('#receiver_name').val();
-            let receiver_number = $('#receiver_number').val();
-            let reciever_address = $('#reciever_address').val();
-            let price = $('#price').val();
-            let advance_payment = $('#advance_payment').val();
-            let cod_amount = $('#cod_amount').val();
-            let status_reason = $('#status_reason').val();
-            let user_id = $('#user_id').val();
+        $('#QuickEditOrderUpdate').on('click',function(e) {
+            // alert('working');
+            $("body").addClass("loading"); 
+            
+            let order_id = $('#QuickEdit_order_id').val(); 
+            let order_status = $('#QuickEdit_status').val();
+            let status_reason = $('#QuickEdit_status_reason').val();
             
             
             if(order_status == 'cancel' || order_status == 'hold' || order_status == 'incomplete')
             {
                 if(status_reason == '')
                 {
-                    
-                    alert("please give Reason to "+order_status);
-                    // $("body").removeClass("loading");
+                    $("body").removeClass("loading"); 
+                    toastr.error("please give Reason to "+order_status,'Error'); 
                     return;
                 }
                 
             }
-            $("body").addClass("loading");
-        //console.log(status_reason);
+            
+            e.preventDefault();
+            let formData = new FormData(document.getElementById("QuickEditOrderForm")); 
+            
+            
             $.ajax({
-              url: base_url + '/client/orders/ManualOrders/dispatch-order-edit/'+dispatch_order_id,
-              headers: {
+                type:'POST',
+                headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-              type:"POST",
-              dataType: 'json',
-              data:{
-                receiver_name:receiver_name,
-                receiver_number:receiver_number,
-                reciever_address:reciever_address,
-                price:price,
-                advance_payment:advance_payment,
-                cod_amount:cod_amount,
-                status:order_status,
-                status_reason:status_reason,
-                user_id:user_id,
-              },
-              success:function(response){
+                }, 
+                url: base_url + '/client/orders/ManualOrders/QuickEditOrderUpdate/'+order_id,
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: (e) => {
                 //$('#successMsg').show();
-                if(typeof response.success !== 'undefined')
+                if(typeof e.success !== 'undefined')
                 {
                     $("body").removeClass("loading");
-                    toastr["success"](response.messege, 'Assigning Order');
+                    toastr["success"](e.messege, 'Assigning Order');
                 } 
                 else 
                 {
                     $("body").removeClass("loading");
-                    toastr.error(response.messege,'Error');
+                    toastr.error(e.messege,'Error');
                 }
-                if(response.messege == true)
+                if(e.messege == true)
                 {
                     $("body").removeClass("loading");
                     if(order_status == "cancel")
@@ -303,13 +294,9 @@ var container = "";
                 
                 //console.log(response);
               },
-              error: function(response) {
-                    alert(response); 
-                    $("body").removeClass("loading");
-                // $('#nameErrorMsg').text(response.responseJSON.errors.name);
-                // $('#emailErrorMsg').text(response.responseJSON.errors.email);
-                // $('#mobileErrorMsg').text(response.responseJSON.errors.mobile);
-                // $('#messageErrorMsg').text(response.responseJSON.errors.message);
+              error: function(e) {
+                    alert(e); 
+                    $("body").removeClass("loading"); 
               },
           });
         
@@ -394,18 +381,15 @@ var container = "";
     }
     
     
-    function change_order_status_and_price(val,status) 
+    function QuickEditOrder(order_id) 
     {   
         $("body").addClass("loading");
-        //alert('working');
-        dispatch_order_id = val;
-        order_status = status;
-        //alert('working');
+        
         $.ajax({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            url: base_url + '/client/orders/ManualOrders/dispatch-order-edit/'+val,
+            url: base_url + '/client/orders/ManualOrders/QuickEditOrder/'+order_id, 
             
             type: 'GET',
             dataType: 'json',
@@ -422,25 +406,29 @@ var container = "";
                 console.log(diffDays + " days");
                 
                 
-              
+               
                 if(e.messege.status == 'dispatched')
                 {
-                    if(diffDays >= 3)
-                    {
-                        alert('you cant edit this order cause it is already dispatched');
+                    @if(Auth::guard('admin')->check())
+                    
+                    @else
+                        toastr.error('you cant edit this order cause it is already dispatched', 'Error');
                         $("body").removeClass("loading");
                         return;
-                    } 
+                    @endif
+                    
 
                 }
                 
-                $('#receiver_name').val(e.messege.receiver_name); 
-                $('#receiver_number').val(e.messege.receiver_number);
-                $('#reciever_address').val(e.messege.reciever_address);
-                $('#price').val(e.messege.price);
-                $('#cod_amount').val(e.messege.cod_amount);
-                $('#advance_payment').val(e.messege.advance_payment);
-                $('#user_id').val(e.messege.updated_by);
+                $('#QuickEdit_order_id').val(e.messege.id); 
+                $('#QuickEdit_receiver_name').val(e.messege.receiver_name); 
+                $('#QuickEdit_receiver_number').val(e.messege.receiver_number);
+                $('#QuickEdit_reciever_address').val(e.messege.reciever_address);
+                $('#QuickEdit_price').val(e.messege.price);
+                $('#QuickEdit_cod_amount').val(e.messege.cod_amount);
+                $('#QuickEdit_advance_payment').val(e.messege.advance_payment);
+                $('#QuickEdit_assign_to').val(e.messege.assign_to);
+                $('#QuickEdit_status').val(e.messege.status);
                 var images ='';
                 var str_array = e.messege.images.split('|'); 
                 for(var i = 0; i < str_array.length; i++) 
@@ -560,90 +548,113 @@ var container = "";
 
 <div class="modal fade" id="order_status_edit" tabindex="-1" role="dialog" aria-labelledby="order_status_edit" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-      <div class="modal-content">
+        <div class="modal-content">
             <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle">Edit Status</h5> 
+                <h5 class="modal-title" id="exampleModalLongTitle">Edit Status</h5> 
             </div>
+            
             <div class="modal-body">
-                <div class="row col-sm-12"> 
-                
-                    <div class="col-sm-4">
-                        <h4>Reciever Detail <hr></h4> 
-                        <div class="alert alert-success" id="dispatch-succes-noti" style="display:none" role="alert">successfully dispatch and update</div>
-                        <div class="form-group col-sm">
-                            <div class="card" id="images_pop" style="max-width: 200px;"> 
+                <form method="post" name="QuickEditOrderForm" id="QuickEditOrderForm" enctype="multipart/form-data">
+                    <div class="row col-sm-12"> 
+                        
+                        <input type="hidden" name="QuickEdit_order_id" id="QuickEdit_order_id" >
+                        <div class="col-sm-3">
+                            <div class="alert alert-success" id="dispatch-succes-noti" style="display:none" role="alert">successfully dispatch and update</div>
+                            <div class="form-group col-sm">
+                                <div class="card" id="images_pop" style="max-width: 200px;"> 
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <div class="col-sm-4">
-                            
-                        <div class="form-group">
-                            <label for="receiver_name">Reciever Name</label>
-                            <input type="text" class="form-control" value="" id="receiver_name"  name="receiver_name" placeholder="Reciever Name" required>
-                            <small id="receiver_name_error" class="form-text text-danger"></small>
-                        </div> 
                         
-                        <div class="form-group">
-                            <label for="receiver_name">Reciever Number</label>
-                            <input type="text" class="form-control" id="receiver_number"  name="receiver_number" placeholder="Reciever Number" required>
-                            <small id="receiver_name_error" class="form-text text-danger"></small>
-                        </div> 
-                        
-                        <div class="form-group">
-                            <label for="receiver_name">Reciever address</label>
-                            <textarea class="form-control" id="reciever_address"   name="reciever_address" placeholder="reciever_address" required></textarea>
-                            <small id="reciever_address_error" class="form-text text-danger"></small>
-                        </div> 
-                        
-                    </div>
-                    
-                    <div class="col-sm-4">
-            
-                        <div class="form-group">
-                            <label for="Number">price</label>
-                            <input type="text" class="form-control" onkeyup="change_price_popup_status()" value="0" id="price"  name="price" placeholder="Price" required>
-                            <small id="price_error" class="form-text text-danger"></small>
-                        </div>
-            
-                        <div class="form-group">
-                            <label for="Number">Advance Payment</label>
-                            <input type="text" class="form-control" onkeyup="change_price_popup_status()" id="advance_payment"  name="advance_payment" placeholder="Advance Payment" readonly>
-                            <small id="advance_payment_error" class="form-text text-danger"></small>
-                        </div>
-            
-                        <div class="form-group">
-                            <label for="Number">COD Amount</label>
-                            <input type="text" class="form-control" value="" id="cod_amount"  name="cod_amount" placeholder="COD" readonly>
-                            <small id="cod_amount_error" class="form-text text-danger"></small>
-                        </div>
-            
-                        <div class="form-group">
-                            <label for="Number">Reason</label>
-                            <textarea  class="form-control" value="" id="status_reason"  name="status_reason" placeholder="Reason for status" required></textarea>
-                            <small id="status_reason_error" class="form-text text-danger"></small>
-                        </div>
-            
-                        <div class="form-group">
-                            <select class="form-control @if($errors->get('user_id')) is-invalid @endif cities_dropdown user_id" id="user_id"  name="user_id" required>
-                                <option value="">Select user</option>
-                                @for($i=0 ; $i < sizeof($users); $i++)
-                                 
-                                    <option value="{{$users[$i]->id}}" >{{$users[$i]->first_name}} {{$users[$i]->last_name}}</option>
-                                    
-                                @endfor
+                        <div class="col-sm-3">
                                 
-                            </select>  
+                            <div class="form-group">
+                                <label for="receiver_name">Reciever Name</label>
+                                <input type="text" class="form-control" value="" id="QuickEdit_receiver_name"  name="QuickEdit_receiver_name" placeholder="Reciever Name" required>
+                                <small id="receiver_name_error" class="form-text text-danger"></small>
+                            </div> 
+                            
+                            <div class="form-group">
+                                <label for="receiver_name">Reciever Number</label>
+                                <input type="text" class="form-control" id="QuickEdit_receiver_number"  name="QuickEdit_receiver_number" placeholder="Reciever Number" required>
+                                <small id="receiver_name_error" class="form-text text-danger"></small>
+                            </div> 
+                            
+                            <div class="form-group">
+                                <label for="receiver_name">Reciever address</label>
+                                <textarea class="form-control" id="QuickEdit_reciever_address"   name="QuickEdit_reciever_address" placeholder="reciever_address" required></textarea>
+                                <small id="reciever_address_error" class="form-text text-danger"></small>
+                            </div> 
+                            
                         </div>
-                    </div>
+                        
+                        <div class="col-sm-3">
+                
+                            <div class="form-group">
+                                <label for="Number">price</label>
+                                <input type="text" class="form-control" onkeyup="change_price_popup_status()" value="0" id="QuickEdit_price"  name="QuickEdit_price" placeholder="Price" required>
+                                <small id="price_error" class="form-text text-danger"></small>
+                            </div>
+                
+                            <div class="form-group">
+                                <label for="Number">Advance Payment</label>
+                                <input type="text" class="form-control" onkeyup="change_price_popup_status()" id="QuickEdit_advance_payment"  name="QuickEdit_advance_payment" placeholder="Advance Payment" readonly>
+                                <small id="advance_payment_error" class="form-text text-danger"></small>
+                            </div>
+                
+                            <div class="form-group">
+                                <label for="Number">COD Amount</label>
+                                <input type="text" class="form-control" value="" id="QuickEdit_cod_amount"  name="QuickEdit_cod_amount" placeholder="COD" readonly>
+                                <small id="cod_amount_error" class="form-text text-danger"></small>
+                            </div> 
+                        </div>
+                        
+                        <div class="col-sm-3">
+                
+                            <div class="form-group">
+                                <label for="Number">Assign to</label>
+                                
+                                <select class="form-control" id="QuickEdit_assign_to"  name="QuickEdit_assign_to" required>
+                                    <option value="">Select user</option>
+                                    @for($i=0 ; $i < sizeof($users); $i++)
+                                     
+                                        <option value="{{$users[$i]->id}}" >{{$users[$i]->first_name}} {{$users[$i]->last_name}}</option>
+                                        
+                                    @endfor 
+                                    
+                                </select>  
+                            </div>
+                
+                            <div class="form-group">
+                                <label for="Number">Status</label>
+                                <select class="form-control"  name="QuickEdit_status" id="QuickEdit_status">
+                                    <option selected >Select Status</option> 
+                                    @foreach($statuses as $status) 
+                                        <option value="{{$status->name}}">{{$status->name}}</option>
+                                    @endforeach
+                        
+                                </select>  
+                            
+                            </div>
+                
+                            <div class="form-group">
+                                <label for="Number">Reason</label>
+                                <textarea  class="form-control" value="" id="QuickEdit_status_reason"  name="QuickEdit_status_reason" placeholder="Reason for status" required></textarea>
+                                <small id="QuickEdit_status_reason_error" class="form-text text-danger"></small>
+                            </div>
+                            
+                        </div>
                         
                     </div>
+                </form>
         
             </div>
+            
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" id="order_status_edit_close">Close</button>
-                <button type="button" class="btn btn-primary" id="save_order_status_and_price">Save changes</button>
+                <button button="button" class="btn btn-primary" id="QuickEditOrderUpdate">Save changes</button>
             </div>
+            
         </div>
     </div>
 </div>
@@ -778,7 +789,7 @@ var container = "";
                         </button>
                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">            
                             <a type="button" target="_blank" href="{{route('ManualOrders.edit',$lists->id)}}" class="dropdown-item">Edit</a>   
-                            <button type="button" id="dispatch-btn" onclick="change_order_status_and_price({{$lists->id}},'pending')" class="dropdown-item" >Quick Edit</button>          
+                            <button type="button" id="dispatch-btn" onclick="QuickEditOrder({{$lists->id}})" class="dropdown-item" >Quick Edit</button>          
                             <a type="button" target="_blank" href="{{route('ManualOrders.show',$lists->id)}}" class="dropdown-item">view</a>
                             <a type="button" href="{{route('ManualOrders.print.order.slip',$lists->id)}}" class="dropdown-item">Print Slip</a> 
                             <button type="button" onclick="check_pos_slip_duplication('{{route('ManualOrders.print.pos.slip',$lists->id)}}','{{$lists->id}}','list_<?=$count;?>')"class="dropdown-item" >Print Pos Slip</button>

@@ -1128,30 +1128,32 @@ class ManualOrdersController extends Controller
     }
     
     
-    public function popup_dispatch_edit($ManualOrder)
+    public function QuickEditOrder(ManualOrders $ManualOrder)
     { 
-        //dd($ManualOrder); 
-        $ManualOrder = ManualOrders::where('manual_orders.id',$ManualOrder)->first();
-        //dd(ManualOrders::leftJoin('customers', 'customers.id', '=', 'manual_orders.customers_id')->where('manual_orders.status','pending')); 
-        //dd($ManualOrder) ; 
+        // dd($ManualOrder->id);
+        // //dd($ManualOrder); 
+        // $ManualOrder = ManualOrders::where('manual_orders.id',$ManualOrder)->first();
+        // //dd(ManualOrders::leftJoin('customers', 'customers.id', '=', 'manual_orders.customers_id')->where('manual_orders.status','pending')); 
+        // //dd($ManualOrder) ; 
         
-        return response()->json(['messege' => $ManualOrder]);
+        return response()->json(['success'=>'1','messege' => $ManualOrder]); 
         //
     }
     
-    public function popup_dispatch_update(Request $request, ManualOrders $ManualOrder)
-    {
+    public function QuickEditOrderUpdate(Request $request, ManualOrders $ManualOrder)
+    { 
         //dd($ManualOrder);
-        $ManualOrder->receiver_name = $request->receiver_name;
-        $ManualOrder->receiver_number = $request->receiver_number;
+        $ManualOrder->receiver_name = $request->QuickEdit_receiver_name;
+        $ManualOrder->receiver_number = $request->QuickEdit_receiver_number;
         //dd($request->receiver_number);
-        $ManualOrder->reciever_address = $request->reciever_address;  
-        $ManualOrder->price = $request->price;
-        $ManualOrder->cod_amount = $request->cod_amount;
-        $ManualOrder->advance_payment = $request->advance_payment;
-        $ManualOrder->status = $request->status;
-        $ManualOrder->updated_by = $request->user_id;
-        $ManualOrder->status_reason = $request->status_reason;
+        $ManualOrder->reciever_address = $request->QuickEdit_reciever_address;  
+        $ManualOrder->price = $request->QuickEdit_price;
+        $ManualOrder->cod_amount = $request->QuickEdit_cod_amount;
+        $ManualOrder->advance_payment = $request->QuickEdit_advance_payment;
+        $ManualOrder->status = $request->QuickEdit_status;
+        $ManualOrder->updated_by = Auth::id();
+        $ManualOrder->assign_to = $request->QuickEdit_assign_to;
+        $ManualOrder->status_reason = $request->QuickEdit_status_reason;
         
         $status = $ManualOrder->save();
         

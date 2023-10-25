@@ -142,7 +142,7 @@ var base_url = '<?php echo e(url('/')); ?>';
                e.preventDefault();
                let formData = new FormData(document.getElementById("edit_form")); 
       
-               $.ajax({
+                $.ajax({
                     type:'POST',
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -173,7 +173,7 @@ var base_url = '<?php echo e(url('/')); ?>';
                     error: function(response){
                     //         $('#image-input-error').text(response.responseJSON.message);
                     }
-                   });
+                });
             });
             
         });

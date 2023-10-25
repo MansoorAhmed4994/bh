@@ -297,6 +297,8 @@
                 {
                     
                     validation_status = false;
+                    toastr.warning('Please Select Shipment Method to auto fil fare', 'Warning'); 
+                    toastr.warning('Please Select Shipment Method', 'Warning'); 
                     $('#shipping_mode_id_error').html('Please Select Shipment Method'); 
                     $('#fare_error').html('Please Select Shipment Method to auto fil fare');
                 }
@@ -310,6 +312,7 @@
                 {
                     
                     validation_status = false;
+                    toastr.warning('Please Select Shipment Method to auto fil fare', 'Warning'); 
                     $('#fare_error').html('Please Select Shipment Method to auto fil fare');
                 }
                 else
@@ -322,6 +325,7 @@
                 {
                     
                     validation_status = false;
+                    toastr.warning('Please Select Shipment Method to auto fil fare', 'Warning'); 
                     $('#reference_number_error').html('Please Select Shipment Method to auto fil fare');
                     
                 }
@@ -336,48 +340,52 @@
             {
                 
                 validation_status = false;
+                toastr.warning('Please enter price', 'Warning'); 
                 $('#product_price_error').html('Please enter price');  
             }
             else
             {
                 
                 $('#product_price_error').html('');  
-            }
-            
-            
-            // if($('#cod_amount').val() > $('#price').val())
-            // {
-            //     console.log($('#cod_amount').val(),'===',('#price').val());
-            //     validation_status = false;
-            //     $('#price_error').html('price cannot be less than cod');  
-            //     $('#product_price_error').html('Please enter product price');  
-            // }
-            // else
-            // {
-                
-            //     $('#price_error').html('');  
-            //     $('#product_price_error').html('');  
-            // }
+            } 
             
             if($('#cod_amount').val() < 0)
             {
                 
-                validation_status = false;  
-                $('#cod_amount_error').html('Cod cannot be less then 0');
+                validation_status = false; 
+                toastr.warning('You cant select dispatch while only saving record', 'Warning'); 
+                $('#cod_amount_error').html('You cant select dispatch while only saving record');
             }
             else
             {
                 $('#cod_amount_error').html('');
             }
-            // alert($('#cod_amount').val());
-            // if($('#cod_amount').val() < 0)
-            // {
-                
-            //     $('#cod_amount_error').html('Cod cannot be less then 0);  
-            // }
+            
+            
+             
+            
+            
             
             return validation_status;
         }
+        // var which;
+        //     validation_status = false; 
+        //     $("#save").click(function () {
+        //         which = $(this).attr("id");
+        //         console.log('1');
+        //         if (which == "save") {
+        //             console.log('2');
+        //             if($('#order_status').val() == 'dispatched')
+        //             {
+        //                 console.log('3');
+        //                 validation_status = false;  
+        //                 toastr.warning('You cant select dispatch while only saving record', 'Warning');
+        //                 $('#order_status_error').html('You cant select dispatch while only saving record');
+                        
+        //             }
+        //             return false; // if "button2" submit clicked - prevent submission
+        //         }
+        //     });
         
         function getorderdetails()
         {
@@ -716,10 +724,10 @@
                                 
                             @endforeach 
                         </select>
+                        <small id="order_status_error" class="form-text text-danger"></small>
                     </div>
                             
-                        <div class="form-group col-auto">
-                            {{$ManualOrder->status}}
+                        <div class="form-group col-auto"> 
                             @if($ManualOrder->status == 'dispatched')
                                 @if(Auth::guard('admin')->check())
                                     <button type="submit" class="btn btn-primary" name="submit" id="save" value="save">Save</button>
