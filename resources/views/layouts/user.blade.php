@@ -137,11 +137,20 @@
                                 
                                 <li> <a class="dropdown-item" href="{{route('product.demand.list')}}">Demand</a></li>
                             </ul> 
+                        </li>
+                        <li class="nav-item dropdown" id="myDropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Inventory</a>
+                            <ul class="dropdown-menu">
+                                <li> <a class="dropdown-item" href="{{route('inventory.index')}}"> Manage Inventory </a></li> 
+                                <li> <a class="dropdown-item" href="{{route('inventory.pos')}}"> POS </a></li>
+                            </ul> 
+                        </li>
                         <li class="nav-item dropdown" id="myDropdown">
                             <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Loadsheets</a>
                             <ul class="dropdown-menu">
                                 <li> <a class="dropdown-item" href="{{route('ManualOrders.dipatch.bulk.orders')}}">Local Loadsheet</a></li> 
                             </ul>
+                        </li>
                         <li class="nav-item dropdown" id="shipment">
                             <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Shipment</a>
                             <ul class="dropdown-menu">
