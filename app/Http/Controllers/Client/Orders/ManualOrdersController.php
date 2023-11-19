@@ -465,6 +465,8 @@ class ManualOrdersController extends Controller
         $customers->updated_by = Auth::id();
         $customers->status = 'active'; 
         $customers->save(); 
+        $act_sta = create_activity_log(['table_name'=>'customers','ref_id'=>$ManualOrder->customers_id,'activity_desc'=>'Edit customer data','created_by'=>Auth::id(),'method'=>'update','route'=>route('ManualOrders.update',$order_id)]);
+
         
         //$manual_orders = new ManualOders();
         $ManualOrder->receiver_name = $request->receiver_name;
@@ -504,6 +506,8 @@ class ManualOrdersController extends Controller
         if($request->submit == "save")
         {
             $status = $ManualOrder->save();
+            $act_sta = create_activity_log(['table_name'=>'manual_orders','ref_id'=>$order_id,'activity_desc'=>'Edit order data','created_by'=>Auth::id(),'method'=>'update','route'=>route('ManualOrders.update',$order_id)]);
+
             // dd($status);
             if($status)
             {
@@ -549,6 +553,8 @@ class ManualOrdersController extends Controller
                 // echo '1';
                 if($ApiResponse->status == 0)
                 { 
+                    $act_sta = create_activity_log(['table_name'=>'manual_orders','ref_id'=>$order_id,'activity_desc'=>'Trax booking created','created_by'=>Auth::id(),'method'=>'create','route'=>route('ManualOrders.update',$order_id)]);
+
                     // echo '2';
                     $id = array();
                     array_push($id, $ApiResponse->tracking_number);
@@ -565,6 +571,7 @@ class ManualOrdersController extends Controller
                     }
                     // echo '4';
                     $status = $ManualOrder->save();
+                    $act_sta = create_activity_log(['table_name'=>'manual_orders','ref_id'=>$order_id,'activity_desc'=>'Edit order data','created_by'=>Auth::id(),'method'=>'update','route'=>route('ManualOrders.update',$order_id)]);
                     $check_status = check_order_status_for_print($order_id); 
                     if( $check_status['row_count'] > 0)
                     {
@@ -1096,6 +1103,8 @@ class ManualOrdersController extends Controller
             {
                 $manualorder->status = $request->status;
                 $update_status = $manualorder->save();
+                $act_sta = create_activity_log(['table_name'=>'manual_orders','ref_id'=>$request->order_id,'activity_desc'=>'Status changed : '.$request->status,'created_by'=>Auth::id(),'method'=>'update','route'=>route('ManualOrders.change.status')]);
+                // dd($act_sta);
                 if($update_status)
                 {
                     return response()->json(['success'=>'1','messege' => 'Order Status changed to '.$request->status]);
@@ -1115,6 +1124,8 @@ class ManualOrdersController extends Controller
         {
             $manualorder->status = $request->status;
             $update_status = $manualorder->save();
+            $act_sta = create_activity_log(['table_name'=>'manual_orders','ref_id'=>$request->order_id,'activity_desc'=>'Status changed to: '.$request->status,'created_by'=>Auth::id(),'method'=>'update','route'=>route('ManualOrders.change.status')]);
+            // dd($act_sta);
             if($update_status)
             {
                 return response()->json(['success'=>'1','messege' => 'Order Status changed to '.$request->status]);
@@ -1143,6 +1154,7 @@ class ManualOrdersController extends Controller
     public function QuickEditOrderUpdate(Request $request, ManualOrders $ManualOrder)
     { 
         //dd($ManualOrder);
+        $order_id = $ManualOrder->id;
         $ManualOrder->receiver_name = $request->QuickEdit_receiver_name;
         $ManualOrder->receiver_number = $request->QuickEdit_receiver_number;
         //dd($request->receiver_number);
@@ -1159,6 +1171,8 @@ class ManualOrdersController extends Controller
         
         if($status)
         {
+            $act_sta = create_activity_log(['table_name'=>'manual_orders','ref_id'=>$order_id,'activity_desc'=>'Quick Edit order data','created_by'=>Auth::id(),'method'=>'update','route'=>route('ManualOrders.update.quick.edit.order',$order_id)]);
+
             
             return response()->json(['success'=>'1','messege' => 'Record Successfully updated']);
         }
@@ -1185,6 +1199,8 @@ class ManualOrdersController extends Controller
         {
             dd('Parcel Status is '.$check_status['status'].' and parcel cannot print slip until parcel status is confirmed OR Dispatched');
         }
+        $act_sta = create_activity_log(['table_name'=>'manual_orders','ref_id'=>$ManualOrder_id,'activity_desc'=>'Print Local Slip : ','created_by'=>Auth::id(),'method'=>'update','route'=>route('ManualOrders.print.order.slip',$ManualOrder_id)]);
+
         return view('client.orders.manual-orders.print_slip')->with('ManualOrders',$ManualOrder);
     }
     

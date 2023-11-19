@@ -5,6 +5,7 @@ namespace App\Models\Client;
 
 use App\Models\Orderpayments;
 use App\Models\User;
+use App\Models\ActivityLogs;
 // use App\Models\Client\Cities;
 use Illuminate\Database\Eloquent\Model;
 
@@ -29,6 +30,11 @@ class ManualOrders extends Model
     public function AssignTo()
     {
         return $this->belongsTo(User::class,'assign_to','id');
+    }
+    
+    public function activity_logs()
+    {
+        return $this->hasMany(ActivityLogs::class,'ref_id','id');
     }
     
     

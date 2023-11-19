@@ -791,7 +791,7 @@ var container = "";
                             <a type="button" target="_blank" href="{{route('ManualOrders.edit',$lists->id)}}" class="dropdown-item">Edit</a>   
                             <button type="button" id="dispatch-btn" onclick="QuickEditOrder({{$lists->id}})" class="dropdown-item" >Quick Edit</button>          
                             <a type="button" target="_blank" href="{{route('ManualOrders.show',$lists->id)}}" class="dropdown-item">view</a>
-                            <a type="button" href="{{route('ManualOrders.print.order.slip',$lists->id)}}" class="dropdown-item">Print Slip</a> 
+                            <a type="button" href="{{route('ManualOrders.print.order.slip',$lists->id)}}" class="dropdown-item">Print Local Slip</a> 
                             <button type="button" onclick="check_pos_slip_duplication('{{route('ManualOrders.print.pos.slip',$lists->id)}}','{{$lists->id}}','list_<?=$count;?>')"class="dropdown-item" >Print Pos Slip</button>
                         </div>
                     
@@ -828,7 +828,21 @@ var container = "";
                             <option value="{{$status->name}}" {{ ($status->name == $lists->status) ? 'selected="selected"' : '' }}>{{$status->name}}</option>
                         @endforeach  
                 
-                    </select> 
+                    </select>
+                    
+                    <div class="btn-group">
+                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Order History
+                        </button>
+                        <div class="dropdown-menu">
+                    
+                            @foreach($lists->activity_logs as $activity_log)
+                                <a class="dropdown-item" >{{$activity_log->activity_desc}} / Date: {{$activity_log->created_at}}</a>
+                            @endforeach
+ 
+                        </div>
+                    </div>
+                    
                 </td>
                 <td>{{$lists->status_reason}}</td>
                 
@@ -882,7 +896,7 @@ var container = "";
                         </button>
                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">            
                             <a target="_blank" class="dropdown-item" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualaikum {{$lists->first_name}},%0aI am from Brandhub, check the details and verify.%0aName: {{$lists->first_name}}%0aNumber: {{$lists->receiver_number}}%0aAddress: {{$lists->reciever_address}}%0acity: @if(isset($lists->cities->name))?$lists->cities->name@else '' @endif %0aCOD: {{$lists->cod_amount}}">Send Confirmation msg</a>
-                            <a target="_blank" class="dropdown-item" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualaikum {{$lists->first_name}},%0aI am from Brandhub, %0aplease track your order %0aHere is your tracking ID: {{$lists->consignment_id}} %0aHere is your Order ID: {{$lists->id}}  %0aThank you %0alink: https://manualordersstaging.brandhub.com.pk/trackorder">Send Tracking</a> 
+                            <a target="_blank" class="dropdown-item" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualaikum {{$lists->first_name}},%0aI am from Brandhub, %0aplease track your order %0aHere is your tracking ID: {{$lists->consignment_id}} %0aHere is your Order ID: {{$lists->id}}  %0a helpline number: 021111118729  %0aThank you %0alink: https://manualordersstaging.brandhub.com.pk/trackorder">Send Tracking</a> 
                         </div>
                     </div>
                 </td> 
