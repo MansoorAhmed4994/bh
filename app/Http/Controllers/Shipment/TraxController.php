@@ -215,6 +215,14 @@ class TraxController extends Controller
         return response()->json(['data' => $calculation]);
     }
     
+    public function TraxGetShipmentSlip($tracking_number)
+    {
+        $id = array();
+        array_push($id, $tracking_number);
+        $slips = $this->print_trax_slips($id);
+        return view('client.orders.manual-orders.trax.print_trax_slip')->with('slips',$slips);
+    }
+    
     public function get_fare_list(Request $request)
     {
         $best_fare_result=0;

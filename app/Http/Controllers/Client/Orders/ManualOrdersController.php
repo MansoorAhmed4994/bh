@@ -26,6 +26,7 @@ use App\Models\User;
 //Traits
 use App\Traits\MNPTraits;
 use App\Traits\TraxTraits;
+use App\Traits\LeopordTraits;
 use App\Traits\ManualOrderTraits;
 use App\Traits\InventoryTraits;
 
@@ -51,6 +52,7 @@ class ManualOrdersController extends Controller
 
     use ManualOrderTraits;
     use MNPTraits;
+    use LeopordTraits;
     use TraxTraits;
     use InventoryTraits;
     
@@ -78,6 +80,7 @@ class ManualOrdersController extends Controller
             'manual_orders.status',
             'manual_orders.created_at',
             'manual_orders.updated_at',
+            'manual_orders.shipment_company',
             DB::raw("CONCAT(t.first_name,'') as updated_by"), 
             DB::raw("CONCAT(users.first_name,'') as created_by"), 
             'manual_orders.status_reason', 
@@ -366,6 +369,11 @@ class ManualOrdersController extends Controller
         }
         
         $cities = $this->get_trax_cities();
+        $leopordCities = $this->LeopordGetCities()->city_list;
+        
+        
+        // $cities = $this->LeopordGetCities()->city_list;
+        // dd($cities);
         $order_id = $ManualOrder;
         $this->UpdateReferenceNumberByOrderIds([$ManualOrder]);
         // dd($Manualorders);
@@ -408,10 +416,10 @@ class ManualOrdersController extends Controller
                 } 
                 
             }
-        }
+        } 
          $statuses = get_active_order_status_list();
         
-        return view('client.orders.manual-orders.edit')->with(['ManualOrder'=>$ManualOrder, 'cities'=>$cities,'inventories'=>$inventory,'product_price'=>$this->updateorderprice($ManualOrder->id),'advance_payment_status'=>$advance_payment_status,'statuses'=>$statuses]);
+        return view('client.orders.manual-orders.edit')->with(['ManualOrder'=>$ManualOrder, 'LeopordCities' => $leopordCities,'cities'=>$cities,'inventories'=>$inventory,'product_price'=>$this->updateorderprice($ManualOrder->id),'advance_payment_status'=>$advance_payment_status,'statuses'=>$statuses]);
 
         // if($Manualorders != null)
         // {
@@ -471,7 +479,6 @@ class ManualOrdersController extends Controller
         //$manual_orders = new ManualOders();
         $ManualOrder->receiver_name = $request->receiver_name;
         $ManualOrder->receiver_number = $request->receiver_number;
-        $ManualOrder->cities_id = $request->city;
         $ManualOrder->reciever_address = $request->reciever_address;  
         if($images != null)
         {
@@ -502,9 +509,24 @@ class ManualOrdersController extends Controller
         $ManualOrder->status = $request->order_status; 
         
         $traxdata = []; 
+        $leoporddata = [];
         //Shipment details
         if($request->submit == "save")
         {
+            if($request->shipment_type == 'trax')
+            {
+                $ManualOrder->service_type = $request->shipping_mode_id; 
+                $ManualOrder->shipment_company = $request->shipment_type;
+                $ManualOrder->cities_id = $request->city;
+            }
+            else if($request->shipment_type == 'leopord')
+            {
+                
+                $ManualOrder->service_type = $request->leopord_shipment_type_id; 
+                $ManualOrder->shipment_company = $request->shipment_type;
+                $ManualOrder->cities_id = $request->leopord_city;
+            }
+            
             $status = $ManualOrder->save();
             $act_sta = create_activity_log(['table_name'=>'manual_orders','ref_id'=>$order_id,'activity_desc'=>'Edit order data','created_by'=>Auth::id(),'method'=>'update','route'=>route('ManualOrders.update',$order_id)]);
 
@@ -561,8 +583,9 @@ class ManualOrdersController extends Controller
                     // dd($id);
                     $ManualOrder->date_order_paid = $request->date_order_paid;
                     $ManualOrder->reference_number = $request->reference_number;
-                    $ManualOrder->service_type = $request->service_type; 
                     $ManualOrder->consignment_id = $ApiResponse->tracking_number;
+                    $ManualOrder->service_type = $request->shipping_mode_id; 
+                    $ManualOrder->shipment_company = $request->shipment_type;
                     $ManualOrder->status = 'dispatched';  
                     // echo '3';
                     if(check_customer_advance_payment($order_id) > 0)
@@ -584,6 +607,131 @@ class ManualOrdersController extends Controller
                     $slips = $this->print_trax_slips($id);
                     return view('client.orders.manual-orders.trax.print_trax_slip')->with('slips',$slips);
                 }
+                
+                else
+                {
+                    toastr()->error('These shipments not created! Please contact Admin','Error');
+                    return back(); 
+                }
+                
+            }
+            else if($request->shipment_type == 'leopord')
+            {
+                if(check_customer_advance_payment($ManualOrder->id) > 0)
+                {
+                    dd('payment not approved');
+                }
+                $mytime = Carbon::now();
+                $current_date_time = $mytime->toDateTimeString();
+                $pickup_address_id = $this->get_trax_pickup_address(); 
+                $reference_number= '('.$ManualOrder->id.')('.$current_date_time.')';
+                // dd('work');
+                // dd($this->GetShippingCharges('KI752931139'));
+                // dd($this->LeopordTrackBookedPacket('KI752931139'));
+                // dd($this->GetShipperDetails());
+                // $traxdata['order_id'] = $ManualOrder->id;
+                // $traxdata['service_type_id'] = 1;
+                // $traxdata['pickup_address_id'] = $pickup_address_id;
+                // $traxdata['information_display'] = 0;
+                // $traxdata['consignee_city_id'] = $request->city;
+                // $traxdata['consignee_name'] = trim($request->receiver_name);
+                // $traxdata['consignee_address'] = trim($request->reciever_address);
+                // $traxdata['consignee_phone_number_1'] = trim($request->receiver_number);
+                // $traxdata['consignee_email_address'] = trim('orderstesting@brandhub.com');
+                // $traxdata['item_product_type_id'] = 1;
+                // $traxdata['item_description'] = trim($request->description);
+                // $traxdata['item_quantity'] = (int)trim($request->total_pieces);
+                // $traxdata['item_insurance'] = 0;
+                // $traxdata['item_price'] = (int)trim($request->price);
+                // $traxdata['parcel_value'] = (int)trim($request->price);
+                // $traxdata['pickup_date'] = $mytime;
+                // $traxdata['special_instructions'] = trim('Nothing');
+                // $traxdata['estimated_weight'] = trim($request->weight);
+                // $traxdata['shipping_mode_id'] = (int)trim($request->shipping_mode_id);
+                // $traxdata['amount'] = (int)trim($request->cod_amount);
+                // $traxdata['shipper_reference_number_1'] = $reference_number;
+                // $traxdata['payment_mode_id'] = 1;
+                // $traxdata['charges_mode_id'] = 4;
+                
+                
+                $leoporddata = json_encode(array(
+                'api_key'                       => (env('LEOPORD_API_KEY')),
+                'api_password'                  => (env('LEOPORD_API_PASSWORD')),
+                'booked_packet_weight'          => (trim($request->weight)*1000),                 // Weight should in 'Grams' e.g. '2000'
+                'booked_packet_vol_weight_w'    => $request->booked_packet_vol_weight_w,                 // Optional Field (You can keep it empty), Volumetric Weight Width
+                'booked_packet_vol_weight_h'    => $request->booked_packet_vol_weight_h,                 // Optional Field (You can keep it empty), Volumetric Weight Height
+                'booked_packet_vol_weight_l'    => $request->booked_packet_vol_weight_l,                 // Optional Field (You can keep it empty), Volumetric Weight Length
+                'booked_packet_no_piece'        => (int)trim($request->total_pieces),                 // No. of Pieces should an Integer Value
+                'booked_packet_collect_amount'  => (int)trim($request->cod_amount),                 // Collection Amount on Delivery
+                'booked_packet_order_id'        => $ManualOrder->id,            // Optional Filed, (If any) Order ID of Given Product
+                
+                'origin_city'                   => env('LEOPORD_ORIGIN_CITY'),            /** Params: 'self' or 'integer_value' e.g. 'origin_city' => 'self' or 'origin_city' => 789 (where 789 is Lahore ID)
+                                                                         * If 'self' is used then Your City ID will be used.
+                                                                         * 'integer_value' provide integer value (for integer values read 'Get All Cities' api documentation)
+                                                                         */
+                
+                'destination_city'              => $request->leopord_city,            /** Params: 'self' or 'integer_value' e.g. 'destination_city' => 'self' or 'destination_city' => 789 (where 789 is Lahore ID)
+                                                                         * If 'self' is used then Your City ID will be used.
+                                                                         * 'integer_value' provide integer value (for integer values read 'Get All Cities' api documentation) 
+                                                                         */
+                
+                'shipment_id'                   => 1551342,
+                'shipment_name_eng'             => 'self',            // Params: 'self' or 'Type any other Name here', If 'self' will used then Your Company's Name will be Used here
+                'shipment_email'                => 'self',            // Params: 'self' or 'Type any other Email here', If 'self' will used then Your Company's Email will be Used here
+                'shipment_phone'                => 'self',            // Params: 'self' or 'Type any other Phone Number here', If 'self' will used then Your Company's Phone Number will be Used here
+                'shipment_address'              => 'self',            // Params: 'self' or 'Type any other Address here', If 'self' will used then Your Company's Address will be Used here
+                
+                
+                'consignment_name_eng'          => trim($request->receiver_name),            // Type Consignee Name here
+                'consignment_email'             => '',            // Optional Field (You can keep it empty), Type Consignee Email here
+                'consignment_phone'             => trim($request->receiver_number),            // Type Consignee Phone Number here
+                'consignment_phone_two'         => '',            // Optional Field (You can keep it empty), Type Consignee Second Phone Number here
+                'consignment_phone_three'       => '',            // Optional Field (You can keep it empty), Type Consignee Third Phone Number here
+                'consignment_address'           => trim($request->reciever_address),            // Type Consignee Address here
+                'special_instructions'          => trim($request->description),            // Type any instruction here regarding booked packet
+                'shipment_type'                 => $request->leopord_shipment_type_id,            // Optional Field (You can keep it empty so It will pick default value i.e. "overnight"), Type Shipment type name here
+                'custom_data'                   => '',        // Optional Field (You can keep it empty), [{"key1":"value1","key2":value2,.....}]
+                'return_address'                => '',            // Optional Field (You can keep it empty) - If 'return_address' is empty, then the address of shipper will be added as return address
+                'return_city'                   => '',               // Optional Field (You can keep it empty) - If 'return_city' is empty, then shipper's origin city will ne return city
+                'is_vpc'                        => 1,               
+                ));
+                $ApiResponse = $this->LeopordCreateBooking($leoporddata);
+                $order_id=$ManualOrder->id;
+                // dd($ApiResponse);
+                // echo '1';
+                if($ApiResponse->status == 1)
+                { 
+                    $act_sta = create_activity_log(['table_name'=>'manual_orders','ref_id'=>$order_id,'activity_desc'=>'Trax booking created','created_by'=>Auth::id(),'method'=>'update','route'=>route('ManualOrders.update',$order_id)]);
+
+                    // echo '2';
+                    $id = array();
+                    array_push($id, $ApiResponse->track_number);
+                    // dd($id);
+                    $ManualOrder->date_order_paid = $request->date_order_paid;
+                    $ManualOrder->reference_number = '';
+                    $ManualOrder->consignment_id = $ApiResponse->track_number; 
+                    $ManualOrder->service_type = $request->leopord_shipment_type_id; 
+                    $ManualOrder->shipment_company = $request->shipment_type;
+                    $ManualOrder->shipment_slip = $ApiResponse->slip_link;
+                    $ManualOrder->status = 'dispatched';  
+                    // echo '3';
+                    
+                    // echo '4';
+                    $status = $ManualOrder->save();
+                    $act_sta = create_activity_log(['table_name'=>'manual_orders','ref_id'=>$order_id,'activity_desc'=>'Edit order data','created_by'=>Auth::id(),'method'=>'update','route'=>route('ManualOrders.update',$order_id)]);
+                    $check_status = check_order_status_for_print($order_id); 
+                    if( $check_status['row_count'] > 0)
+                    {
+                        // echo '5'; re
+                        toastr()->error('Parcel Status is '.$check_status['status'].' and parcel cannot print slip until parcel status is confirmed OR Dispatched','Error');
+                        return back();
+                        // dd();
+                    }
+                    
+                    return redirect()->away($ApiResponse->slip_link);
+                    // return view('client.orders.manual-orders.trax.print_trax_slip')->with('slips',$slips);
+                }
+                
                 else
                 {
                     toastr()->error('These shipments not created! Please contact Admin','Error');
@@ -1821,6 +1969,23 @@ class ManualOrdersController extends Controller
             
             return response()->json(['error' => '1', 'messege' => 'order not updated please contact admin'.$ManualOrder]);
         }
+    }
+    
+    public function GetShipmentCities($shipmentcompany)
+    {
+        if($shipmentcompany == 'trax')
+        {
+            $cities = $this->get_trax_cities();
+        }
+        else if($shipmentcompany == 'leopord')
+        {
+            $cities = $this->LeopordGetCities()->city_list;
+        }
+        
+        
+         
+        return response()->json(['success' => '1', 'cities' => $cities]);
+        
     }
         
     

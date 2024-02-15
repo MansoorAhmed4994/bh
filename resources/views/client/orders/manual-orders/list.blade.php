@@ -835,11 +835,26 @@ var container = "";
                         Order History
                         </button>
                         <div class="dropdown-menu">
-                    
-                            @foreach($lists->activity_logs as $activity_log)
-                                <a class="dropdown-item" >{{$activity_log->activity_desc}} / Date: {{$activity_log->created_at}}</a>
-                            @endforeach
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>description</th>
+                                        <th>Date</th>
+                                        <th>User</th>
+                                    </tr>
+                                </thead>
+                                
+                                <tbody>
+                                    @foreach($lists->activity_logs as $activity_log)
+                                    <tr>
+                                        <td>{{$activity_log->activity_desc}}</td>
+                                        <td>{{$activity_log->created_at}}</td>
+                                        <td>{{$activity_log->users->first_name}}</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
  
+                            </table>
                         </div>
                     </div>
                     
@@ -859,7 +874,32 @@ var container = "";
                     @endif
                     </div>
                 </td>
-                <td>{{$lists->consignment_id}}</td> 
+                <td>
+                    
+                    
+                    
+                    @if($lists->consignment_id != '' && $lists->consignment_id != '0')
+                    <div class="btn-group" role="group">
+                        <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          {{$lists->consignment_id}}
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1"> 
+                                @if($lists->shipment_company == 'leopord')
+                                    <a type="button" target="_blank" href="{{route('leopord.get.shipment.slip',$lists->consignment_id)}}"  class="dropdown-item"><img style="margin:15px; width:60px" src="https://ecom.leopardscourier.com/assets/landing_page/images/c-logo.png">Print Slip</a>
+                                @elseif($lists->shipment_company == 'trax')
+                                     
+                                    <a type="button" target="_blank" href="{{route('trax.get.shipment.slip',$lists->consignment_id)}}" class="dropdown-item"><img style="margin:15px; width:100px" src="https://trax.pk/wp-content/uploads/2021/07/Black-Logo.svg">Print Slip</a>
+                                @else
+                                    
+                                @endif
+                        </div>
+                    
+                    </div>
+                    @else
+                        {{$lists->consignment_id}}
+                    @endif
+                    
+                </td> 
                 <td>{{$lists->id}}</td>
                 <td>{{$lists->first_name}}<p>{{$lists->loyality_count}}</p><i class='far fa-user'></i></td>   
                 <?php 
