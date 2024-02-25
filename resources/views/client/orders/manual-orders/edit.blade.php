@@ -139,11 +139,12 @@
                         total_amount+=parseInt(e.inventory[i].sale);
                         row_data += '<tr id="'+row_id+'"><td class="delete_btn_class"><button type="button" class="btn btn-danger " onclick="delete_row('+row_id+','+e.inventory[i].id+')">Delete</button></td><td>'+e.inventory[i].name+'</td><td>'+e.inventory[i].sale+'</td></tr>';
     
-                    row_id++;
+                        row_id++;
                     }
                     $("#row_data").html(row_data);
                     $("#total_products").html(total_products);
                     $("#total_amount").html(total_amount);
+                    $("#sku_number").html();
                     $("body").removeClass("loading");
                     get_fare_list();
                     onchangeprice();
@@ -1208,13 +1209,18 @@ function calculate_leopord_shipment_charges()
 
 function calculate_charges()
 {  
-    $("body").addClass("loading"); 
+    
     let destination_city_id = document.getElementById("city").value;
     let estimated_weight = document.getElementById("weight").value;
     let shipping_mode_id = document.getElementById("shipping_mode_id").value;
     let price = document.getElementById("cod_amount").value;
     let dc = document.getElementById("dc");
-     
+    if(destination_city_id == '' || estimated_weight <= 0 || shipping_mode_id == '' )
+    {
+        validateForm();
+        return;
+    }
+    $("body").addClass("loading"); 
     $.ajax({
           url: base_url + '/trax/calculate-charges',
           headers: {

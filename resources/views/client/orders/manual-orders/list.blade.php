@@ -849,7 +849,13 @@ var container = "";
                                     <tr>
                                         <td>{{$activity_log->activity_desc}}</td>
                                         <td>{{$activity_log->created_at}}</td>
-                                        <td>{{$activity_log->users->first_name}}</td>
+                                        @if(!empty($activity_log->users))
+                                            <td>{{$activity_log->users->first_name}}</td>
+                                        @else
+                                            
+                                            <td>No User Found (User ID: {{$activity_log->created_by}})</td>
+                                            
+                                        @endif
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -935,8 +941,9 @@ var container = "";
                           <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/WhatsApp_icon.png/640px-WhatsApp_icon.png" width=30 style="margin-right: 5px;">Start msg
                         </button>
                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">            
-                            <a target="_blank" class="dropdown-item" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualaikum {{$lists->first_name}},%0aI am from Brandhub, check the details and verify.%0aName: {{$lists->first_name}}%0aNumber: {{$lists->receiver_number}}%0aAddress: {{$lists->reciever_address}}%0acity: @if(isset($lists->cities->name))?$lists->cities->name@else '' @endif %0aCOD: {{$lists->cod_amount}}">Send Confirmation msg</a>
-                            <a target="_blank" class="dropdown-item" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualaikum {{$lists->first_name}},%0aI am from Brandhub, %0aplease track your order %0aHere is your tracking ID: {{$lists->consignment_id}} %0aHere is your Order ID: {{$lists->id}}  %0a helpline number: 021111118729  %0aThank you %0alink: https://manualordersstaging.brandhub.com.pk/trackorder">Send Tracking</a> 
+                            <a target="_blank" class="dropdown-item" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualaikum {{$lists->first_name}},%0aI am from Brandhub, check the details and verify.%0aName: {{$lists->first_name}}%0aNumber: {{$lists->receiver_number}}%0aAddress: {{$lists->reciever_address}}%0acity: @if(isset($lists->cities->name)) {{$lists->cities->name}}@else '' @endif %0aCOD: {{$lists->cod_amount}}">Send Confirmation msg</a>
+                            <a target="_blank" class="dropdown-item" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualaikum {{$lists->first_name}},%0aI am from Brandhub, %0aplease track your order %0aHere is your tracking ID: {{$lists->consignment_id}} %0aHere is your Order ID: {{$lists->id}}  %0a helpline number: @if($lists->shipment_company == 'trax') 021111118729 @else 021111300786 @endif  %0aThank you %0alink: https://manualordersstaging.brandhub.com.pk/trackorder">Send Tracking</a> 
+                            <a target="_blank" class="dropdown-item" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualaikum {{$lists->first_name}},%0aI am from Brandhub, %0aPlease Follow the Social Platform for latest product upcomming %0aFacebook:https://www.facebook.com/Brandhub000/ %0aInstagram: https://www.instagram.com/brandshub000/ %0aTiktok: https://www.tiktok.com/@brandhub994 %0aYoutube: https://www.youtube.com/@brandhub8324 ">Social Links</a> 
                         </div>
                     </div>
                 </td> 
