@@ -224,10 +224,18 @@ class ManualOrdersController extends Controller
     
     public function InActiveCustomers(Request $request)
     {
-        $from_date = Carbon::now()->subDays(60)->toDateTimeString(); 
+        $from_date = Carbon::now()->subDays(90)->toDateTimeString(); 
         $views_customer_data = DB::table('manual_orders')
-            ->select('customers.id', DB::raw('count(*) as total_purchase' ),  'customers.first_name', 'customers.status','customers.number as receiver_number','customers.whatsapp_number as number','customers.created_at','customers.description','customers.address as reciever_address','customers.remarks')
-            // ->leftJoin('orderpayments', 'orderpayments.order_id', '=', 'manual_orders.id')
+            ->select('customers.id', 
+            DB::raw('count(*) as total_purchase'),
+            'customers.first_name', 
+            'customers.status',
+            'customers.number as receiver_number',
+            'customers.whatsapp_number as number',
+            'customers.created_at',
+            'customers.description',
+            'customers.address as reciever_address',
+            'customers.remarks')
             ->leftJoin('customers', 'customers.id', '=', 'manual_orders.customers_id')
             ->where('manual_orders.created_at', '<',$from_date) 
             

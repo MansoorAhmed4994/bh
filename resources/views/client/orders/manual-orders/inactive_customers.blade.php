@@ -559,6 +559,17 @@ var order_link='';
                 
                 
                 ?>
+                <td>
+                    <div class="btn-group" role="group">
+                        <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" style="background:white;border:2px solid #4ac95a;color:black;padding: 0 11px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/WhatsApp_icon.png/640px-WhatsApp_icon.png" width=30 style="margin-right: 5px;">Start msg
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">            
+                            <a target="_blank" class="dropdown-item" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualaikum {{$lists->first_name}},%0aI am from Brandhub, %0aPlease Follow the Social Platform for latest product upcomming %0aFacebook:https://www.facebook.com/Brandhub000/ %0aInstagram: https://www.instagram.com/brandshub000/ %0aTiktok: https://www.tiktok.com/@brandhub994 %0aYoutube: https://www.youtube.com/@brandhub8324 ">Social Links</a> 
+                            <a target="_blank" class="dropdown-item" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualaikum {{$lists->first_name}},%0aI am from Brandhub, %0aYou Have not purchase any thing from brandhub since last 3 months, %0aCongratulation Your gift awaits by pucrhasing any thing using this code '{{$lists->id}}'. We've carefully selected something we believe you'll love, and we hope it brings a smile to your face as a small token of our gratitude.%0aThank you %0a %0a %0aPlease Follow the Social Platform for latest upcomming product %0aFacebook: https://www.facebook.com/Brandhub000/ %0aInstagram: https://www.instagram.com/brandshub000/ %0aTiktok: https://www.tiktok.com/@brandhub994 %0aYoutube: https://www.youtube.com/@brandhub8324">Customer Retain</a> 
+                        </div>
+                    </div>
+                </td>
                 <td><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualikum {{$lists->first_name}}, I am from Brandhub, Mam you are our loyal customers, Mam you purchase some articles on {{date('d-M-y', strtotime($lists->created_at))}}, please let me know if you have issue with our product Thank you"><?=$reciever_number?></a></td> 
                 <td><a ><?=$number?></a></td> 
                 
