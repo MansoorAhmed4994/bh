@@ -152,4 +152,23 @@ class LeopordController extends Controller
         return redirect()->away($ManualOrder);
     }
     
+    public function Loadsheet()
+    {
+        return view('client.orders.manual-orders.leopord.generate_loadsheet');
+    }
+    
+    public function GetCnDetails($cn)
+    {
+        $response = $this->LeopordTrackBookedPacket($cn);
+        // dd($response->packet_list[0]);
+        if($response->status == 1)
+        {
+            return response()->json(['success'=>'1','messege' => 'some thing went wrong','data'=> $response->packet_list[0]]);
+        }
+        else
+        {
+            return response()->json(['error'=>'1','messege' => 'some thing went wrong','data'=> $response]);
+        }
+    }
+    
 }

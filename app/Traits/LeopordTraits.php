@@ -57,6 +57,20 @@ trait LeopordTraits {
     }
     
     
+    // public function LeopordGetCnDetails($tracking_number)
+    // {
+    //     $data = array(
+    //     'api_key' => env('LEOPORD_API_KEY'),
+    //     'api_password' => env('LEOPORD_API_PASSWORD'),
+    //     'track_numbers' => $tracking_number
+    //     );
+    //     $url = "https://merchantapistaging.leopardscourier.com/api/trackBookedPacket/format/json/";
+    //     $headers = ['Authorization:'.env('LEOPORD_API_KEY'), 'Accepts:' . 'application/json',"real:json content"];
+    //     $response = $this->LeopordCurlPostRequest($url,$data);
+    //     return $response = json_decode($response);
+    // }
+    
+    
     public function LeopordPrintAirWayBill($slip)
     {
         

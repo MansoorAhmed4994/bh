@@ -29,6 +29,8 @@ class DashboardController extends Controller
         {
             $from_date = $request->date_from;
             $to_date = $request->date_to;  
+            
+            
         }
         
         $users = DB::table('users')->select('id','first_name')->get();
@@ -75,65 +77,65 @@ class DashboardController extends Controller
         
         
                  
-            $order_report_by_cities = ManualOrders::leftJoin('cities', 'manual_orders.cities_id', '=', 'cities.id')->
-            select('cities.name', DB::raw('count(*) as total'))
-            ->whereBetween('updated_at', [$from_date, $to_date])
-            ->groupBy('cities.name')->havingRaw('COUNT(*) > 10')->get();
-            
-            $cities_name = array();
-            $total_city_orders = array();
-            // $total_orders=[];
-            foreach($order_report_by_cities as $city)
-            {
-                $cities_name[] = $city->name;
-                $total_city_orders[] = $city->total;
-            }
-            
+        $order_report_by_cities = ManualOrders::leftJoin('cities', 'manual_orders.cities_id', '=', 'cities.id')->
+        select('cities.name', DB::raw('count(*) as total'))
+        ->whereBetween('updated_at', [$from_date, $to_date])
+        ->groupBy('cities.name')->havingRaw('COUNT(*) > 10')->get();
         
+        $cities_name = array();
+        $total_city_orders = array();
+        // $total_orders=[];
+        foreach($order_report_by_cities as $city)
+        {
+            $cities_name[] = $city->name;
+            $total_city_orders[] = $city->total;
+        }
         
-            $shipment = DB::table('manual_orders')
-            ->select('manual_orders.payment_status', DB::raw('count(*) as total' ), DB::raw('sum(price-fare) as amount'), DB::raw('(sum(orderpayments.amount) ) as t_amount'), DB::raw('sum(fare) as fare'))
+    
+    // dd($from_date, $to_date);
+        $shipment = DB::table('manual_orders')
+        ->select('manual_orders.payment_status', DB::raw('count(*) as total' ), DB::raw('sum(price-fare) as amount'), DB::raw('(sum(orderpayments.amount) ) as t_amount'), DB::raw('sum(fare) as fare'))
+        ->leftJoin('orderpayments', 'orderpayments.order_id', '=', 'manual_orders.id')
+        ->leftJoin('customers', 'customers.id', '=', 'manual_orders.customers_id')
+        ->whereBetween('manual_orders.updated_at', [$from_date, $to_date]) 
+        ->where('manual_orders.consignment_id' ,'>','0') 
+        ->groupBy('manual_orders.payment_status')
+        ->get();
+        
+        $shipment_statuses = DB::table('manual_orders')
+        ->select('shipment_tracking_status')
+        ->groupBy('shipment_tracking_status')
+            ->whereBetween('manual_orders.updated_at', [$from_date, $to_date])
+            ->where('manual_orders.consignment_id' ,'>','0') 
+        ->get();
+        // dd($shipment_statuses);
+        
+        $statusfinal=[];
+        foreach($shipment_statuses as  $shipment_statuses)
+        {
+            //$statusfinal[] = $shipment_statuses->shipment_tracking_status;
+            // echo $shipment_statuses->shipment_tracking_status;
+            $shipmenttrackings = DB::table('manual_orders')
+            ->select('manual_orders.payment_status', DB::raw('count(*) as total' ), DB::raw('sum(price-fare) as amount'))
             ->leftJoin('orderpayments', 'orderpayments.order_id', '=', 'manual_orders.id')
             ->leftJoin('customers', 'customers.id', '=', 'manual_orders.customers_id')
-            ->whereBetween('manual_orders.updated_at', [$from_date, $to_date]) 
+            ->whereBetween('manual_orders.updated_at', [$from_date, $to_date])
             ->where('manual_orders.consignment_id' ,'>','0') 
+            ->where('manual_orders.shipment_tracking_status' ,'=',$shipment_statuses->shipment_tracking_status) 
             ->groupBy('manual_orders.payment_status')
             ->get();
-            
-            $shipment_statuses = DB::table('manual_orders')
-            ->select('shipment_tracking_status')
-            ->groupBy('shipment_tracking_status')
-                ->whereBetween('manual_orders.updated_at', [$from_date, $to_date])
-                ->where('manual_orders.consignment_id' ,'>','0') 
-            ->get();
-            // dd($shipment_statuses);
-            
-            $statusfinal=[];
-            foreach($shipment_statuses as  $shipment_statuses)
+            //dd($shipmenttrackings);
+            foreach($shipmenttrackings as  $shipmenttracking)
             {
-                //$statusfinal[] = $shipment_statuses->shipment_tracking_status;
-                // echo $shipment_statuses->shipment_tracking_status;
-                $shipmenttrackings = DB::table('manual_orders')
-                ->select('manual_orders.payment_status', DB::raw('count(*) as total' ), DB::raw('sum(price-fare) as amount'))
-                ->leftJoin('orderpayments', 'orderpayments.order_id', '=', 'manual_orders.id')
-                ->leftJoin('customers', 'customers.id', '=', 'manual_orders.customers_id')
-                ->whereBetween('manual_orders.updated_at', [$from_date, $to_date])
-                ->where('manual_orders.consignment_id' ,'>','0') 
-                ->where('manual_orders.shipment_tracking_status' ,'=',$shipment_statuses->shipment_tracking_status) 
-                ->groupBy('manual_orders.payment_status')
-                ->get();
-                //dd($shipmenttrackings);
-                foreach($shipmenttrackings as  $shipmenttracking)
-                {
-                    
-                    $statusfinal[$shipment_statuses->shipment_tracking_status][] = $shipmenttracking;
-                    // array_push($statusfinal, $shipmenttrackings);
-                }
                 
-            
-            
-                 
+                $statusfinal[$shipment_statuses->shipment_tracking_status][] = $shipmenttracking;
+                // array_push($statusfinal, $shipmenttrackings);
             }
+            
+        
+        
+             
+        }
             // dd($statusfinal);
             // $shipmenttracking = DB::table('manual_orders')
             // ->select('manual_orders.shipment_tracking_status','manual_orders.payment_status', DB::raw('count(*) as total' ), DB::raw('sum(price-fare) as amount'), DB::raw('sum(orderpayments.amount) as t_amount'))

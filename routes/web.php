@@ -120,11 +120,16 @@ Route::group(['prefix' => 'trax/', 'namespace' => 'Shipment', 'middleware' => 'a
     Route::get('get-shipment-slip/{tracking_number}', 'TraxController@TraxGetShipmentSlip')->name('get.shipment.slip');
 }); 
  
-Route::group(['prefix' => 'leopord/', 'namespace' => 'Shipment', 'middleware' => 'auth:user,admin','as'=> 'leopord.'],function(){
+Route::group(['prefix' => 'leopord/', 'namespace' => 'Shipment', 'middleware' => 'auth:user,admin','as'=> 'leopord.'],function()
+{
     
     Route::get('get-tariff-details/{weight}/{origion_city}/{destination_city}/{cod}', 'LeopordController@LeopordGetTariffDetails')->name('shipment.get.tariff.details');
     Route::post('calculate-tariff-charges', 'LeopordController@LeopordCalculateDeliveryCharges')->name('shipment.calculate.tariff.charges');
     Route::get('get-shipment-slip/{tracking_number}', 'LeopordController@LeopordGetShipmentSlip')->name('get.shipment.slip');
+    
+    Route::get('get-cn-details/{cn}', 'LeopordController@GetCnDetails')->name('get.cn.details');
+    Route::get('loadsheet', 'LeopordController@Loadsheet')->name('loadsheet');
+    Route::get('generate-loadsheet', 'LeopordController@GenerateLoadsheet')->name('generate.loadsheet');
     
     
     
