@@ -705,6 +705,8 @@ class ManualOrdersController extends Controller
                 ));
                 $ApiResponse = $this->LeopordCreateBooking($leoporddata);
                 $order_id=$ManualOrder->id;
+                
+                // dd($leoporddata);
                 // dd($ApiResponse);
                 // echo '1';
                 if($ApiResponse->status == 1)
