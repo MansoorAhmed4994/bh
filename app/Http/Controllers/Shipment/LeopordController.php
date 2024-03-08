@@ -36,6 +36,7 @@ class LeopordController extends Controller
         
         // =======================detain
         $details = $this->GetTariffDetails($weight,$shipment_type,$origion_city,$destination_city,$cod);
+        
         if($details->status == 0)
         {
             return response()->json(['success'=>'0','messege' => $details->error]);
@@ -67,6 +68,7 @@ class LeopordController extends Controller
         // =======================detain
         $shipment_type = 'detain';
         $details = $this->GetTariffDetails($weight,$shipment_type,$origion_city,$destination_city,$cod);
+        // dd($details);
         if($details->status == 0)
         {
             return response()->json(['success'=>'0','messege' => $details->error]);

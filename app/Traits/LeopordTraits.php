@@ -82,11 +82,11 @@ trait LeopordTraits {
         // $response = json_decode($response);
         // return($response);
     }
-    
+     
     
     public function GetTariffDetails($weight,$shipment_type,$origion_city,$destination_city,$cod)
     {
-        $apiUrl = 'https://merchantapi.leopardscourier.com/api/getTariffDetails/format/json/?api_key='.env('LEOPORD_API_KEY').'&api_password='.(env('LEOPORD_API_PASSWORD')).'&packet_weight='.$weight.'&shipment_type='.$shipment_type.'&origin_city='.(env('LEOPORD_ORIGIN_CITY')).'&destination_city='.$destination_city.'&cod_amount='.$cod;
+        $apiUrl = 'http://new.leopardscod.com/webservice/getTariffDetails/format/json/?api_key='.env('LEOPORD_API_KEY').'&api_password='.(env('LEOPORD_API_PASSWORD')).'&packet_weight='.$weight.'&shipment_type='.$shipment_type.'&origin_city='.(env('LEOPORD_ORIGIN_CITY')).'&destination_city='.$destination_city.'&cod_amount='.$cod;
         $headers = ['Authorization:'.env('Leopord_API_KEY'), 'Accepts:' . 'application/json',"real:json content"];
         $response = $this->CurlGetRequest($apiUrl,$headers);
         $response = json_decode($response);
