@@ -638,14 +638,15 @@ class ManualOrdersController extends Controller
             }
             else if($request->shipment_type == 'leopord')
             {
+                
                 if(check_customer_advance_payment($ManualOrder->id) > 0)
                 {
                     dd('payment not approved');
-                }
+                } 
                 $mytime = Carbon::now();
                 $current_date_time = $mytime->toDateTimeString();
-                $pickup_address_id = $this->get_trax_pickup_address(); 
-                $reference_number= '('.$ManualOrder->id.')('.$current_date_time.')';
+                // $pickup_address_id = $this->get_trax_pickup_address(); 
+                $reference_number= '('.$ManualOrder->id.')('.$current_date_time.')'; 
                 // dd('work');
                 // dd($this->GetShippingCharges('KI752931139'));
                 // dd($this->LeopordTrackBookedPacket('KI752931139'));
@@ -696,7 +697,7 @@ class ManualOrdersController extends Controller
                                                                          * 'integer_value' provide integer value (for integer values read 'Get All Cities' api documentation) 
                                                                          */
                 
-                'shipment_id'                   => 1551342,
+                'shipment_id'                   => 562491,
                 'shipment_name_eng'             => 'self',            // Params: 'self' or 'Type any other Name here', If 'self' will used then Your Company's Name will be Used here
                 'shipment_email'                => 'self',            // Params: 'self' or 'Type any other Email here', If 'self' will used then Your Company's Email will be Used here
                 'shipment_phone'                => 'self',            // Params: 'self' or 'Type any other Phone Number here', If 'self' will used then Your Company's Phone Number will be Used here
@@ -716,11 +717,14 @@ class ManualOrdersController extends Controller
                 'return_city'                   => '',               // Optional Field (You can keep it empty) - If 'return_city' is empty, then shipper's origin city will ne return city
                 'is_vpc'                        => 1,               
                 ));
+                
+                
                 $ApiResponse = $this->LeopordCreateBooking($leoporddata);
+                // dd($ApiResponse);
                 $order_id=$ManualOrder->id;
                 
                 // dd($leoporddata);
-                // dd($ApiResponse);
+                
                 // echo '1';
                 if($ApiResponse->status == 1)
                 { 
