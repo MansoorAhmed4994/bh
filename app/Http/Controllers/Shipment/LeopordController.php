@@ -173,4 +173,10 @@ class LeopordController extends Controller
         }
     }
     
+    public function PrintLoadsheet(Request $request)
+    {
+        $response = $this->LeopordGenerateLoadsheet($request->order_ids);
+        dd($response);
+    }
+    
 }

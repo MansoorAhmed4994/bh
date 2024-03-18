@@ -81,6 +81,8 @@ class ManualOrdersController extends Controller
             'manual_orders.created_at',
             'manual_orders.updated_at',
             'manual_orders.shipment_company',
+            DB::raw("(select count(*) from manual_orders where customers.id = manual_orders.customers_id and status = 'return') as return_count"), 
+            DB::raw("(select count(*) from manual_orders where customers.id = manual_orders.customers_id and status = 'dispatched') as dispatched_count"), 
             DB::raw("CONCAT(t.first_name,'') as updated_by"), 
             DB::raw("CONCAT(users.first_name,'') as created_by"), 
             'manual_orders.status_reason', 
@@ -97,6 +99,7 @@ class ManualOrdersController extends Controller
         $order_by = $request->order_by;
         $date_from = $request->date_from;
         $date_to =  $request->date_to;
+        // $customer_d =   $request->search_order_id;
         
         $date_by = 'created_at';
         $query = ManualOrders::query();
@@ -107,7 +110,12 @@ class ManualOrdersController extends Controller
         ->select($this->OrderFieldList()); 
         if($order_id != '')
         { 
-            $query = $query->where('manual_orders.id',$order_id);
+            // $query = $query->where('manual_orders.id',$order_id);
+            $query = $query->
+            where(function ($query) use ($order_id) {
+                $query->where('manual_orders.id',$order_id)
+                    ->orWhere('manual_orders.customers_id',$order_id);
+            });
         }
         else if($search_text != '')
         {
@@ -217,7 +225,7 @@ class ManualOrdersController extends Controller
         $list = $query->paginate(20); 
         $statuses = get_active_order_status_list();
         $catgories = product_child_categories();
-        // dd($catgories);
+        // dd($list->first());
         
         return view('client.orders.manual-orders.list')->with(['list'=>$list,'users'=>$users,'statuses'=>$statuses,'catgories'=>$catgories]); 
     }
@@ -254,7 +262,10 @@ class ManualOrdersController extends Controller
      */
     public function create()
     {
-        $cities = $this->GetCities()->cities;
+        
+        $cities = $this->LeopordGetCities()->city_list;
+        // dd($cities[0]->shipment_type);
+        // $cities = $this->LeopordGetCities()->cities;
         return view('client.orders.manual-orders.create')->with([ 'cities'=>$cities]);
         //
     }
@@ -737,8 +748,8 @@ class ManualOrdersController extends Controller
                         return back();
                         // dd();
                     }
-                    
-                    return redirect()->away($ApiResponse->slip_link);
+                    return view('client.orders.manual-orders.leopord.print_slip')->with(['slip'=>$ApiResponse->slip_link]);
+                    // return redirect()->away($ApiResponse->slip_link);
                     // return view('client.orders.manual-orders.trax.print_trax_slip')->with('slips',$slips);
                 }
                 
@@ -995,8 +1006,11 @@ class ManualOrdersController extends Controller
             
             $explode_id = explode(',', $order_ids); 
             $ManualOrders = Manualorders::whereIn('manual_orders.id',$explode_id)->get();
-            // dd('w');
-            // dd($ManualOrders);
+            // dd($ManualOrders->first()->id);
+            $clc = $this->CheckCustomerLoyalityStatus($ManualOrders->first()->id);
+            
+            // dd($customer_loyality_status->first());
+            // dd($customer_loyality_value);
             foreach($ManualOrders as $ManualOrder)
             {
                 if($ManualOrder->status == 'dispatched')
@@ -1013,14 +1027,13 @@ class ManualOrdersController extends Controller
                     }
                 }
             }
-            
             foreach($ManualOrders as $ManualOrder)
             {
                 create_activity_log(['table_name'=>'manual_orders','ref_id'=>$ManualOrder->id,'activity_desc'=>'pos slip','created_by'=>Auth::id(),'method'=>'print','route'=>route('ManualOrders.order.action')]);
     
             }
             
-            return view('client.orders.manual-orders.print_pos_slips')->with('ManualOrders',$ManualOrders);
+            return view('client.orders.manual-orders.print_pos_slips')->with(['ManualOrders'=>$ManualOrders,'clc'=>$clc]);
                 //dd($order_ids);
         }
         
@@ -1790,11 +1803,12 @@ class ManualOrdersController extends Controller
     
     public function PrintPosSlip($ManualOrder)
     {
-        
+        // dd($ManualOrder);
         // $order_id = $id; 
         $ManualOrder = Manualorders::where('manual_orders.id',$ManualOrder)->get();
         $ManualOrders = $ManualOrder->first();
         
+        $clc = $this->CheckCustomerLoyalityStatus($ManualOrders->id);
         if($ManualOrders->status == 'dispatched' || $ManualOrders->status == 'confirmed')
         {
             toastr()->error('Parcel Status is '.$ManualOrders->status.' and cannot print pos slip cause parcel status is Dispatched','Error');
@@ -1808,8 +1822,8 @@ class ManualOrdersController extends Controller
         }
         create_activity_log(['table_name'=>'manual_orders','ref_id'=>$ManualOrders->id,'activity_desc'=>'pos slip','created_by'=>Auth::id(),'method'=>'print','route'=>route('ManualOrders.order.action')]);
 
-    // dd($ManualOrders);
-        return view('client.orders.manual-orders.print_pos_slips')->with('ManualOrders',$ManualOrder);
+    // dd($ManualOrder);
+        return view('client.orders.manual-orders.print_pos_slips')->with(['ManualOrders'=>$ManualOrder,'clc'=>$clc]);
     }
     
     public function CheckPosSlipDuplication(Manualorders $ManualOrder)
@@ -1998,6 +2012,45 @@ class ManualOrdersController extends Controller
         
     }
         
+    public function CheckCustomerLoyalityStatus($explode_id)
+    {
+        $customer_loyality_value='';
+        $customer_loyality_status = Manualorders::select(
+            DB::raw("(select count(*) from manual_orders where customers.id = manual_orders.customers_id and status = 'return') as return_count"), 
+            DB::raw("(select count(*) from manual_orders where customers.id = manual_orders.customers_id and status = 'dispatched') as dispatched_count")
+        )->leftJoin('customers', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.id',$explode_id)->get();
+            // dd($customer_loyality_status);
+        $do = (int)$customer_loyality_status->first()->dispatched_count;
+        $ro = (int)$customer_loyality_status->first()->return_count;
+        // $to = 1;
+        // $ro = 2;
+        $per=0;
+        if($ro > 0 && $do >0)
+        {
+            $per = ($ro/($do))*100;
+        }
+        else
+        {
+            $per =0;
+        } 
+        // echo $per;
+        // dd($ro,$do);
+        // echo 'DO: '.$do.' RO: '.$ro; dd($per);
+        if(($per) > 5)
+        {
+            $customer_loyality_value = 'Black List';
+        }
+        else
+        {
+            // customer_loyality_value = 'Lo';
+        } 
+        $data = array([
+            'customer_status'=>$customer_loyality_value,
+            'do'=>$do,
+            'ro'=>$ro
+            ]);
+        return $data;
+    }
     
     
  

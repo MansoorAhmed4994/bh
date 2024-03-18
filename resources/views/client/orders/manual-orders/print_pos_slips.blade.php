@@ -83,7 +83,7 @@ tfoot tr td input {
 }
 .label2 th h5, .label2 td h4, .label2 td h5
 {
-    font-size:25px!important;
+    font-size:25px;
     word-break: break-all;
     padding:10px 0;
 }
@@ -115,6 +115,14 @@ tfoot tr td input {
     background: initial;
     page-break-after: always;
   }
+}
+
+.black_list
+{ 
+    text-align: center !important;
+    width: 100%;
+    font-weight: bold;
+    font-size: 73px !important;
 }
 
 </style>
@@ -152,9 +160,9 @@ tfoot tr td input {
                 <table>
                     <tbody>
                         <tr> 
-                                @php
-                                    $generatorPNG = new Picqer\Barcode\BarcodeGeneratorPNG();
-                                @endphp
+                            @php
+                                $generatorPNG = new Picqer\Barcode\BarcodeGeneratorPNG();
+                            @endphp
                                    
                               
                             <td colspan="2" style="padding: 10px;"> 
@@ -166,7 +174,19 @@ tfoot tr td input {
                                 <!--alt="barcode" width="200"  />-->
                                 <img src="data:image/png;base64,{{ base64_encode($generatorPNG->getBarcode($ManualOrder->id, $generatorPNG::TYPE_CODE_128)) }}" style="width:80%">
                     			<span class="notranslate barcode-text"><h3>{{$ManualOrder->id}}</h3></span></tr>
-                            </td>
+                            </td> 
+                            
+                            @if($clc[0]['customer_status'] == 'Black List')
+                        <tr class="label2">
+                            
+                                <td colspan=2 ><h5 class="black_list">{{$clc[0]['customer_status']}}</h5></td>
+                            
+                              
+                        </tr>
+                        <tr class="label2">
+                            <td colspan=2 ><h5 >Dispatched: {{$clc[0]['do']}}, Returned:{{$clc[0]['ro']}}</h5></td>
+                        </tr>
+                        @endif
                         <tr class="label2">
                             <td><h5>Name: </h5></td>
                             <td><h4>{{$ManualOrder->receiver_name}}</h4></td> 

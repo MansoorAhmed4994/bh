@@ -130,6 +130,7 @@ Route::group(['prefix' => 'leopord/', 'namespace' => 'Shipment', 'middleware' =>
     Route::get('get-cn-details/{cn}', 'LeopordController@GetCnDetails')->name('get.cn.details');
     Route::get('loadsheet', 'LeopordController@Loadsheet')->name('loadsheet');
     Route::get('generate-loadsheet', 'LeopordController@GenerateLoadsheet')->name('generate.loadsheet');
+    Route::post('print-loadsheet', 'LeopordController@PrintLoadsheet')->name('print.loadsheet');
     
     
     

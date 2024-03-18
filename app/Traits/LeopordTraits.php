@@ -124,16 +124,40 @@ trait LeopordTraits {
         $response = json_decode($response);
         return($response);
     }
-
-   
     
-    public function LeopordGetShipmentPaymentStatus($data)
+    public function LeopordGenerateLoadsheet($ids)
     {
-        $apiUrl = "https://sonic.pk/api/shipment/payments?tracking_number=".$data;
-        $headers = ['Authorization:'.env('Leopord_API_KEY'), 'Accepts:' . 'application/json',"real:json content"];
-        $response = $this->CurlGetRequest($apiUrl,$headers);
-        return $response = json_decode($response);
+        $curl_handle = curl_init();
+        curl_setopt($curl_handle, CURLOPT_URL,'https://merchantapi.leopardscourier.com/api/generateLoadSheet/format/json/'); // Write here
+        curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl_handle, CURLOPT_POST, 1); 
+        curl_setopt($curl_handle, CURLOPT_HTTPHEADER, ['api_key:503AFB5BBBD7779D4DA0A3BCC4082076', 'Accepts:' . 'application/json',"real:json content"]);
+        curl_setopt($curl_handle, CURLOPT_POSTFIELDS, json_decode(array(
+            'api_key' => '503AFB5BBBD7779D4DA0A3BCC4082076',
+            'api_password' => 'MANSOOR1@3',
+            'cn_numbers' => array('KI780348439'),
+            'courier_name' => 'Mansoor',
+            'courier_code' => '1@3',
+        )));
+        $buffer = curl_exec($curl_handle);
+        curl_close($curl_handle);
+        
+        return $buffer;
+        
+        
+        
+        // $data['api_key'] = env('LEOPORD_API_KEY');
+        // $data['api_password'] = env('LEOPORD_API_PASSWORD');
+        // $data['cn_numbers'] = array('KI780348439');
+        // $data['courier_name'] = 'Mansoor';
+        // $data['courier_code'] = '1@3';
+        
+        // $url = "https://merchantapi.leopardscourier.com/api/generateLoadSheet/format/json/";
+        // $headers = ['Authorization:'.env('LEOPORD_API_KEY'), 'Accepts:' . 'application/json',"real:json content"];
+        // $response = $this->LeopordCurlPostRequest($url,json_encode($data));
+        // return $response = json_decode($response);
     }
+    
     // public function TestGetPickupAddresses($tracking_number,$print_type)
     // { 
     //     $apiUrl = "https://sonic.pk/api/shipment/track?tracking_number=".$tracking_number.'&type='.$print_type;

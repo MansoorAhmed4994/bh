@@ -35,6 +35,22 @@
         width: 80%;
        white-space: nowrap;
     }
+    .blink {
+        text-align: center;
+        animation: blinker 1s linear infinite;
+        background: red;
+        color: white;
+        width: 100px;
+        font-weight: bold;
+        padding: 6px;
+        border-radius: 5px;
+    }
+    
+    @keyframes blinker {
+        50% {
+            opacity: 0;
+        }
+    }
 </style>
 <script  type="application/javascript">
 var base_url = '<?php echo e(url('/')); ?>';
@@ -906,30 +922,47 @@ var container = "";
                     @endif
                     
                 </td> 
-                <td>{{$lists->id}}</td>
-                <td>{{$lists->first_name}}<p>{{$lists->loyality_count}}</p><i class='far fa-user'></i></td>   
-                <?php 
-                $number = $lists->number;
-                $reciever_number = $lists->receiver_number;
-                
-                $get_char_num = substr($lists->number,0,1);
-                if($get_char_num == 0)
+                <?php
+                $do = (int)$lists->dispatched_count;
+                $ro = (int)$lists->return_count;
+                $per=0;
+                if($ro > 0 && $do >0)
                 {
-                    $number = substr($lists->number, 1);
-                    $number = '+92'.$number;
-                    
+                    $per = ($ro/($do))*100;
                 }
-                
-                $get_char_rec_num = substr($lists->receiver_number,0,1);
-                if($get_char_rec_num == 0)
+                else
                 {
-                    $reciever_number = substr($lists->receiver_number, 1);
-                    $reciever_number = '+92'.$reciever_number;
-                    
+                    $per =0;
                 }
-                
-                
                 ?>
+                <!--{{$per}}-->
+                <td>{{$lists->id}}</td>
+                <td>{{$lists->customers_id}}</td>
+                <td>{{$lists->first_name}}
+                    @if($per > 5)
+                        <p>TO:{{$do }} DO:{{$ro}} Per:{{$per}}</p>
+                        <div class="blink">Black list</div>@endif
+                        </td>   
+                        <?php 
+                            $number = $lists->number;
+                            $reciever_number = $lists->receiver_number;
+                            
+                            $get_char_num = substr($lists->number,0,1);
+                            if($get_char_num == 0)
+                            {
+                                $number = substr($lists->number, 1);
+                                $number = '+92'.$number;
+                                
+                            }
+                            
+                            $get_char_rec_num = substr($lists->receiver_number,0,1);
+                            if($get_char_rec_num == 0)
+                            {
+                                $reciever_number = substr($lists->receiver_number, 1);
+                                $reciever_number = '+92'.$reciever_number;
+                                
+                            } 
+                        ?>
                 <td>
                     <p><?=$reciever_number?></p>
                     <p><?=$number?></p> 

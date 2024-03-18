@@ -37,6 +37,11 @@ class ManualOrders extends Model
         return $this->hasMany(ActivityLogs::class,'ref_id','id');
     }
     
+    public function CustomerOrderSummary()
+    {
+        return $this->hasMany(ActivityLogs::class,'ref_id','id');
+    }
+    
     
     public function riders()
     {

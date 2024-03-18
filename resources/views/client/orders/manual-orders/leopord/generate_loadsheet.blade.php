@@ -91,7 +91,7 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        url: base_url + '/riders/generate-loadsheet',
+                        url: '{{route("leopord.print.loadsheet")}}',
                         type: 'POST',
                         data: $('#load_sheet_form').serialize(),
                         dataType: 'json',
@@ -333,18 +333,7 @@
                     </thead>
                     <tbody id="row_data">
                           
-                    </tbody>
-                    <tbody id="row_data">
-                        <tr>
-                            <td colspan="3" style="height:100px;vertical-align: middle;border:1px solid black">Rider Signature</td>
-                            <td colspan="3" style="height:100px;vertical-align: middle;border:1px solid black"></td>
-                        </tr>
-                        <tr>
-                            <td colspan="3" style="height:100px;vertical-align: middle;border:1px solid black">Manager Signature</td>
-                            <td colspan="3" style="height:100px;vertical-align: middle;border:1px solid black"></td>
-                        </tr>
-                          
-                    </tbody>
+                    </tbody> 
                 </table>
             </div>
         </form>

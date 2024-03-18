@@ -249,7 +249,7 @@
                 <div class="form-group ">
                         <label for="address">city</label>
                         
-                        <select class="form-control " id="city"  name="city" >
+                        <select class="form-control js-example-basic-single leopord_city" id="city"  name="city" data-rel="chosen">
                             <option value="">Select City</option>
                             @for($i=0 ; $i < sizeof($cities); $i++)
                              
@@ -299,7 +299,17 @@
         </div>
     </div>
     
+<script>
+    $(document).ready(function() {
+    $('.js-example-basic-single').select2({
+        width:'100%', 
+        templateSelection: function (data, container) {
+            $(container).addClass('form-control');
+            return data.text;
+          }
+    });
     
-    
+});
+</script>
      
   @endsection
