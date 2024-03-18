@@ -387,7 +387,9 @@ class ManualOrdersController extends Controller
             return back();
         }
         
-        $cities = $this->get_trax_cities();
+        // $cities = $this->get_trax_cities();
+        $cities = $this->LeopordGetCities()->city_list;
+        
         $leopordCities = $this->LeopordGetCities()->city_list;
         
         
@@ -1520,7 +1522,7 @@ class ManualOrdersController extends Controller
     
     public function get_trax_cities()
     {
-        return $this->GetCities()->cities;
+        return $this->LeopordGetCities()->city_list;
         // $baseUrl = "https://sonic.pk/";
  
         // $apiUrl = $baseUrl."api/cities";
@@ -1999,7 +2001,7 @@ class ManualOrdersController extends Controller
     {
         if($shipmentcompany == 'trax')
         {
-            $cities = $this->get_trax_cities();
+            $cities = $this->LeopordGetCities()->city_list;
         }
         else if($shipmentcompany == 'leopord')
         {
