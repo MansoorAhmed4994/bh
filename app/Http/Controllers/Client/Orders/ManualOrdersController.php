@@ -754,8 +754,8 @@ class ManualOrdersController extends Controller
                         return back();
                         // dd();
                     }
-                    return view('client.orders.manual-orders.leopord.print_slip')->with(['slip'=>$ApiResponse->slip_link]);
-                    // return redirect()->away($ApiResponse->slip_link);
+                    // return view('client.orders.manual-orders.leopord.print_slip')->with(['slip'=>$ApiResponse->slip_link]);
+                    return redirect()->away($ApiResponse->slip_link);
                     // return view('client.orders.manual-orders.trax.print_trax_slip')->with('slips',$slips);
                 }
                 
