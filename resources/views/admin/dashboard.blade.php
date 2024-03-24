@@ -403,6 +403,12 @@ function toggleDataSeries(e) {
     </div>
     
     <div style="width: 100%; margin: auto;">
+        <canvas id="parcels_by_shipment_company"></canvas>
+    </div>
+    
+    
+    
+    <div style="width: 100%; margin: auto;">
         <div id="chartContainer" style="height: 300px; width: 100%;"></div>
     </div>
 
@@ -413,7 +419,7 @@ function toggleDataSeries(e) {
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
    
- 
+//Parcels delivered Cities Chart
   const labels = {!! json_encode($cities_name) !!}; 
 
   const data = {
@@ -433,12 +439,48 @@ function toggleDataSeries(e) {
     options: {}
   };
   
- 
-</script>
-<script>
   const myChart = new Chart(
     document.getElementById('myChart1'),
     config
   );
+  
+  
+  //Parcels delivered Cities Chart
+  const labels2 = {!! json_encode($shipment_companies) !!}; 
+
+  const data2 = {
+    labels: labels2,
+    datasets: [{
+      label: 'Order Delivered in Cities',
+      backgroundColor: 'rgb(255, 99, 132)',
+      borderColor: 'rgb(255, 99, 132)',
+      data :{!! json_encode($total_shipment_orders)!!},
+
+    }]
+  };
+
+  const config2 = {
+    type: 'bar',
+    data: data2,
+    options: {}
+  };
+  
+  const myChart2 = new Chart(
+    document.getElementById('parcels_by_shipment_company'),
+    config2
+  ); 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 </script>
 @endsection

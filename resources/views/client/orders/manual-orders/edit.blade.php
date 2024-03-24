@@ -845,7 +845,7 @@
                         
                         <div class="form-group col-sm">
                             <label for="Number">Pieces</label>
-                            <input type="text" class="form-control @if($errors->get('total_pieces')) is-invalid @endif" value="{{old('total_pieces')}}@if(isset($ManualOrder)){{trim($ManualOrder->total_pieces)}}@endif" id="total_pieces"  name="total_pieces" placeholder="Total Pieces" required>
+                            <input type="number" min="1" max="250" class="form-control @if($errors->get('total_pieces')) is-invalid @endif" value="{{old('total_pieces')}}@if(isset($ManualOrder)){{trim($ManualOrder->total_pieces)}}@endif" id="total_pieces"  name="total_pieces" placeholder="Total Pieces" required>
                             <small id="total_pieces_error" class="form-text text-danger">@if($errors->get('total_pieces')) {{$errors->first('total_pieces')}} @endif</small>
                         </div>
             

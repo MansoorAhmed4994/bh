@@ -131,6 +131,8 @@ Route::group(['prefix' => 'leopord/', 'namespace' => 'Shipment', 'middleware' =>
     Route::get('loadsheet', 'LeopordController@Loadsheet')->name('loadsheet');
     Route::get('generate-loadsheet', 'LeopordController@GenerateLoadsheet')->name('generate.loadsheet');
     Route::post('print-loadsheet', 'LeopordController@PrintLoadsheet')->name('print.loadsheet');
+    Route::get('generate-cities', 'LeopordController@GenerateLeopordCities')->name('generate.cities');
+    
     
     
     

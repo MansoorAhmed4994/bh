@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Traits\LeopordTraits;
 
 use App\Models\Client\ManualOrders;
+use App\Models\LeopordCities;
 
 class LeopordController extends Controller
 { 
@@ -177,6 +178,30 @@ class LeopordController extends Controller
     {
         $response = $this->LeopordGenerateLoadsheet($request->order_ids);
         dd($response);
+    }
+    
+    public function GenerateLeopordCities()
+    {
+        $cities = $this->LeopordGetCities()->city_list;
+        
+        $competition_all=[];
+        foreach($cities as $city)
+        {
+            $newCompete = array(
+            'id' => $city->id,
+            'name' => $city->name
+            );
+            array_push($competition_all, $newCompete);
+            
+            // $leopord_cities = new LeopordCities();
+            // $leopord_cities->id = $city->id;
+            // $leopord_cities->name = $city->name;
+            // $status = $leopord_cities->save();
+            // dd($status);
+        }
+        dd($competition_all);
+        $status = LeopordCities::insert($cities);
+        // dd();
     }
     
 }

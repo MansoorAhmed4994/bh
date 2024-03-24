@@ -64,9 +64,19 @@ class DashboardController extends Controller
         ->whereBetween('updated_at', [$from_date, $to_date])
         ->groupBy('assign_to')->get();
             
-        // dd($users_totla_orders->assign_to);
-        
-        // dd($users_totla_orders);
+        $orders_by_shipment_company = DB::table('manual_orders')
+        ->select('shipment_company as id', DB::raw('count(*) as total_orders'),DB::raw('sum(price) as total_amount'))
+        ->leftJoin('users', 'manual_orders.assign_to', '=', 'users.id') 
+        ->whereBetween('updated_at', [$from_date, $to_date])->where('status','dispatched')
+        ->groupBy('shipment_company')->get();
+        // dd($orders_by_shipment_company);
+        $shipment_companies = array();
+        $total_shipment_orders = array();
+        foreach($orders_by_shipment_company as $city)
+        {
+            $shipment_companies[] = $city->id;
+            $total_shipment_orders[] = $city->total_orders;
+        }
     
         $inventory = DB::table('inventories')
              ->select('stock_status', DB::raw('sum(qty) as qty'), DB::raw('sum(cost) as cost'), DB::raw('sum(sale) as sale'))
@@ -76,16 +86,46 @@ class DashboardController extends Controller
              
         
         
-                 
-        $order_report_by_cities = ManualOrders::leftJoin('cities', 'manual_orders.cities_id', '=', 'cities.id')->
-        select('cities.name', DB::raw('count(*) as total'))
-        ->whereBetween('updated_at', [$from_date, $to_date])
-        ->groupBy('cities.name')->havingRaw('COUNT(*) > 10')->get();
-        
         $cities_name = array();
         $total_city_orders = array();
-        // $total_orders=[];
-        foreach($order_report_by_cities as $city)
+        
+        $order_report_by_cities = ManualOrders::leftJoin('cities', 'manual_orders.cities_id', '=', 'cities.id')->
+        select('cities.name', DB::raw('count(*) as total'))
+        ->whereBetween('updated_at', [$from_date, $to_date])->where('shipment_company','trax')
+        ->groupBy('cities.name')->havingRaw('COUNT(*) > 100')->get();
+        
+        $order_report_by_leopord_cities = ManualOrders::leftJoin('leopord_cities', 'manual_orders.cities_id', '=', 'leopord_cities.id')->
+        select('leopord_cities.name', DB::raw('count(*) as total'))
+        ->whereBetween('updated_at', [$from_date, $to_date])->where('shipment_company','leopord')
+        ->groupBy('leopord_cities.name')->havingRaw('COUNT(*) > 100')->get();
+        dd($order_report_by_leopord_cities);
+        
+        // $order_report_by_leopord_cities = ManualOrders::leftJoin('leopord_cities', 'manual_orders.cities_id', '=', 'leopord_cities.id')->
+        // select('manual_orders.cities_id')
+        // ->whereBetween('updated_at', [$from_date, $to_date])->where('shipment_company','leopord')
+        // ->paginate(100);
+        // dd($order_report_by_leopord_cities);
+        
+        
+        
+        $order_report_by_local_city = ManualOrders::
+        select('shipment_company')
+        ->whereBetween('updated_at', [$from_date, $to_date])->where('shipment_company','=','local')->get()->count();
+        
+        // dd($order_report_by_local_city->);
+        
+        
+        // dd($order_report_by_local_city);
+        $cities_name[] = 'Local';
+        $total_city_orders[] = $order_report_by_local_city;
+ 
+        // foreach($order_report_by_cities as $city)
+        // {
+        //     $cities_name[] = $city->name;
+        //     $total_city_orders[] = $city->total;
+        // }
+        
+         foreach($order_report_by_leopord_cities as $city)
         {
             $cities_name[] = $city->name;
             $total_city_orders[] = $city->total;
@@ -168,7 +208,10 @@ class DashboardController extends Controller
             'inventories'=>$inventory,
             'cities_name'=>$cities_name,
             'total_city_orders'=>$total_city_orders,
-            'users_totla_orders'=>$users_totla_orders
+            'users_totla_orders'=>$users_totla_orders,
+            'orders_by_shipment_company'=>$orders_by_shipment_company,
+            'shipment_companies'=>$shipment_companies,
+            'total_shipment_orders'=>$total_shipment_orders
             ]);
         // return view('admin.dashboard');
         

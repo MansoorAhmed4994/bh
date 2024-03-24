@@ -607,6 +607,7 @@ class ManualOrdersController extends Controller
                     $ManualOrder->consignment_id = $ApiResponse->tracking_number;
                     $ManualOrder->service_type = $request->shipping_mode_id; 
                     $ManualOrder->shipment_company = $request->shipment_type;
+                    $ManualOrder->cities_id = $request->city;
                     $ManualOrder->status = 'dispatched';  
                     // echo '3';
                     if(check_customer_advance_payment($order_id) > 0)
@@ -723,7 +724,7 @@ class ManualOrdersController extends Controller
                 // dd($ApiResponse);
                 $order_id=$ManualOrder->id;
                 
-                // dd($leoporddata);
+                dd($ApiResponse);
                 
                 // echo '1';
                 if($ApiResponse->status == 1)
@@ -740,6 +741,7 @@ class ManualOrdersController extends Controller
                     $ManualOrder->service_type = $request->leopord_shipment_type_id; 
                     $ManualOrder->shipment_company = $request->shipment_type;
                     $ManualOrder->shipment_slip = $ApiResponse->slip_link;
+                    $ManualOrder->cities_id = $request->city;
                     $ManualOrder->status = 'dispatched';  
                     // echo '3';
                     
@@ -780,6 +782,7 @@ class ManualOrdersController extends Controller
                 
                 
                 
+                $ManualOrder->shipment_company = $request->shipment_type;
                 $ManualOrder->status = 'dispatched';
                 $status = $ManualOrder->save();
                 // dd($status);
