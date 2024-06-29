@@ -698,7 +698,7 @@ class ManualOrdersController extends Controller
                                                                          * 'integer_value' provide integer value (for integer values read 'Get All Cities' api documentation) 
                                                                          */
                 
-                'shipment_id'                   => 562491,
+                'shipment_id'                   => 1648479,
                 'shipment_name_eng'             => 'self',            // Params: 'self' or 'Type any other Name here', If 'self' will used then Your Company's Name will be Used here
                 'shipment_email'                => 'self',            // Params: 'self' or 'Type any other Email here', If 'self' will used then Your Company's Email will be Used here
                 'shipment_phone'                => 'self',            // Params: 'self' or 'Type any other Phone Number here', If 'self' will used then Your Company's Phone Number will be Used here
@@ -718,13 +718,15 @@ class ManualOrdersController extends Controller
                 'return_city'                   => '',               // Optional Field (You can keep it empty) - If 'return_city' is empty, then shipper's origin city will ne return city
                 'is_vpc'                        => 1,               
                 ));
-                
-                
+                // dd($this->LeopordGetShipperDetails());
+                // echo "<pre>"; 
+                // print_r($leoporddata);
+                // die;
                 $ApiResponse = $this->LeopordCreateBooking($leoporddata);
                 // dd($ApiResponse);
                 $order_id=$ManualOrder->id;
                 
-                dd($ApiResponse);
+                // dd($ApiResponse);
                 
                 // echo '1';
                 if($ApiResponse->status == 1)
@@ -2059,6 +2061,18 @@ class ManualOrdersController extends Controller
             'ro'=>$ro
             ]);
         return $data;
+    }
+    
+    
+        
+    public function TestFileUpload(Request $request)
+    {
+        dd('working');
+        $image = $request->file('file');
+        dd($image);
+        $imageName = time().'.'.$image->extension();
+        $image->move(public_path('images'),$imageName);
+        return response()->json(['success'=>$imageName]);
     }
     
     

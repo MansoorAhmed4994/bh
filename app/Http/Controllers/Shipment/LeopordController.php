@@ -9,7 +9,7 @@ use App\Traits\LeopordTraits;
 
 use App\Models\Client\ManualOrders;
 use App\Models\LeopordCities;
-
+use DB;
 class LeopordController extends Controller
 { 
     use LeopordTraits;
@@ -175,23 +175,43 @@ class LeopordController extends Controller
     }
     
     public function PrintLoadsheet(Request $request)
-    {
+    { 
         $response = $this->LeopordGenerateLoadsheet($request->order_ids);
-        dd($response);
+        
+        return response()->json(['error'=>'1','messege' => 'some thing went wrong','data'=> $response]);
     }
     
     public function GenerateLeopordCities()
     {
+        
+        // $data = ManualOrders::select('*')->where(['shipment_company'=>'leopord'])->WhereNull('cities_id')->first();
+        // dd($data);
+        // foreach($data as $dt)
+        // {
+        //     $response = $this->LeopordTrackBookedPacket($dt->consignment_id);
+        //     if($response->status == 1)
+        //     {
+        //         dd($response);
+        //     }
+        // }
+        // dd();
+        
+        
+        
+        
+        
+        
+        
         $cities = $this->LeopordGetCities()->city_list;
         
         $competition_all=[];
         foreach($cities as $city)
         {
-            $newCompete = array(
+            $competition_all[]=[
             'id' => $city->id,
             'name' => $city->name
-            );
-            array_push($competition_all, $newCompete);
+            ];
+            // array_push($competition_all, $newCompete);
             
             // $leopord_cities = new LeopordCities();
             // $leopord_cities->id = $city->id;
@@ -199,8 +219,9 @@ class LeopordController extends Controller
             // $status = $leopord_cities->save();
             // dd($status);
         }
-        dd($competition_all);
-        $status = LeopordCities::insert($cities);
+        // dd($competition_all);
+        DB::table('leopord_cities')->insert($competition_all);
+        // $status = LeopordCities::insert($cities);
         // dd();
     }
     

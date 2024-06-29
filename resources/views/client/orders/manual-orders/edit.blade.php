@@ -872,7 +872,6 @@
                             <select class="form-control" id="shipment_type" onchange="OnChangeShipment()" name="shipment_type" required>
                                 <option value="">Select Shipment type</option>
                                 <option value="local">Local Rider</option>
-                                <option value="trax">Trax</option> 
                                 <option value="leopord">Leopord</option> 
                             </select> 
                             <small id="shipment_type_error" class="form-text text-danger"></small>

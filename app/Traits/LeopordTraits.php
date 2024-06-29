@@ -115,47 +115,94 @@ trait LeopordTraits {
         return $response = json_decode($response);
     } 
     
-    public function GetShipperDetails()
+    public function LeopordGetShipperDetails()
     {
         // return 123;
-        $apiUrl = 'https://merchantapi.leopardscourier.com/api/getShipperDetails/format/json/?api_key='.env('LEOPORD_API_KEY').'&api_password='.(env('LEOPORD_API_PASSWORD')).'&request_param=request_param&request_value=request_value';
+        $apiUrl = 'http://new.leopardscod.com/webservice/getShipperDetails/format/json/?api_key='.env('LEOPORD_API_KEY').'&api_password='.(env('LEOPORD_API_PASSWORD')).'&request_param=shipper_detail&request_value=test';
         $headers = ['Authorization:'.env('LEOPORD_API_KEY'), 'Accepts:' . 'application/json',"real:json content"];
         $response = $this->CurlGetRequest($apiUrl,$headers);
         $response = json_decode($response);
         return($response);
     }
     
+    
+    
+    
     public function LeopordGenerateLoadsheet($ids)
     {
+        // $data= json_encode(array(
+        //     'api_key' => '503AFB5BBBD7779D4DA0A3BCC4082076',
+        //     'api_password' => 'MANSOOR1@3',
+        //     'cn_numbers' => array('KI780348439','KI780653757'),
+        //     'courier_name' => 'Mansoor',
+        //     'courier_code' => '1@3',
+        // ));
+        // trim($str, "Hir");
+        // return $data;
+        // $curl_handle = curl_init();
+        // curl_setopt($curl_handle, CURLOPT_URL, 'https://merchantapi.leopardscourier.com/api/generateLoadSheet/format/json/'); // Write here Test or Production Link
+        // curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
+        // curl_setopt($curl_handle, CURLOPT_POST, 1);
+        // curl_setopt($curl_handle, CURLOPT_HTTPHEADER, ['Authorization:'.env('LEOPORD_API_KEY'), 'Accepts:' . 'application/json',"real:json content"]);
+        // curl_setopt($curl_handle, CURLOPT_POSTFIELDS,$data) ;
+        
+        // $buffer = curl_exec($curl_handle);
+        // curl_close($curl_handle);
+        // return $buffer;
+        
+        
+        
+        $data = array();
+        $data['api_key'] = env('LEOPORD_API_KEY');
+        $data['api_password'] = env('LEOPORD_API_PASSWORD');
+        $data['cn_numbers'] = array('I780348439');
+        $data['courier_name'] = 'Mansoor';
+        $data['courier_code'] = '1@3';
+        
         $curl_handle = curl_init();
-        curl_setopt($curl_handle, CURLOPT_URL,'https://merchantapi.leopardscourier.com/api/generateLoadSheet/format/json/'); // Write here
+        curl_setopt($curl_handle, CURLOPT_URL,
+        'https://merchantapi.leopardscourier.com/api/generateLoadSheet/format/json/'); // Write here 
         curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl_handle, CURLOPT_POST, 1); 
-        curl_setopt($curl_handle, CURLOPT_HTTPHEADER, ['api_key:503AFB5BBBD7779D4DA0A3BCC4082076', 'Accepts:' . 'application/json',"real:json content"]);
-        curl_setopt($curl_handle, CURLOPT_POSTFIELDS, json_decode(array(
-            'api_key' => '503AFB5BBBD7779D4DA0A3BCC4082076',
-            'api_password' => 'MANSOOR1@3',
-            'cn_numbers' => array('KI780348439'),
-            'courier_name' => 'Mansoor',
-            'courier_code' => '1@3',
-        )));
+        curl_setopt($curl_handle, CURLOPT_POST, 1);
+        
+        curl_setopt($curl_handle, CURLOPT_HTTPHEADER, ['Authorization:'.env('LEOPORD_API_KEY'), 'Accepts:' . 'application/json',"real:json content"]);
+        curl_setopt($curl_handle, CURLOPT_POSTFIELDS, json_encode($data));
         $buffer = curl_exec($curl_handle);
         curl_close($curl_handle);
-        
         return $buffer;
+        
+        
+        
+        
+        // $curl_handle = curl_init();
+        // curl_setopt($curl_handle, CURLOPT_URL,'https://merchantapi.leopardscourier.com/api/generateLoadSheet/format/json/'); // Write here
+        // curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
+        // curl_setopt($curl_handle, CURLOPT_POST, 1); 
+        // // curl_setopt($curl_handle, CURLOPT_HTTPHEADER, ['api_key:503AFB5BBBD7779D4DA0A3BCC4082076', 'Accepts:' . 'application/json',"real:json content"]);
+        // curl_setopt($curl_handle, CURLOPT_POSTFIELDS, array(
+        //     'api_key' => '503AFB5BBBD7779D4DA0A3BCC4082076',
+        //     'api_password' => 'MANSOOR1@3',
+        //     'cn_numbers' => array('KI780348439'),
+        //     'courier_name' => 'Mansoor',
+        //     'courier_code' => '1@3',
+        // ));
+        // $buffer = curl_exec($curl_handle);
+        // curl_close($curl_handle);
+        
+        // return $buffer;
         
         
         
         // $data['api_key'] = env('LEOPORD_API_KEY');
         // $data['api_password'] = env('LEOPORD_API_PASSWORD');
-        // $data['cn_numbers'] = array('KI780348439');
+        // $data['cn_numbers'] = 'KI780348439';
         // $data['courier_name'] = 'Mansoor';
         // $data['courier_code'] = '1@3';
         
         // $url = "https://merchantapi.leopardscourier.com/api/generateLoadSheet/format/json/";
         // $headers = ['Authorization:'.env('LEOPORD_API_KEY'), 'Accepts:' . 'application/json',"real:json content"];
         // $response = $this->LeopordCurlPostRequest($url,json_encode($data));
-        // return $response = json_decode($response);
+        // return $response = ($response);
     }
     
     // public function TestGetPickupAddresses($tracking_number,$print_type)

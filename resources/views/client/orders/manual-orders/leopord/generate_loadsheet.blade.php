@@ -80,11 +80,7 @@
             
             $('#print_loadsheet_btn').on('click',function(e)
             { 
-                if($("#riders").val() == "select rider") {
-                    alert("Please Select Rider");
-                }
-                else
-                {
+                alert('working');
                     $("body").addClass("loading"); 
                     //console.log($('#load_sheet_form').serialize());
                     $.ajax({
@@ -97,26 +93,8 @@
                         dataType: 'json',
                         success: function(e)
                         { 
-                            if(typeof(e.success) != 'undefined')
-                            { 
-                                    var today = new Date();
-                                    var dd = String(today.getDate()).padStart(2, '0');
-                                    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-                                    var yyyy = today.getFullYear();
-                                    
-                                    today = mm + '/' + dd + '/' + yyyy; 
-                                    document.getElementById("print_date").innerHTML = today;
-                                    PrintElem();
-                                    $("body").removeClass("loading");
-                                
-                            }
-                            if(typeof(e.error) != 'undefined')
-                            
-                            {
-                                
-                                 alert(e.messege);
-                                 $("body").removeClass("loading");
-                            }
+                            console.log(e);
+                           
                             
                             $("body").removeClass("loading");
                         },
@@ -125,7 +103,7 @@
                             $("body").removeClass("loading");
                         }
                     });
-                }   
+                   
             });
         });
         

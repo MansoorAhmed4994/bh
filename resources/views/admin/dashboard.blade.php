@@ -32,16 +32,20 @@
 </style>
 <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 <script type="text/javascript">
+
+var test = @json($shipment_cities_data);
 window.onload = function () {
 
 var chart = new CanvasJS.Chart("chartContainer", {
 	animationEnabled: true,
 	title:{
-		text: "Olympic Medals of all Times (till 2016 Olympics)"
+		text: "Top Ten Cities"
 	},
+	height:500,
 	axisY: {
 		title: "Medals",
-		includeZero: true
+		includeZero: true,
+		maximum: 610
 	},
 	legend: {
 		cursor:"pointer",
@@ -51,54 +55,55 @@ var chart = new CanvasJS.Chart("chartContainer", {
 		shared: true,
 		content: toolTipFormatter
 	},
-	data: [{
+	data: [
+	    {
 		type: "bar",
 		showInLegend: true,
 		name: "Gold",
 		color: "gold",
-		dataPoints: [
-			{ y: 243, label: "Italy" },
-			{ y: 236, label: "China" },
-			{ y: 243, label: "France" },
-			{ y: 273, label: "Great Britain" },
-			{ y: 269, label: "Germany" },
-			{ y: 196, label: "Russia" },
-			{ y: 1118, label: "USA" }
-		]
+		dataPoints:@json($shipment_cities_data)
 	},
-	{
-		type: "bar",
-		showInLegend: true,
-		name: "Silver",
-		color: "silver",
-		dataPoints: [
-			{ y: 212, label: "Italy" },
-			{ y: 186, label: "China" },
-			{ y: 272, label: "France" },
-			{ y: 299, label: "Great Britain" },
-			{ y: 270, label: "Germany" },
-			{ y: 165, label: "Russia" },
-			{ y: 896, label: "USA" }
-		]
-	},
-	{
-		type: "bar",
-		showInLegend: true,
-		name: "Bronze",
-		color: "#A57164",
-		dataPoints: [
-			{ y: 236, label: "Italy" },
-			{ y: 172, label: "China" },
-			{ y: 309, label: "France" },
-			{ y: 302, label: "Great Britain" },
-			{ y: 285, label: "Germany" },
-			{ y: 188, label: "Russia" },
-			{ y: 788, label: "USA" }
-		]
-	}]
+// 	{
+// 		type: "bar",
+// 		showInLegend: true,
+// 		name: "Silver",
+// 		color: "silver",
+// 		dataPoints: [
+// 			{"y":26,"label":"Abbottabad"},
+// 			{ y: 186, label: "China" },
+// 			{ y: 272, label: "France" },
+// 			{ y: 299, label: "Great Britain" },
+// 			{ y: 270, label: "Germany" },
+// 			{ y: 165, label: "Russia" },
+// 			{ y: 896, label: "USA" }
+// 		]
+// 	},
+// 	{
+// 		type: "bar",
+// 		showInLegend: true,
+// 		name: "Bronze",
+// 		color: "#A57164",
+// 		dataPoints: [
+// 		    {"y":"26","label":"Abbottabad"},
+// 		    {"y":"2","label":"Alipur"},
+// 		    {"y":"4","label":"Arifwala"},
+// 		    {"y":"4","label":"Attock"}
+// 		]
+// 	}
+	]
 });
+// handleChartHeight(chart);
 chart.render();
 
+function handleChartHeight(chart){    
+    var dpsWidth = 30;
+    var plotAreaHeight = chart.axisX[0].bounds.height;
+    var chartHeight = plotAreaHeight + (50 * dpsWidth);
+    chart.options.dataPointWidth = dpsWidth;
+    chart.options.height = chartHeight;
+}
+
+// {!! json_encode($shipment_cities_data) !!}
 function toolTipFormatter(e) {
 	var str = "";
 	var total = 0 ;
@@ -409,7 +414,7 @@ function toggleDataSeries(e) {
     
     
     <div style="width: 100%; margin: auto;">
-        <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+        <div id="chartContainer" style="height: auto; width: 100%;"></div>
     </div>
 
 
@@ -431,7 +436,7 @@ function toggleDataSeries(e) {
       data :{!! json_encode($total_city_orders)!!},
 
     }]
-  };
+  }; 
 
   const config = {
     type: 'line',
@@ -446,7 +451,7 @@ function toggleDataSeries(e) {
   
   
   //Parcels delivered Cities Chart
-  const labels2 = {!! json_encode($shipment_companies) !!}; 
+  const labels2 = {!! json_encode($shipment_cities_summary['shipment_cities_name']) !!}; 
 
   const data2 = {
     labels: labels2,
@@ -454,7 +459,7 @@ function toggleDataSeries(e) {
       label: 'Order Delivered in Cities',
       backgroundColor: 'rgb(255, 99, 132)',
       borderColor: 'rgb(255, 99, 132)',
-      data :{!! json_encode($total_shipment_orders)!!},
+      data :{!! json_encode($shipment_cities_summary['shipment_cities_orders'])!!},
 
     }]
   };
@@ -469,6 +474,10 @@ function toggleDataSeries(e) {
     document.getElementById('parcels_by_shipment_company'),
     config2
   ); 
+  
+  
+  
+  
   
   
   

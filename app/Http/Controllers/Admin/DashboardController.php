@@ -72,10 +72,11 @@ class DashboardController extends Controller
         // dd($orders_by_shipment_company);
         $shipment_companies = array();
         $total_shipment_orders = array();
+        $shipment_cities_summary = array();
         foreach($orders_by_shipment_company as $city)
         {
-            $shipment_companies[] = $city->id;
-            $total_shipment_orders[] = $city->total_orders;
+            $shipment_cities_summary['shipment_cities_name'][] = $city->id;
+            $shipment_cities_summary['shipment_cities_orders'][] = $city->total_orders;
         }
     
         $inventory = DB::table('inventories')
@@ -88,23 +89,64 @@ class DashboardController extends Controller
         
         $cities_name = array();
         $total_city_orders = array();
+        // dd($from_date, $to_date);
+        // $order_report_by_cities = ManualOrders::leftJoin('cities', 'manual_orders.cities_id', '=', 'cities.id')->
+        // select('cities.name', DB::raw('count(*) as total'))
+        // ->whereBetween('updated_at', [$from_date, $to_date])->where('shipment_company','trax')
+        // ->groupBy('cities.name')->havingRaw('COUNT(*) > 100')->get();
         
-        $order_report_by_cities = ManualOrders::leftJoin('cities', 'manual_orders.cities_id', '=', 'cities.id')->
-        select('cities.name', DB::raw('count(*) as total'))
-        ->whereBetween('updated_at', [$from_date, $to_date])->where('shipment_company','trax')
-        ->groupBy('cities.name')->havingRaw('COUNT(*) > 100')->get();
+        // $order_report_by_leopord_cities = ManualOrders::leftJoin('leopord_cities', 'manual_orders.cities_id', '=', 'leopord_cities.id')->where('shipment_company','leopord')->
+        // select('leopord_cities.name', DB::raw('count(*) as total'))
+        // ->whereBetween('updated_at', [$from_date, $to_date])
+        // ->groupBy('leopord_cities.name')->havingRaw('COUNT(*) > 100')->get();
         
         $order_report_by_leopord_cities = ManualOrders::leftJoin('leopord_cities', 'manual_orders.cities_id', '=', 'leopord_cities.id')->
-        select('leopord_cities.name', DB::raw('count(*) as total'))
-        ->whereBetween('updated_at', [$from_date, $to_date])->where('shipment_company','leopord')
-        ->groupBy('leopord_cities.name')->havingRaw('COUNT(*) > 100')->get();
-        dd($order_report_by_leopord_cities);
+        where(['status'=>'dispatched','shipment_company'=>'leopord'])->
+        where('cities_id','!=','0')->
+        whereBetween('updated_at', [$from_date, $to_date])->
+        select('leopord_cities.name', DB::raw('count(*) as total'))->
+        groupBy('leopord_cities.name')->
+        OrderBy('total','DESC')->
+        limit(20)->
+        get();
         
-        // $order_report_by_leopord_cities = ManualOrders::leftJoin('leopord_cities', 'manual_orders.cities_id', '=', 'leopord_cities.id')->
-        // select('manual_orders.cities_id')
-        // ->whereBetween('updated_at', [$from_date, $to_date])->where('shipment_company','leopord')
-        // ->paginate(100);
-        // dd($order_report_by_leopord_cities);
+        $order_report_by_leopord_cities_dispatched = ManualOrders::leftJoin('leopord_cities', 'manual_orders.cities_id', '=', 'leopord_cities.id')->
+        where(['status'=>'dispatched','shipment_company'=>'leopord'])->
+        where('cities_id','!=','0')->
+        whereBetween('updated_at', [$from_date, $to_date])->
+        select('leopord_cities.name', DB::raw('count(*) as total'))->
+        groupBy('leopord_cities.name')->
+        OrderBy('total','DESC')->
+        limit(10)->
+        get();
+        
+        $order_report_by_leopord_cities_return = ManualOrders::leftJoin('leopord_cities', 'manual_orders.cities_id', '=', 'leopord_cities.id')->
+        where(['status'=>'return','shipment_company'=>'leopord'])->
+        where('cities_id','!=','0')->
+        whereBetween('updated_at', [$from_date, $to_date])->
+        select('leopord_cities.name', DB::raw('count(*) as total'))->
+        groupBy('leopord_cities.name')->
+        OrderBy('total','DESC')->
+        limit(10)->
+        get();
+        
+        $order_report_by_leopord_cities_pending = ManualOrders::leftJoin('leopord_cities', 'manual_orders.cities_id', '=', 'leopord_cities.id')->
+        where(['status'=>'pending','shipment_company'=>'leopord'])->
+        where('cities_id','!=','0')->
+        whereBetween('updated_at', [$from_date, $to_date])->
+        select('leopord_cities.name', DB::raw('count(*) as total'))->
+        groupBy('leopord_cities.name')->
+        OrderBy('total','DESC')->
+        limit(10)->
+        get();
+        
+        $res= DB::table('manual_orders')
+        ->selectRaw('MONTH(created_at) as month, COUNT(*) as count')->
+        whereBetween('updated_at', [$from_date, $to_date])
+        ->groupByRaw('MONTH(created_at)')
+        ->whereYear('created_at', date('M'))
+        ->get();
+
         
         
         
@@ -118,15 +160,15 @@ class DashboardController extends Controller
         // dd($order_report_by_local_city);
         $cities_name[] = 'Local';
         $total_city_orders[] = $order_report_by_local_city;
- 
-        // foreach($order_report_by_cities as $city)
-        // {
-        //     $cities_name[] = $city->name;
-        //     $total_city_orders[] = $city->total;
-        // }
         
+        
+        $shipment_cities_data=[]; 
          foreach($order_report_by_leopord_cities as $city)
         {
+            $shipment_cities_data[]=  [
+			 'y'=> (int)$city->total, 
+			 'label'=> $city->name 
+		        ];
             $cities_name[] = $city->name;
             $total_city_orders[] = $city->total;
         }
@@ -198,6 +240,11 @@ class DashboardController extends Controller
           
         //   dd($shipment);
         //if ($result->count()) { }
+        // dd($total_shipment_orders);
+        // dd(json_encode($shipment_cities_data));
+        $shipment_cities_data = json_encode($shipment_cities_data);
+        $shipment_cities_data = json_decode($shipment_cities_data);
+        // dd(json_encode($shipment_cities_data));
         return view('admin.dashboard')->with([
             'data'=>$group_by_status,
             'shipment'=>$shipment,
@@ -210,8 +257,8 @@ class DashboardController extends Controller
             'total_city_orders'=>$total_city_orders,
             'users_totla_orders'=>$users_totla_orders,
             'orders_by_shipment_company'=>$orders_by_shipment_company,
-            'shipment_companies'=>$shipment_companies,
-            'total_shipment_orders'=>$total_shipment_orders
+            'shipment_cities_summary'=>$shipment_cities_summary, 
+            'shipment_cities_data'=>$shipment_cities_data,
             ]);
         // return view('admin.dashboard');
         

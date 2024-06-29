@@ -19,11 +19,20 @@ Auth::routes();
 /*==================================
             Admin Routes
 ====================================*/
+Route::get('/test', function()
+{
+    return view('test');
+
+});
+
+
+Route::post('test/fileupload', 'Client\Orders\ManualOrdersController@TestFileUpload')->name('TestFileUpload');
 
 Route::group(['middleware' => 'auth:user'],function(){
 
     Route::get('/', 'HomeController@index')->name('dashboard');
     Route::get('/contactmanage', 'HomeController@contact')->name('contactmanage'); 
+    
     Route::get('user/dashboard', 'Auth\DashboardController@index')->name('user.dashboard');
 });
 
@@ -132,6 +141,20 @@ Route::group(['prefix' => 'leopord/', 'namespace' => 'Shipment', 'middleware' =>
     Route::get('generate-loadsheet', 'LeopordController@GenerateLoadsheet')->name('generate.loadsheet');
     Route::post('print-loadsheet', 'LeopordController@PrintLoadsheet')->name('print.loadsheet');
     Route::get('generate-cities', 'LeopordController@GenerateLeopordCities')->name('generate.cities');
+    
+    
+    
+    
+    
+});
+
+
+
+Route::group(['prefix' => 'social/', 'namespace' => 'social', 'middleware' => 'auth:user,admin','as'=> 'social.'],function()
+{
+    
+    Route::get('facebook', 'facebookController@index')->name('facebook.index');
+
     
     
     
