@@ -21,10 +21,10 @@ class DashboardController extends Controller
     
     public function index(Request $request)
     {
-        $from_date= date('Y-m-01');
+        $from_date= date('Y-m-01', strtotime('-30 days'));
         $to_date = date('Y-m-t');
 
-         
+        // dd(date('Y-m-01', strtotime('-30 days')));         
         if($request->date_from)
         {
             $from_date = $request->date_from;
