@@ -225,4 +225,16 @@ class LeopordController extends Controller
         // dd();
     }
     
+    public function LeopordTrackBookedPacket($tracking_number)
+    {
+        $bookeddpacketdetails = $this->TrackLeopordOrder($tracking_number);
+        if($bookeddpacketdetails->status == 1 && $bookeddpacketdetails->error == 0)
+        {
+            // dd('s');
+            return view('client.orders.manual-orders.leopord.track_booked_packet')->with(['bookeddpacketdetails'=>$bookeddpacketdetails]);  
+        }
+        dd($bookeddpacketdetails);
+        
+    }
+    
 }

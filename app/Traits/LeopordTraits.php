@@ -70,7 +70,7 @@ trait LeopordTraits {
     //     return $response = json_decode($response);
     // }
     
-    
+  
     public function LeopordPrintAirWayBill($slip)
     {
         
@@ -107,9 +107,9 @@ trait LeopordTraits {
     } 
     
     
-    public function TrackLeopordOrder($tracking_number,$print_type)
+    public function TrackLeopordOrder($tracking_number)
     {
-        $apiUrl = "https://sonic.pk/api/shipment/track?tracking_number=".$tracking_number.'&type='.$print_type;
+        $apiUrl = 'https://merchantapi.leopardscourier.com/api/trackBookedPacket/format/json/?api_key='.env('LEOPORD_API_KEY').'&api_password='.(env('LEOPORD_API_PASSWORD')).'&track_numbers='.$tracking_number;
         $headers = ['Authorization:'.env('LEOPORD_API_KEY'), 'Accepts:' . 'application/json',"real:json content"];
         $response = $this->CurlGetRequest($apiUrl,$headers);
         return $response = json_decode($response);
