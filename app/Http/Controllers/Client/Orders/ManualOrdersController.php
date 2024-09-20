@@ -31,6 +31,9 @@ use App\Traits\ManualOrderTraits;
 use App\Traits\InventoryTraits;
 
 
+use Shopify\Rest\Admin2024_07\StorefrontAccessToken;
+use Shopify\Utils;
+
 use Illuminate\Support\Picqer\Barcode;
 
 class ManualOrdersController extends Controller 
@@ -2063,7 +2066,24 @@ class ManualOrdersController extends Controller
         return $data;
     }
     
- 
+    public function test()
+    {
+        
+        
+        $this->test_session = Utils::loadCurrentSession(
+            $requestHeaders,
+            $requestCookies,
+            $isOnline
+        );
+        
+        $storefront_access_token = new StorefrontAccessToken($this->test_session);
+        $storefront_access_token->title = "Test";
+        $storefront_access_token->save(
+            true 
+        );
+        dd('working');
+    }
+    
     
     
         
@@ -2075,6 +2095,28 @@ class ManualOrdersController extends Controller
         $imageName = time().'.'.$image->extension();
         $image->move(public_path('images'),$imageName);
         return response()->json(['success'=>$imageName]);
+    }
+    
+    public function GetCustomerId(Request $request)
+    {
+        // dd($request);
+        // dd($request->number);
+        
+        $query = Customers::Select('id', 'first_name', 'last_name', 'address', 'email', 'number',  'whatsapp_number', 'created_at')->where('number',$request->number);
+        // $query = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->where('customers.number',$request->number);
+        $search_text = $request->number;
+        $query = $query->
+            where(function ($query) use ($search_text) {
+                $query->where('customers.number','like',$search_text.'%')
+                    ->orWhere('customers.number','like','%'.$search_text.'%')
+                    ->orWhere('customers.number','like','%'.$search_text)
+                    ->orWhere('customers.whatsapp_number','like',$search_text.'%')
+                    ->orWhere('customers.whatsapp_number','like','%'.$search_text.'%')
+                    ->orWhere('customers.whatsapp_number','like','%'.$search_text);
+            });
+        
+            // dd($query->first());
+        return response()->json(['success'=>1,'data'=> $query->get()]);
     }
     
     

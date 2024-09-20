@@ -451,7 +451,9 @@ function toggleDataSeries(e) {
   
   
   //Parcels delivered Cities Chart
+  @if(!empty($shipment_cities_summary['shipment_cities_name'])) 
   const labels2 = {!! json_encode($shipment_cities_summary['shipment_cities_name']) !!}; 
+    @endif
 
   const data2 = {
     labels: labels2,
@@ -459,7 +461,10 @@ function toggleDataSeries(e) {
       label: 'Order Delivered in Cities',
       backgroundColor: 'rgb(255, 99, 132)',
       borderColor: 'rgb(255, 99, 132)',
-      data :{!! json_encode($shipment_cities_summary['shipment_cities_orders'])!!},
+      @if(!empty($shipment_cities_summary['shipment_cities_orders'])) 
+        data :{!! json_encode($shipment_cities_summary['shipment_cities_orders'])!!},
+      @endif
+      
 
     }]
   };

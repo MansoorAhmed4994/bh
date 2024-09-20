@@ -12,18 +12,33 @@ Auth::routes();
 | contains the "web" middleware group. Now create something great!
 |
 */ 
+/*==================================
+            Global Routes
+====================================*/
+ 
+    // Route::get('/error','GlobalController@error')->name('global.error');
+    // Route::view('/error', 'global.error')->name('global.error');
+    
+/*==================================
+            Customer Routes
+====================================*/
 
+Route::group(['prefix' => 'customer','as'=> 'customer.'],function(){
+    
+    Route::get('/create','Frontend\CustomersController@Create')->name('create');
+    Route::post('/store','Frontend\CustomersController@store')->name('store');
+    Route::post('/login','Frontend\CustomersController@GetCustomerId')->name('login');
+    Route::post('/delete/coockies','Frontend\CustomersController@DeleteCustomerCoockies')->name('delete.coockies');
+    Route::post('/upload/product/screenshot','Frontend\CustomersController@UploadProductScreentShot')->name('upload.product.screenshot');
+    Route::post('/delete/product/screenshot','Frontend\CustomersController@DeleteOrderImage')->name('delete.product.screenshot');
+    
+});
 
-    // Route::get('register', 'Auth\RegisterController@register')->name('admin.user.register');
 
 /*==================================
             Admin Routes
 ====================================*/
-Route::get('/test', function()
-{
-    return view('test');
-
-});
+Route::get('/test','Client\Orders\ManualOrdersController@test');
 
 
 Route::post('test/fileupload', 'Client\Orders\ManualOrdersController@TestFileUpload')->name('TestFileUpload');
@@ -35,6 +50,8 @@ Route::group(['middleware' => 'auth:user'],function(){
     
     Route::get('user/dashboard', 'Auth\DashboardController@index')->name('user.dashboard');
 });
+
+
 
 Route::group(['prefix' => 'client/orders/', 'namespace' => 'Client\Orders', 'middleware' => 'auth:user,admin'],function(){
      

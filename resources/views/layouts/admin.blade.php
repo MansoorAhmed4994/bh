@@ -16,14 +16,10 @@
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     
     <!--Toaster css--> 
-    <link href="{{ asset('public/css/toastr.css') }}" rel="stylesheet"> 
-    <!--<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" rel="stylesheet"> -->
+    <link href="{{ asset('public/css/toastr.css') }}" rel="stylesheet">  
     
-    <!--Toaster js--> 
-    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>-->
-    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.js"></script>-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"></script>-->
+    <!--Toaster js-->  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script> 
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     

@@ -5,6 +5,7 @@ namespace App\Models\Client;
 
 use App\Models\Orderpayments;
 use App\Models\User;
+use App\Models\Country_codes;
 use App\Models\ActivityLogs;
 // use App\Models\Client\Cities;
 use Illuminate\Database\Eloquent\Model;
@@ -61,6 +62,11 @@ class ManualOrders extends Model
     public function orderpayments()
     {
         return $this->hasMany(Orderpayments::class,'order_id','id');
+    }
+    
+    public function country_codes()
+    {
+        return $this->belongsTo(Country_codes::class,'country_code_','Country_code_id');
     }
     //
 }

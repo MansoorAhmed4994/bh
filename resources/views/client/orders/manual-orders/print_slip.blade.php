@@ -122,9 +122,11 @@ padding: 0px;
                 	</tr>
                     <tr>
                         <td colspan="2" rowspan="3" style="padding:5px; text-align:center;">
-                		 <div class="container mt-4">
-                        <div class="mb-3"><img src="data:image/png;base64,<?php echo DNS2D::getBarcodePNG((string)$ManualOrder->id, 'QRCODE') ?>" alt="barcode" width="80"  />
-                        </div></div>
+                		    <div class="container mt-4">
+                                <div class="mb-3">
+                                    <img src="data:image/png;base64,<?php echo DNS2D::getBarcodePNG((string)'brandhub.com.pk', 'QRCODE') ?>" alt="barcode" width="80"  />
+                                </div>
+                            </div>
                         </td>
                         <td rowspan="2" align="center">
                             <h3 style="writing-mode: vertical-rl;text-align: center;margin: 0;transform: rotate(180deg);">Consignee</h3>

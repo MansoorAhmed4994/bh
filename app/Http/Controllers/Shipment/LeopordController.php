@@ -61,6 +61,7 @@ class LeopordController extends Controller
     
     public function LeopordGetTariffDetails($weight=0,$origion_city=0,$destination_city=0,$cod=0)
     {
+        // dd('wior');
         $weight = (int)(trim($weight)*1000);
         $allfare=[]; 
         $final_delivery_charges=0;
@@ -78,6 +79,7 @@ class LeopordController extends Controller
         else if($details->status == 1)
         {
             $packet_charges_details = $details->packet_charges; 
+           
             $final_delivery_charges = $packet_charges_details->shipment_charges+$packet_charges_details->cash_handling+$packet_charges_details->insurance_charges+$packet_charges_details->gst_amount+$packet_charges_details->fuel_surcharge_amount;
 
             array_push($allfare,array(
