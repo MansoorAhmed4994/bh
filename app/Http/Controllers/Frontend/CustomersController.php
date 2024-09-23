@@ -394,7 +394,14 @@ class CustomersController extends Controller
             
             if($images != null)
             {
-                $manual_orders->images = $manual_orders->images.'|'.(implode("|",$images));
+                if($manual_orders->images != null)
+                {
+                    $manual_orders->images = $manual_orders->images.'|'.(implode("|",$images));
+                }
+                else
+                {
+                    $manual_orders->images = (implode("|",$images));
+                }
             }
             $save_status = $manual_orders->save();
             if($save_status == true)
@@ -480,7 +487,7 @@ class CustomersController extends Controller
                 // dd($manual_orders->save());
                 if($status)
                 {
-                    dd($final_images,$request->delete_path);
+                    // dd($final_images,$request->delete_path);
                     $this->ManualOrdersCoockie($manual_orders->id,$manual_orders->receiver_name,$manual_orders->receiver_number,$manual_orders->reciever_address,$final_images);
                     return response()->json(['success'=>'1','messege' => 'successfully deleted']); 
                 }
@@ -493,7 +500,7 @@ class CustomersController extends Controller
         }
         else
         {
-            dd('w1');
+            // dd('w1');
             $manual_orders = ManualOrders::find($request->order_id); 
             // dd($manual_orders);
             $manual_orders->images = $final_images;

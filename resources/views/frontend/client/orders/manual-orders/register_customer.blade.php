@@ -10,9 +10,10 @@
         var all_images=''; 
         var allimagesboxes = '';
         
-        @if(Cookie::get('id') == true)
+        @if(Cookie::get('images') == true)
             all_images = '{{Cookie::get("images")}}';
             all_images = all_images.split("|");
+            console.log('{{Cookie::get("images")}}');
         @endif 
         
         $('#ImageDeleteModalClose').on('click',function(){
@@ -34,6 +35,11 @@
             document.getElementById("delete_image").disabled = false;
             $('#ImageDeleteModal').modal('show');
             
+            // console.log('all images: '+all_images)
+            // var final_images = all_images.filter(e => e !== delete_image_path);  
+            // console.log('Before Delete'+delete_image_path)
+            // console.log('after Delete'+final_images);
+            
         } 
         
         $( document ).ready(function() {
@@ -42,7 +48,7 @@
             {   
                 $("body").addClass("loading"); 
                  $("#delete_image").prop('disabled', true); 
-                 console.log(all_images)
+                console.log('all images: '+all_images)
                 var final_images = all_images.filter(e => e !== delete_image_path);  
                 console.log('Before Delete'+delete_image_path)
                 console.log('after Delete'+final_images);
@@ -58,7 +64,7 @@
                 }
                 
                 
-                console.log(final_images);
+                // console.log(final_images);
                 // document.getElementById('images_path').value = final_images;
                 $.ajax({
                     headers: {
@@ -259,16 +265,17 @@
                         $('#receiver_address').html(e.receiver_address);
                         $('#order_id').html(e.order_id); 
                        
-                        if(e.images != null || typeof e.images !== 'undefined')
+                        if(typeof e.images !== 'undefined')
                         {
-                            // console.log(e.images);
-                            all_images = e.images.split("|");
-                            // all_images.forEach(RenderImages);
-                            // var images_data = RenderImages(e.images);
-                            console.log("All Images data: "+all_images);
-                            $('#edit_images_box').html(e.rendered_images); 
+                            // if(e.images !== null || e.images !== "")
+                            if((e.images))
+                            { 
+                                all_images = e.images.split("|");
+                                console.log("All Images data: "+all_images);
+                                $('#edit_images_box').html(e.rendered_images);
+                            }
                             
-                        }
+                        }   
  
                         customer_details_show(); 
                         
@@ -536,9 +543,9 @@
                             
                             
                             <div class="form-group row" id="edit_images_box">
-                                @if(Cookie::get('id') == true)
+                                @if(Cookie::get('images') == true)
                                            
-                                    @if(Cookie::get('images') !== false) 
+                                    @if(Cookie::get('images') !== null || Cookie::get('images') !== "") 
                                      
                                         <?php $i=1;?>
                                         @foreach(explode('|',Cookie::get('images')) as $image)
