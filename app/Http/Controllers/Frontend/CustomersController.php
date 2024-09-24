@@ -230,8 +230,8 @@ class CustomersController extends Controller
                         'receiver_number'=>$customer_order_details->receiver_number,
                         'reciever_address'=>$customer_order_details->reciever_address, 
                         'order_id'=>$customer_order_details->order_id,
-                        'images'=>$customer_order_details->first()->images,
-                        'rendered_images'=>$this->ImageBoxStructure($customer_order_details->first()->images)
+                        'images'=>$customer_order_details->images,
+                        'rendered_images'=>$this->ImageBoxStructure($customer_order_details->images)
                         ])
                         ->withCookie($id)
                         ->withCookie($first_name)
@@ -294,6 +294,7 @@ class CustomersController extends Controller
         $allimagesboxes = '';
         $i=1;
         $images = explode('|',$images);
+        // dd($images);
         // return $images;
         foreach($images as $image)
         {
