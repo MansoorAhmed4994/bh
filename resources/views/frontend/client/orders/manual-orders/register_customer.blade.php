@@ -609,7 +609,7 @@
                         
                         <div class="form-group">
                             <label for="First Name">Last Name</label>
-                            <input type="text" class="form-control" id="laste_name"  name="laste_name" placeholder="Enter Your Last Name" required>
+                            <input type="text" class="form-control" id="last_name"  name="last_name" placeholder="Enter Your Last Name" required>
                              <small id="laste_name_error" class="form-text text-danger">@if($errors->get('laste_name')){{$errors->first('laste_name')}} @endif</small>
                         </div> 
                         

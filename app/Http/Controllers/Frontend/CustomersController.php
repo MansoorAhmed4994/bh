@@ -420,15 +420,16 @@ class CustomersController extends Controller
             dd($save_status);
         }
         else
-        { 
+        {  
+            // dd(Cookie::get('first_name').' '.Cookie::get('last_name'),Cookie::get('number'),Cookie::get('address'));
             $manual_orders = new ManualOrders(); 
-            $manual_orders->receiver_name = Cookie::get('receiver_name');
-            $manual_orders->receiver_number = Cookie::get('receiver_number');
+            $manual_orders->receiver_name = Cookie::get('first_name').' '.Cookie::get('last_name');
+            $manual_orders->receiver_number = Cookie::get('number');
             if($request->city != '')
             {
                 $manual_orders->cities_id = $request->city;
             }
-            $manual_orders->reciever_address = Cookie::get('reciever_address'); 
+            $manual_orders->reciever_address = Cookie::get('address'); 
             $manual_orders->images = implode("|",$images);
             $manual_orders->total_pieces = '';
             $manual_orders->weight = '';

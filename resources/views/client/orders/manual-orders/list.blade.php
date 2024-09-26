@@ -686,7 +686,7 @@ var container = "";
             <div class="form-group">
                 <div class="input-group">
                     
-                    <input class="input-group-text" type="search" name="search_order_id" placeholder="Search by Order id #" aria-label="Search">
+                    <input class="input-group-text" type="search" name="search_order_id" placeholder="Search by Order ID OR Customer ID" aria-label="Search">
                     <input class="input-group-text" type="search" name="search_text" placeholder="Name OR Number" aria-label="Search">
                     <select class="custom-select" aria-label="Default select example" name="order_by">
                         <option selected value ="">Order By</option>

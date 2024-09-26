@@ -134,6 +134,7 @@ class ManualOrdersController extends Controller
                     ->orWhere('customers.number','like',$search_text.'%')
                     ->orWhere('customers.number','like','%'.$search_text.'%')
                     ->orWhere('manual_orders.id','like','%'.$search_text.'%')
+                    ->orWhere('manual_orders.customers_id','like',$search_text.'%')
                     ->orWhere('manual_orders.consignment_id','like','%'.$search_text.'%');
             });
             
