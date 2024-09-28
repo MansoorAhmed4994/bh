@@ -151,12 +151,11 @@ function toggleDataSeries(e) {
     
     <?php $total_orders=0;$rows_division=0;?>
         @foreach($data as $list)
-            <div class="col-sm-4 form-group">  
+            <div class="col-sm-3 form-group">  
                 <div class="card" style="width: 100%;"> 
                   <div class="card-body status-{!! str_replace(' ', '-', $list->status) !!} dashbord-card-body">
-                    <h3>{{$list->status}}</h3>
-                    <h5 class="card-title">{{$list->total_orders}}</h5> 
-                    <h5 class="card-title">{{$list->total_amount}}</h5>  
+                    <h5 class="card-title text-capitalize">{{$list->status}}: {{$list->total_orders}} <span class="float-right">Rs: {{(int)$list->total_amount}}</span></h5>
+ 
                     <table>
                         <thead>
                             <tr>
@@ -430,7 +429,7 @@ function toggleDataSeries(e) {
   const data = {
     labels: labels,
     datasets: [{
-      label: 'Order Delivered in Cities',
+      label: 'Order Delivered ',
       backgroundColor: 'rgb(255, 99, 132)',
       borderColor: 'rgb(255, 99, 132)',
       data :{!! json_encode($total_city_orders)!!},

@@ -52,8 +52,8 @@ class CustomersController extends Controller
         $customers->address = $request->address;
         $customers->number = $request->number;
         $customers->whatsapp_number = $request->whatsapp_number;
-        $customers->created_by = 1;
-        $customers->updated_by = 1;
+        $customers->created_by = 37;
+        $customers->updated_by = 37;
         $customers->loyality_count = 1;
         $customers->status = 'active'; 
         $status = $customers->save(); 
@@ -440,9 +440,9 @@ class CustomersController extends Controller
             $manual_orders->description = '';
             $manual_orders->reference_number = '';
             $manual_orders->service_type = '';
-            $manual_orders->assign_to = 1; 
-            $manual_orders->created_by = 1;
-            $manual_orders->updated_by = 1;
+            $manual_orders->assign_to = 24; 
+            $manual_orders->created_by = 37;
+            $manual_orders->updated_by = 37;
             $manual_orders->status = 'pending'; 
             $manual_orders->customers_id = Cookie::get('id');
             $save_status = $manual_orders->save();

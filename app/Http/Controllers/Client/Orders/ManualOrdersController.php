@@ -177,11 +177,17 @@ class ManualOrdersController extends Controller
         //========================filter on assign column
         if(in_array('author', $user_roles) || in_array('admin', $user_roles))
         { 
+            
             // dd('');
         } 
         elseif(in_array('user', $user_roles))
         { 
+            // dd($user_roles);
             $query = $query->where("manual_orders.assign_to" ,$user_id->id);
+        }
+        else
+        {
+            dd('Sorry! you dont have permission');
         }
         
         if($order_by != '')
@@ -231,7 +237,7 @@ class ManualOrdersController extends Controller
         $catgories = product_child_categories();
         // dd($list->first());
         
-        return view('client.orders.manual-orders.list')->with(['list'=>$list,'users'=>$users,'statuses'=>$statuses,'catgories'=>$catgories]); 
+        return view('client.orders.manual-orders.list')->with(['list'=>$list,'users'=>$users,'statuses'=>$statuses,'catgories'=>$catgories,'user_roles'=>$user_roles]); 
     }
     
     public function InActiveCustomers(Request $request)

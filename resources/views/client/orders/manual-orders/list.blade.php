@@ -490,7 +490,7 @@ var container = "";
                 }
                 else
                 {
-                    toastr.success(e.messege, 'Error');
+                    toastr.success(e.messege, 'Success');
                 }
                 $("body").removeClass("loading");
                  
@@ -841,11 +841,55 @@ var container = "";
                 <td>
                     <select class="form-control" onchange="ChangeOrderStatus('{{$lists->id}}')" id="ChnageOrderStatusId_{{$lists->id}}" style="width:auto;">
                         <option selected >Select Status</option> 
-                        @foreach($statuses as $status) 
-                            <option value="{{$status->name}}" {{ ($status->name == $lists->status) ? 'selected="selected"' : '' }}>{{$status->name}}</option>
-                        @endforeach  
+                        
+                        @if(in_array('author', $user_roles) || in_array('admin', $user_roles))
+                            
+                            
+                            @foreach($statuses as $status) 
+                                
+                                <option value="{{$status->name}}" {{ ($status->name == $lists->status) ? 'selected="selected"' : '' }}>{{$status->name}}</option>
+                            
+                            @endforeach  
+                         
+                        @else
+                        
+                            @if(in_array('user', $user_roles)  || in_array('calling', $user_roles))  
+                            
+                                <option selected="">Select Status</option>  
+                                <option value="prepared" {{ ('prepared' == $lists->status) ? 'selected="selected"' : '' }} >prepared</option> 
+                                <option value="addition" {{ ('addition' == $lists->status) ? 'selected="selected"' : '' }} >addition</option>  
+                                <option value="confirmed" {{ ('confirmed' == $lists->status) ? 'selected="selected"' : '' }} >confirmed</option> 
+                                <option value="hold" {{ ('hold' == $lists->status) ? 'selected="selected"' : '' }} >hold</option> 
+                                <option value="not responding" {{ ('not respondin' == $lists->status) ? 'selected="selected"' : '' }} >not responding</option> 
+                                <option value="dc comming" {{ ('dc comming' == $lists->status) ? 'selected="selected"' : '' }}>dc comming</option>   
+                            
+                            @endif
+                            
+                        @endif
                 
                     </select>
+                            
+                            <!--<option selected="">Select Status</option> -->
+                         
+                            <!--<option value="pending">pending</option>-->
+                         
+                            <!--<option value="prepared">prepared</option>-->
+                         
+                            <!--<option value="addition">addition</option>-->
+                         
+                            <!--<option value="incomplete">incomplete</option>-->
+                         
+                            <!--<option value="confirmed">confirmed</option>-->
+                         
+                            <!--<option value="hold">hold</option>-->
+                         
+                            <!--<option value="not responding" selected="&quot;selected&quot;">not responding</option>-->
+                         
+                            <!--<option value="dc comming">dc comming</option>-->
+                         
+                            <!--<option value="dispatched">dispatched</option>-->
+                            
+                            
                     
                     <div class="btn-group">
                         <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -975,16 +1019,16 @@ var container = "";
                           <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/WhatsApp_icon.png/640px-WhatsApp_icon.png" width=30 style="margin-right: 5px;">Start msg
                         </button>
                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">            
-                            <a target="_blank" class="dropdown-item" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualaikum {{$lists->first_name}},%0aI am from Brandhub, check the details and verify.%0aName: {{$lists->first_name}}%0aNumber: {{$lists->receiver_number}}%0aAddress: {{$lists->reciever_address}}%0acity: @if(isset($lists->cities->name)) {{$lists->cities->name}}@else '' @endif %0aCOD: {{$lists->cod_amount}}">Send Confirmation msg</a>
+                            <a target="_blank" class="dropdown-item" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualaikum {{$lists->first_name}} code: {{$lists->customers_id}},%0aI am from Brandhub, check the details and verify.%0aName: {{$lists->first_name}}%0aNumber: {{$lists->receiver_number}}%0aAddress: {{$lists->reciever_address}}%0acity: @if(isset($lists->cities->name)) {{$lists->cities->name}}@else '' @endif %0aCOD: {{$lists->cod_amount}}">Send Confirmation msg</a>
                             
                             <!--send tracking-->
-                            <a target="_blank" class="dropdown-item" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualaikum {{$lists->first_name}},%0aI am from Brandhub, %0aplease track your order %0aHere is your tracking ID: {{$lists->consignment_id}} %0aHere is your Order ID: {{$lists->id}}  %0a helpline number: @if($lists->shipment_company == 'trax') 021111118729 @else 021111300786 @endif  %0aThank you %0alink: {{route('leopord.track.boocked.packet',$lists->consignment_id)}}">Send Tracking 
+                            <a target="_blank" class="dropdown-item" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualaikum {{$lists->first_name}} code: {{$lists->customers_id}},%0aI am from Brandhub, %0aplease track your order %0aHere is your tracking ID: {{$lists->consignment_id}} %0aHere is your Order ID: {{$lists->id}}  %0a helpline number: @if($lists->shipment_company == 'trax') 021111118729 @else 021111300786 @endif  %0aThank you %0alink: {{route('leopord.track.boocked.packet',$lists->consignment_id)}}">Send Tracking 
                             </a> 
                             
                             <a target="_blank" class="dropdown-item" href="{{route('leopord.track.boocked.packet',$lists->consignment_id)}}">Track Order</a>
                             
-                            <a target="_blank" class="dropdown-item" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualaikum {{$lists->first_name}},%0aI am from Brandhub, %0aPlease Follow the Social Platform for latest product upcoming %0aFacebook:https://www.facebook.com/Brandhub000/ %0aInstagram: https://www.instagram.com/brandshub000/ %0aTiktok: https://www.tiktok.com/@brandhub994 %0aYoutube: https://www.youtube.com/@brandhub8324 ">Social Links</a> 
-                            <a target="_blank" class="dropdown-item" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualaikum {{$lists->first_name}},%0aMain brandhub se mukhatib hoon, %0aham dekh sakte hain ke apne bht time se hamse kuch khareedari nahi ki hai, %0aMubarak hoo, khush khabri hai apke liye apke agle order per apko dene ke liye hamari janib se ak tohfa hai barae meherbani 7 din kay ander apna order place krain or apne tohfe se lutf andooz hoon shukria apka code ye hai: '{{$lists->id}}' isko code ko order place krte wkt agent ko bata dain.%0a %0a %0Or ye social platforms ko like and follow bhi zaroor karain ta ke apko new products ki malomat bawakt milti rhe %0aFacebook: https://www.facebook.com/Brandhub000/ %0aInstagram: https://www.instagram.com/brandshub000/ %0aTiktok: https://www.tiktok.com/@brandhub994 %0aYoutube: https://www.youtube.com/@brandhub8324">Customer Retain</a> 
+                            <a target="_blank" class="dropdown-item" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualaikum {{$lists->first_name}} code: {{$lists->customers_id}},%0aI am from Brandhub, %0aPlease Follow the Social Platform for latest product upcoming %0aFacebook:https://www.facebook.com/Brandhub000/ %0aInstagram: https://www.instagram.com/brandshub000/ %0aTiktok: https://www.tiktok.com/@brandhub994 %0aYoutube: https://www.youtube.com/@brandhub8324 ">Social Links</a> 
+                            <a target="_blank" class="dropdown-item" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualaikum {{$lists->first_name}} code: {{$lists->customers_id}},%0aMain brandhub se mukhatib hoon, %0aham dekh sakte hain ke apne bht time se hamse kuch khareedari nahi ki hai, %0aMubarak hoo, khush khabri hai apke liye apke agle order per apko dene ke liye hamari janib se ak tohfa hai barae meherbani 7 din kay ander apna order place krain or apne tohfe se lutf andooz hoon shukria apka code ye hai: '{{$lists->id}}' isko code ko order place krte wkt agent ko bata dain.%0a %0a %0Or ye social platforms ko like and follow bhi zaroor karain ta ke apko new products ki malomat bawakt milti rhe %0aFacebook: https://www.facebook.com/Brandhub000/ %0aInstagram: https://www.instagram.com/brandshub000/ %0aTiktok: https://www.tiktok.com/@brandhub994 %0aYoutube: https://www.youtube.com/@brandhub8324">Customer Retain</a> 
                         </div>
                     </div>
                 </td> 

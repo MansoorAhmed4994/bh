@@ -90,7 +90,7 @@ class DashboardController extends Controller
                 
             // Orders Dashboard Tab
             $orders_dashboard_query = ManualOrders::query();
-            $orders_dashboard_query = $orders_dashboard_query->select('status', DB::raw('count(*) as total_orders'), DB::raw('sum(price) as total_amount'))->whereBetween('updated_at', [$from_date, $to_date]);
+            $orders_dashboard_query = $orders_dashboard_query->select('status', DB::raw('count(*) as total_orders'), DB::raw('sum(price) as total_amount'))->whereBetween('updated_at', [$from_date, $to_date])->where("manual_orders.assign_to" ,auth()->user()->id);
             $user_id = User::find(auth()->user()->id);
             $user_roles = $user_id->roles()->get()->pluck('name')->toArray();
             if(in_array('author', $user_roles) || in_array('admin', $user_roles))

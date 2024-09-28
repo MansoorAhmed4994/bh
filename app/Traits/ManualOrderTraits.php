@@ -84,7 +84,7 @@ trait ManualOrderTraits {
             $manual_orders->description = $request->description;
             $manual_orders->reference_number = '';
             $manual_orders->service_type = '';
-            $manual_orders->assign_to = $this->AssignOrderToUser();
+            $manual_orders->assign_to = Auth::id();
             
             $manual_orders->created_by = Auth::id();
             $manual_orders->updated_by = Auth::id();
