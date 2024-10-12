@@ -105,19 +105,32 @@ class ManualOrdersController extends Controller
         // $customer_d =   $request->search_order_id;
         
         $date_by = 'created_at';
+        // dd('working');
         $query = ManualOrders::query();
+        
+        // dd($query->paginate(20)->first());
         $query = $query
         ->leftJoin('customers', 'manual_orders.customers_id', '=', 'customers.id')
         ->leftJoin('users', 'manual_orders.created_by', '=', 'users.id') 
         ->leftJoin('users as t', 'manual_orders.updated_by', '=', 't.id') 
         ->select($this->OrderFieldList()); 
+        
+        
+        // $query = Customers::query();
+        // $query = $query
+        // ->rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')
+        // ->rightJoin('users', 'manual_orders.created_by', '=', 'users.id') 
+        // ->rightJoin('users as t', 'manual_orders.updated_by', '=', 't.id') 
+        // ->select($this->OrderFieldList()); 
+        // dd($query->paginate(20));
+        
         if($order_id != '')
         { 
             // $query = $query->where('manual_orders.id',$order_id);
             $query = $query->
             where(function ($query) use ($order_id) {
                 $query->where('manual_orders.id',$order_id)
-                    ->orWhere('manual_orders.customers_id',$order_id);
+                    ->orWhere('customers.id',$order_id);
             });
         }
         else if($search_text != '')
@@ -169,10 +182,10 @@ class ManualOrdersController extends Controller
         }
         
         
+        
         //========================get user roles
         $user_id = User::find(auth()->user()->id);
         $user_roles = $user_id->roles()->get()->pluck('name')->toArray();
-
         
         //========================filter on assign column
         if(in_array('author', $user_roles) || in_array('admin', $user_roles))
@@ -198,7 +211,6 @@ class ManualOrdersController extends Controller
         {
             $query = $query->orderBy('manual_orders.id', 'DESC');
         }
-        
         
         
         //========================filter on status column
@@ -229,15 +241,16 @@ class ManualOrdersController extends Controller
                 $query->where('manual_orders.status','like','%%'); 
             }
         }
-        
-        
-        $users = User::select('*')->get();
+        // dd('working');
+        $assign_to_users = User::whereHas('roles', function($q){$q->where('name', 'calling');})->get();
+        // dd($students);
+        // $assign_to_users = User::select('*')->get();
         $list = $query->paginate(20); 
         $statuses = get_active_order_status_list();
         $catgories = product_child_categories();
-        // dd($list->first());
         
-        return view('client.orders.manual-orders.list')->with(['list'=>$list,'users'=>$users,'statuses'=>$statuses,'catgories'=>$catgories,'user_roles'=>$user_roles]); 
+        // dd($list->first());
+        return view('client.orders.manual-orders.list')->with(['list'=>$list,'users'=>$assign_to_users,'statuses'=>$statuses,'catgories'=>$catgories,'user_roles'=>$user_roles]); 
     }
     
     public function InActiveCustomers(Request $request)
@@ -1113,7 +1126,10 @@ class ManualOrdersController extends Controller
     { 
         // dd($request->number);
         // dd(date('Y-m-d h:i:s', strtotime("-3 days")));
-        if(Auth::guard('admin')->check())
+        $user_id = User::find(auth()->user()->id);
+        $user_roles = $user_id->roles()->get()->pluck('name')->toArray();
+
+        if(in_array('author', $user_roles) || in_array('admin', $user_roles))
         {
             
         }
@@ -1227,6 +1243,8 @@ class ManualOrdersController extends Controller
     
     public function status_order_list( Request $request)
     {
+        $user_id = User::find(auth()->user()->id);
+        $user_roles = $user_id->roles()->get()->pluck('name')->toArray();
         //dd($request->status); 
         $status = $request->status;
         
@@ -1254,7 +1272,7 @@ class ManualOrdersController extends Controller
             //$list = $list->all();
             //dd($list->all());
         $statuses = get_active_order_status_list();
-        return view('client.orders.manual-orders.list')->with(['list'=>$query,'duplicate_check' => $duplicate_check,'users'=>$users,'statuses'=>$statuses]);
+        return view('client.orders.manual-orders.list')->with(['list'=>$query,'duplicate_check' => $duplicate_check,'users'=>$users,'statuses'=>$statuses,'user_roles'=>$user_roles]);
         
     } 
     

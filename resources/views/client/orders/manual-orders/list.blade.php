@@ -741,15 +741,16 @@ var container = "";
                 </div>
                 <select class="form-select" aria-label="Default select example" name="order_action" required>
                     <option selected >Select Action</option> 
+                    
+                    <option value="print_pos_slips">Print Pos Slips</option>
                     @foreach($statuses as $status)
                     
                         <option value="{{$status->name}}">{{$status->name}}</option>
                     @endforeach
                     <option value="print">Print </option>
                     <option value="duplicate_orders">Duplicate Orders</option>
-                    <option value="print_mnp_slips">Print M&P Slips</option>
-                    <option value="print_trax_slips">Print Trax Slips</option>
-                    <option value="print_pos_slips">Print Pos Slips</option>
+                    <!--<option value="print_mnp_slips">Print M&P Slips</option>-->
+                    <!--<option value="print_trax_slips">Print Trax Slips</option>-->
                 </select> 
                 <div class="input-group-append">
                     <button class="btn btn-warning" type="submit">Submit</button> 
@@ -805,11 +806,11 @@ var container = "";
                           Actions
                         </button>
                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">            
-                            <a type="button" target="_blank" href="{{route('ManualOrders.edit',$lists->id)}}" class="dropdown-item">Edit</a>   
+                            <a type="button" target="_blank" href="@if($lists->id) {{route('ManualOrders.edit',$lists->id)}} @endif" class="dropdown-item">Edit</a>   
                             <button type="button" id="dispatch-btn" onclick="QuickEditOrder({{$lists->id}})" class="dropdown-item" >Quick Edit</button>          
-                            <a type="button" target="_blank" href="{{route('ManualOrders.show',$lists->id)}}" class="dropdown-item">view</a>
-                            <a type="button" href="{{route('ManualOrders.print.order.slip',$lists->id)}}" class="dropdown-item">Print Local Slip</a> 
-                            <button type="button" onclick="check_pos_slip_duplication('{{route('ManualOrders.print.pos.slip',$lists->id)}}','{{$lists->id}}','list_<?=$count;?>')"class="dropdown-item" >Print Pos Slip</button>
+                            <a type="button" target="_blank" href="@if($lists->id) {{route('ManualOrders.show',$lists->id)}} @endif" class="dropdown-item">view</a>
+                            <a type="button" href="@if($lists->id) {{route('ManualOrders.print.order.slip',$lists->id)}} @endif" class="dropdown-item">Print Local Slip</a> 
+                            <button type="button" onclick="@if($lists->id) check_pos_slip_duplication('{{route('ManualOrders.print.pos.slip',$lists->id)}}','{{$lists->id}}','list_<?=$count;?>') @endif"class="dropdown-item" >Print Pos Slip</button>
                         </div>
                     
                         @if(Auth::guard('admin')->check())
@@ -906,19 +907,21 @@ var container = "";
                                 </thead>
                                 
                                 <tbody>
-                                    @foreach($lists->activity_logs as $activity_log)
-                                    <tr>
-                                        <td>{{$activity_log->activity_desc}}</td>
-                                        <td>{{$activity_log->created_at}}</td>
-                                        @if(!empty($activity_log->users))
-                                            <td>{{$activity_log->users->first_name}}</td>
-                                        @else
-                                            
-                                            <td>No User Found (User ID: {{$activity_log->created_by}})</td>
-                                            
-                                        @endif
-                                    </tr>
-                                    @endforeach
+                                    @if($lists->activity_logs)
+                                        @foreach($lists->activity_logs as $activity_log)
+                                        <tr>
+                                            <td>{{$activity_log->activity_desc}}</td>
+                                            <td>{{$activity_log->created_at}}</td>
+                                            @if(!empty($activity_log->users))
+                                                <td>{{$activity_log->users->first_name}}</td>
+                                            @else
+                                                
+                                                <td>No User Found (User ID: {{$activity_log->created_by}})</td>
+                                                
+                                            @endif
+                                        </tr>
+                                        @endforeach
+                                    @endif
                                 </tbody>
  
                             </table>
@@ -1022,10 +1025,10 @@ var container = "";
                             <a target="_blank" class="dropdown-item" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualaikum {{$lists->first_name}} code: {{$lists->customers_id}},%0aI am from Brandhub, check the details and verify.%0aName: {{$lists->first_name}}%0aNumber: {{$lists->receiver_number}}%0aAddress: {{$lists->reciever_address}}%0acity: @if(isset($lists->cities->name)) {{$lists->cities->name}}@else '' @endif %0aCOD: {{$lists->cod_amount}}">Send Confirmation msg</a>
                             
                             <!--send tracking-->
-                            <a target="_blank" class="dropdown-item" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualaikum {{$lists->first_name}} code: {{$lists->customers_id}},%0aI am from Brandhub, %0aplease track your order %0aHere is your tracking ID: {{$lists->consignment_id}} %0aHere is your Order ID: {{$lists->id}}  %0a helpline number: @if($lists->shipment_company == 'trax') 021111118729 @else 021111300786 @endif  %0aThank you %0alink: {{route('leopord.track.boocked.packet',$lists->consignment_id)}}">Send Tracking 
+                            <a target="_blank" class="dropdown-item" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualaikum {{$lists->first_name}} code: {{$lists->customers_id}},%0aI am from Brandhub, %0aplease track your order %0aHere is your tracking ID: {{$lists->consignment_id}} %0aHere is your Order ID: {{$lists->id}}  %0a helpline number: @if($lists->shipment_company == 'trax') 021111118729 @else 021111300786 @endif  %0aThank you %0alink: @if($lists->id) {{route('leopord.track.boocked.packet',$lists->consignment_id)}} @endif">Send Tracking 
                             </a> 
                             
-                            <a target="_blank" class="dropdown-item" href="{{route('leopord.track.boocked.packet',$lists->consignment_id)}}">Track Order</a>
+                            <a target="_blank" class="dropdown-item" href="@if($lists->id) {{route('leopord.track.boocked.packet',$lists->consignment_id)}} @endif">Track Order</a>
                             
                             <a target="_blank" class="dropdown-item" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualaikum {{$lists->first_name}} code: {{$lists->customers_id}},%0aI am from Brandhub, %0aPlease Follow the Social Platform for latest product upcoming %0aFacebook:https://www.facebook.com/Brandhub000/ %0aInstagram: https://www.instagram.com/brandshub000/ %0aTiktok: https://www.tiktok.com/@brandhub994 %0aYoutube: https://www.youtube.com/@brandhub8324 ">Social Links</a> 
                             <a target="_blank" class="dropdown-item" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualaikum {{$lists->first_name}} code: {{$lists->customers_id}},%0aMain brandhub se mukhatib hoon, %0aham dekh sakte hain ke apne bht time se hamse kuch khareedari nahi ki hai, %0aMubarak hoo, khush khabri hai apke liye apke agle order per apko dene ke liye hamari janib se ak tohfa hai barae meherbani 7 din kay ander apna order place krain or apne tohfe se lutf andooz hoon shukria apka code ye hai: '{{$lists->id}}' isko code ko order place krte wkt agent ko bata dain.%0a %0a %0Or ye social platforms ko like and follow bhi zaroor karain ta ke apko new products ki malomat bawakt milti rhe %0aFacebook: https://www.facebook.com/Brandhub000/ %0aInstagram: https://www.instagram.com/brandshub000/ %0aTiktok: https://www.tiktok.com/@brandhub994 %0aYoutube: https://www.youtube.com/@brandhub8324">Customer Retain</a> 

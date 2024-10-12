@@ -34,6 +34,18 @@ Route::group(['prefix' => 'customer','as'=> 'customer.'],function(){
     
 });
 
+Route::group(['prefix' => 'support', 'namespace' => 'Frontend','as'=> 'support.'],function(){
+    
+    Route::get('/','SupportController@index')->name('index');
+    Route::get('/create','SupportController@Create')->name('create');
+    Route::post('/store','SupportController@store')->name('store');
+    Route::get('/edit/{id}','SupportController@edit')->name('delete.product.screenshot');
+    Route::post('/update','SupportController@GetCustomerId')->name('login');
+    Route::post('/customer-details','SupportController@CustomerDetails')->name('customer.details');
+    
+    
+});
+
 
 /*==================================
             Admin Routes
