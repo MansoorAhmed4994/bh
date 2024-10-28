@@ -205,6 +205,9 @@
                         <li class="nav-item active"> 
                             <a class="nav-link" target="_blank" href="{{route('inactive.customers')}}">Inactive Customers </a> 
                         </li>
+                        <li class="nav-item active"> 
+                            <a class="nav-link" target="_blank" href="{{route('support.index')}}">Support </a> 
+                        </li>
                     </ul>
                     <ul class="navbar-nav ms-auto"> 
                         <li class="nav-item dropdown">

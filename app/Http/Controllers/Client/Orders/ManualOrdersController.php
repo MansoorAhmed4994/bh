@@ -1122,6 +1122,16 @@ class ManualOrdersController extends Controller
         //dd($request->order_action);
     }
     
+    public function CustomerDetailsByCode(Request $request)
+    {
+        $customer_id = $request->customer_id;
+        $query = Customers::select('*')->where('id',$customer_id)->first();
+        return response()->json([
+            'error' => 0,
+            'data' => $query  
+            ]); 
+    }
+    
     public function previouse_order_history(Request $request)
     { 
         // dd($request->number);

@@ -39,6 +39,42 @@
         
         $( document ).ready(function() {
             
+            
+            
+            $('#customer_id').focusout('click',function(e)
+            {  
+                // $("body").addClass("loading"); 
+                var customer_id = $('#customer_id').val(); 
+                
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: '{{route("customer.details")}}',
+                    data: {
+                        customer_id: customer_id,  
+                    },
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function(e)
+                    {
+                         $("body").removeClass("loading");
+                        $('#first_name').val(e.data['first_name']);
+                            $('#address').val(e.data['address']);   
+                            $('#number').val(e.data['number']), 
+                            
+                            $("#order_save_btn").show();
+                            console.log(e.messege);
+                        
+                    },
+                    error: function(e) {
+                        console.log(e.responseText);
+                    }
+                });
+            });
+            
+            
+            
             $('#number').focusout('click',function(e)
             {  
                 $("body").addClass("loading"); 
@@ -46,14 +82,15 @@
                 const firstTwoChars = number.slice(0, 2);
                 if(firstTwoChars == '92')
                 {
+                    $("body").removeClass("loading");
                     alert('please coorect receiver number (for e.g: 03XXXXXXXXX)');
                     return;
                 }
                 else if(number.length != '11')
                 {
+                    $("body").removeClass("loading");
                     alert('please coorect receiver number (for e.g: length must be 11 digit)');
-                    return;
-                    
+                    return; 
                 }
                 // console.log(firstTwoChars);
                 var base_url = '<?php echo e(url('/')); ?>';
@@ -226,6 +263,12 @@
                         
                     </div>
                     <small id="images_error" class="form-text text-danger">@if($errors->get('images')) {{$errors->first('images')}}@endif </small>
+                </div> 
+    
+                <div class="form-group"> 
+                    <label for="Customer Code">Customer Code</label>
+                    <input type="tel"  class="form-control" id="customer_id"  name="customer_id" placeholder="Enter Customer Code here" >
+                    <small id="customer_id_error" class="form-text text-danger">@if($errors->get('customer_id')) {{$errors->first('customer_id')}} @endif</small>
                 </div> 
     
                 <div class="form-group"> 

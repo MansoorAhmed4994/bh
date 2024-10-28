@@ -17,7 +17,7 @@ Auth::routes();
 ====================================*/
  
     // Route::get('/error','GlobalController@error')->name('global.error');
-    // Route::view('/error', 'global.error')->name('global.error');
+    // Route::view('/error', 'global.error')->name('global.error');previouse/order-history
     
 /*==================================
             Customer Routes
@@ -34,7 +34,7 @@ Route::group(['prefix' => 'customer','as'=> 'customer.'],function(){
     
 });
 
-Route::group(['prefix' => 'support', 'namespace' => 'Frontend','as'=> 'support.'],function(){
+Route::group(['prefix' => 'support', 'namespace' => 'Client','as'=> 'support.', 'middleware' => 'auth:user,admin'],function(){
     
     Route::get('/','SupportController@index')->name('index');
     Route::get('/create','SupportController@Create')->name('create');
@@ -75,6 +75,7 @@ Route::group(['prefix' => 'client/orders/', 'namespace' => 'Client\Orders', 'mid
     Route::get('inactivecustomers', 'ManualOrdersController@InActiveCustomers')->name('inactive.customers');
     Route::get('ManualOrders/status/order-list/{status}', 'ManualOrdersController@status_order_list')->name('ManualOrders.status.order.list'); 
     Route::post('ManualOrders/previouse/order-history', 'ManualOrdersController@previouse_order_history')->name('ManualOrders.previouse.order.history');
+    Route::post('customer/details', 'ManualOrdersController@CustomerDetailsByCode')->name('customer.details');
     Route::get('ManualOrders/dispatch-bulk-orders', 'ManualOrdersController@dispatch_bulk_orders')->name('ManualOrders.dipatch.bulk.orders');
     Route::get('ManualOrders/quick-search', 'ManualOrdersController@QuickSearch')->name('manualOrders.quick.search'); 
     Route::post('ManualOrders/quick-search', 'ManualOrdersController@QuickSearchActions')->name('manualOrders.quick.search.actions');  
