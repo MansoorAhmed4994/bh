@@ -154,6 +154,8 @@ tfoot tr td input {
             //echo $date->format('Y-m-d H:i:s');
             // Will print 2011-02-16 16:24:04
         ?>
+         
+        
         @foreach($ManualOrders as $ManualOrder) 
             <div class="sub-page">  
         
@@ -201,7 +203,7 @@ tfoot tr td input {
                         </tr>
                         <tr class="label2">
                             <td><h5>City: </h5></td>
-                            <td ><h4>@if($ManualOrder->cities != null) : {{$ManualOrder->cities->name}} @endif</h4></td> 
+                            <td ><h4>@if($ManualOrder->leopord_cities != null) : {{$ManualOrder->leopord_cities->name}} @endif</h4></td> 
                         </tr>
                         <tr class="label1">
                             <td><h5>Pieces: </h5></td>

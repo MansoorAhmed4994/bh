@@ -7,7 +7,8 @@ use App\Models\Orderpayments;
 use App\Models\User;
 use App\Models\Country_codes;
 use App\Models\ActivityLogs;
-// use App\Models\Client\Cities;
+use App\Models\Client\Cities;
+use App\Models\LeopordCities;
 use Illuminate\Database\Eloquent\Model;
 
 class ManualOrders extends Model
@@ -47,6 +48,14 @@ class ManualOrders extends Model
     public function riders()
     {
         return $this->belongsToOne(Riders::class);
+    }
+    
+    public function leopord_cities()
+    {
+        // return $this->belongsTo(Cities::class,'city','id');
+        return $this->belongsTo(LeopordCities::class,'cities_id','id'); 
+        // return $this->hasMany(Cities::class,'cities_id','id'); 
+        
     }
     
     public function cities()

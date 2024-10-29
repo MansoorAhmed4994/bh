@@ -112,7 +112,7 @@ class ManualOrdersController extends Controller
         $query = $query
         ->leftJoin('customers', 'manual_orders.customers_id', '=', 'customers.id')
         ->leftJoin('users', 'manual_orders.created_by', '=', 'users.id') 
-        ->leftJoin('users as t', 'manual_orders.updated_by', '=', 't.id') 
+        ->leftJoin('users as t', 'manual_orders.updated_by', '=', 't.id')  
         ->select($this->OrderFieldList()); 
         
         
@@ -240,17 +240,16 @@ class ManualOrdersController extends Controller
             {
                 $query->where('manual_orders.status','like','%%'); 
             }
-        }
-        // dd('working');
+        } 
+        
         $assign_to_users = User::whereHas('roles', function($q){$q->where('name', 'calling');})->get();
-        // dd($students);
-        // $assign_to_users = User::select('*')->get();
-        $list = $query->paginate(20); 
+        
+        $list = $query->limit(10)->get(); 
+        $pagination_cuttons = $query->paginate(20);
         $statuses = get_active_order_status_list();
         $catgories = product_child_categories();
-        
-        // dd($list->first());
-        return view('client.orders.manual-orders.list')->with(['list'=>$list,'users'=>$assign_to_users,'statuses'=>$statuses,'catgories'=>$catgories,'user_roles'=>$user_roles]); 
+         
+        return view('client.orders.manual-orders.list')->with(['list'=>$list,'users'=>$assign_to_users,'statuses'=>$statuses,'catgories'=>$catgories,'user_roles'=>$user_roles,'pagination_cuttons'=>$pagination_cuttons]); 
     }
     
     public function InActiveCustomers(Request $request)

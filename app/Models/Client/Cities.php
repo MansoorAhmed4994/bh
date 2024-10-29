@@ -4,6 +4,7 @@ namespace App\Models\Client;
 
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\Client\ManualOrders;
 class Cities extends Model
 {
     // protected $guarded = ['id'];

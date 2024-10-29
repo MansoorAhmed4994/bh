@@ -292,7 +292,7 @@
                 <div class="form-group ">
                         <label for="address">city</label>
                         
-                        <select class="form-control js-example-basic-single leopord_city" id="city"  name="city" data-rel="chosen">
+                        <select class="form-control js-example-basic-single leopord_city" id="city"  name="city" data-rel="chosen" required>
                             <option value="">Select City</option>
                             @for($i=0 ; $i < sizeof($cities); $i++)
                              

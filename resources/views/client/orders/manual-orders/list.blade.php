@@ -780,6 +780,7 @@ var container = "";
                 <th scope="col">Rec.Phone</th> 
                 <th scope="col"> Whatsapp</th> 
                 <th scope="col">Desc.</th>
+                <th scope="col">City</th>
                 <th scope="col">Address</th>
                 <th scope="col">Price</th>
                 <th scope="col">Adv.Pay</th>
@@ -1042,6 +1043,8 @@ var container = "";
                     <a class="copy-to-clipboard-btn" onclick="copy_clipboard_by_id('{{$lists->id}}_description')">Copy</a>
                 </td> 
                 
+                <td>@if($lists->leopord_cities != null) {{$lists->leopord_cities->name}} @endif</td>
+                
                 <!--============copy Address-->
                 <td style="position:relative">
                     <p class="text-hidden-ellipsis-nowrap" id="{{$lists->id}}_address" >{{$lists->reciever_address}}</p>
@@ -1063,7 +1066,7 @@ var container = "";
         
     </table>
 </div>
-{!! $list->appends(Request::all())->links() !!} 
+{!! $pagination_cuttons->links() !!} 
 
 
 <script type="application/javascript">
