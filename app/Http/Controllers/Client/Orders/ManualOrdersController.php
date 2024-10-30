@@ -244,12 +244,12 @@ class ManualOrdersController extends Controller
         
         $assign_to_users = User::whereHas('roles', function($q){$q->where('name', 'calling');})->get();
         
-        $list = $query->limit(10)->get(); 
-        $pagination_cuttons = $query->paginate(20);
+        $list = $query->Paginate(20); 
+        // $pagination_cuttons = $query->paginate(20);
         $statuses = get_active_order_status_list();
         $catgories = product_child_categories();
          
-        return view('client.orders.manual-orders.list')->with(['list'=>$list,'users'=>$assign_to_users,'statuses'=>$statuses,'catgories'=>$catgories,'user_roles'=>$user_roles,'pagination_cuttons'=>$pagination_cuttons]); 
+        return view('client.orders.manual-orders.list')->with(['list'=>$list,'users'=>$assign_to_users,'statuses'=>$statuses,'catgories'=>$catgories,'user_roles'=>$user_roles]); 
     }
     
     public function InActiveCustomers(Request $request)

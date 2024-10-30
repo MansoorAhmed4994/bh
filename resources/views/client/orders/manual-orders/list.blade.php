@@ -795,8 +795,7 @@ var container = "";
             <?php $count=1;?>
             @foreach($list as $lists)
             
-            <tr class="list_<?=$count;?> status-{!! str_replace(' ', '-', $lists->status) !!}
-            ">
+            <tr class="list_<?=$count;?> status-{!! str_replace(' ', '-', $lists->status) !!} ">
                 <td ><input type="checkbox" id="order_checkbox" class="order_checkbox_class" name="order_checkbox" onclick="get_checked_values()" value="{{$lists->id}}"></td>
                 
                 <td scope="row"><?=$count?></td> 
@@ -869,29 +868,7 @@ var container = "";
                             
                         @endif
                 
-                    </select>
-                            
-                            <!--<option selected="">Select Status</option> -->
-                         
-                            <!--<option value="pending">pending</option>-->
-                         
-                            <!--<option value="prepared">prepared</option>-->
-                         
-                            <!--<option value="addition">addition</option>-->
-                         
-                            <!--<option value="incomplete">incomplete</option>-->
-                         
-                            <!--<option value="confirmed">confirmed</option>-->
-                         
-                            <!--<option value="hold">hold</option>-->
-                         
-                            <!--<option value="not responding" selected="&quot;selected&quot;">not responding</option>-->
-                         
-                            <!--<option value="dc comming">dc comming</option>-->
-                         
-                            <!--<option value="dispatched">dispatched</option>-->
-                            
-                            
+                    </select> 
                     
                     <div class="btn-group">
                         <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -1066,7 +1043,7 @@ var container = "";
         
     </table>
 </div>
-{!! $pagination_cuttons->links() !!} 
+{!! $list->appends(Request::all())->links() !!} 
 
 
 <script type="application/javascript">
