@@ -204,7 +204,11 @@
             }
             
             
-            
+            if(validation_status == true)
+            {
+                $("body").addClass("loading"); 
+                $("#order_save_btn").hide();
+            }
             return validation_status;
         }
     </script>
@@ -328,7 +332,7 @@
                 
     
                 <div class="form-group" id="order_save_btn">
-                    <button type="submit" onclick="validateForm()" class="btn btn-primary">Save</button>
+                    <button type="submit" onclick="validateForm();" class="btn btn-primary">Save</button>
                 </div>
                     
             </form> 

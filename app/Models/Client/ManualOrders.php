@@ -24,6 +24,11 @@ class ManualOrders extends Model
         return $this->belongsTo(User::class,'created_by','id');
     }
     
+    public function UsersCreatedBy()
+    {
+        return $this->belongsTo(User::class,'created_by','id');
+    }
+    
     public function UsersUpdatedBy()
     {
         return $this->belongsTo(User::class,'updated_by','id');
@@ -64,9 +69,7 @@ class ManualOrders extends Model
         return $this->belongsTo(Cities::class,'cities_id','id'); 
         // return $this->hasMany(Cities::class,'cities_id','id'); 
         
-    }
-    
-    
+    } 
     
     public function orderpayments()
     {

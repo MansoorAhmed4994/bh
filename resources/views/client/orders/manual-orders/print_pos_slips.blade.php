@@ -229,20 +229,20 @@ tfoot tr td input {
                                 $date->setTimezone(new DateTimeZone('Asia/Karachi'));
                                 
                                 $current_date = $date->format('Y-m-d H:i:s');
-                            ?>
+                            ?> 
                             <td><h4>{{$current_date}}</h4></td> 
                         </tr>
                         <tr class="label1">
                             <td><h5>Crtd By: </h5></td>  
-                            <td><h4>{{$ManualOrder->users->first_name}}</h4></td> 
+                            <td><h4>@if($ManualOrder->users->first_name){{$ManualOrder->users->first_name}}@endif</h4></td> 
                         </tr>
                         <tr class="label1">
                             <td><h5>Updt By: </h5></td>  
-                            <td><h4>{{$ManualOrder->UsersUpdatedBy->first_name}}</h4></td> 
+                            <td><h4>@if($ManualOrder->UsersUpdatedBy->first_name){{$ManualOrder->UsersUpdatedBy->first_name}}@endif</h4></td> 
                         </tr>
                         <tr class="label1">
                             <td><h5>Assigned To: </h5></td>  
-                            <td><h4>{{$ManualOrder->AssignTo->first_name}}</h4></td> 
+                            <td><h4>@if($ManualOrder->AssignTo->first_name){{$ManualOrder->AssignTo->first_name}}@endif</h4></td> 
                         </tr>
                         <tr class="label1">
                             <td><h5>Printed By: </h5></td>

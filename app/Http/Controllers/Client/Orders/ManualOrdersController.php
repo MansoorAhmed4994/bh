@@ -86,8 +86,10 @@ class ManualOrdersController extends Controller
             'manual_orders.shipment_company',
             DB::raw("(select count(*) from manual_orders where customers.id = manual_orders.customers_id and status = 'return') as return_count"), 
             DB::raw("(select count(*) from manual_orders where customers.id = manual_orders.customers_id and status = 'dispatched') as dispatched_count"), 
-            DB::raw("CONCAT(t.first_name,'') as updated_by"), 
-            DB::raw("CONCAT(users.first_name,'') as created_by"), 
+            // DB::raw("CONCAT(t.first_name,'') as updated_by"), 
+            // DB::raw("CONCAT(users.first_name,'') as created_by"), 
+            'manual_orders.created_by',
+            'manual_orders.updated_by',
             'manual_orders.status_reason', 
             'manual_orders.assign_to'
             ); 

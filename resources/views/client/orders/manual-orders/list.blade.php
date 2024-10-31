@@ -38,12 +38,11 @@
     .blink {
         text-align: center;
         animation: blinker 1s linear infinite;
-        background: red;
-        color: white;
-        width: 100px;
+        background: white;
+        color: red;
         font-weight: bold;
-        padding: 6px;
-        border-radius: 5px;
+        padding: 1px 5px;
+        border-radius: 3px;
     }
     
     @keyframes blinker {
@@ -209,14 +208,8 @@ var container = "";
       });
     }
         
+        
     $( document ).ready(function() { 
-        // $('.pop').on('click', function() {
-        //     // alert($(this).attr('src'));
-        //     $('.imagepreview').attr('src', $(this).attr('src'));
-        //     $('#imagemodal').modal('show');   
-        // });   
-        
-        
         
         
         $('#order_status_edit_close').on('click',function(){
@@ -743,14 +736,11 @@ var container = "";
                     <option selected >Select Action</option> 
                     
                     <option value="print_pos_slips">Print Pos Slips</option>
-                    @foreach($statuses as $status)
-                    
-                        <option value="{{$status->name}}">{{$status->name}}</option>
-                    @endforeach
+                        @foreach($statuses as $status) 
+                            <option value="{{$status->name}}">{{$status->name}}</option>
+                        @endforeach
                     <option value="print">Print </option>
-                    <option value="duplicate_orders">Duplicate Orders</option>
-                    <!--<option value="print_mnp_slips">Print M&P Slips</option>-->
-                    <!--<option value="print_trax_slips">Print Trax Slips</option>-->
+                    <option value="duplicate_orders">Duplicate Orders</option> 
                 </select> 
                 <div class="input-group-append">
                     <button class="btn btn-warning" type="submit">Submit</button> 
@@ -767,28 +757,23 @@ var container = "";
     <table class="table table-bordered" style="min-height: 500px;">
         <thead>
             <tr> 
-                <th scope="col" class="delete_btn_class"><input type="checkbox" onclick="checkAll(this)" ></th>
-                <th scope="col">#</th> 
-                <th scope="col">Act</th> 
+                <th scope="col" class="delete_btn_class"><input type="checkbox" onclick="checkAll(this)" ></th> 
+                <th scope="col">Action / Assign</th> 
                 <th scope="col">Status</th>
-                <th scope="col">Status Reason</th>
-                <th scope="col">Img.</th>
-                <th scope="col">Consignment.Id</th>
+                <th scope="col">Shipment</th>
                 <th scope="col">Ord.ID</th>
-                <th scope="col">C.ID</th>
-                <th scope="col">F.Name</th> 
-                <th scope="col">Rec.Phone</th> 
-                <th scope="col"> Whatsapp</th> 
+                <th scope="col">Images</th>
+                <th scope="col">Customer</th>   
+                <th scope="col"> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/WhatsApp_icon.png/640px-WhatsApp_icon.png" width=30 style="margin-right: 5px;"></th> 
                 <th scope="col">Desc.</th>
                 <th scope="col">City</th>
                 <th scope="col">Address</th>
                 <th scope="col">Price</th>
                 <th scope="col">Adv.Pay</th>
                 <th scope="col">COD</th> 
-                <th scope="col">cr.Date</th>
-                <th scope="col">Up.Date</th>
-                <th scope="col">Updated by</th>
-                <th scope="col">created by</th>
+                <th scope="col">created</th>
+                <th scope="col">Updated</th> 
+                <th scope="col">Status Reason</th> 
             </tr>
         </thead>
         <tbody>  
@@ -796,15 +781,17 @@ var container = "";
             @foreach($list as $lists)
             
             <tr class="list_<?=$count;?> status-{!! str_replace(' ', '-', $lists->status) !!} ">
-                <td ><input type="checkbox" id="order_checkbox" class="order_checkbox_class" name="order_checkbox" onclick="get_checked_values()" value="{{$lists->id}}"></td>
-                
-                <td scope="row"><?=$count?></td> 
+                <td>
+                     
+                        <input type="checkbox" id="order_checkbox" class="order_checkbox_class" name="order_checkbox" onclick="get_checked_values()" value="{{$lists->id}}"> <?=$count;?>
+                        
+                    </div> 
+                </td>
                 
                 <td>
+                    
                     <div class="btn-group" role="group">
-                        <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          Actions
-                        </button>
+                        <button id="btnGroupDrop1" type="button" class="btn btn-secondary bi bi-gear" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">  </button>
                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">            
                             <a type="button" target="_blank" href="@if($lists->id) {{route('ManualOrders.edit',$lists->id)}} @endif" class="dropdown-item">Edit</a>   
                             <button type="button" id="dispatch-btn" onclick="QuickEditOrder({{$lists->id}})" class="dropdown-item" >Quick Edit</button>          
@@ -815,7 +802,7 @@ var container = "";
                     
                         @if(Auth::guard('admin')->check())
                         <div class="btn-group " role="group">
-                            <select class=" form-control @if($errors->get('assign_to')) is-invalid @endif assign_to_dropdown city btn-group" style="width:120px" onchange="assign_to('{{$lists->id}}',this.value)" id="assign_to"  name="assign_to">
+                            <select class=" form-select form-select-sm @if($errors->get('assign_to')) is-invalid @endif assign_to_dropdown city btn-group" style="width:120px" onchange="assign_to('{{$lists->id}}',this.value)" id="assign_to"  name="assign_to">
                                 <option value="">Select Assign To</option>
                                 
                                 @foreach($users as $user)
@@ -827,90 +814,125 @@ var container = "";
                                 
                             </select>
                         </div>
+                        
                         @else
-                        <div class="input-group-text" id="btnGroupAddon">
-                        @foreach($users as $user)
-                                         
-                             {{ ($user->id == $lists->assign_to) ? ($user->first_name." ".$user->last_name)  : '' }}
-                                    
-                        @endforeach
-                        </div>
+                            <div class="input-group-text" id="btnGroupAddon">
+                                @foreach($users as $user)
+                                                 
+                                     {{ ($user->id == $lists->assign_to) ? ($user->first_name." ".$user->last_name)  : '' }}
+                                            
+                                @endforeach
+                            </div>
                         @endif
+                        
                     </div>
                     
                 </td>
-                <td>
-                    <select class="form-control" onchange="ChangeOrderStatus('{{$lists->id}}')" id="ChnageOrderStatusId_{{$lists->id}}" style="width:auto;">
-                        <option selected >Select Status</option> 
-                        
-                        @if(in_array('author', $user_roles) || in_array('admin', $user_roles))
-                            
-                            
-                            @foreach($statuses as $status) 
-                                
-                                <option value="{{$status->name}}" {{ ($status->name == $lists->status) ? 'selected="selected"' : '' }}>{{$status->name}}</option>
-                            
-                            @endforeach  
-                         
-                        @else
-                        
-                            @if(in_array('user', $user_roles)  || in_array('calling', $user_roles))  
-                            
-                                <option selected="">Select Status</option>  
-                                <option value="prepared" {{ ('prepared' == $lists->status) ? 'selected="selected"' : '' }} >prepared</option> 
-                                <option value="addition" {{ ('addition' == $lists->status) ? 'selected="selected"' : '' }} >addition</option>  
-                                <option value="confirmed" {{ ('confirmed' == $lists->status) ? 'selected="selected"' : '' }} >confirmed</option> 
-                                <option value="hold" {{ ('hold' == $lists->status) ? 'selected="selected"' : '' }} >hold</option> 
-                                <option value="not responding" {{ ('not respondin' == $lists->status) ? 'selected="selected"' : '' }} >not responding</option> 
-                                <option value="dc comming" {{ ('dc comming' == $lists->status) ? 'selected="selected"' : '' }}>dc comming</option>   
-                            
-                            @endif
-                            
-                        @endif
                 
-                    </select> 
-                    
-                    <div class="btn-group">
-                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Order History
-                        </button>
-                        <div class="dropdown-menu">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>description</th>
-                                        <th>Date</th>
-                                        <th>User</th>
-                                    </tr>
-                                </thead>
+                <td>
+                    <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                        <select class="form-select form-select-sm" onchange="ChangeOrderStatus('{{$lists->id}}')" id="ChnageOrderStatusId_{{$lists->id}}" style="width: 153px;">
+                            <option selected >Select Status</option> 
+                            
+                            @if(in_array('author', $user_roles) || in_array('admin', $user_roles))
                                 
-                                <tbody>
-                                    @if($lists->activity_logs)
-                                        @foreach($lists->activity_logs as $activity_log)
+                                
+                                @foreach($statuses as $status) 
+                                    
+                                    <option value="{{$status->name}}" {{ ($status->name == $lists->status) ? 'selected="selected"' : '' }}>{{$status->name}}</option>
+                                
+                                @endforeach  
+                             
+                            @else
+                            
+                                @if(in_array('user', $user_roles)  || in_array('calling', $user_roles))  
+                                
+                                    <option selected="">Select Status</option>  
+                                    <option value="prepared" {{ ('prepared' == $lists->status) ? 'selected="selected"' : '' }} >prepared</option> 
+                                    <option value="addition" {{ ('addition' == $lists->status) ? 'selected="selected"' : '' }} >addition</option>  
+                                    <option value="confirmed" {{ ('confirmed' == $lists->status) ? 'selected="selected"' : '' }} >confirmed</option> 
+                                    <option value="hold" {{ ('hold' == $lists->status) ? 'selected="selected"' : '' }} >hold</option> 
+                                    <option value="not responding" {{ ('not respondin' == $lists->status) ? 'selected="selected"' : '' }} >not responding</option> 
+                                    <option value="dc comming" {{ ('dc comming' == $lists->status) ? 'selected="selected"' : '' }}>dc comming</option>   
+                                
+                                @endif
+                                
+                            @endif
+                    
+                        </select> 
+                    
+                        <div class="btn-group" role="group">
+                            <button class="bi bi-three-dots btn btn-secondary " type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> </button>
+                            
+                            <div class="btn-group" role="group">
+                            <div class="dropdown-menu">
+                                <table>
+                                    <thead>
                                         <tr>
-                                            <td>{{$activity_log->activity_desc}}</td>
-                                            <td>{{$activity_log->created_at}}</td>
-                                            @if(!empty($activity_log->users))
-                                                <td>{{$activity_log->users->first_name}}</td>
-                                            @else
-                                                
-                                                <td>No User Found (User ID: {{$activity_log->created_by}})</td>
-                                                
-                                            @endif
+                                            <th>description</th>
+                                            <th>Date</th>
+                                            <th>User</th>
                                         </tr>
-                                        @endforeach
-                                    @endif
-                                </tbody>
- 
-                            </table>
+                                    </thead>
+                                    
+                                    <tbody>
+                                        @if($lists->activity_logs)
+                                            @foreach($lists->activity_logs as $activity_log)
+                                            <tr>
+                                                <td>{{$activity_log->activity_desc}}</td>
+                                                <td>{{$activity_log->created_at}}</td>
+                                                @if(!empty($activity_log->users))
+                                                    <td>{{$activity_log->users->first_name}}</td>
+                                                @else
+                                                    
+                                                    <td>No User Found (User ID: {{$activity_log->created_by}})</td>
+                                                    
+                                                @endif
+                                            </tr>
+                                            @endforeach
+                                        @endif
+                                    </tbody>
+     
+                                </table>
+                            </div>
                         </div>
                     </div>
-                    
                 </td>
-                <td>{{$lists->status_reason}}</td>
+                
+                <td>  
+                    @if($lists->consignment_id != '' && $lists->consignment_id != '0')
+                        <div class="btn-group" role="group"> 
+                        
+                            <div id="{{$lists->id}}_consignment" style="display:none;">{{$lists->consignment_id}}</div> 
+                            <div class="btn-group" role="group">
+                               
+                                <button id="btnGroupDrop1" type="button" class="btn btn-secondary bi bi-truck" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> </button>
+                                
+                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1"> 
+                                        @if($lists->shipment_company == 'leopord')
+                                            <a type="button" target="_blank" href="{{route('leopord.get.shipment.slip',$lists->consignment_id)}}"  class="dropdown-item"><img style="margin:15px; width:60px" src="https://ecom.leopardscourier.com/assets/landing_page/images/c-logo.png">Print Slip</a>
+                                        @elseif($lists->shipment_company == 'trax')
+                                             
+                                            <a type="button" target="_blank" href="{{route('trax.get.shipment.slip',$lists->consignment_id)}}" class="dropdown-item"><img style="margin:15px; width:100px" src="https://trax.pk/wp-content/uploads/2021/07/Black-Logo.svg">Print Slip</a>
+                                        @else
+                                            
+                                        @endif
+                                </div>
+                                
+                            </div>
+                            <button type="button" class="btn btn-secondary bi bi-copy"  onclick="copy_clipboard_by_id('{{$lists->id}}_consignment')"></button> 
+                            
+                        </div>
+                    @else
+                        {{$lists->consignment_id}}
+                    @endif
+                    
+                </td>  
+                
+                <td>{{$lists->id}}</td>
                 
                 <td >
-                    <button class="btn btn-primary" onclick="UniversalImagesBoxes(0,'{{$lists->images}}',{{$lists->id}})">Images</button>
+                    <button class="btn btn-primary bi bi-image" onclick="UniversalImagesBoxes(0,'{{$lists->images}}',{{$lists->id}})"></button>
                     <div id="order_images">
                     @if(!empty($lists->images)) 
                      <?php $count_image_index= 0;?>
@@ -922,82 +944,97 @@ var container = "";
                     @endif
                     </div>
                 </td>
-                <td>
-                    
-                    
-                    
-                    @if($lists->consignment_id != '' && $lists->consignment_id != '0')
-                    <div class="btn-group" role="group">
-                        <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          {{$lists->consignment_id}}
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1"> 
-                                @if($lists->shipment_company == 'leopord')
-                                    <a type="button" target="_blank" href="{{route('leopord.get.shipment.slip',$lists->consignment_id)}}"  class="dropdown-item"><img style="margin:15px; width:60px" src="https://ecom.leopardscourier.com/assets/landing_page/images/c-logo.png">Print Slip</a>
-                                @elseif($lists->shipment_company == 'trax')
-                                     
-                                    <a type="button" target="_blank" href="{{route('trax.get.shipment.slip',$lists->consignment_id)}}" class="dropdown-item"><img style="margin:15px; width:100px" src="https://trax.pk/wp-content/uploads/2021/07/Black-Logo.svg">Print Slip</a>
-                                @else
-                                    
-                                @endif
-                        </div>
-                    
-                    </div>
-                    @else
-                        {{$lists->consignment_id}}
-                    @endif
-                    
-                </td> 
-                <?php
-                $do = (int)$lists->dispatched_count;
-                $ro = (int)$lists->return_count;
-                $per=0;
-                if($ro > 0 && $do >0)
-                {
-                    $per = ($ro/($do))*100;
-                }
-                else
-                {
-                    $per =0;
-                }
+                
+                
+                <?php 
+                    $do = (int)$lists->dispatched_count;
+                    $ro = (int)$lists->return_count;
+                    $per=0;
+                    if($ro > 0 && $do >0)
+                    {
+                        $per = ($ro/($do))*100;
+                    }
+                    else
+                    {
+                        $per =0;
+                    }
                 ?>
-                <!--{{$per}}-->
-                <td>{{$lists->id}}</td>
-                <td>{{$lists->customers_id}}</td>
-                <td>{{$lists->first_name}}
-                    @if($per > 5)
-                        <p>TO:{{$do }} DO:{{$ro}} Per:{{$per}}</p>
-                        <div class="blink">Black list</div>@endif
-                        </td>   
-                        <?php 
-                            $number = $lists->number;
-                            $reciever_number = $lists->receiver_number;
+                <td style="white-space: nowrap;"> 
+                    <?php  
+                        
+                        
+                        
+                        $number = $lists->number;
+                        $reciever_number = $lists->receiver_number;
+                        
+                        $get_char_num = substr($lists->number,0,1);
+                        if($get_char_num == 0)
+                        {
+                            $number = substr($lists->number, 1);
+                            $number = '+92'.$number;
                             
-                            $get_char_num = substr($lists->number,0,1);
-                            if($get_char_num == 0)
-                            {
-                                $number = substr($lists->number, 1);
-                                $number = '+92'.$number;
-                                
-                            }
+                        }
+                        
+                        $get_char_rec_num = substr($lists->receiver_number,0,1);
+                        if($get_char_rec_num == 0)
+                        {
+                            $reciever_number = substr($lists->receiver_number, 1);
+                            $reciever_number = '+92'.$reciever_number;
                             
-                            $get_char_rec_num = substr($lists->receiver_number,0,1);
-                            if($get_char_rec_num == 0)
-                            {
-                                $reciever_number = substr($lists->receiver_number, 1);
-                                $reciever_number = '+92'.$reciever_number;
-                                
-                            } 
-                        ?>
-                <td>
-                    <p><?=$reciever_number?></p>
-                    <p><?=$number?></p> 
-                </td>  
+                        } 
+                    ?>
+                        
+                    <span> 
+                        
+                        <i class="bi bi-copy"  onclick="copy_clipboard_by_id('{{$lists->id}}_customer_data')"></i>
+                        <span class="@if($per > 5) blink @endif">{{$lists->first_name}} Code: {{$lists->customers_id}}</span> 
+                        <div style="display:none" id="{{$lists->id}}_customer_data">{{$lists->first_name}} Code: {{$lists->customers_id}}</div>
+                        
+                        @if($per > 5)
+                            
+                            <div class="btn-group " role="group" >
+                                <i class="bi bi-three-dots "  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> </i>
+                                 
+                                <div class="dropdown-menu">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Total Orders</th>
+                                                <th>Dispacth Order</th>
+                                                <th>Return Orders</th>
+                                            </tr>
+                                        </thead>
+                                        
+                                        <tbody> 
+                                                <tr>
+                                                    <td>{{$do }}</td> 
+                                                    <td>{{$do }}</td> 
+                                                    <td>{{$ro }}</td> 
+                                                     
+                                                </tr> 
+                                        </tbody>
+         
+                                    </table>
+                                </div> 
+                            </div> 
+                            
+                        @endif
+                    </span>
+                    
+                    <br/>
+                    <span>
+                        <!--<span style="font-size: 10px;"><?=$reciever_number?> / <?=$number?></span>-->
+                        
+                        <i  class="bi bi-copy" onclick="copy_clipboard_by_id('{{$lists->id}}_customer_numbers')"></i> 
+                        <span  id="{{$lists->id}}_customer_numbers"><?=$reciever_number?> / <?=$number?></span>
+                    </span>
+                    
+                </td>   
                 
                 <td>
                     <div class="btn-group" role="group">
                         <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" style="background:white;border:2px solid #4ac95a;color:black;padding: 0 11px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/WhatsApp_icon.png/640px-WhatsApp_icon.png" width=30 style="margin-right: 5px;">Start msg
+                          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/WhatsApp_icon.png/640px-WhatsApp_icon.png" width=30 style="margin-right: 5px;">
                         </button>
                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">            
                             <a target="_blank" class="dropdown-item" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualaikum {{$lists->first_name}} code: {{$lists->customers_id}},%0aI am from Brandhub, check the details and verify.%0aName: {{$lists->first_name}}%0aNumber: {{$lists->receiver_number}}%0aAddress: {{$lists->reciever_address}}%0acity: @if(isset($lists->cities->name)) {{$lists->cities->name}}@else '' @endif %0aCOD: {{$lists->cod_amount}}">Send Confirmation msg</a>
@@ -1016,26 +1053,28 @@ var container = "";
                 
                 <!--============copy Description-->
                 <td style="position:relative">
-                    <p class="text-hidden-ellipsis-nowrap" id="{{$lists->id}}_description" >{{$lists->description}}</p>
-                    <a class="copy-to-clipboard-btn" onclick="copy_clipboard_by_id('{{$lists->id}}_description')">Copy</a>
+                    <span>
+                        <i class="bi bi-copy" onclick="copy_clipboard_by_id('{{$lists->id}}_description')"></i> 
+                        <p class="text-hidden-ellipsis-nowrap " id="{{$lists->id}}_description" >{{$lists->description}}</p>
+                    </span>
                 </td> 
                 
                 <td>@if($lists->leopord_cities != null) {{$lists->leopord_cities->name}} @endif</td>
                 
                 <!--============copy Address-->
                 <td style="position:relative">
-                    <p class="text-hidden-ellipsis-nowrap" id="{{$lists->id}}_address" >{{$lists->reciever_address}}</p>
-                    <a class="copy-to-clipboard-btn" onclick="copy_clipboard_by_id('{{$lists->id}}_address')">Copy</a>
+                    <span>
+                        <i class="bi bi-copy " onclick="copy_clipboard_by_id('{{$lists->id}}_address')"></i>
+                        <p class="text-hidden-ellipsis-nowrap" id="{{$lists->id}}_address" > {{$lists->reciever_address}}</p>
+                    </span>
                 </td>
                 
                 <td>{{$lists->price}}</td>  
                 <td>{{$lists->advance_payment}}</td> 
                 <td>{{$lists->cod_amount}}</td>   
-                <td style="font-size: 10px;">{{date('d-M-y', strtotime($lists->created_at))}} <br> {{date('G:i a', strtotime($lists->created_at))}}</td>
-                <td style="font-size: 10px;">{{date('d-M-y', strtotime($lists->updated_at))}} <br> {{date('G:i a', strtotime($lists->updated_at))}}</td> 
-                
-                <td>{{$lists->updated_by}}</td>
-                <td>{{$lists->created_by}}</td>
+                <td > @if($lists->UsersCreatedBy->first_name) {{$lists->UsersCreatedBy->first_name}} @endif <br> <span style="font-size: 10px;">{{date('d-M-y', strtotime($lists->created_at))}} {{date('G:i a', strtotime($lists->created_at))}}</td>
+                <td > @if($lists->UsersUpdatedBy->first_name) {{$lists->UsersUpdatedBy->first_name}} @endif <br> <span style="font-size: 10px;">{{date('d-M-y', strtotime($lists->updated_at))}} {{date('G:i a', strtotime($lists->updated_at))}} </span></td>    
+                <td>{{$lists->status_reason}}</td>
             </tr>
             <?php $count++;?>
             @endforeach
