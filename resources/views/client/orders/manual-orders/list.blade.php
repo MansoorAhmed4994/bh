@@ -760,6 +760,7 @@ var container = "";
                 <th scope="col" class="delete_btn_class"><input type="checkbox" onclick="checkAll(this)" ></th> 
                 <th scope="col">Action / Assign</th> 
                 <th scope="col">Status</th>
+                <th scope="col">Status Reason</th> 
                 <th scope="col">Shipment</th>
                 <th scope="col">Ord.ID</th>
                 <th scope="col">Images</th>
@@ -773,7 +774,6 @@ var container = "";
                 <th scope="col">COD</th> 
                 <th scope="col">created</th>
                 <th scope="col">Updated</th> 
-                <th scope="col">Status Reason</th> 
             </tr>
         </thead>
         <tbody>  
@@ -897,7 +897,8 @@ var container = "";
                             </div>
                         </div>
                     </div>
-                </td>
+                </td>    
+                <td>{{$lists->status_reason}}</td>
                 
                 <td>  
                     @if($lists->consignment_id != '' && $lists->consignment_id != '0')
@@ -1067,14 +1068,12 @@ var container = "";
                         <i class="bi bi-copy " onclick="copy_clipboard_by_id('{{$lists->id}}_address')"></i>
                         <p class="text-hidden-ellipsis-nowrap" id="{{$lists->id}}_address" > {{$lists->reciever_address}}</p>
                     </span>
-                </td>
-                
+                </td> 
                 <td>{{$lists->price}}</td>  
                 <td>{{$lists->advance_payment}}</td> 
                 <td>{{$lists->cod_amount}}</td>   
-                <td > @if($lists->UsersCreatedBy->first_name) {{$lists->UsersCreatedBy->first_name}} @endif <br> <span style="font-size: 10px;">{{date('d-M-y', strtotime($lists->created_at))}} {{date('G:i a', strtotime($lists->created_at))}}</td>
-                <td > @if($lists->UsersUpdatedBy->first_name) {{$lists->UsersUpdatedBy->first_name}} @endif <br> <span style="font-size: 10px;">{{date('d-M-y', strtotime($lists->updated_at))}} {{date('G:i a', strtotime($lists->updated_at))}} </span></td>    
-                <td>{{$lists->status_reason}}</td>
+                <td > @if(!empty($lists->UsersCreatedBy->first_name)) {{$lists->UsersCreatedBy->first_name}} @endif <br> <span style="font-size: 10px;">{{date('d-M-y', strtotime($lists->created_at))}} {{date('G:i a', strtotime($lists->created_at))}}</td>
+                <td > @if(!empty($lists->UsersUpdatedBy->first_name)) {{$lists->UsersUpdatedBy->first_name}} @endif <br> <span style="font-size: 10px;">{{date('d-M-y', strtotime($lists->updated_at))}} {{date('G:i a', strtotime($lists->updated_at))}} </span></td>
             </tr>
             <?php $count++;?>
             @endforeach
