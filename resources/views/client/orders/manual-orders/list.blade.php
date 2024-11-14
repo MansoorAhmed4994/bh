@@ -1072,8 +1072,8 @@ var container = "";
                 <td>{{$lists->price}}</td>  
                 <td>{{$lists->advance_payment}}</td> 
                 <td>{{$lists->cod_amount}}</td>   
-                <td > @if(!empty($lists->UsersCreatedBy->first_name)) {{$lists->UsersCreatedBy->first_name}} @endif <br> <span style="font-size: 10px;">{{date('d-M-y', strtotime($lists->created_at))}} {{date('G:i a', strtotime($lists->created_at))}}</td>
-                <td > @if(!empty($lists->UsersUpdatedBy->first_name)) {{$lists->UsersUpdatedBy->first_name}} @endif <br> <span style="font-size: 10px;">{{date('d-M-y', strtotime($lists->updated_at))}} {{date('G:i a', strtotime($lists->updated_at))}} </span></td>
+                <td > @if(!empty($lists->UsersCreatedBy->first_name)) {{$lists->UsersCreatedBy->first_name}} @endif <br> <span style="font-size: 10px;">{{date('d-M-y', strtotime($lists->created_at))}} {{date('G:i a', strtotime($lists->created_at))}} ({{$lists->created_by}})</td>
+                <td > @if(!empty($lists->UsersUpdatedBy->first_name)) {{$lists->UsersUpdatedBy->first_name}} @endif <br> <span style="font-size: 10px;">{{date('d-M-y', strtotime($lists->updated_at))}} {{date('G:i a', strtotime($lists->updated_at))}} ({{$lists->updated_by}})</span></td>
             </tr>
             <?php $count++;?>
             @endforeach

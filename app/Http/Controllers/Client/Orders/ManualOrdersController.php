@@ -88,8 +88,8 @@ class ManualOrdersController extends Controller
             DB::raw("(select count(*) from manual_orders where customers.id = manual_orders.customers_id and status = 'dispatched') as dispatched_count"), 
             // DB::raw("CONCAT(t.first_name,'') as updated_by"), 
             // DB::raw("CONCAT(users.first_name,'') as created_by"), 
-            'manual_orders.created_by',
-            'manual_orders.updated_by',
+            'manual_orders.created_by as created_by',
+            'manual_orders.updated_by as updated_by',
             'manual_orders.status_reason', 
             'manual_orders.assign_to'
             ); 
@@ -113,8 +113,8 @@ class ManualOrdersController extends Controller
         // dd($query->paginate(20)->first());
         $query = $query
         ->leftJoin('customers', 'manual_orders.customers_id', '=', 'customers.id')
-        ->leftJoin('users', 'manual_orders.created_by', '=', 'users.id') 
-        ->leftJoin('users as t', 'manual_orders.updated_by', '=', 't.id')  
+        // ->leftJoin('users', 'manual_orders.created_by', '=', 'users.id') 
+        // ->leftJoin('users as t', 'manual_orders.updated_by', '=', 't.id')  
         ->select($this->OrderFieldList()); 
         
         
@@ -551,6 +551,7 @@ class ManualOrdersController extends Controller
         $ManualOrder->total_pieces = $request->total_pieces;
         $ManualOrder->weight = $request->weight;
         $ManualOrder->description = $request->description; 
+        $ManualOrder->updated_by = Auth::id();
         $ManualOrder->status = $request->order_status; 
         
         $traxdata = []; 
@@ -632,6 +633,7 @@ class ManualOrdersController extends Controller
                     $ManualOrder->service_type = $request->shipping_mode_id; 
                     $ManualOrder->shipment_company = $request->shipment_type;
                     $ManualOrder->cities_id = $request->city;
+                    $ManualOrder->updated_by = Auth::id();
                     $ManualOrder->status = 'dispatched';  
                     // echo '3';
                     if(check_customer_advance_payment($order_id) > 0)
@@ -767,7 +769,8 @@ class ManualOrdersController extends Controller
                     $ManualOrder->service_type = $request->leopord_shipment_type_id; 
                     $ManualOrder->shipment_company = $request->shipment_type;
                     $ManualOrder->shipment_slip = $ApiResponse->slip_link;
-                    $ManualOrder->cities_id = $request->city;
+                    $ManualOrder->cities_id = $request->city; 
+                    $ManualOrder->updated_by = Auth::id();
                     $ManualOrder->status = 'dispatched';  
                     // echo '3';
                     
@@ -797,7 +800,8 @@ class ManualOrdersController extends Controller
             else if($request->shipment_type == 'local')
             {
                 // dd($ManualOrder); 
-                $ManualOrder->status = 'dispatched';
+                $ManualOrder->status = 'dispatched'; 
+                $ManualOrder->updated_by = Auth::id();
                 if(check_customer_advance_payment($order_id) > 0)
                 {
                     toastr()->error('payment not approved','Error');
@@ -843,6 +847,8 @@ class ManualOrdersController extends Controller
      */
     public function destroy(ManualOrders $ManualOrder)
     { 
+        
+        $ManualOrder->updated_by = Auth::id();
         $ManualOrder->status = 'deleted';
         $ManualOrder->save();
         return redirect()->route('ManualOrders.index')->with('success', 'Order Deleted');
@@ -850,6 +856,8 @@ class ManualOrdersController extends Controller
     }
     public function order_status($status, ManualOrders $ManualOrder)
     { 
+        
+        $ManualOrder->updated_by = Auth::id();
         $ManualOrder->status = $status;
         $ManualOrder->save();
         return redirect()->route('ManualOrders.index')->with('success', 'Order '.$status);
@@ -1109,8 +1117,9 @@ class ManualOrdersController extends Controller
             $ManualOrdersMaster->images = $images;
             $ManualOrdersMaster->price = $price; 
             $ManualOrdersMaster->status = 'pending';
+            
             $ManualOrdersMaster->save();
-            $ids_update = ManualOrders::whereIn('id',$duplicate_ids)->update(['status' => 'duplicate']);
+            $ids_update = ManualOrders::whereIn('id',$duplicate_ids)->update(['status' => 'duplicate', 'updated_by' => Auth::id()]);
         
             create_activity_log(['table_name'=>'manual_orders','ref_id'=>$ManualOrdersMaster->id,'activity_desc'=>'two orders merge from '.$ManualOrdersMaster->id.' to '.$duplicate_ids[0],'created_by'=>Auth::id(),'method'=>'update','route'=>route('ManualOrders.order.action')]);
             
@@ -1241,7 +1250,7 @@ class ManualOrdersController extends Controller
                         <td>'.$ManualOrder->status.'</td>';
                 }
             $data .= '</tbody>';
-        //dd($data);
+        // dd($ManualOrders);
         
         return response()->json([
             'messege' => $data,
@@ -1317,13 +1326,17 @@ class ManualOrdersController extends Controller
     
     public function ChangeOrderStatus(Request $request)
     {
+        
         $manualorder = ManualOrders::find($request->order_id);
         if($manualorder->status == 'dispatched')
         {
             if(Auth::guard('admin')->check())
             {
-                $manualorder->status = $request->status;
-                $update_status = $manualorder->save();
+                // $manualorder->status = $request->status; 
+                // $update_status = $manualorder->save();
+                $update_status = $manualorder->update(['status' => $request->status, 'updated_by'=>Auth::id()]);
+                
+                
                 $act_sta = create_activity_log(['table_name'=>'manual_orders','ref_id'=>$request->order_id,'activity_desc'=>'Status changed : '.$request->status,'created_by'=>Auth::id(),'method'=>'update','route'=>route('ManualOrders.change.status')]);
                 // dd($act_sta);
                 if($update_status)
@@ -1334,7 +1347,7 @@ class ManualOrdersController extends Controller
                 {
                     return response()->json(['error'=>'1','messege' => 'Cant change the order status please contact admin']);
                 }
-                // $action_status = ManualOrders::where('id',$order_id)->update(['status' => 'dispatched', 'riders_id'=> $request->riders]);
+                
             }
             else
             {
@@ -1343,10 +1356,12 @@ class ManualOrdersController extends Controller
         }
         else
         {
-            $manualorder->status = $request->status;
-            $update_status = $manualorder->save();
+            
+            // $manualorder->status = $request->status;
+            // $update_status = $manualorder->save(); 
+            $update_status = $manualorder->update(['status' => $request->status, 'updated_by'=>Auth::id()]);
             $act_sta = create_activity_log(['table_name'=>'manual_orders','ref_id'=>$request->order_id,'activity_desc'=>'Status changed to: '.$request->status,'created_by'=>Auth::id(),'method'=>'update','route'=>route('ManualOrders.change.status')]);
-            // dd($act_sta);
+            // dd($update_status);
             if($update_status)
             {
                 return response()->json(['success'=>'1','messege' => 'Order Status changed to '.$request->status]);
@@ -1866,6 +1881,8 @@ class ManualOrdersController extends Controller
         }
         if($ManualOrders->status == 'pending' || $ManualOrders->status == 'addition')
         {
+            
+            $ManualOrders->updated_by = Auth::id();
             $ManualOrders->status = 'prepared';
             $ManualOrders->save();
             create_activity_log(['table_name'=>'manual_orders','ref_id'=>$ManualOrders->id,'activity_desc'=>'Status prepared from pending to prepared','created_by'=>Auth::id(),'method'=>'print','route'=>route('ManualOrders.print.pos.slip',$ManualOrders->id)]);

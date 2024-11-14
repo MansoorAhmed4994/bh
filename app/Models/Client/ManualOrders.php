@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 class ManualOrders extends Model
 {
     protected $guarded = [];  
+    protected $manual_orders = 'ManualOrders';
     public function customers()
     {
         return $this->belongsTo(Customers::class,'customers_id','id');
@@ -79,6 +80,6 @@ class ManualOrders extends Model
     public function country_codes()
     {
         return $this->belongsTo(Country_codes::class,'country_code_','Country_code_id');
-    }
-    //
+    } 
+ 
 }
