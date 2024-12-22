@@ -333,10 +333,7 @@ class ManualOrdersController extends Controller
         return view('client.orders.manual-orders.list')->with(['list'=>$list,'statuses'=>$statuses]);
     }
     
-    public function ImageUpload123(Request $request)
-    {
-        dd($request);
-    }
+    
 
     /**
      * Store a newly created resource in storage.
@@ -414,13 +411,9 @@ class ManualOrdersController extends Controller
             return back();
         }
         
-<<<<<<< HEAD
-        $cities = $this->get_trax_cities();
-=======
         // $cities = $this->get_trax_cities();
         $cities = $this->LeopordGetCities()->city_list;
         
->>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
         $leopordCities = $this->LeopordGetCities()->city_list;
         
         
@@ -672,58 +665,6 @@ class ManualOrdersController extends Controller
             }
             else if($request->shipment_type == 'leopord')
             {
-<<<<<<< HEAD
-                $mytime = Carbon::now();
-                $current_date_time = $mytime->toDateTimeString();
-                $pickup_address_id = $this->get_trax_pickup_address(); 
-                $reference_number= '('.$ManualOrder->id.')('.$current_date_time.')';
-                // dd(trim($request->price));
-                $traxdata['order_id'] = $ManualOrder->id;
-                $traxdata['service_type_id'] = 1;
-                $traxdata['pickup_address_id'] = $pickup_address_id;
-                $traxdata['information_display'] = 0;
-                $traxdata['consignee_city_id'] = $request->city;
-                $traxdata['consignee_name'] = trim($request->receiver_name);
-                $traxdata['consignee_address'] = trim($request->reciever_address);
-                $traxdata['consignee_phone_number_1'] = trim($request->receiver_number);
-                $traxdata['consignee_email_address'] = trim('orderstesting@brandhub.com');
-                $traxdata['item_product_type_id'] = 1;
-                $traxdata['item_description'] = trim($request->description);
-                $traxdata['item_quantity'] = (int)trim($request->total_pieces);
-                $traxdata['item_insurance'] = 0;
-                $traxdata['item_price'] = (int)trim($request->price);
-                $traxdata['parcel_value'] = (int)trim($request->price);
-                $traxdata['pickup_date'] = $mytime;
-                $traxdata['special_instructions'] = trim('Nothing');
-                $traxdata['estimated_weight'] = trim($request->weight);
-                $traxdata['shipping_mode_id'] = (int)trim($request->shipping_mode_id);
-                $traxdata['amount'] = (int)trim($request->cod_amount);
-                $traxdata['shipper_reference_number_1'] = $reference_number;
-                $traxdata['payment_mode_id'] = 1;
-                $traxdata['charges_mode_id'] = 4;
-                
-                $ApiResponse = $this->CreateBooking($traxdata);
-                // dd($ApiResponse);
-                // echo '1';
-                if($ApiResponse->status == 0)
-                { 
-                    $act_sta = create_activity_log(['table_name'=>'manual_orders','ref_id'=>$order_id,'activity_desc'=>'Trax booking created','created_by'=>Auth::id(),'method'=>'create','route'=>route('ManualOrders.update',$order_id)]);
-
-                    // echo '2';
-                    $id = array();
-                    array_push($id, $ApiResponse->tracking_number);
-                    // dd($id);
-                    $ManualOrder->date_order_paid = $request->date_order_paid;
-                    $ManualOrder->reference_number = $request->reference_number;
-                    $ManualOrder->service_type = $request->service_type; 
-                    $ManualOrder->consignment_id = $ApiResponse->tracking_number;
-                    $ManualOrder->status = 'dispatched';  
-                    // echo '3';
-                    if(check_customer_advance_payment($order_id) > 0)
-                    {
-                        dd('payment not approved');
-                    }
-=======
                 
                 if(check_customer_advance_payment($ManualOrder->id) > 0)
                 {
@@ -833,7 +774,6 @@ class ManualOrdersController extends Controller
                     $ManualOrder->status = 'dispatched';  
                     // echo '3';
                     
->>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
                     // echo '4';
                     $status = $ManualOrder->save();
                     $act_sta = create_activity_log(['table_name'=>'manual_orders','ref_id'=>$order_id,'activity_desc'=>'Edit order data','created_by'=>Auth::id(),'method'=>'update','route'=>route('ManualOrders.update',$order_id)]);
@@ -845,15 +785,9 @@ class ManualOrdersController extends Controller
                         return back();
                         // dd();
                     }
-<<<<<<< HEAD
-                    
-                    $slips = $this->print_trax_slips($id);
-                    return view('client.orders.manual-orders.trax.print_trax_slip')->with('slips',$slips);
-=======
                     // return view('client.orders.manual-orders.leopord.print_slip')->with(['slip'=>$ApiResponse->slip_link]);
                     return redirect()->away($ApiResponse->slip_link);
                     // return view('client.orders.manual-orders.trax.print_trax_slip')->with('slips',$slips);
->>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
                 }
                 
                 else
@@ -2132,25 +2066,12 @@ class ManualOrdersController extends Controller
     {
         if($shipmentcompany == 'trax')
         {
-<<<<<<< HEAD
-            $cities = $this->get_trax_cities();
-=======
             $cities = $this->LeopordGetCities()->city_list;
->>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
         }
         else if($shipmentcompany == 'leopord')
         {
             $cities = $this->LeopordGetCities()->city_list;
         }
-<<<<<<< HEAD
-        
-        
-         
-        return response()->json(['success' => '1', 'cities' => $cities]);
-        
-    }
-=======
->>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
         
         
          

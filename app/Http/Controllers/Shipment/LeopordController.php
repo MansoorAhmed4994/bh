@@ -7,26 +7,13 @@ use Illuminate\Http\Request;
 
 use App\Traits\LeopordTraits;
 
-<<<<<<< HEAD
-=======
 use App\Models\Client\ManualOrders;
 use App\Models\LeopordCities;
 use DB;
->>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
 class LeopordController extends Controller
 { 
     use LeopordTraits;
     
-<<<<<<< HEAD
-    
-    
-    public function LeopordGetTariffDetails($weight=0,$shipment_type=0,$origion_city=0,$destination_city=0,$cod=0)
-    {
-        // dd('workin');
-        $details = $this->GetTariffDetails($weight,$shipment_type,$origion_city,$destination_city,$cod);
-        $final_delivery_charges=0;
-        
-=======
     public function LeopordCalculateDeliveryCharges(Request $request )
     {
         $weight=$request->estimated_weight;
@@ -51,7 +38,6 @@ class LeopordController extends Controller
         // =======================detain
         $details = $this->GetTariffDetails($weight,$shipment_type,$origion_city,$destination_city,$cod);
         
->>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
         if($details->status == 0)
         {
             return response()->json(['success'=>'0','messege' => $details->error]);
@@ -59,30 +45,14 @@ class LeopordController extends Controller
         }
         else if($details->status == 1)
         {
-<<<<<<< HEAD
-            $packet_charges_details = $details->packet_charges;
-            // dd($packet_charges_details);
-            $final_delivery_charges = $packet_charges_details->shipment_charges+$packet_charges_details->cash_handling+$packet_charges_details->insurance_charges+$packet_charges_details->gst_amount+$packet_charges_details->fuel_surcharge_amount;
-            // dd($final_delivery_charges);
-            return response()->json(['success'=>'1','messege' => 'successfully deleted','final_delivery_charges'=>$final_delivery_charges]);
-=======
             $packet_charges_details = $details->packet_charges; 
             $final_delivery_charges = $packet_charges_details->shipment_charges+$packet_charges_details->cash_handling+$packet_charges_details->insurance_charges+$packet_charges_details->gst_amount+$packet_charges_details->fuel_surcharge_amount;
 
             return response()->json(['data' => $details,'fare'=> $final_delivery_charges]);
->>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
         }
         else
         {
             return response()->json(['success'=>'0','messege' => 'some thing went wrong'.$details]);
-<<<<<<< HEAD
-        }
-        
-        
-        
-        // $this->GetTariffDetails();
-    }
-=======
         } 
         
     }
@@ -269,5 +239,4 @@ class LeopordController extends Controller
         
     }
     
->>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
 }

@@ -21,16 +21,6 @@ class DashboardController extends Controller
     
     public function index(Request $request)
     {
-<<<<<<< HEAD
-        $from_date= date('Y-m-01').' 00:00:00';
-        $to_date = date('Y-m-t').' 23:59:59';
-
-        //  dd($from_date,$to_date);
-        if($request->date_from)
-        {
-            $from_date = $request->date_from.' 00:00:00';
-            $to_date = $request->date_to.' 23:59:59';  
-=======
         $from_date= date('Y-m-01', strtotime('-30 days'));
         $to_date = date('Y-m-t');
 
@@ -41,7 +31,6 @@ class DashboardController extends Controller
             $to_date = $request->date_to;  
             
             
->>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
         }
         // dd($request->date_from , $request->date_to);
         $users = DB::table('users')->select('id','first_name')->get();
@@ -54,11 +43,6 @@ class DashboardController extends Controller
              ->groupBy('status')
              ->get()->toArray(); 
          
-        //  dd(DB::table('manual_orders')
-        //      ->select('status', DB::raw('count(*) as total_orders'), DB::raw('sum(price) as total_amount'))
-        //      ->whereBetween('updated_at', [$from_date, $to_date])
-        //      ->groupBy('status')->toSql());
-             
         for($i=0; $i<sizeof($group_by_status); $i++)
         {
             $users_order_status = DB::table('manual_orders')
@@ -80,10 +64,6 @@ class DashboardController extends Controller
         ->whereBetween('updated_at', [$from_date, $to_date])
         ->groupBy('assign_to')->get();
             
-<<<<<<< HEAD
-        
-    
-=======
         $orders_by_shipment_company = DB::table('manual_orders')
         ->select('shipment_company as id', DB::raw('count(*) as total_orders'),DB::raw('sum(price) as total_amount'))
         ->leftJoin('users', 'manual_orders.assign_to', '=', 'users.id') 
@@ -98,7 +78,6 @@ class DashboardController extends Controller
             $shipment_cities_summary['shipment_cities_name'][] = $city->id;
             $shipment_cities_summary['shipment_cities_orders'][] = $city->total_orders;
         } 
->>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
         $inventory = DB::table('inventories')
              ->select('stock_status', DB::raw('sum(qty) as qty'), DB::raw('sum(cost) as cost'), DB::raw('sum(sale) as sale'))
              ->whereBetween('updated_at', [$from_date, $to_date])

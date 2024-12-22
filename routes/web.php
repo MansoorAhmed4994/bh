@@ -180,11 +180,6 @@ Route::group(['prefix' => 'leopord/', 'namespace' => 'Shipment','as'=> 'leopord.
     Route::get('track-boocked-packet/{tracking_number}', 'LeopordController@LeopordTrackBookedPacket')->name('track.boocked.packet');
 }); 
 
-<<<<<<< HEAD
-Route::group(['prefix' => 'leopord/', 'namespace' => 'Shipment', 'middleware' => 'auth:user,admin','as'=> 'trax.'],function(){
-    
-    Route::get('get-tariff-details/{weight}/{shipment_type}/{origion_city}/{destination_city}/{cod}', 'LeopordController@LeopordGetTariffDetails')->name('leopord.shipment.get.tariff.details');
-=======
 Route::group(['prefix' => 'social/', 'namespace' => 'social', 'middleware' => 'auth:user,admin','as'=> 'social.'],function()
 {
     
@@ -195,7 +190,6 @@ Route::group(['prefix' => 'social/', 'namespace' => 'social', 'middleware' => 'a
     
     
     
->>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
 });
 //{weight}/{shipment_type}/{origion_city}/{destination_city}/{cod}
 //https://manualordersstaging.brandhub.com.pk/get-tariff-details/1000/2/789/76/5000

@@ -15,7 +15,9 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
-
+ 
+ 
+ 
 # DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION BEGIN
 # PassengerAppRoot "/home/desenado/manualordersstaging.brandhub.com.pk"
 # PassengerBaseURI "/"

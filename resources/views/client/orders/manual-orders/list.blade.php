@@ -859,33 +859,6 @@ var container = "";
                                 
                             @endif
                     
-<<<<<<< HEAD
-                    <div class="btn-group">
-                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Order History
-                        </button>
-                        <div class="dropdown-menu">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>description</th>
-                                        <th>Date</th>
-                                        <th>User</th>
-                                    </tr>
-                                </thead>
-                                
-                                <tbody>
-                                    @foreach($lists->activity_logs as $activity_log)
-                                    <tr>
-                                        <td>{{$activity_log->activity_desc}}</td>
-                                        <td>{{$activity_log->created_at}}</td>
-                                        <td>{{$activity_log->users->first_name}}</td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
- 
-                            </table>
-=======
                         </select> 
                     
                         <div class="btn-group" role="group">
@@ -922,7 +895,6 @@ var container = "";
      
                                 </table>
                             </div>
->>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
                         </div>
                     </div>
                 </td>    

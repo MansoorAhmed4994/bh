@@ -113,52 +113,6 @@
     }
     
     
-<<<<<<< HEAD
-    
-    function LeopordGetTariffDetails() 
-    {
-        var weight = $('#weight').val();
-        var shipment_type_id = $('#shipment_type_id').val();
-        var leopord_city = $('#leopord_city').val();
-        var cod_amount = $('#cod_amount').val();
-        cod_amount = parseInt(cod_amount);
-        // console.log('city'+leopord_city);
-        $("body").addClass("loading"); 
-        $.ajax({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            url: base_url + '/leopord/get-tariff-details/'+weight+'/'+shipment_type_id+'/'+202+'/'+leopord_city+'/'+cod_amount,
-            type: 'Get',
-            dataType: 'json',
-            success: function(e)
-            { 
-                
-                if(typeof e.success !== 'undefined')
-                {
-                    $("#fare").val(e.final_delivery_charges);
-                    $("body").removeClass("loading"); 
-                } 
-                else if(typeof e.error !== 'undefined')
-                {
-                    $("body").removeClass("loading");
-                    // toastr.error(e.messege,'Error');
-                }
-                
-                $("body").removeClass("loading");
-                console.log(e);
-            },
-            error: function(e) {
-                alert(e); 
-                $("body").removeClass("loading");
-            }
-        });
-            
-    }
-    
-    
-=======
->>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
     function get_products_by_sku() 
     {
         $("body").addClass("loading"); 
@@ -398,33 +352,21 @@
         
         if(shipment_type_value == 'trax')
         {
-<<<<<<< HEAD
-            console.log('5');
-=======
             // console.log('5');
->>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
             get_fare_list();
             document.getElementById("trax_shipment_fields").style.display = "block"; 
             document.getElementById("leopord_shipment_fields").style.display = "none"; 
         }
         else if(shipment_type_value == 'leopord')
         {
-<<<<<<< HEAD
-            console.log('6');
-=======
             // console.log('6');
->>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
             document.getElementById("trax_shipment_fields").style.display = "none"; 
             document.getElementById("leopord_shipment_fields").style.display = "block"; 
             
         }
         else
         {
-<<<<<<< HEAD
-            console.log('7');
-=======
             // console.log('7');
->>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
             document.getElementById("trax_shipment_fields").style.display = "none"; 
             document.getElementById("leopord_shipment_fields").style.display = "none"; 
         }
@@ -435,31 +377,14 @@
     function OnChangeShipment()
     {
         var validate_status = CustomeFieldValidation();
-<<<<<<< HEAD
-        console.log('1');
-        if(validate_status == true)
-        {
-            console.log('2');
-=======
         // console.log('1');
         if(validate_status == true)
         {
             // console.log('2');
->>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
             shipment_type_change();
         }
         else
         {
-<<<<<<< HEAD
-            console.log('3');
-            $("#shipment_type").val('');
-            // shipment_type_change();
-        }
-        
-        
-    }
-    
-=======
             // console.log('3');
             $("#shipment_type").val('');
             // shipment_type_change();
@@ -467,7 +392,6 @@
     }
     
     
->>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
     function CustomeFieldValidation()
     { 
         var validation_status = true; 
@@ -537,12 +461,6 @@
             }
         });
         
-<<<<<<< HEAD
-        if(validation_status == false)
-        {
-            return false;
-        }
-=======
         var number = $('#receiver_number').val();
         console.log(number);
         var firstTwoChars = number.slice(0, 2);
@@ -574,7 +492,6 @@
             return false;
         }
 
->>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
         return validation_status;
     }
     
@@ -633,18 +550,11 @@
         }
         else if($('#shipment_type').val() == 'leopord')
         {
-<<<<<<< HEAD
-            if($('#leopord_shipment_type_id').val() == '')
-            {
-                validation_status = false;
-                toastr.warning('Please Select Shipment Method to auto fil fare', 'Warning'); 
-=======
             console.log($('#leopord_shipment_type_id').val());
             // return;
             if($('#leopord_shipment_type_id').val() == '')
             {
                 validation_status = false;  
->>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
                 toastr.warning('Please Select Shipment Method', 'Warning'); 
                 $('#leopord_shipment_type_id_error').html('Please Select Shipment Method'); 
                 return validation_status;
@@ -652,21 +562,14 @@
             else
             {
                 
-<<<<<<< HEAD
-=======
                 $('#leopord_shipment_type_id_error').html(''); 
->>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
                 $('#fare_error').html('');  
             }
             
             if($('#leopord_city').val() == '')
             {
                 validation_status = false;
-<<<<<<< HEAD
-                console.log('city not selected');
-=======
                 // console.log('city not selected');
->>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
                 toastr.warning('Please Select Shipment Method to auto fil fare', 'Warning'); 
                 toastr.warning('Please Select Shipment Method', 'Warning'); 
                 $('#leopord_city_error').html('Please Select City');  
@@ -674,11 +577,7 @@
             }
             else
             {
-<<<<<<< HEAD
-                console.log('city  selected');
-=======
                 // console.log('city  selected');
->>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
                 LeopordGetTariffDetails();
                 $('#leopord_city_error').html('');  
             }  
@@ -856,23 +755,14 @@
                         
             
                         <div class="form-group col-auto">
-<<<<<<< HEAD
-                            <label for="Number">Number</label>
-                            <input type="text" class="form-control @if($errors->get('number')) is-invalid @endif" value="{{old('number')}}@if(isset($ManualOrder)){{$ManualOrder->number}}@endif" id="number"  name="number" placeholder="number Number" required>
-=======
                             <label for="Number">Number (03xxxxxxxxx)</label>
                             <input type="text" class="form-control @if($errors->get('number')) is-invalid @endif" pattern="0[0-9]{2}(?!1234567)(?!1111111)(?!7654321)[0-9]{8}" value="{{old('number')}}@if(isset($ManualOrder)){{$ManualOrder->number}}@endif" id="number"  name="number" placeholder="number Number" required>
->>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
                             <small id="number_error" class="form-text text-danger">@if($errors->get('number')) {{$errors->first('number')}} @endif</small>
                         </div>     
             
                         <div class="form-group col-auto">
                             <label for="Number">Whatsapp Number</label>
-<<<<<<< HEAD
-                            <input type="text" class="form-control @if($errors->get('whatsapp_number')) is-invalid @endif" value="{{old('whatsapp_number')}}@if(isset($ManualOrder)){{$ManualOrder->number}}@endif" id="whatsapp_number"  name="whatsapp_number" placeholder="Whatsapp number" >
-=======
                             <input type="text" class="form-control @if($errors->get('whatsapp_number')) is-invalid @endif"  value="{{old('whatsapp_number')}}@if(isset($ManualOrder)){{$ManualOrder->number}}@endif" id="whatsapp_number"  name="whatsapp_number" placeholder="Whatsapp number" >
->>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
                             <small id="whatsapp_number_error" class="form-text text-danger">@if($errors->get('whatsapp_number')) {{$errors->first('whatsapp_number')}} @endif</small>
                         </div> 
             
@@ -894,13 +784,8 @@
                         </div>
                         
                         <div class="form-group col-auto">
-<<<<<<< HEAD
-                            <label for="receiver_name">Reciever Number</label>
-                            <input type="text" id="receiver_number"  name="receiver_number" class="form-control @if($errors->get('receiver_number')) is-invalid @endif" value="{{old('receiver_number')}}@if(isset($ManualOrder)){{$ManualOrder->receiver_number}}@endif"  placeholder="Reciever Number" required>
-=======
                             <label for="receiver_name">Reciever Number (03xxxxxxxxx)</label>
                             <input type="text" id="receiver_number"  name="receiver_number" pattern="0[0-9]{2}(?!1234567)(?!1111111)(?!7654321)[0-9]{8}" class="form-control @if($errors->get('receiver_number')) is-invalid @endif" value="{{old('receiver_number')}}@if(isset($ManualOrder)){{$ManualOrder->receiver_number}}@endif"  placeholder="Reciever Number" required>
->>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
                             <small id="receiver_number_error" class="form-text text-danger">@if($errors->get('receiver_number')) {{$errors->first('receiver_name')}}@endif</small>
                         </div> 
                         
@@ -915,20 +800,12 @@
                         <h5>Payment Details <hr></h5>
                         <div class="form-group col-auto">
                             <label for="Product Price">Product Price</label>
-<<<<<<< HEAD
-                            <input type="number" step="0.01" id="product_price"  name="product_price" class="form-control @if($errors->get('product_price')) is-invalid @endif" value="{{old('product_price')}}@if($ManualOrder->product_price != ''){{$ManualOrder->product_price}}@else{{0}}@endif" onchange="onchangeprice();get_fare_list();"  required>
-=======
                             <input type="number" step="0.01" id="product_price"  name="product_price" class="form-control @if($errors->get('product_price')) is-invalid @endif" value="{{old('product_price')}}@if($ManualOrder->product_price != ''){{$ManualOrder->product_price}}@else{{0}}@endif" onkeyup="onchangeprice();" onchange="get_fare_list();"  required>
->>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
                              <small id="product_price_error" class="form-text text-danger">@if($errors->get('product_price')){{$errors->first('product_price')}} @endif</small>
                         </div>
                         <div class="form-group col-auto">
                             <label for="Delivery Charges">Delivery Charges</label>
-<<<<<<< HEAD
-                            <input type="number" step="0.01" class="form-control @if($errors->get('dc')) is-invalid @endif" value="{{old('dc')}}@if($ManualOrder != ''){{$ManualOrder->dc}}{{0}}@else @endif" onchange="onchangeprice();get_fare_list();" id="dc"  name="dc" placeholder="dc" required>
-=======
                             <input type="number" step="0.01" class="form-control @if($errors->get('dc')) is-invalid @endif" value="{{old('dc')}}@if($ManualOrder != ''){{$ManualOrder->dc}}{{0}}@else @endif" onchange="onchangeprice();get_fare_list();" id="dc"  name="dc" placeholder="dc" required readonly>
->>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
                             <small id="dc_error" class="form-text text-danger">@if($errors->get('dc')) {{$errors->first('dc')}} @endif</small>
                         </div>
                         <div class="form-group col-auto">
@@ -968,11 +845,7 @@
                         
                         <div class="form-group col-sm">
                             <label for="Number">Pieces</label>
-<<<<<<< HEAD
-                            <input type="text" class="form-control @if($errors->get('total_pieces')) is-invalid @endif" value="{{old('total_pieces')}}@if(isset($ManualOrder)){{trim($ManualOrder->total_pieces)}}@endif" id="total_pieces"  name="total_pieces" placeholder="Total Pieces" required>
-=======
                             <input type="number" min="1" max="250" class="form-control @if($errors->get('total_pieces')) is-invalid @endif" value="{{old('total_pieces')}}@if(isset($ManualOrder)){{trim($ManualOrder->total_pieces)}}@endif" id="total_pieces"  name="total_pieces" placeholder="Total Pieces" required>
->>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
                             <small id="total_pieces_error" class="form-text text-danger">@if($errors->get('total_pieces')) {{$errors->first('total_pieces')}} @endif</small>
                         </div>
             
@@ -999,42 +872,12 @@
                             <select class="form-control" id="shipment_type" onchange="OnChangeShipment()" name="shipment_type" required>
                                 <option value="">Select Shipment type</option>
                                 <option value="local">Local Rider</option>
-<<<<<<< HEAD
-                                <option value="trax">Trax</option> 
-=======
->>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
                                 <option value="leopord">Leopord</option> 
                             </select> 
                             <small id="shipment_type_error" class="form-text text-danger"></small>
                         </div>
                     
                         <div id="trax_shipment_fields" style="display:@if($ManualOrder->shipment_company == 'trax') block @else none @endif;">
-                            
-                            <div class="form-group col-sm">
-                                <label for="address">city</label>
-                                <select class="form-control @if($errors->get('city')) is-invalid @endif cities_dropdown city" id="city"  onchange="validateForm()" name="city" >
-                                    <option value="">Select City</option>
-                                    @if($ManualOrder->shipment_company == 'trax')
-                                    
-                                        @for($i=0 ; $i < sizeof($cities); $i++)
-                                         
-                                            <option value="{{$cities[$i]->id}}" {{ ($cities[$i]->id == $ManualOrder->cities_id) ? 'selected="selected"' : '' }}>{{$cities[$i]->name}}</option>
-                                            
-                                        @endfor
-                                    
-                                    @else
-                                        
-                                        @for($i=0 ; $i < sizeof($cities); $i++)
-                                         
-                                            <option value="{{$cities[$i]->id}}">{{$cities[$i]->name}}</option>
-                                            
-                                        @endfor
-                                    
-                                    @endif
-                                    
-                                </select> 
-                                <small id="city_error" class="form-text text-danger">@if($errors->get('city')) {{$errors->first('city')}} @endif</small>
-                            </div>
                             
                             <div class="form-group col-sm">
                                 <label for="address">city</label>
@@ -1082,30 +925,16 @@
             
                         <div class="form-group col-sm">
                             <label for="fare">Fare</label>
-<<<<<<< HEAD
-                            <input type="text" onkeyup="limit(this);" class="form-control @if($errors->get('fare')) is-invalid @endif fare" value="{{old('fare')}}@if(isset($ManualOrder)){{trim($ManualOrder->fare)}}@endif" id="fare" autocomplete="off" name="fare" placeholder="fare"  >
-=======
                             <input type="text" onkeyup="limit(this);" class="form-control @if($errors->get('fare')) is-invalid @endif fare" value="{{old('fare')}}@if(isset($ManualOrder)){{trim($ManualOrder->fare)}}@endif" id="fare" autocomplete="off" name="fare" placeholder="fare"  readonly>
->>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
                             <small id="fare_error" class="form-text text-danger fare_error">@if($errors->get('fare')) {{$errors->first('fare')}} @endif</small>
                         </div>
                         
                     
-<<<<<<< HEAD
-                        <div id="leopord_shipment_fields" style="display:none;">
-                             
-                         
-                        
-                            <div class="form-group col-sm">
-                                <label for="address">city</label>
-                                <select class="form-control @if($errors->get('leopord_city')) is-invalid @endif cities_dropdown leopord_city" id="leopord_city" onchange="validateForm();" name="leopord_city" >
-=======
                         <div id="leopord_shipment_fields" style="display:@if($ManualOrder->shipment_company == 'leopord') block @else none @endif;">  
                         
                             <div class="form-group col-sm">
                                 <label for="address">city</label>
                                 <select class="form-control select2 @if($errors->get('leopord_city')) is-invalid @endif js-example-basic-single leopord_city"  data-rel="chosen" id="leopord_city" onchange="validateForm();" name="leopord_city" >
->>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
                                     <option value="">Select City</option>
                                     
                                     @if($ManualOrder->shipment_company == 'leopord')
@@ -1129,8 +958,6 @@
                                 <small id="leopord_city_error" class="form-text text-danger">@if($errors->get('leopord_city')) {{$errors->first('leopord_city')}} @endif</small>
                             </div>
                             
-<<<<<<< HEAD
-=======
                             
                             <div class="form-group col-sm">
                             
@@ -1143,17 +970,12 @@
                                 
                             </div>
                             
->>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
                             <div class="form-group col-sm">
                                 <label for="Number">Width</label>
                                 <input type="text" class="form-control @if($errors->get('booked_packet_vol_weight_w')) is-invalid @endif" value="{{old('booked_packet_vol_weight_w')}}@if(isset($ManualOrder)){{trim($ManualOrder->booked_packet_vol_weight_w)}}@endif" id="booked_packet_vol_weight_w"  name="booked_packet_vol_weight_w" placeholder="booked_packet_vol_weight_w" >
                                 @if($errors->get('booked_packet_vol_weight_w')) <small id="booked_packet_vol_weight_w_error" class="form-text text-danger">{{$errors->first('booked_packet_vol_weight_w')}} </small>@endif
                             </div>
                             
-<<<<<<< HEAD
-                            
-=======
->>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
                             <div class="form-group col-sm">
                                 <label for="Number">Height</label>
                                 <input type="text" class="form-control @if($errors->get('booked_packet_vol_weight_h')) is-invalid @endif" value="{{old('booked_packet_vol_weight_h')}}@if(isset($ManualOrder)){{trim($ManualOrder->booked_packet_vol_weight_h)}}@endif" id="booked_packet_vol_weight_h"  name="booked_packet_vol_weight_h" placeholder="booked_packet_vol_weight_h" >
@@ -1166,21 +988,6 @@
                                 <input type="text" class="form-control @if($errors->get('booked_packet_vol_weight_l')) is-invalid @endif" value="{{old('booked_packet_vol_weight_l')}}@if(isset($ManualOrder)){{trim($ManualOrder->booked_packet_vol_weight_l)}}@endif" id="booked_packet_vol_weight_l"  name="booked_packet_vol_weight_l" placeholder="booked_packet_vol_weight_l" >
                                 @if($errors->get('booked_packet_vol_weight_l')) <small id="booked_packet_vol_weight_l_error" class="form-text text-danger">{{$errors->first('booked_packet_vol_weight_l')}} </small>@endif
                             </div>
-<<<<<<< HEAD
-                            
-                            
-                            <div class="form-group col-sm">
-                            
-                                <select class="inp-form-select" name="shipment_type_id" id="shipment_type_id">
-                                    <option value="-1">- Select a Shipment Type -</option>
-                                    <option value="2">Detain</option>
-                                    <option value="3">Overland</option>
-                                    <option selected="selected" value="10">Overnight</option>
-                                </select>
-                                
-                            </div>
-=======
->>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
 
                         </div>
                     
