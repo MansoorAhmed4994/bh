@@ -26,6 +26,7 @@ use App\Models\User;
 //Traits
 use App\Traits\MNPTraits;
 use App\Traits\TraxTraits;
+use App\Traits\LeopordTraits;
 use App\Traits\ManualOrderTraits;
 use App\Traits\InventoryTraits;
 
@@ -51,6 +52,7 @@ class ManualOrdersController extends Controller
 
     use ManualOrderTraits;
     use MNPTraits;
+    use LeopordTraits;
     use TraxTraits;
     use InventoryTraits;
     
@@ -287,7 +289,10 @@ class ManualOrdersController extends Controller
         return view('client.orders.manual-orders.list')->with(['list'=>$list,'statuses'=>$statuses]);
     }
     
-    
+    public function ImageUpload123(Request $request)
+    {
+        dd($request);
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -366,6 +371,11 @@ class ManualOrdersController extends Controller
         }
         
         $cities = $this->get_trax_cities();
+        $leopordCities = $this->LeopordGetCities()->city_list;
+        
+        
+        // $cities = $this->LeopordGetCities()->city_list;
+        // dd($cities);
         $order_id = $ManualOrder;
         $this->UpdateReferenceNumberByOrderIds([$ManualOrder]);
         // dd($Manualorders);
@@ -408,10 +418,10 @@ class ManualOrdersController extends Controller
                 } 
                 
             }
-        }
+        } 
          $statuses = get_active_order_status_list();
         
-        return view('client.orders.manual-orders.edit')->with(['ManualOrder'=>$ManualOrder, 'cities'=>$cities,'inventories'=>$inventory,'product_price'=>$this->updateorderprice($ManualOrder->id),'advance_payment_status'=>$advance_payment_status,'statuses'=>$statuses]);
+        return view('client.orders.manual-orders.edit')->with(['ManualOrder'=>$ManualOrder, 'LeopordCities' => $leopordCities,'cities'=>$cities,'inventories'=>$inventory,'product_price'=>$this->updateorderprice($ManualOrder->id),'advance_payment_status'=>$advance_payment_status,'statuses'=>$statuses]);
 
         // if($Manualorders != null)
         // {
@@ -584,6 +594,82 @@ class ManualOrdersController extends Controller
                     $slips = $this->print_trax_slips($id);
                     return view('client.orders.manual-orders.trax.print_trax_slip')->with('slips',$slips);
                 }
+                
+                else
+                {
+                    toastr()->error('These shipments not created! Please contact Admin','Error');
+                    return back(); 
+                }
+                
+            }
+            else if($request->shipment_type == 'leopord')
+            {
+                $mytime = Carbon::now();
+                $current_date_time = $mytime->toDateTimeString();
+                $pickup_address_id = $this->get_trax_pickup_address(); 
+                $reference_number= '('.$ManualOrder->id.')('.$current_date_time.')';
+                // dd(trim($request->price));
+                $traxdata['order_id'] = $ManualOrder->id;
+                $traxdata['service_type_id'] = 1;
+                $traxdata['pickup_address_id'] = $pickup_address_id;
+                $traxdata['information_display'] = 0;
+                $traxdata['consignee_city_id'] = $request->city;
+                $traxdata['consignee_name'] = trim($request->receiver_name);
+                $traxdata['consignee_address'] = trim($request->reciever_address);
+                $traxdata['consignee_phone_number_1'] = trim($request->receiver_number);
+                $traxdata['consignee_email_address'] = trim('orderstesting@brandhub.com');
+                $traxdata['item_product_type_id'] = 1;
+                $traxdata['item_description'] = trim($request->description);
+                $traxdata['item_quantity'] = (int)trim($request->total_pieces);
+                $traxdata['item_insurance'] = 0;
+                $traxdata['item_price'] = (int)trim($request->price);
+                $traxdata['parcel_value'] = (int)trim($request->price);
+                $traxdata['pickup_date'] = $mytime;
+                $traxdata['special_instructions'] = trim('Nothing');
+                $traxdata['estimated_weight'] = trim($request->weight);
+                $traxdata['shipping_mode_id'] = (int)trim($request->shipping_mode_id);
+                $traxdata['amount'] = (int)trim($request->cod_amount);
+                $traxdata['shipper_reference_number_1'] = $reference_number;
+                $traxdata['payment_mode_id'] = 1;
+                $traxdata['charges_mode_id'] = 4;
+                
+                $ApiResponse = $this->CreateBooking($traxdata);
+                // dd($ApiResponse);
+                // echo '1';
+                if($ApiResponse->status == 0)
+                { 
+                    $act_sta = create_activity_log(['table_name'=>'manual_orders','ref_id'=>$order_id,'activity_desc'=>'Trax booking created','created_by'=>Auth::id(),'method'=>'create','route'=>route('ManualOrders.update',$order_id)]);
+
+                    // echo '2';
+                    $id = array();
+                    array_push($id, $ApiResponse->tracking_number);
+                    // dd($id);
+                    $ManualOrder->date_order_paid = $request->date_order_paid;
+                    $ManualOrder->reference_number = $request->reference_number;
+                    $ManualOrder->service_type = $request->service_type; 
+                    $ManualOrder->consignment_id = $ApiResponse->tracking_number;
+                    $ManualOrder->status = 'dispatched';  
+                    // echo '3';
+                    if(check_customer_advance_payment($order_id) > 0)
+                    {
+                        dd('payment not approved');
+                    }
+                    // echo '4';
+                    $status = $ManualOrder->save();
+                    $act_sta = create_activity_log(['table_name'=>'manual_orders','ref_id'=>$order_id,'activity_desc'=>'Edit order data','created_by'=>Auth::id(),'method'=>'update','route'=>route('ManualOrders.update',$order_id)]);
+                    $check_status = check_order_status_for_print($order_id); 
+                    if( $check_status['row_count'] > 0)
+                    {
+                        // echo '5'; re
+                        toastr()->error('Parcel Status is '.$check_status['status'].' and parcel cannot print slip until parcel status is confirmed OR Dispatched','Error');
+                        return back();
+                        // dd();
+                    }
+                    
+                    $slips = $this->print_trax_slips($id);
+                    return view('client.orders.manual-orders.trax.print_trax_slip')->with('slips',$slips);
+                }
+                
                 else
                 {
                     toastr()->error('These shipments not created! Please contact Admin','Error');
@@ -1821,6 +1907,23 @@ class ManualOrdersController extends Controller
             
             return response()->json(['error' => '1', 'messege' => 'order not updated please contact admin'.$ManualOrder]);
         }
+    }
+    
+    public function GetShipmentCities($shipmentcompany)
+    {
+        if($shipmentcompany == 'trax')
+        {
+            $cities = $this->get_trax_cities();
+        }
+        else if($shipmentcompany == 'leopord')
+        {
+            $cities = $this->LeopordGetCities()->city_list;
+        }
+        
+        
+         
+        return response()->json(['success' => '1', 'cities' => $cities]);
+        
     }
         
     

@@ -145,3 +145,7 @@ Stack trace:
 #4 /home/desenado/manualordersstaging.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
 #5 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Http\\Contro...')
 #6 [internal function]: spl_autoload_call('App\\Http\\Contro... in /home/desenado/manualordersstaging.brandhub.com.pk/app/Http/Controllers/Client/Orders/ManualOrdersController.php on line 35
+[05-Dec-2023 01:12:54 Asia/Karachi] PHP Fatal error:  Trait 'App\Http\Controllers\Client\Orders\LeopordTraits' not found in /home/desenado/manualordersstaging.brandhub.com.pk/app/Http/Controllers/Client/Orders/ManualOrdersController.php on line 35
+[05-Dec-2023 01:13:22 Asia/Karachi] PHP Fatal error:  Trait 'App\Http\Controllers\Client\Orders\LeopordTraits' not found in /home/desenado/manualordersstaging.brandhub.com.pk/app/Http/Controllers/Client/Orders/ManualOrdersController.php on line 35
+[05-Dec-2023 01:13:26 Asia/Karachi] PHP Fatal error:  Trait 'App\Http\Controllers\Client\Orders\LeopordTraits' not found in /home/desenado/manualordersstaging.brandhub.com.pk/app/Http/Controllers/Client/Orders/ManualOrdersController.php on line 35
+[03-Jan-2024 02:08:36 Asia/Karachi] PHP Fatal error:  Trait 'App\Http\Controllers\Shipment\ManualOrderTraits' not found in /home/desenado/manualordersstaging.brandhub.com.pk/app/Http/Controllers/Shipment/LeopordController.php on line 8

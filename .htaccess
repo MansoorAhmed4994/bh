@@ -17,9 +17,9 @@
 </IfModule>
 
 # DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION BEGIN
-PassengerAppRoot "/home/desenado/manualordersstaging.brandhub.com.pk"
-PassengerBaseURI "/"
-PassengerNodejs "/home/desenado/nodevenv/manualordersstaging.brandhub.com.pk/12/bin/node"
-PassengerAppType node
-PassengerStartupFile app.js
+# PassengerAppRoot "/home/desenado/manualordersstaging.brandhub.com.pk"
+# PassengerBaseURI "/"
+# PassengerNodejs "/home/desenado/nodevenv/manualordersstaging.brandhub.com.pk/12/bin/node"
+# PassengerAppType node
+# PassengerStartupFile app.js
 # DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION END

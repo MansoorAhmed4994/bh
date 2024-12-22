@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Client\Orders\ManualOrdersController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -16,4 +17,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
+    
+     
+Route::post('manualorders/image/upload123', 'Client\Orders\ManualOrdersController@ImageUpload123');
 });
+
+// Route::post('manualorders/image/upload', 'Client\Orders\ManualOrdersController@ImageUpload123');
+Route::resource('manualorders/image/upload', 'Client\Orders\ManualOrdersController@ImageUpload123');

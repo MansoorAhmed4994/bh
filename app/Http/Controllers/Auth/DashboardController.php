@@ -36,15 +36,15 @@ class DashboardController extends Controller
             return redirect('login');
             // somehow this seems te get ignored because the unaccessible view gets displayed anyway.
         }
-        $from_date= date('Y-m-01');
-        $to_date = date('Y-m-t');
+        $from_date= date('Y-m-01') . '00:00:00';
+        $to_date = date('Y-m-t') . '11:59:59';
         // dd( $from_date.' '.$to_date);
         if(isset($request->date_from))
         {
             // dd($request->date_from.'  '.$request->date_to);
             // $from_date = ;
-            $from_date = $request->date_from;
-            $to_date = $request->date_to;  
+            $from_date = $request->date_from . '00:00:00';
+            $to_date = $request->date_to . '11:59:59';  
             // dd($from_date.'  '.$to_date);
         }
         // else

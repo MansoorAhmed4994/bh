@@ -835,11 +835,26 @@ var container = "";
                         Order History
                         </button>
                         <div class="dropdown-menu">
-                    
-                            @foreach($lists->activity_logs as $activity_log)
-                                <a class="dropdown-item" >{{$activity_log->activity_desc}} / Date: {{$activity_log->created_at}}</a>
-                            @endforeach
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>description</th>
+                                        <th>Date</th>
+                                        <th>User</th>
+                                    </tr>
+                                </thead>
+                                
+                                <tbody>
+                                    @foreach($lists->activity_logs as $activity_log)
+                                    <tr>
+                                        <td>{{$activity_log->activity_desc}}</td>
+                                        <td>{{$activity_log->created_at}}</td>
+                                        <td>{{$activity_log->users->first_name}}</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
  
+                            </table>
                         </div>
                     </div>
                     

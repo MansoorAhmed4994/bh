@@ -21,14 +21,14 @@ class DashboardController extends Controller
     
     public function index(Request $request)
     {
-        $from_date= date('Y-m-01');
-        $to_date = date('Y-m-t');
+        $from_date= date('Y-m-01').' 00:00:00';
+        $to_date = date('Y-m-t').' 23:59:59';
 
-         
+        //  dd($from_date,$to_date);
         if($request->date_from)
         {
-            $from_date = $request->date_from;
-            $to_date = $request->date_to;  
+            $from_date = $request->date_from.' 00:00:00';
+            $to_date = $request->date_to.' 23:59:59';  
         }
         
         $users = DB::table('users')->select('id','first_name')->get();
@@ -41,6 +41,11 @@ class DashboardController extends Controller
              ->groupBy('status')
              ->get()->toArray(); 
          
+        //  dd(DB::table('manual_orders')
+        //      ->select('status', DB::raw('count(*) as total_orders'), DB::raw('sum(price) as total_amount'))
+        //      ->whereBetween('updated_at', [$from_date, $to_date])
+        //      ->groupBy('status')->toSql());
+             
         for($i=0; $i<sizeof($group_by_status); $i++)
         {
             $users_order_status = DB::table('manual_orders')
@@ -62,9 +67,7 @@ class DashboardController extends Controller
         ->whereBetween('updated_at', [$from_date, $to_date])
         ->groupBy('assign_to')->get();
             
-        // dd($users_totla_orders->assign_to);
         
-        // dd($users_totla_orders);
     
         $inventory = DB::table('inventories')
              ->select('stock_status', DB::raw('sum(qty) as qty'), DB::raw('sum(cost) as cost'), DB::raw('sum(sale) as sale'))

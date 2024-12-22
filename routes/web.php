@@ -27,8 +27,10 @@ Route::group(['middleware' => 'auth:user'],function(){
     Route::get('user/dashboard', 'Auth\DashboardController@index')->name('user.dashboard');
 });
 
+
+
 Route::group(['prefix' => 'client/orders/', 'namespace' => 'Client\Orders', 'middleware' => 'auth:user,admin'],function(){
-    
+     
     Route::any('ManualOrders/list', 'ManualOrdersController@index')->name('ManualOrders.index');
     Route::post('ManualOrders/search-order', 'ManualOrdersController@search_order')->name('ManualOrders.search.order');
     Route::get('ManualOrders/search-order', 'ManualOrdersController@search_order');
@@ -65,6 +67,9 @@ Route::group(['prefix' => 'client/orders/', 'namespace' => 'Client\Orders', 'mid
     Route::get('ManualOrders/show/{id}', 'ManualOrdersController@show')->name('ManualOrders.show'); 
     Route::post('generate/scan/slip', 'ManualOrdersController@print_slip_by_scan_store')->name('generate.scan.slip');
     
+    
+    Route::get('ManualOrders/shipment/cities/{shipmentcompany}', 'ManualOrdersController@GetShipmentCities')->name('ManualOrders.get.shipment.cities');
+ 
     //delete
     Route::post('ManualOrders/delete-image', 'ManualOrdersController@delete_order_image')->name('ManualOrders.delete.order.image');
     
@@ -116,8 +121,12 @@ Route::group(['prefix' => 'trax/', 'namespace' => 'Shipment', 'middleware' => 'a
     Route::get('shipment/', function () {return view('client.orders.manual-orders.trax.create-bulk-booking-by-scan');})->name('create.bulk.booking.by.scan');
 }); 
 
-
-
+Route::group(['prefix' => 'leopord/', 'namespace' => 'Shipment', 'middleware' => 'auth:user,admin','as'=> 'trax.'],function(){
+    
+    Route::get('get-tariff-details/{weight}/{shipment_type}/{origion_city}/{destination_city}/{cod}', 'LeopordController@LeopordGetTariffDetails')->name('leopord.shipment.get.tariff.details');
+});
+//{weight}/{shipment_type}/{origion_city}/{destination_city}/{cod}
+//https://manualordersstaging.brandhub.com.pk/get-tariff-details/1000/2/789/76/5000
 /*==================================
             Admin Routes
 ====================================*/
