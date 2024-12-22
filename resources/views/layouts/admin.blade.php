@@ -11,23 +11,19 @@
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"crossorigin="anonymous"></script>
     
-    
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     
     <!--Toaster css--> 
-    <link href="{{ asset('public/css/toastr.css') }}" rel="stylesheet"> 
-    <!--<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" rel="stylesheet"> -->
+    <link href="{{ asset('public/css/toastr.css') }}" rel="stylesheet">  
     
-    <!--Toaster js--> 
-    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>-->
-    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.js"></script>-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"></script>-->
+    <!--Toaster js-->  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script> 
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
 
     <link rel="icon" href="https://scontent.fkhi6-2.fna.fbcdn.net/v/t39.30808-6/271851970_797859254942923_8384634057214477174_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=T_JF1ooZlfIAX8VAMOF&tn=qbJWCDzG88tDUCIH&_nc_ht=scontent.fkhi6-2.fna&oh=00_AT-PmcdiG8euvrHKf0u_aI6qtr6g2VjhlGuWaI8Ks1I_fA&oe=630B15D5">
@@ -43,10 +39,11 @@
     <!-- Styles -->
     <link href="{{ asset('public/css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('public/css/style.css') }}" rel="stylesheet">
-    <!--<link  href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.css" rel="stylesheet"/> -->
-    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js" ></script>-->
+    
+    
+    <!--Select2 Drop down-->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
    
     <style>
         @media all and (min-width: 992px) {
@@ -147,6 +144,8 @@
                             <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Loadsheets</a>
                             <ul class="dropdown-menu">
                                 <li> <a class="dropdown-item" href="{{route('ManualOrders.dipatch.bulk.orders')}}">Local Loadsheet</a></li> 
+                                <li> <a class="dropdown-item" href="{{route('leopord.loadsheet')}}">Leopord Loadsheet</a></li> 
+                                
                             </ul>
                         </li><li class="nav-item dropdown" id="myDropdown">
                             <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Reports</a>
@@ -206,6 +205,9 @@
                         </li>
                         <li class="nav-item active"> 
                             <a class="nav-link" target="_blank" href="{{route('inactive.customers')}}">Inactive Customers </a> 
+                        </li>
+                        <li class="nav-item active"> 
+                            <a class="nav-link" target="_blank" href="{{route('support.index')}}">Support </a> 
                         </li>
                     </ul>
                     <ul class="navbar-nav ms-auto"> 

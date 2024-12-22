@@ -19,8 +19,7 @@
             $('#ImageDeleteModal').modal('hide');
         });
         
-        var cities =@json($cities);
-        $('.cities_dropdown').select2();
+        var cities =@json($cities); 
         
         $('#add_product_btn').on('click',function(e)
         {  
@@ -114,6 +113,7 @@
     }
     
     
+<<<<<<< HEAD
     
     function LeopordGetTariffDetails() 
     {
@@ -157,6 +157,8 @@
     }
     
     
+=======
+>>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
     function get_products_by_sku() 
     {
         $("body").addClass("loading"); 
@@ -183,11 +185,12 @@
                         total_amount+=parseInt(e.inventory[i].sale);
                         row_data += '<tr id="'+row_id+'"><td class="delete_btn_class"><button type="button" class="btn btn-danger " onclick="delete_row('+row_id+','+e.inventory[i].id+')">Delete</button></td><td>'+e.inventory[i].name+'</td><td>'+e.inventory[i].sale+'</td></tr>';
     
-                    row_id++;
+                        row_id++;
                     }
                     $("#row_data").html(row_data);
                     $("#total_products").html(total_products);
                     $("#total_amount").html(total_amount);
+                    $("#sku_number").html();
                     $("body").removeClass("loading");
                     get_fare_list();
                     onchangeprice();
@@ -197,6 +200,7 @@
                     alert('no product found');
                     $("body").removeClass("loading");
                 }
+                $("#sku_number").val("");
                     // document.getElementById('order_id').value = '';
                 
                 //cosole.log(e.messege);
@@ -212,9 +216,34 @@
     function onchangeprice()
     {
         
-        let product_price = parseFloat(document.getElementById("product_price").value);
-        let dc = parseFloat(document.getElementById("dc").value);
+        let product_price = document.getElementById("product_price").value;
+        let dc = (document.getElementById("dc").value);
+        if(product_price == '' || product_price <= 0 )
+        {
+            $('#product_price_error').html('Please Fill Product Price'); 
+            return;
+        }
+        else
+        {
+            $('#product_price_error').html(''); 
+            
+        }
+        
+        if(dc == '' || dc <= 0 )
+        {
+            $('#dc_error').html('Please Fill Product Price'); 
+            return;
+        }
+        else
+        {
+            $('#dc_error').html(''); 
+            
+        }
+        
+        product_price = parseFloat(document.getElementById("product_price").value);
+        dc = parseFloat(document.getElementById("dc").value);
         let packaging_cost = parseFloat(document.getElementById("packaging_cost").value);
+        
         document.getElementById("price").value = product_price+dc+packaging_cost; 
         
         let advance_payment = parseFloat(document.getElementById("advance_payment").value); 
@@ -225,8 +254,7 @@
 
     $( document ).ready(function() {
         // var Inputmask = require('inputmask');
-        var cities =@json($cities);
-        $('.cities_dropdown').select2();
+        var cities =@json($cities); 
         
         var cities =@json($cities);
         $('.information_display_dropdown').select2();
@@ -267,7 +295,7 @@
             {  
                 $("body").addClass("loading"); 
                  $("#delete_image").prop('disabled', true); 
-                 console.log(all_images)
+                //  console.log(all_images)
                 var final_images = all_images.filter(e => e !== delete_image_path);  
                 
                 console.log(final_images);
@@ -299,7 +327,7 @@
                     dataType: 'json',
                     success: function(e)
                     {
-                        console.log(e);
+                        // console.log(e);
                         
                         myFunction(); 
                         if(typeof e.success !== 'undefined')
@@ -349,7 +377,7 @@
                     dataType: 'json',
                     success: function(e)
                     {
-                        console.log(e);
+                        // console.log(e);
                         $('#advance_payment').val(e.advance_payment); 
                         // $("body").removeClass("loading"); 
                     },
@@ -370,21 +398,33 @@
         
         if(shipment_type_value == 'trax')
         {
+<<<<<<< HEAD
             console.log('5');
+=======
+            // console.log('5');
+>>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
             get_fare_list();
             document.getElementById("trax_shipment_fields").style.display = "block"; 
             document.getElementById("leopord_shipment_fields").style.display = "none"; 
         }
         else if(shipment_type_value == 'leopord')
         {
+<<<<<<< HEAD
             console.log('6');
+=======
+            // console.log('6');
+>>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
             document.getElementById("trax_shipment_fields").style.display = "none"; 
             document.getElementById("leopord_shipment_fields").style.display = "block"; 
             
         }
         else
         {
+<<<<<<< HEAD
             console.log('7');
+=======
+            // console.log('7');
+>>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
             document.getElementById("trax_shipment_fields").style.display = "none"; 
             document.getElementById("leopord_shipment_fields").style.display = "none"; 
         }
@@ -395,14 +435,22 @@
     function OnChangeShipment()
     {
         var validate_status = CustomeFieldValidation();
+<<<<<<< HEAD
         console.log('1');
         if(validate_status == true)
         {
             console.log('2');
+=======
+        // console.log('1');
+        if(validate_status == true)
+        {
+            // console.log('2');
+>>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
             shipment_type_change();
         }
         else
         {
+<<<<<<< HEAD
             console.log('3');
             $("#shipment_type").val('');
             // shipment_type_change();
@@ -411,6 +459,15 @@
         
     }
     
+=======
+            // console.log('3');
+            $("#shipment_type").val('');
+            // shipment_type_change();
+        }
+    }
+    
+    
+>>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
     function CustomeFieldValidation()
     { 
         var validation_status = true; 
@@ -480,10 +537,44 @@
             }
         });
         
+<<<<<<< HEAD
         if(validation_status == false)
         {
             return false;
         }
+=======
+        var number = $('#receiver_number').val();
+        console.log(number);
+        var firstTwoChars = number.slice(0, 2);
+        if(firstTwoChars == '92')
+        {
+            console.log(1);
+            alert('please correct receiver number (for e.g: 03XXXXXXXXX)');
+            $('#receiver_number_error').html(' (for e.g: 03XXXXXXXXX)'); 
+            return;
+        }
+        
+        if(number.length != '11')
+        {
+            console.log(2);
+            alert('please correct receiver number (for e.g: length must be 11 digit)');
+            
+            $('#receiver_number_error').html('(for e.g: length must be 11 digit)'); 
+            return;
+            
+        }
+        else
+        {
+            $('#receiver_number_error').html(''); 
+        }
+        
+        if(validation_status == false)
+        {
+            toastr.error('Please check Fields Error', 'Warning'); 
+            return false;
+        }
+
+>>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
         return validation_status;
     }
     
@@ -542,10 +633,18 @@
         }
         else if($('#shipment_type').val() == 'leopord')
         {
+<<<<<<< HEAD
             if($('#leopord_shipment_type_id').val() == '')
             {
                 validation_status = false;
                 toastr.warning('Please Select Shipment Method to auto fil fare', 'Warning'); 
+=======
+            console.log($('#leopord_shipment_type_id').val());
+            // return;
+            if($('#leopord_shipment_type_id').val() == '')
+            {
+                validation_status = false;  
+>>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
                 toastr.warning('Please Select Shipment Method', 'Warning'); 
                 $('#leopord_shipment_type_id_error').html('Please Select Shipment Method'); 
                 return validation_status;
@@ -553,13 +652,21 @@
             else
             {
                 
+<<<<<<< HEAD
+=======
+                $('#leopord_shipment_type_id_error').html(''); 
+>>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
                 $('#fare_error').html('');  
             }
             
             if($('#leopord_city').val() == '')
             {
                 validation_status = false;
+<<<<<<< HEAD
                 console.log('city not selected');
+=======
+                // console.log('city not selected');
+>>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
                 toastr.warning('Please Select Shipment Method to auto fil fare', 'Warning'); 
                 toastr.warning('Please Select Shipment Method', 'Warning'); 
                 $('#leopord_city_error').html('Please Select City');  
@@ -567,7 +674,11 @@
             }
             else
             {
+<<<<<<< HEAD
                 console.log('city  selected');
+=======
+                // console.log('city  selected');
+>>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
                 LeopordGetTariffDetails();
                 $('#leopord_city_error').html('');  
             }  
@@ -745,14 +856,23 @@
                         
             
                         <div class="form-group col-auto">
+<<<<<<< HEAD
                             <label for="Number">Number</label>
                             <input type="text" class="form-control @if($errors->get('number')) is-invalid @endif" value="{{old('number')}}@if(isset($ManualOrder)){{$ManualOrder->number}}@endif" id="number"  name="number" placeholder="number Number" required>
+=======
+                            <label for="Number">Number (03xxxxxxxxx)</label>
+                            <input type="text" class="form-control @if($errors->get('number')) is-invalid @endif" pattern="0[0-9]{2}(?!1234567)(?!1111111)(?!7654321)[0-9]{8}" value="{{old('number')}}@if(isset($ManualOrder)){{$ManualOrder->number}}@endif" id="number"  name="number" placeholder="number Number" required>
+>>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
                             <small id="number_error" class="form-text text-danger">@if($errors->get('number')) {{$errors->first('number')}} @endif</small>
                         </div>     
             
                         <div class="form-group col-auto">
                             <label for="Number">Whatsapp Number</label>
+<<<<<<< HEAD
                             <input type="text" class="form-control @if($errors->get('whatsapp_number')) is-invalid @endif" value="{{old('whatsapp_number')}}@if(isset($ManualOrder)){{$ManualOrder->number}}@endif" id="whatsapp_number"  name="whatsapp_number" placeholder="Whatsapp number" >
+=======
+                            <input type="text" class="form-control @if($errors->get('whatsapp_number')) is-invalid @endif"  value="{{old('whatsapp_number')}}@if(isset($ManualOrder)){{$ManualOrder->number}}@endif" id="whatsapp_number"  name="whatsapp_number" placeholder="Whatsapp number" >
+>>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
                             <small id="whatsapp_number_error" class="form-text text-danger">@if($errors->get('whatsapp_number')) {{$errors->first('whatsapp_number')}} @endif</small>
                         </div> 
             
@@ -774,8 +894,13 @@
                         </div>
                         
                         <div class="form-group col-auto">
+<<<<<<< HEAD
                             <label for="receiver_name">Reciever Number</label>
                             <input type="text" id="receiver_number"  name="receiver_number" class="form-control @if($errors->get('receiver_number')) is-invalid @endif" value="{{old('receiver_number')}}@if(isset($ManualOrder)){{$ManualOrder->receiver_number}}@endif"  placeholder="Reciever Number" required>
+=======
+                            <label for="receiver_name">Reciever Number (03xxxxxxxxx)</label>
+                            <input type="text" id="receiver_number"  name="receiver_number" pattern="0[0-9]{2}(?!1234567)(?!1111111)(?!7654321)[0-9]{8}" class="form-control @if($errors->get('receiver_number')) is-invalid @endif" value="{{old('receiver_number')}}@if(isset($ManualOrder)){{$ManualOrder->receiver_number}}@endif"  placeholder="Reciever Number" required>
+>>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
                             <small id="receiver_number_error" class="form-text text-danger">@if($errors->get('receiver_number')) {{$errors->first('receiver_name')}}@endif</small>
                         </div> 
                         
@@ -790,12 +915,20 @@
                         <h5>Payment Details <hr></h5>
                         <div class="form-group col-auto">
                             <label for="Product Price">Product Price</label>
+<<<<<<< HEAD
                             <input type="number" step="0.01" id="product_price"  name="product_price" class="form-control @if($errors->get('product_price')) is-invalid @endif" value="{{old('product_price')}}@if($ManualOrder->product_price != ''){{$ManualOrder->product_price}}@else{{0}}@endif" onchange="onchangeprice();get_fare_list();"  required>
+=======
+                            <input type="number" step="0.01" id="product_price"  name="product_price" class="form-control @if($errors->get('product_price')) is-invalid @endif" value="{{old('product_price')}}@if($ManualOrder->product_price != ''){{$ManualOrder->product_price}}@else{{0}}@endif" onkeyup="onchangeprice();" onchange="get_fare_list();"  required>
+>>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
                              <small id="product_price_error" class="form-text text-danger">@if($errors->get('product_price')){{$errors->first('product_price')}} @endif</small>
                         </div>
                         <div class="form-group col-auto">
                             <label for="Delivery Charges">Delivery Charges</label>
+<<<<<<< HEAD
                             <input type="number" step="0.01" class="form-control @if($errors->get('dc')) is-invalid @endif" value="{{old('dc')}}@if($ManualOrder != ''){{$ManualOrder->dc}}{{0}}@else @endif" onchange="onchangeprice();get_fare_list();" id="dc"  name="dc" placeholder="dc" required>
+=======
+                            <input type="number" step="0.01" class="form-control @if($errors->get('dc')) is-invalid @endif" value="{{old('dc')}}@if($ManualOrder != ''){{$ManualOrder->dc}}{{0}}@else @endif" onchange="onchangeprice();get_fare_list();" id="dc"  name="dc" placeholder="dc" required readonly>
+>>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
                             <small id="dc_error" class="form-text text-danger">@if($errors->get('dc')) {{$errors->first('dc')}} @endif</small>
                         </div>
                         <div class="form-group col-auto">
@@ -835,7 +968,11 @@
                         
                         <div class="form-group col-sm">
                             <label for="Number">Pieces</label>
+<<<<<<< HEAD
                             <input type="text" class="form-control @if($errors->get('total_pieces')) is-invalid @endif" value="{{old('total_pieces')}}@if(isset($ManualOrder)){{trim($ManualOrder->total_pieces)}}@endif" id="total_pieces"  name="total_pieces" placeholder="Total Pieces" required>
+=======
+                            <input type="number" min="1" max="250" class="form-control @if($errors->get('total_pieces')) is-invalid @endif" value="{{old('total_pieces')}}@if(isset($ManualOrder)){{trim($ManualOrder->total_pieces)}}@endif" id="total_pieces"  name="total_pieces" placeholder="Total Pieces" required>
+>>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
                             <small id="total_pieces_error" class="form-text text-danger">@if($errors->get('total_pieces')) {{$errors->first('total_pieces')}} @endif</small>
                         </div>
             
@@ -862,13 +999,42 @@
                             <select class="form-control" id="shipment_type" onchange="OnChangeShipment()" name="shipment_type" required>
                                 <option value="">Select Shipment type</option>
                                 <option value="local">Local Rider</option>
+<<<<<<< HEAD
                                 <option value="trax">Trax</option> 
+=======
+>>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
                                 <option value="leopord">Leopord</option> 
                             </select> 
                             <small id="shipment_type_error" class="form-text text-danger"></small>
                         </div>
                     
-                        <div id="trax_shipment_fields" style="display:none;">
+                        <div id="trax_shipment_fields" style="display:@if($ManualOrder->shipment_company == 'trax') block @else none @endif;">
+                            
+                            <div class="form-group col-sm">
+                                <label for="address">city</label>
+                                <select class="form-control @if($errors->get('city')) is-invalid @endif cities_dropdown city" id="city"  onchange="validateForm()" name="city" >
+                                    <option value="">Select City</option>
+                                    @if($ManualOrder->shipment_company == 'trax')
+                                    
+                                        @for($i=0 ; $i < sizeof($cities); $i++)
+                                         
+                                            <option value="{{$cities[$i]->id}}" {{ ($cities[$i]->id == $ManualOrder->cities_id) ? 'selected="selected"' : '' }}>{{$cities[$i]->name}}</option>
+                                            
+                                        @endfor
+                                    
+                                    @else
+                                        
+                                        @for($i=0 ; $i < sizeof($cities); $i++)
+                                         
+                                            <option value="{{$cities[$i]->id}}">{{$cities[$i]->name}}</option>
+                                            
+                                        @endfor
+                                    
+                                    @endif
+                                    
+                                </select> 
+                                <small id="city_error" class="form-text text-danger">@if($errors->get('city')) {{$errors->first('city')}} @endif</small>
+                            </div>
                             
                             <div class="form-group col-sm">
                                 <label for="address">city</label>
@@ -916,11 +1082,16 @@
             
                         <div class="form-group col-sm">
                             <label for="fare">Fare</label>
+<<<<<<< HEAD
                             <input type="text" onkeyup="limit(this);" class="form-control @if($errors->get('fare')) is-invalid @endif fare" value="{{old('fare')}}@if(isset($ManualOrder)){{trim($ManualOrder->fare)}}@endif" id="fare" autocomplete="off" name="fare" placeholder="fare"  >
+=======
+                            <input type="text" onkeyup="limit(this);" class="form-control @if($errors->get('fare')) is-invalid @endif fare" value="{{old('fare')}}@if(isset($ManualOrder)){{trim($ManualOrder->fare)}}@endif" id="fare" autocomplete="off" name="fare" placeholder="fare"  readonly>
+>>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
                             <small id="fare_error" class="form-text text-danger fare_error">@if($errors->get('fare')) {{$errors->first('fare')}} @endif</small>
                         </div>
                         
                     
+<<<<<<< HEAD
                         <div id="leopord_shipment_fields" style="display:none;">
                              
                          
@@ -928,6 +1099,13 @@
                             <div class="form-group col-sm">
                                 <label for="address">city</label>
                                 <select class="form-control @if($errors->get('leopord_city')) is-invalid @endif cities_dropdown leopord_city" id="leopord_city" onchange="validateForm();" name="leopord_city" >
+=======
+                        <div id="leopord_shipment_fields" style="display:@if($ManualOrder->shipment_company == 'leopord') block @else none @endif;">  
+                        
+                            <div class="form-group col-sm">
+                                <label for="address">city</label>
+                                <select class="form-control select2 @if($errors->get('leopord_city')) is-invalid @endif js-example-basic-single leopord_city"  data-rel="chosen" id="leopord_city" onchange="validateForm();" name="leopord_city" >
+>>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
                                     <option value="">Select City</option>
                                     
                                     @if($ManualOrder->shipment_company == 'leopord')
@@ -951,13 +1129,31 @@
                                 <small id="leopord_city_error" class="form-text text-danger">@if($errors->get('leopord_city')) {{$errors->first('leopord_city')}} @endif</small>
                             </div>
                             
+<<<<<<< HEAD
+=======
+                            
+                            <div class="form-group col-sm">
+                            
+                                <label for="Shipment Method">Shipment Method</label>
+                                <select class="form-control" name="leopord_shipment_type_id" onchange='calculate_leopord_shipment_charges()' id="leopord_shipment_type_id">
+                                     
+                                </select>
+                                <small id="leopord_shipment_type_id_error" class="form-text text-danger"></small>
+                                
+                                
+                            </div>
+                            
+>>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
                             <div class="form-group col-sm">
                                 <label for="Number">Width</label>
                                 <input type="text" class="form-control @if($errors->get('booked_packet_vol_weight_w')) is-invalid @endif" value="{{old('booked_packet_vol_weight_w')}}@if(isset($ManualOrder)){{trim($ManualOrder->booked_packet_vol_weight_w)}}@endif" id="booked_packet_vol_weight_w"  name="booked_packet_vol_weight_w" placeholder="booked_packet_vol_weight_w" >
                                 @if($errors->get('booked_packet_vol_weight_w')) <small id="booked_packet_vol_weight_w_error" class="form-text text-danger">{{$errors->first('booked_packet_vol_weight_w')}} </small>@endif
                             </div>
                             
+<<<<<<< HEAD
                             
+=======
+>>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
                             <div class="form-group col-sm">
                                 <label for="Number">Height</label>
                                 <input type="text" class="form-control @if($errors->get('booked_packet_vol_weight_h')) is-invalid @endif" value="{{old('booked_packet_vol_weight_h')}}@if(isset($ManualOrder)){{trim($ManualOrder->booked_packet_vol_weight_h)}}@endif" id="booked_packet_vol_weight_h"  name="booked_packet_vol_weight_h" placeholder="booked_packet_vol_weight_h" >
@@ -970,6 +1166,7 @@
                                 <input type="text" class="form-control @if($errors->get('booked_packet_vol_weight_l')) is-invalid @endif" value="{{old('booked_packet_vol_weight_l')}}@if(isset($ManualOrder)){{trim($ManualOrder->booked_packet_vol_weight_l)}}@endif" id="booked_packet_vol_weight_l"  name="booked_packet_vol_weight_l" placeholder="booked_packet_vol_weight_l" >
                                 @if($errors->get('booked_packet_vol_weight_l')) <small id="booked_packet_vol_weight_l_error" class="form-text text-danger">{{$errors->first('booked_packet_vol_weight_l')}} </small>@endif
                             </div>
+<<<<<<< HEAD
                             
                             
                             <div class="form-group col-sm">
@@ -982,6 +1179,8 @@
                                 </select>
                                 
                             </div>
+=======
+>>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
 
                         </div>
                     
@@ -1097,14 +1296,123 @@
     </div>
     
 <script>
-    function calculate_charges()
+$(document).ready(function() {
+    $('.js-example-basic-single').select2({
+        width:'100%', 
+        templateSelection: function (data, container) {
+            $(container).addClass('form-control');
+            return data.text;
+          }
+    });
+    
+});
+
+function calculate_leopord_shipment_charges()
 {  
-    $("body").addClass("loading"); 
+     
+    let destination_city_id = document.getElementById("leopord_city").value;
+    let estimated_weight = document.getElementById("weight").value;
+    let shipping_mode_id = document.getElementById("leopord_shipment_type_id").value;
+    let price = document.getElementById("cod_amount").value;
+    let dc = document.getElementById("dc");
+    if(destination_city_id == '' || estimated_weight <= 0 || shipping_mode_id == '' )
+    {
+        validateForm();
+        return;
+    }
+     $("body").addClass("loading");
+    $.ajax({
+          url: base_url + '/leopord/calculate-tariff-charges',
+          headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+          type:"POST",
+          dataType: 'json',
+          data:{
+            destination_city_id:destination_city_id,
+            estimated_weight:estimated_weight,
+            shipping_mode_id:shipping_mode_id,
+            amount:price,
+          },
+          success:function(response){
+            $("body").removeClass("loading"); 
+              
+            if(response.data.status == 1)
+            { 
+                var total_fare = (response.fare).toFixed(2); 
+                
+                // console.log(total_fare);
+                document.getElementById("fare").value = (total_fare); 
+                dc.value = (total_fare);
+                onchangeprice();
+                
+            } 
+             
+            
+          },
+          error: function(response) {
+              alert(response)
+              $("body").removeClass("loading");  
+          },
+      });
+    // $("body").addClass("loading"); 
+    // let destination_city_id = document.getElementById("leopord_city").value;
+    // let estimated_weight = document.getElementById("weight").value;
+    // let shipping_mode_id = document.getElementById("leopord_shipment_type_id").value;
+    // let price = document.getElementById("cod_amount").value;
+    // let dc = document.getElementById("dc");
+    // //  return;
+    // $.ajax({
+    //       url: base_url + '/leopord/calculate-tariff-charges/',
+    //       headers: {
+    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //         },
+    //       type:"POST",
+    //       dataType: 'json',
+    //       data:{  
+    //         destination_city_id:destination_city_id,
+    //         estimated_weight:estimated_weight,
+    //         shipping_mode_id:shipping_mode_id,
+    //         amount:price,
+    //       },
+    //       success:function(response){
+             
+             
+    //         $("body").removeClass("loading"); 
+              
+    //         if(response.data.status == 1)
+    //         { 
+    //             var total_fare = response.data.fare; 
+                
+    //             console.log(total_fare.toFixed(2));
+    //             document.getElementById("fare").value = (total_fare.toFixed(2)); 
+    //             dc.value = (tota_fare.toFixed(2));
+    //             onchangeprice();
+                
+    //         } 
+            
+    //       },
+    //       error: function(response) { 
+    //           $("body").removeClass("loading"); 
+    //       },
+    //   });
+}
+
+
+function calculate_charges()
+{  
+    
     let destination_city_id = document.getElementById("city").value;
     let estimated_weight = document.getElementById("weight").value;
     let shipping_mode_id = document.getElementById("shipping_mode_id").value;
     let price = document.getElementById("cod_amount").value;
     let dc = document.getElementById("dc");
+    if(destination_city_id == '' || estimated_weight <= 0 || shipping_mode_id == '' )
+    {
+        validateForm();
+        return;
+    }
+    $("body").addClass("loading"); 
     $.ajax({
           url: base_url + '/trax/calculate-charges',
           headers: {
@@ -1113,12 +1421,6 @@
           type:"POST",
           dataType: 'json',
           data:{
-            // $data['service_type_id'] = 1;
-            // $data['origin_city_id'] = 202;
-            // $data['destination_city_id'] = 172;
-            // $data['estimated_weight'] = 0.53;
-            // $data['shipping_mode_id'] = 1;
-            // $data['amount'] = 300;
             service_type_id:1,
             origin_city_id:202,
             destination_city_id:destination_city_id,
@@ -1172,8 +1474,100 @@
       });
 }
 
-
 function get_fare_list()
+{  
+    var shipment_type_value = document.getElementById("shipment_type").value;
+    if( shipment_type_value == 'leopord')
+    {
+        LeopordGetTariffDetails();
+    }
+    else if(shipment_type_value == 'trax')
+    {
+        GetTraxFareList();
+    }
+    
+}
+    
+    
+    
+    function LeopordGetTariffDetails() 
+    {
+        var weight = $('#weight').val(); 
+        var leopord_city = $('#leopord_city').val(); 
+        let advance_payment = document.getElementById("advance_payment").value; 
+         var shipment_type_value = document.getElementById("shipment_type").value;
+        var cod_amount = $('#cod_amount').val();
+        cod_amount = parseInt(cod_amount); 
+        
+        
+        if( shipment_type_value == 'local' || shipment_type_value == '')
+        {
+            toastr.warning('Please Select Shipmet Type','Warning');
+            return;
+        } 
+
+        if (leopord_city == '')
+        { 
+            toastr.warning('Please Select City','Warning');
+            return; 
+        }
+        else if ( weight <=0  ||  weight == "")
+        { 
+            
+            toastr.warning('Please Select Weight','Warning');
+            return;
+        } 
+        else if ( price <0  ||  price == "" || advance_payment == "")
+        { 
+            
+            toastr.warning('Please Check price and advance payment','Warning');
+            return;
+        }
+        
+        $("body").addClass("loading"); 
+        
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: base_url + '/leopord/get-tariff-details/'+weight+'/'+592+'/'+leopord_city+'/'+cod_amount,
+            type: 'Get',
+            dataType: 'json',
+            success: function(e)
+            { 
+                
+                if(typeof e.success !== 'undefined')
+                {
+                    $("#fare").val(e.final_delivery_charges);
+                    text ='';
+                    //console.log(response.best_fare);
+                    (e.all_shipment_method_fares).forEach(element => text+='<option value="'+(element.shippment_value)+'">'+(element.shippment_lable)+' fare:('+(element.fare.toFixed(2))+')</option>' );
+                    //console.log(text);
+                    text = '<option value="">Select Leopord Shipment Mode</option>'+text;
+                    document.getElementById("leopord_shipment_type_id").innerHTML = text;
+                    
+                    $("body").removeClass("loading");
+                    
+                } 
+                else if(typeof e.error !== 'undefined')
+                {
+                    $("body").removeClass("loading");
+                    // toastr.error(e.messege,'Error');
+                }
+                
+                $("body").removeClass("loading");
+                console.log(e);
+            },
+            error: function(e) {
+                alert(e); 
+                $("body").removeClass("loading");
+            }
+        });
+            
+    }
+
+
+function GetTraxFareList()
 {   
     var shipment_type_value = document.getElementById("shipment_type").value;
     if( shipment_type_value == 'local' || shipment_type_value == '')
@@ -1185,6 +1579,7 @@ function get_fare_list()
     let estimated_weight = document.getElementById("weight").value;
     let shipping_mode_id = document.getElementById("shipping_mode_id").value;
     let price = document.getElementById("cod_amount").value;
+    let cod = document.getElementById("cod_amount").value;
     
     
     let advance_payment = document.getElementById("advance_payment").value;
@@ -1201,8 +1596,10 @@ function get_fare_list()
         // alert('weight is not working');
         return;
     } 
-    else if ( price <0  ||  price == "" || advance_payment == "")
+    else if ( cod <0  ||  cod == "" || advance_payment == "")
     {
+        
+        toastr["success"](e.messege, 'Please Check Price');
         // alert('cod and advance');
         return;
     }
@@ -1226,7 +1623,7 @@ function get_fare_list()
             destination_city_id:destination_city_id,
             estimated_weight:estimated_weight,
             shipping_mode_id:shipping_mode_id,
-            amount:price,
+            amount:cod,
           },
           success:function(response){
                
@@ -1264,6 +1661,33 @@ function get_fare_list()
 }
  
 $('#order_status').val('{{$ManualOrder->status}}');
+$('#shipment_type').val('{{$ManualOrder->shipment_company}}');
+
+@if($ManualOrder->shipment_company == 'leopord')
+
+    $('#leopord_city').val('{{$ManualOrder->cities_id}}');
+    setTimeout(
+    function() 
+    {
+        $('#leopord_shipment_type_id').val('{{$ManualOrder->service_type}}');
+        calculate_leopord_shipment_charges();
+    }, 3000);
+@else
+
+    $('#city').val('{{$ManualOrder->cities_id}}');
+    $('#shipping_mode_id').val('{{$ManualOrder->service_type}}');
+    setTimeout(
+    function() 
+    {
+        $('#shipping_mode_id').val('{{$ManualOrder->service_type}}');
+        calculate_charges();
+    }, 2000);
+
+@endif 
+
+
+
+ 
 get_fare_list();
 onchangeprice();
 </script>

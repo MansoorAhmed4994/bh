@@ -32,16 +32,20 @@
 </style>
 <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 <script type="text/javascript">
+
+var test = @json($shipment_cities_data);
 window.onload = function () {
 
 var chart = new CanvasJS.Chart("chartContainer", {
 	animationEnabled: true,
 	title:{
-		text: "Olympic Medals of all Times (till 2016 Olympics)"
+		text: "Top Ten Cities"
 	},
+	height:500,
 	axisY: {
 		title: "Medals",
-		includeZero: true
+		includeZero: true,
+		maximum: 610
 	},
 	legend: {
 		cursor:"pointer",
@@ -51,54 +55,55 @@ var chart = new CanvasJS.Chart("chartContainer", {
 		shared: true,
 		content: toolTipFormatter
 	},
-	data: [{
+	data: [
+	    {
 		type: "bar",
 		showInLegend: true,
 		name: "Gold",
 		color: "gold",
-		dataPoints: [
-			{ y: 243, label: "Italy" },
-			{ y: 236, label: "China" },
-			{ y: 243, label: "France" },
-			{ y: 273, label: "Great Britain" },
-			{ y: 269, label: "Germany" },
-			{ y: 196, label: "Russia" },
-			{ y: 1118, label: "USA" }
-		]
+		dataPoints:@json($shipment_cities_data)
 	},
-	{
-		type: "bar",
-		showInLegend: true,
-		name: "Silver",
-		color: "silver",
-		dataPoints: [
-			{ y: 212, label: "Italy" },
-			{ y: 186, label: "China" },
-			{ y: 272, label: "France" },
-			{ y: 299, label: "Great Britain" },
-			{ y: 270, label: "Germany" },
-			{ y: 165, label: "Russia" },
-			{ y: 896, label: "USA" }
-		]
-	},
-	{
-		type: "bar",
-		showInLegend: true,
-		name: "Bronze",
-		color: "#A57164",
-		dataPoints: [
-			{ y: 236, label: "Italy" },
-			{ y: 172, label: "China" },
-			{ y: 309, label: "France" },
-			{ y: 302, label: "Great Britain" },
-			{ y: 285, label: "Germany" },
-			{ y: 188, label: "Russia" },
-			{ y: 788, label: "USA" }
-		]
-	}]
+// 	{
+// 		type: "bar",
+// 		showInLegend: true,
+// 		name: "Silver",
+// 		color: "silver",
+// 		dataPoints: [
+// 			{"y":26,"label":"Abbottabad"},
+// 			{ y: 186, label: "China" },
+// 			{ y: 272, label: "France" },
+// 			{ y: 299, label: "Great Britain" },
+// 			{ y: 270, label: "Germany" },
+// 			{ y: 165, label: "Russia" },
+// 			{ y: 896, label: "USA" }
+// 		]
+// 	},
+// 	{
+// 		type: "bar",
+// 		showInLegend: true,
+// 		name: "Bronze",
+// 		color: "#A57164",
+// 		dataPoints: [
+// 		    {"y":"26","label":"Abbottabad"},
+// 		    {"y":"2","label":"Alipur"},
+// 		    {"y":"4","label":"Arifwala"},
+// 		    {"y":"4","label":"Attock"}
+// 		]
+// 	}
+	]
 });
+// handleChartHeight(chart);
 chart.render();
 
+function handleChartHeight(chart){    
+    var dpsWidth = 30;
+    var plotAreaHeight = chart.axisX[0].bounds.height;
+    var chartHeight = plotAreaHeight + (50 * dpsWidth);
+    chart.options.dataPointWidth = dpsWidth;
+    chart.options.height = chartHeight;
+}
+
+// {!! json_encode($shipment_cities_data) !!}
 function toolTipFormatter(e) {
 	var str = "";
 	var total = 0 ;
@@ -146,12 +151,11 @@ function toggleDataSeries(e) {
     
     <?php $total_orders=0;$rows_division=0;?>
         @foreach($data as $list)
-            <div class="col-sm-4 form-group">  
+            <div class="col-sm-3 form-group">  
                 <div class="card" style="width: 100%;"> 
                   <div class="card-body status-{!! str_replace(' ', '-', $list->status) !!} dashbord-card-body">
-                    <h3>{{$list->status}}</h3>
-                    <h5 class="card-title">{{$list->total_orders}}</h5> 
-                    <h5 class="card-title">{{$list->total_amount}}</h5>  
+                    <h5 class="card-title text-capitalize">{{$list->status}}: {{$list->total_orders}} <span class="float-right">Rs: {{(int)$list->total_amount}}</span></h5>
+ 
                     <table>
                         <thead>
                             <tr>
@@ -403,7 +407,13 @@ function toggleDataSeries(e) {
     </div>
     
     <div style="width: 100%; margin: auto;">
-        <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+        <canvas id="parcels_by_shipment_company"></canvas>
+    </div>
+    
+    
+    
+    <div style="width: 100%; margin: auto;">
+        <div id="chartContainer" style="height: auto; width: 100%;"></div>
     </div>
 
 
@@ -413,19 +423,19 @@ function toggleDataSeries(e) {
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
    
- 
+//Parcels delivered Cities Chart
   const labels = {!! json_encode($cities_name) !!}; 
 
   const data = {
     labels: labels,
     datasets: [{
-      label: 'Order Delivered in Cities',
+      label: 'Order Delivered ',
       backgroundColor: 'rgb(255, 99, 132)',
       borderColor: 'rgb(255, 99, 132)',
       data :{!! json_encode($total_city_orders)!!},
 
     }]
-  };
+  }; 
 
   const config = {
     type: 'line',
@@ -433,12 +443,57 @@ function toggleDataSeries(e) {
     options: {}
   };
   
- 
-</script>
-<script>
   const myChart = new Chart(
     document.getElementById('myChart1'),
     config
   );
+  
+  
+  //Parcels delivered Cities Chart
+  @if(!empty($shipment_cities_summary['shipment_cities_name'])) 
+  const labels2 = {!! json_encode($shipment_cities_summary['shipment_cities_name']) !!}; 
+    @endif
+
+  const data2 = {
+    labels: labels2,
+    datasets: [{
+      label: 'Order Delivered in Cities',
+      backgroundColor: 'rgb(255, 99, 132)',
+      borderColor: 'rgb(255, 99, 132)',
+      @if(!empty($shipment_cities_summary['shipment_cities_orders'])) 
+        data :{!! json_encode($shipment_cities_summary['shipment_cities_orders'])!!},
+      @endif
+      
+
+    }]
+  };
+
+  const config2 = {
+    type: 'bar',
+    data: data2,
+    options: {}
+  };
+  
+  const myChart2 = new Chart(
+    document.getElementById('parcels_by_shipment_company'),
+    config2
+  ); 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 </script>
 @endsection

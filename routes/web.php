@@ -12,18 +12,54 @@ Auth::routes();
 | contains the "web" middleware group. Now create something great!
 |
 */ 
+/*==================================
+            Global Routes
+====================================*/
+ 
+    // Route::get('/error','GlobalController@error')->name('global.error');
+    // Route::view('/error', 'global.error')->name('global.error');previouse/order-history
+    
+/*==================================
+            Customer Routes
+====================================*/
 
+Route::group(['prefix' => 'customer','as'=> 'customer.'],function(){
+    
+    Route::get('/create','Frontend\CustomersController@Create')->name('create');
+    Route::post('/store','Frontend\CustomersController@store')->name('store');
+    Route::post('/login','Frontend\CustomersController@GetCustomerId')->name('login');
+    Route::post('/delete/coockies','Frontend\CustomersController@DeleteCustomerCoockies')->name('delete.coockies');
+    Route::post('/upload/product/screenshot','Frontend\CustomersController@UploadProductScreentShot')->name('upload.product.screenshot');
+    Route::post('/delete/product/screenshot','Frontend\CustomersController@DeleteOrderImage')->name('delete.product.screenshot');
+    
+});
 
-    // Route::get('register', 'Auth\RegisterController@register')->name('admin.user.register');
+Route::group(['prefix' => 'support', 'namespace' => 'Client','as'=> 'support.', 'middleware' => 'auth:user,admin'],function(){
+    
+    Route::get('/','SupportController@index')->name('index');
+    Route::get('/create','SupportController@Create')->name('create');
+    Route::post('/store','SupportController@store')->name('store');
+    Route::get('/edit/{id}','SupportController@edit')->name('delete.product.screenshot');
+    Route::post('/update','SupportController@GetCustomerId')->name('login');
+    Route::post('/customer-details','SupportController@CustomerDetails')->name('customer.details');
+    
+    
+});
+
 
 /*==================================
             Admin Routes
 ====================================*/
+Route::get('/test','Client\Orders\ManualOrdersController@test');
+
+
+Route::post('test/fileupload', 'Client\Orders\ManualOrdersController@TestFileUpload')->name('TestFileUpload');
 
 Route::group(['middleware' => 'auth:user'],function(){
 
     Route::get('/', 'HomeController@index')->name('dashboard');
     Route::get('/contactmanage', 'HomeController@contact')->name('contactmanage'); 
+    
     Route::get('user/dashboard', 'Auth\DashboardController@index')->name('user.dashboard');
 });
 
@@ -39,6 +75,7 @@ Route::group(['prefix' => 'client/orders/', 'namespace' => 'Client\Orders', 'mid
     Route::get('inactivecustomers', 'ManualOrdersController@InActiveCustomers')->name('inactive.customers');
     Route::get('ManualOrders/status/order-list/{status}', 'ManualOrdersController@status_order_list')->name('ManualOrders.status.order.list'); 
     Route::post('ManualOrders/previouse/order-history', 'ManualOrdersController@previouse_order_history')->name('ManualOrders.previouse.order.history');
+    Route::post('customer/details', 'ManualOrdersController@CustomerDetailsByCode')->name('customer.details');
     Route::get('ManualOrders/dispatch-bulk-orders', 'ManualOrdersController@dispatch_bulk_orders')->name('ManualOrders.dipatch.bulk.orders');
     Route::get('ManualOrders/quick-search', 'ManualOrdersController@QuickSearch')->name('manualOrders.quick.search'); 
     Route::post('ManualOrders/quick-search', 'ManualOrdersController@QuickSearchActions')->name('manualOrders.quick.search.actions');  
@@ -119,11 +156,46 @@ Route::group(['prefix' => 'trax/', 'namespace' => 'Shipment', 'middleware' => 'a
     Route::post('create-booking', 'TraxController@CreateBulkBookingStore')->name('create.booking');
     Route::post('bookings', 'TraxController@CreateBulkBookingByOrderIds')->name('create.bulk.booking');
     Route::get('shipment/', function () {return view('client.orders.manual-orders.trax.create-bulk-booking-by-scan');})->name('create.bulk.booking.by.scan');
+    Route::get('get-shipment-slip/{tracking_number}', 'TraxController@TraxGetShipmentSlip')->name('get.shipment.slip');
+}); 
+ 
+Route::group(['prefix' => 'leopord/', 'namespace' => 'Shipment', 'middleware' => 'auth:user,admin','as'=> 'leopord.'],function()
+{
+    
+    Route::get('get-tariff-details/{weight}/{origion_city}/{destination_city}/{cod}', 'LeopordController@LeopordGetTariffDetails')->name('shipment.get.tariff.details');
+    Route::post('calculate-tariff-charges', 'LeopordController@LeopordCalculateDeliveryCharges')->name('shipment.calculate.tariff.charges');
+    Route::get('get-shipment-slip/{tracking_number}', 'LeopordController@LeopordGetShipmentSlip')->name('get.shipment.slip');;
+    
+    
+    Route::get('get-cn-details/{cn}', 'LeopordController@GetCnDetails')->name('get.cn.details');
+    Route::get('loadsheet', 'LeopordController@Loadsheet')->name('loadsheet');
+    Route::get('generate-loadsheet', 'LeopordController@GenerateLoadsheet')->name('generate.loadsheet');
+    Route::post('print-loadsheet', 'LeopordController@PrintLoadsheet')->name('print.loadsheet');
+    Route::get('generate-cities', 'LeopordController@GenerateLeopordCities')->name('generate.cities');
+    
+});
+
+Route::group(['prefix' => 'leopord/', 'namespace' => 'Shipment','as'=> 'leopord.'],function()
+{
+    Route::get('track-boocked-packet/{tracking_number}', 'LeopordController@LeopordTrackBookedPacket')->name('track.boocked.packet');
 }); 
 
+<<<<<<< HEAD
 Route::group(['prefix' => 'leopord/', 'namespace' => 'Shipment', 'middleware' => 'auth:user,admin','as'=> 'trax.'],function(){
     
     Route::get('get-tariff-details/{weight}/{shipment_type}/{origion_city}/{destination_city}/{cod}', 'LeopordController@LeopordGetTariffDetails')->name('leopord.shipment.get.tariff.details');
+=======
+Route::group(['prefix' => 'social/', 'namespace' => 'social', 'middleware' => 'auth:user,admin','as'=> 'social.'],function()
+{
+    
+    Route::get('facebook', 'facebookController@index')->name('facebook.index');
+
+    
+    
+    
+    
+    
+>>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
 });
 //{weight}/{shipment_type}/{origion_city}/{destination_city}/{cod}
 //https://manualordersstaging.brandhub.com.pk/get-tariff-details/1000/2/789/76/5000

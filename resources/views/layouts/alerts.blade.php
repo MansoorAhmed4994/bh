@@ -16,7 +16,7 @@
 </div>
 @endif
 
-<script>
+<script type="application/javascript">
     toastr.options = 
     {
         "closeButton": true,

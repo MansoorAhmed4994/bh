@@ -5,19 +5,27 @@ namespace App\Models\Client;
 
 use App\Models\Orderpayments;
 use App\Models\User;
+use App\Models\Country_codes;
 use App\Models\ActivityLogs;
-// use App\Models\Client\Cities;
+use App\Models\Client\Cities;
+use App\Models\LeopordCities;
 use Illuminate\Database\Eloquent\Model;
 
 class ManualOrders extends Model
 {
     protected $guarded = [];  
+    protected $manual_orders = 'ManualOrders';
     public function customers()
     {
         return $this->belongsTo(Customers::class,'customers_id','id');
     }
     
     public function users()
+    {
+        return $this->belongsTo(User::class,'created_by','id');
+    }
+    
+    public function UsersCreatedBy()
     {
         return $this->belongsTo(User::class,'created_by','id');
     }
@@ -37,10 +45,23 @@ class ManualOrders extends Model
         return $this->hasMany(ActivityLogs::class,'ref_id','id');
     }
     
+    public function CustomerOrderSummary()
+    {
+        return $this->hasMany(ActivityLogs::class,'ref_id','id');
+    }
+    
     
     public function riders()
     {
         return $this->belongsToOne(Riders::class);
+    }
+    
+    public function leopord_cities()
+    {
+        // return $this->belongsTo(Cities::class,'city','id');
+        return $this->belongsTo(LeopordCities::class,'cities_id','id'); 
+        // return $this->hasMany(Cities::class,'cities_id','id'); 
+        
     }
     
     public function cities()
@@ -49,13 +70,16 @@ class ManualOrders extends Model
         return $this->belongsTo(Cities::class,'cities_id','id'); 
         // return $this->hasMany(Cities::class,'cities_id','id'); 
         
-    }
-    
-    
+    } 
     
     public function orderpayments()
     {
         return $this->hasMany(Orderpayments::class,'order_id','id');
     }
-    //
+    
+    public function country_codes()
+    {
+        return $this->belongsTo(Country_codes::class,'country_code_','Country_code_id');
+    } 
+ 
 }

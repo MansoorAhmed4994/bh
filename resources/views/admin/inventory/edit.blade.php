@@ -183,7 +183,7 @@
             
                         <div class="form-group col-auto">
                             <label for="cost">Sale</label>
-                            <input type="number" class="form-control @if($errors->get('sale')) is-invalid @endif" value="{{old('sale')}}@if(isset($inventory)){{$inventory->sale}}@endif" id="inventory_sale"  name="inventory_sale" placeholder="sale" >
+                            <input type="number" class="form-control @if($errors->get('sale')) is-invalid @endif" value="{{old('sale')}}@if(isset($inventory)){{$inventory->sale}}@endif" step="0.01" id="inventory_sale"  name="inventory_sale" placeholder="sale" >
                             @if($errors->get('sale')) <small id="sale_error" class="form-text text-danger">{{$errors->first('sale')}} </small>@endif
                         </div>  
             

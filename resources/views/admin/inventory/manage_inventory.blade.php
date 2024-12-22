@@ -221,7 +221,11 @@ var order_link='';
             }
             else
             {
-                alert('please fill all the fields');
+                // $('#sku_error').html('please fill this field');
+                $('#cost_error').html('please fill this field');
+                $('#sale_error').html('please fill this field');
+                
+                // alert('please fill all the fields');
                 $("body").removeClass("loading");
             }
         }

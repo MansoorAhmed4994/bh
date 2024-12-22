@@ -39,6 +39,42 @@
         
         $( document ).ready(function() {
             
+            
+            
+            $('#customer_id').focusout('click',function(e)
+            {  
+                // $("body").addClass("loading"); 
+                var customer_id = $('#customer_id').val(); 
+                
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: '{{route("customer.details")}}',
+                    data: {
+                        customer_id: customer_id,  
+                    },
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function(e)
+                    {
+                         $("body").removeClass("loading");
+                        $('#first_name').val(e.data['first_name']);
+                            $('#address').val(e.data['address']);   
+                            $('#number').val(e.data['number']), 
+                            
+                            $("#order_save_btn").show();
+                            console.log(e.messege);
+                        
+                    },
+                    error: function(e) {
+                        console.log(e.responseText);
+                    }
+                });
+            });
+            
+            
+            
             $('#number').focusout('click',function(e)
             {  
                 $("body").addClass("loading"); 
@@ -46,14 +82,15 @@
                 const firstTwoChars = number.slice(0, 2);
                 if(firstTwoChars == '92')
                 {
+                    $("body").removeClass("loading");
                     alert('please coorect receiver number (for e.g: 03XXXXXXXXX)');
                     return;
                 }
                 else if(number.length != '11')
                 {
+                    $("body").removeClass("loading");
                     alert('please coorect receiver number (for e.g: length must be 11 digit)');
-                    return;
-                    
+                    return; 
                 }
                 // console.log(firstTwoChars);
                 var base_url = '<?php echo e(url('/')); ?>';
@@ -167,7 +204,11 @@
             }
             
             
-            
+            if(validation_status == true)
+            {
+                $("body").addClass("loading"); 
+                $("#order_save_btn").hide();
+            }
             return validation_status;
         }
     </script>
@@ -229,6 +270,12 @@
                 </div> 
     
                 <div class="form-group"> 
+                    <label for="Customer Code">Customer Code</label>
+                    <input type="tel"  class="form-control" id="customer_id"  name="customer_id" placeholder="Enter Customer Code here" >
+                    <small id="customer_id_error" class="form-text text-danger">@if($errors->get('customer_id')) {{$errors->first('customer_id')}} @endif</small>
+                </div> 
+    
+                <div class="form-group"> 
                     <label for="Number">Number</label>
                     <input type="tel"  class="form-control"   pattern="0[0-9]{2}(?!1234567)(?!1111111)(?!7654321)[0-9]{8}" id="number"  name="number" placeholder="number Number" required>
                     <small id="number_error" class="form-text text-danger">@if($errors->get('number')) {{$errors->first('number')}} @endif</small>
@@ -249,7 +296,7 @@
                 <div class="form-group ">
                         <label for="address">city</label>
                         
-                        <select class="form-control " id="city"  name="city" >
+                        <select class="form-control js-example-basic-single leopord_city" id="city"  name="city" data-rel="chosen" required>
                             <option value="">Select City</option>
                             @for($i=0 ; $i < sizeof($cities); $i++)
                              
@@ -285,7 +332,7 @@
                 
     
                 <div class="form-group" id="order_save_btn">
-                    <button type="submit" onclick="validateForm()" class="btn btn-primary">Save</button>
+                    <button type="submit" onclick="validateForm();" class="btn btn-primary">Save</button>
                 </div>
                     
             </form> 
@@ -299,7 +346,17 @@
         </div>
     </div>
     
+<script>
+    $(document).ready(function() {
+    $('.js-example-basic-single').select2({
+        width:'100%', 
+        templateSelection: function (data, container) {
+            $(container).addClass('form-control');
+            return data.text;
+          }
+    });
     
-    
+});
+</script>
      
   @endsection

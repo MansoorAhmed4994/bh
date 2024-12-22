@@ -16,9 +16,9 @@
                     <form action="{{route('ManualOrders.index')}}" method="post">
                         @csrf
                         <input type="hidden" name="order_status"  value="{{$list->status}}">
-                    <button type="submit" class="btn btn-primary">Go</button>
+                    <!--<button type="submit" class="btn btn-primary">Go</button>-->
                     </form>
-                    <!--<a href="{{route('ManualOrders.status.order.list',$list->status)}}" class="btn btn-primary">Go</a>-->
+                    <a href="{{route('ManualOrders.status.order.list',$list->status)}}" class="btn btn-primary">Go</a>
                   </div> 
                 </div>
             </div>
@@ -26,7 +26,7 @@
             <?php $total_orders += $list->total; ?>
         @endforeach 
         
-        <div class="col-sm-4 form-group">  
+        <div class="col-sm-3 form-group">  
             <div class="card" style="width: 18rem;"> 
               <div class="card-body">
                   
@@ -39,8 +39,8 @@
         
     </div> 
     <div style="width: 100%; margin: auto;">
-    <canvas id="myChart1"></canvas>
-</div>
+        <canvas id="myChart1"></canvas>
+    </div>
 
 
 
@@ -77,9 +77,11 @@
   };
 </script>
 <script>
-  const myChart = new Chart(
-    document.getElementById('myChart1'),
-    config
-  );
+  
+//   const myChart = new Chart(
+//     document.getElementById('myChart1'),
+//     config
+//   );
+  
 </script>
 @endsection

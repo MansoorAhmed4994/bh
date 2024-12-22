@@ -19,6 +19,7 @@
         "laravel/ui": "2.4",
         "milon/barcode": "^7.0",
         "picqer/php-barcode-generator": "^2.2",
+        "shopify/shopify-api": "^4.3",
         "simplesoftwareio/simple-qrcode": "^4.2",
         "yoeunes/toastr": "^2.3"
     },

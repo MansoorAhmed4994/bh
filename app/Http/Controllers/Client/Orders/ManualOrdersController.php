@@ -31,6 +31,9 @@ use App\Traits\ManualOrderTraits;
 use App\Traits\InventoryTraits;
 
 
+use Shopify\Rest\Admin2024_07\StorefrontAccessToken;
+use Shopify\Utils;
+
 use Illuminate\Support\Picqer\Barcode;
 
 class ManualOrdersController extends Controller 
@@ -80,8 +83,13 @@ class ManualOrdersController extends Controller
             'manual_orders.status',
             'manual_orders.created_at',
             'manual_orders.updated_at',
-            DB::raw("CONCAT(t.first_name,'') as updated_by"), 
-            DB::raw("CONCAT(users.first_name,'') as created_by"), 
+            'manual_orders.shipment_company',
+            DB::raw("(select count(*) from manual_orders where customers.id = manual_orders.customers_id and status = 'return') as return_count"), 
+            DB::raw("(select count(*) from manual_orders where customers.id = manual_orders.customers_id and status = 'dispatched') as dispatched_count"), 
+            // DB::raw("CONCAT(t.first_name,'') as updated_by"), 
+            // DB::raw("CONCAT(users.first_name,'') as created_by"), 
+            'manual_orders.created_by as created_by',
+            'manual_orders.updated_by as updated_by',
             'manual_orders.status_reason', 
             'manual_orders.assign_to'
             ); 
@@ -96,17 +104,36 @@ class ManualOrdersController extends Controller
         $order_by = $request->order_by;
         $date_from = $request->date_from;
         $date_to =  $request->date_to;
+        // $customer_d =   $request->search_order_id;
         
         $date_by = 'created_at';
+        // dd('working');
         $query = ManualOrders::query();
+        
+        // dd($query->paginate(20)->first());
         $query = $query
         ->leftJoin('customers', 'manual_orders.customers_id', '=', 'customers.id')
-        ->leftJoin('users', 'manual_orders.created_by', '=', 'users.id') 
-        ->leftJoin('users as t', 'manual_orders.updated_by', '=', 't.id') 
+        // ->leftJoin('users', 'manual_orders.created_by', '=', 'users.id') 
+        // ->leftJoin('users as t', 'manual_orders.updated_by', '=', 't.id')  
         ->select($this->OrderFieldList()); 
+        
+        
+        // $query = Customers::query();
+        // $query = $query
+        // ->rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')
+        // ->rightJoin('users', 'manual_orders.created_by', '=', 'users.id') 
+        // ->rightJoin('users as t', 'manual_orders.updated_by', '=', 't.id') 
+        // ->select($this->OrderFieldList()); 
+        // dd($query->paginate(20));
+        
         if($order_id != '')
         { 
-            $query = $query->where('manual_orders.id',$order_id);
+            // $query = $query->where('manual_orders.id',$order_id);
+            $query = $query->
+            where(function ($query) use ($order_id) {
+                $query->where('manual_orders.id',$order_id)
+                    ->orWhere('customers.id',$order_id);
+            });
         }
         else if($search_text != '')
         {
@@ -122,6 +149,7 @@ class ManualOrdersController extends Controller
                     ->orWhere('customers.number','like',$search_text.'%')
                     ->orWhere('customers.number','like','%'.$search_text.'%')
                     ->orWhere('manual_orders.id','like','%'.$search_text.'%')
+                    ->orWhere('manual_orders.customers_id','like',$search_text.'%')
                     ->orWhere('manual_orders.consignment_id','like','%'.$search_text.'%');
             });
             
@@ -156,19 +184,25 @@ class ManualOrdersController extends Controller
         }
         
         
+        
         //========================get user roles
         $user_id = User::find(auth()->user()->id);
         $user_roles = $user_id->roles()->get()->pluck('name')->toArray();
-
         
         //========================filter on assign column
         if(in_array('author', $user_roles) || in_array('admin', $user_roles))
         { 
+            
             // dd('');
         } 
         elseif(in_array('user', $user_roles))
         { 
+            // dd($user_roles);
             $query = $query->where("manual_orders.assign_to" ,$user_id->id);
+        }
+        else
+        {
+            dd('Sorry! you dont have permission');
         }
         
         if($order_by != '')
@@ -179,7 +213,6 @@ class ManualOrdersController extends Controller
         {
             $query = $query->orderBy('manual_orders.id', 'DESC');
         }
-        
         
         
         //========================filter on status column
@@ -209,24 +242,32 @@ class ManualOrdersController extends Controller
             {
                 $query->where('manual_orders.status','like','%%'); 
             }
-        }
+        } 
         
+        $assign_to_users = User::whereHas('roles', function($q){$q->where('name', 'calling');})->get();
         
-        $users = User::select('*')->get();
-        $list = $query->paginate(20); 
+        $list = $query->Paginate(20); 
+        // $pagination_cuttons = $query->paginate(20);
         $statuses = get_active_order_status_list();
         $catgories = product_child_categories();
-        // dd($catgories);
-        
-        return view('client.orders.manual-orders.list')->with(['list'=>$list,'users'=>$users,'statuses'=>$statuses,'catgories'=>$catgories]); 
+         
+        return view('client.orders.manual-orders.list')->with(['list'=>$list,'users'=>$assign_to_users,'statuses'=>$statuses,'catgories'=>$catgories,'user_roles'=>$user_roles]); 
     }
     
     public function InActiveCustomers(Request $request)
     {
-        $from_date = Carbon::now()->subDays(60)->toDateTimeString(); 
+        $from_date = Carbon::now()->subDays(90)->toDateTimeString(); 
         $views_customer_data = DB::table('manual_orders')
-            ->select('customers.id', DB::raw('count(*) as total_purchase' ),  'customers.first_name', 'customers.status','customers.number as receiver_number','customers.whatsapp_number as number','customers.created_at','customers.description','customers.address as reciever_address','customers.remarks')
-            // ->leftJoin('orderpayments', 'orderpayments.order_id', '=', 'manual_orders.id')
+            ->select('customers.id', 
+            DB::raw('count(*) as total_purchase'),
+            'customers.first_name', 
+            'customers.status',
+            'customers.number as receiver_number',
+            'customers.whatsapp_number as number',
+            'customers.created_at',
+            'customers.description',
+            'customers.address as reciever_address',
+            'customers.remarks')
             ->leftJoin('customers', 'customers.id', '=', 'manual_orders.customers_id')
             ->where('manual_orders.created_at', '<',$from_date) 
             
@@ -245,7 +286,10 @@ class ManualOrdersController extends Controller
      */
     public function create()
     {
-        $cities = $this->GetCities()->cities;
+        
+        $cities = $this->LeopordGetCities()->city_list;
+        // dd($cities[0]->shipment_type);
+        // $cities = $this->LeopordGetCities()->cities;
         return view('client.orders.manual-orders.create')->with([ 'cities'=>$cities]);
         //
     }
@@ -370,7 +414,13 @@ class ManualOrdersController extends Controller
             return back();
         }
         
+<<<<<<< HEAD
         $cities = $this->get_trax_cities();
+=======
+        // $cities = $this->get_trax_cities();
+        $cities = $this->LeopordGetCities()->city_list;
+        
+>>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
         $leopordCities = $this->LeopordGetCities()->city_list;
         
         
@@ -481,7 +531,6 @@ class ManualOrdersController extends Controller
         //$manual_orders = new ManualOders();
         $ManualOrder->receiver_name = $request->receiver_name;
         $ManualOrder->receiver_number = $request->receiver_number;
-        $ManualOrder->cities_id = $request->city;
         $ManualOrder->reciever_address = $request->reciever_address;  
         if($images != null)
         {
@@ -509,12 +558,28 @@ class ManualOrdersController extends Controller
         $ManualOrder->total_pieces = $request->total_pieces;
         $ManualOrder->weight = $request->weight;
         $ManualOrder->description = $request->description; 
+        $ManualOrder->updated_by = Auth::id();
         $ManualOrder->status = $request->order_status; 
         
         $traxdata = []; 
+        $leoporddata = [];
         //Shipment details
         if($request->submit == "save")
         {
+            if($request->shipment_type == 'trax')
+            {
+                $ManualOrder->service_type = $request->shipping_mode_id; 
+                $ManualOrder->shipment_company = $request->shipment_type;
+                $ManualOrder->cities_id = $request->city;
+            }
+            else if($request->shipment_type == 'leopord')
+            {
+                
+                $ManualOrder->service_type = $request->leopord_shipment_type_id; 
+                $ManualOrder->shipment_company = $request->shipment_type;
+                $ManualOrder->cities_id = $request->leopord_city;
+            }
+            
             $status = $ManualOrder->save();
             $act_sta = create_activity_log(['table_name'=>'manual_orders','ref_id'=>$order_id,'activity_desc'=>'Edit order data','created_by'=>Auth::id(),'method'=>'update','route'=>route('ManualOrders.update',$order_id)]);
 
@@ -571,8 +636,11 @@ class ManualOrdersController extends Controller
                     // dd($id);
                     $ManualOrder->date_order_paid = $request->date_order_paid;
                     $ManualOrder->reference_number = $request->reference_number;
-                    $ManualOrder->service_type = $request->service_type; 
                     $ManualOrder->consignment_id = $ApiResponse->tracking_number;
+                    $ManualOrder->service_type = $request->shipping_mode_id; 
+                    $ManualOrder->shipment_company = $request->shipment_type;
+                    $ManualOrder->cities_id = $request->city;
+                    $ManualOrder->updated_by = Auth::id();
                     $ManualOrder->status = 'dispatched';  
                     // echo '3';
                     if(check_customer_advance_payment($order_id) > 0)
@@ -604,6 +672,7 @@ class ManualOrdersController extends Controller
             }
             else if($request->shipment_type == 'leopord')
             {
+<<<<<<< HEAD
                 $mytime = Carbon::now();
                 $current_date_time = $mytime->toDateTimeString();
                 $pickup_address_id = $this->get_trax_pickup_address(); 
@@ -654,6 +723,117 @@ class ManualOrdersController extends Controller
                     {
                         dd('payment not approved');
                     }
+=======
+                
+                if(check_customer_advance_payment($ManualOrder->id) > 0)
+                {
+                    dd('payment not approved');
+                } 
+                $mytime = Carbon::now();
+                $current_date_time = $mytime->toDateTimeString();
+                // $pickup_address_id = $this->get_trax_pickup_address(); 
+                $reference_number= '('.$ManualOrder->id.')('.$current_date_time.')'; 
+                // dd('work');
+                // dd($this->GetShippingCharges('KI752931139'));
+                // dd($this->LeopordTrackBookedPacket('KI752931139'));
+                // dd($this->GetShipperDetails());
+                // $traxdata['order_id'] = $ManualOrder->id;
+                // $traxdata['service_type_id'] = 1;
+                // $traxdata['pickup_address_id'] = $pickup_address_id;
+                // $traxdata['information_display'] = 0;
+                // $traxdata['consignee_city_id'] = $request->city;
+                // $traxdata['consignee_name'] = trim($request->receiver_name);
+                // $traxdata['consignee_address'] = trim($request->reciever_address);
+                // $traxdata['consignee_phone_number_1'] = trim($request->receiver_number);
+                // $traxdata['consignee_email_address'] = trim('orderstesting@brandhub.com');
+                // $traxdata['item_product_type_id'] = 1;
+                // $traxdata['item_description'] = trim($request->description);
+                // $traxdata['item_quantity'] = (int)trim($request->total_pieces);
+                // $traxdata['item_insurance'] = 0;
+                // $traxdata['item_price'] = (int)trim($request->price);
+                // $traxdata['parcel_value'] = (int)trim($request->price);
+                // $traxdata['pickup_date'] = $mytime;
+                // $traxdata['special_instructions'] = trim('Nothing');
+                // $traxdata['estimated_weight'] = trim($request->weight);
+                // $traxdata['shipping_mode_id'] = (int)trim($request->shipping_mode_id);
+                // $traxdata['amount'] = (int)trim($request->cod_amount);
+                // $traxdata['shipper_reference_number_1'] = $reference_number;
+                // $traxdata['payment_mode_id'] = 1;
+                // $traxdata['charges_mode_id'] = 4;
+                
+                
+                $leoporddata = json_encode(array(
+                'api_key'                       => (env('LEOPORD_API_KEY')),
+                'api_password'                  => (env('LEOPORD_API_PASSWORD')),
+                'booked_packet_weight'          => (trim($request->weight)*1000),                 // Weight should in 'Grams' e.g. '2000'
+                'booked_packet_vol_weight_w'    => $request->booked_packet_vol_weight_w,                 // Optional Field (You can keep it empty), Volumetric Weight Width
+                'booked_packet_vol_weight_h'    => $request->booked_packet_vol_weight_h,                 // Optional Field (You can keep it empty), Volumetric Weight Height
+                'booked_packet_vol_weight_l'    => $request->booked_packet_vol_weight_l,                 // Optional Field (You can keep it empty), Volumetric Weight Length
+                'booked_packet_no_piece'        => (int)trim($request->total_pieces),                 // No. of Pieces should an Integer Value
+                'booked_packet_collect_amount'  => (int)trim($request->cod_amount),                 // Collection Amount on Delivery
+                'booked_packet_order_id'        => $ManualOrder->id,            // Optional Filed, (If any) Order ID of Given Product
+                
+                'origin_city'                   => env('LEOPORD_ORIGIN_CITY'),            /** Params: 'self' or 'integer_value' e.g. 'origin_city' => 'self' or 'origin_city' => 789 (where 789 is Lahore ID)
+                                                                         * If 'self' is used then Your City ID will be used.
+                                                                         * 'integer_value' provide integer value (for integer values read 'Get All Cities' api documentation)
+                                                                         */
+                
+                'destination_city'              => $request->leopord_city,            /** Params: 'self' or 'integer_value' e.g. 'destination_city' => 'self' or 'destination_city' => 789 (where 789 is Lahore ID)
+                                                                         * If 'self' is used then Your City ID will be used.
+                                                                         * 'integer_value' provide integer value (for integer values read 'Get All Cities' api documentation) 
+                                                                         */
+                
+                'shipment_id'                   => 1648479,
+                'shipment_name_eng'             => 'self',            // Params: 'self' or 'Type any other Name here', If 'self' will used then Your Company's Name will be Used here
+                'shipment_email'                => 'self',            // Params: 'self' or 'Type any other Email here', If 'self' will used then Your Company's Email will be Used here
+                'shipment_phone'                => 'self',            // Params: 'self' or 'Type any other Phone Number here', If 'self' will used then Your Company's Phone Number will be Used here
+                'shipment_address'              => 'self',            // Params: 'self' or 'Type any other Address here', If 'self' will used then Your Company's Address will be Used here
+                
+                
+                'consignment_name_eng'          => trim($request->receiver_name),            // Type Consignee Name here
+                'consignment_email'             => '',            // Optional Field (You can keep it empty), Type Consignee Email here
+                'consignment_phone'             => trim($request->receiver_number),            // Type Consignee Phone Number here
+                'consignment_phone_two'         => '',            // Optional Field (You can keep it empty), Type Consignee Second Phone Number here
+                'consignment_phone_three'       => '',            // Optional Field (You can keep it empty), Type Consignee Third Phone Number here
+                'consignment_address'           => trim($request->reciever_address),            // Type Consignee Address here
+                'special_instructions'          => trim($request->description),            // Type any instruction here regarding booked packet
+                'shipment_type'                 => $request->leopord_shipment_type_id,            // Optional Field (You can keep it empty so It will pick default value i.e. "overnight"), Type Shipment type name here
+                'custom_data'                   => '',        // Optional Field (You can keep it empty), [{"key1":"value1","key2":value2,.....}]
+                'return_address'                => '',            // Optional Field (You can keep it empty) - If 'return_address' is empty, then the address of shipper will be added as return address
+                'return_city'                   => '',               // Optional Field (You can keep it empty) - If 'return_city' is empty, then shipper's origin city will ne return city
+                'is_vpc'                        => 1,               
+                ));
+                // dd($this->LeopordGetShipperDetails());
+                // echo "<pre>"; 
+                // print_r($leoporddata);
+                // die;
+                $ApiResponse = $this->LeopordCreateBooking($leoporddata);
+                // dd($ApiResponse);
+                $order_id=$ManualOrder->id;
+                
+                // dd($ApiResponse);
+                
+                // echo '1';
+                if($ApiResponse->status == 1)
+                { 
+                    $act_sta = create_activity_log(['table_name'=>'manual_orders','ref_id'=>$order_id,'activity_desc'=>'Trax booking created','created_by'=>Auth::id(),'method'=>'update','route'=>route('ManualOrders.update',$order_id)]);
+
+                    // echo '2';
+                    $id = array();
+                    array_push($id, $ApiResponse->track_number);
+                    // dd($id);
+                    $ManualOrder->date_order_paid = $request->date_order_paid;
+                    $ManualOrder->reference_number = '';
+                    $ManualOrder->consignment_id = $ApiResponse->track_number; 
+                    $ManualOrder->service_type = $request->leopord_shipment_type_id; 
+                    $ManualOrder->shipment_company = $request->shipment_type;
+                    $ManualOrder->shipment_slip = $ApiResponse->slip_link;
+                    $ManualOrder->cities_id = $request->city; 
+                    $ManualOrder->updated_by = Auth::id();
+                    $ManualOrder->status = 'dispatched';  
+                    // echo '3';
+                    
+>>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
                     // echo '4';
                     $status = $ManualOrder->save();
                     $act_sta = create_activity_log(['table_name'=>'manual_orders','ref_id'=>$order_id,'activity_desc'=>'Edit order data','created_by'=>Auth::id(),'method'=>'update','route'=>route('ManualOrders.update',$order_id)]);
@@ -665,9 +845,15 @@ class ManualOrdersController extends Controller
                         return back();
                         // dd();
                     }
+<<<<<<< HEAD
                     
                     $slips = $this->print_trax_slips($id);
                     return view('client.orders.manual-orders.trax.print_trax_slip')->with('slips',$slips);
+=======
+                    // return view('client.orders.manual-orders.leopord.print_slip')->with(['slip'=>$ApiResponse->slip_link]);
+                    return redirect()->away($ApiResponse->slip_link);
+                    // return view('client.orders.manual-orders.trax.print_trax_slip')->with('slips',$slips);
+>>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
                 }
                 
                 else
@@ -680,7 +866,8 @@ class ManualOrdersController extends Controller
             else if($request->shipment_type == 'local')
             {
                 // dd($ManualOrder); 
-                $ManualOrder->status = 'dispatched';
+                $ManualOrder->status = 'dispatched'; 
+                $ManualOrder->updated_by = Auth::id();
                 if(check_customer_advance_payment($order_id) > 0)
                 {
                     toastr()->error('payment not approved','Error');
@@ -691,6 +878,7 @@ class ManualOrdersController extends Controller
                 
                 
                 
+                $ManualOrder->shipment_company = $request->shipment_type;
                 $ManualOrder->status = 'dispatched';
                 $status = $ManualOrder->save();
                 // dd($status);
@@ -725,6 +913,8 @@ class ManualOrdersController extends Controller
      */
     public function destroy(ManualOrders $ManualOrder)
     { 
+        
+        $ManualOrder->updated_by = Auth::id();
         $ManualOrder->status = 'deleted';
         $ManualOrder->save();
         return redirect()->route('ManualOrders.index')->with('success', 'Order Deleted');
@@ -732,6 +922,8 @@ class ManualOrdersController extends Controller
     }
     public function order_status($status, ManualOrders $ManualOrder)
     { 
+        
+        $ManualOrder->updated_by = Auth::id();
         $ManualOrder->status = $status;
         $ManualOrder->save();
         return redirect()->route('ManualOrders.index')->with('success', 'Order '.$status);
@@ -923,8 +1115,11 @@ class ManualOrdersController extends Controller
             
             $explode_id = explode(',', $order_ids); 
             $ManualOrders = Manualorders::whereIn('manual_orders.id',$explode_id)->get();
-            // dd('w');
-            // dd($ManualOrders);
+            // dd($ManualOrders->first()->id);
+            $clc = $this->CheckCustomerLoyalityStatus($ManualOrders->first()->id);
+            
+            // dd($customer_loyality_status->first());
+            // dd($customer_loyality_value);
             foreach($ManualOrders as $ManualOrder)
             {
                 if($ManualOrder->status == 'dispatched')
@@ -941,14 +1136,13 @@ class ManualOrdersController extends Controller
                     }
                 }
             }
-            
             foreach($ManualOrders as $ManualOrder)
             {
                 create_activity_log(['table_name'=>'manual_orders','ref_id'=>$ManualOrder->id,'activity_desc'=>'pos slip','created_by'=>Auth::id(),'method'=>'print','route'=>route('ManualOrders.order.action')]);
     
             }
             
-            return view('client.orders.manual-orders.print_pos_slips')->with('ManualOrders',$ManualOrders);
+            return view('client.orders.manual-orders.print_pos_slips')->with(['ManualOrders'=>$ManualOrders,'clc'=>$clc]);
                 //dd($order_ids);
         }
         
@@ -989,8 +1183,9 @@ class ManualOrdersController extends Controller
             $ManualOrdersMaster->images = $images;
             $ManualOrdersMaster->price = $price; 
             $ManualOrdersMaster->status = 'pending';
+            
             $ManualOrdersMaster->save();
-            $ids_update = ManualOrders::whereIn('id',$duplicate_ids)->update(['status' => 'duplicate']);
+            $ids_update = ManualOrders::whereIn('id',$duplicate_ids)->update(['status' => 'duplicate', 'updated_by' => Auth::id()]);
         
             create_activity_log(['table_name'=>'manual_orders','ref_id'=>$ManualOrdersMaster->id,'activity_desc'=>'two orders merge from '.$ManualOrdersMaster->id.' to '.$duplicate_ids[0],'created_by'=>Auth::id(),'method'=>'update','route'=>route('ManualOrders.order.action')]);
             
@@ -1003,11 +1198,24 @@ class ManualOrdersController extends Controller
         //dd($request->order_action);
     }
     
+    public function CustomerDetailsByCode(Request $request)
+    {
+        $customer_id = $request->customer_id;
+        $query = Customers::select('*')->where('id',$customer_id)->first();
+        return response()->json([
+            'error' => 0,
+            'data' => $query  
+            ]); 
+    }
+    
     public function previouse_order_history(Request $request)
     { 
         // dd($request->number);
         // dd(date('Y-m-d h:i:s', strtotime("-3 days")));
-        if(Auth::guard('admin')->check())
+        $user_id = User::find(auth()->user()->id);
+        $user_roles = $user_id->roles()->get()->pluck('name')->toArray();
+
+        if(in_array('author', $user_roles) || in_array('admin', $user_roles))
         {
             
         }
@@ -1108,7 +1316,7 @@ class ManualOrdersController extends Controller
                         <td>'.$ManualOrder->status.'</td>';
                 }
             $data .= '</tbody>';
-        //dd($data);
+        // dd($ManualOrders);
         
         return response()->json([
             'messege' => $data,
@@ -1121,6 +1329,8 @@ class ManualOrdersController extends Controller
     
     public function status_order_list( Request $request)
     {
+        $user_id = User::find(auth()->user()->id);
+        $user_roles = $user_id->roles()->get()->pluck('name')->toArray();
         //dd($request->status); 
         $status = $request->status;
         
@@ -1148,7 +1358,7 @@ class ManualOrdersController extends Controller
             //$list = $list->all();
             //dd($list->all());
         $statuses = get_active_order_status_list();
-        return view('client.orders.manual-orders.list')->with(['list'=>$query,'duplicate_check' => $duplicate_check,'users'=>$users,'statuses'=>$statuses]);
+        return view('client.orders.manual-orders.list')->with(['list'=>$query,'duplicate_check' => $duplicate_check,'users'=>$users,'statuses'=>$statuses,'user_roles'=>$user_roles]);
         
     } 
     
@@ -1182,13 +1392,17 @@ class ManualOrdersController extends Controller
     
     public function ChangeOrderStatus(Request $request)
     {
+        
         $manualorder = ManualOrders::find($request->order_id);
         if($manualorder->status == 'dispatched')
         {
             if(Auth::guard('admin')->check())
             {
-                $manualorder->status = $request->status;
-                $update_status = $manualorder->save();
+                // $manualorder->status = $request->status; 
+                // $update_status = $manualorder->save();
+                $update_status = $manualorder->update(['status' => $request->status, 'updated_by'=>Auth::id()]);
+                
+                
                 $act_sta = create_activity_log(['table_name'=>'manual_orders','ref_id'=>$request->order_id,'activity_desc'=>'Status changed : '.$request->status,'created_by'=>Auth::id(),'method'=>'update','route'=>route('ManualOrders.change.status')]);
                 // dd($act_sta);
                 if($update_status)
@@ -1199,7 +1413,7 @@ class ManualOrdersController extends Controller
                 {
                     return response()->json(['error'=>'1','messege' => 'Cant change the order status please contact admin']);
                 }
-                // $action_status = ManualOrders::where('id',$order_id)->update(['status' => 'dispatched', 'riders_id'=> $request->riders]);
+                
             }
             else
             {
@@ -1208,10 +1422,12 @@ class ManualOrdersController extends Controller
         }
         else
         {
-            $manualorder->status = $request->status;
-            $update_status = $manualorder->save();
+            
+            // $manualorder->status = $request->status;
+            // $update_status = $manualorder->save(); 
+            $update_status = $manualorder->update(['status' => $request->status, 'updated_by'=>Auth::id()]);
             $act_sta = create_activity_log(['table_name'=>'manual_orders','ref_id'=>$request->order_id,'activity_desc'=>'Status changed to: '.$request->status,'created_by'=>Auth::id(),'method'=>'update','route'=>route('ManualOrders.change.status')]);
-            // dd($act_sta);
+            // dd($update_status);
             if($update_status)
             {
                 return response()->json(['success'=>'1','messege' => 'Order Status changed to '.$request->status]);
@@ -1435,7 +1651,7 @@ class ManualOrdersController extends Controller
     
     public function get_trax_cities()
     {
-        return $this->GetCities()->cities;
+        return $this->LeopordGetCities()->city_list;
         // $baseUrl = "https://sonic.pk/";
  
         // $apiUrl = $baseUrl."api/cities";
@@ -1718,11 +1934,12 @@ class ManualOrdersController extends Controller
     
     public function PrintPosSlip($ManualOrder)
     {
-        
+        // dd($ManualOrder);
         // $order_id = $id; 
         $ManualOrder = Manualorders::where('manual_orders.id',$ManualOrder)->get();
         $ManualOrders = $ManualOrder->first();
         
+        $clc = $this->CheckCustomerLoyalityStatus($ManualOrders->id);
         if($ManualOrders->status == 'dispatched' || $ManualOrders->status == 'confirmed')
         {
             toastr()->error('Parcel Status is '.$ManualOrders->status.' and cannot print pos slip cause parcel status is Dispatched','Error');
@@ -1730,14 +1947,16 @@ class ManualOrdersController extends Controller
         }
         if($ManualOrders->status == 'pending' || $ManualOrders->status == 'addition')
         {
+            
+            $ManualOrders->updated_by = Auth::id();
             $ManualOrders->status = 'prepared';
             $ManualOrders->save();
             create_activity_log(['table_name'=>'manual_orders','ref_id'=>$ManualOrders->id,'activity_desc'=>'Status prepared from pending to prepared','created_by'=>Auth::id(),'method'=>'print','route'=>route('ManualOrders.print.pos.slip',$ManualOrders->id)]);
         }
         create_activity_log(['table_name'=>'manual_orders','ref_id'=>$ManualOrders->id,'activity_desc'=>'pos slip','created_by'=>Auth::id(),'method'=>'print','route'=>route('ManualOrders.order.action')]);
 
-    // dd($ManualOrders);
-        return view('client.orders.manual-orders.print_pos_slips')->with('ManualOrders',$ManualOrder);
+    // dd($ManualOrder);
+        return view('client.orders.manual-orders.print_pos_slips')->with(['ManualOrders'=>$ManualOrder,'clc'=>$clc]);
     }
     
     public function CheckPosSlipDuplication(Manualorders $ManualOrder)
@@ -1913,12 +2132,25 @@ class ManualOrdersController extends Controller
     {
         if($shipmentcompany == 'trax')
         {
+<<<<<<< HEAD
             $cities = $this->get_trax_cities();
+=======
+            $cities = $this->LeopordGetCities()->city_list;
+>>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
         }
         else if($shipmentcompany == 'leopord')
         {
             $cities = $this->LeopordGetCities()->city_list;
         }
+<<<<<<< HEAD
+        
+        
+         
+        return response()->json(['success' => '1', 'cities' => $cities]);
+        
+    }
+=======
+>>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
         
         
          
@@ -1926,6 +2158,98 @@ class ManualOrdersController extends Controller
         
     }
         
+    public function CheckCustomerLoyalityStatus($explode_id)
+    {
+        $customer_loyality_value='';
+        $customer_loyality_status = Manualorders::select(
+            DB::raw("(select count(*) from manual_orders where customers.id = manual_orders.customers_id and status = 'return') as return_count"), 
+            DB::raw("(select count(*) from manual_orders where customers.id = manual_orders.customers_id and status = 'dispatched') as dispatched_count")
+        )->leftJoin('customers', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.id',$explode_id)->get();
+            // dd($customer_loyality_status);
+        $do = (int)$customer_loyality_status->first()->dispatched_count;
+        $ro = (int)$customer_loyality_status->first()->return_count;
+        // $to = 1;
+        // $ro = 2;
+        $per=0;
+        if($ro > 0 && $do >0)
+        {
+            $per = ($ro/($do))*100;
+        }
+        else
+        {
+            $per =0;
+        } 
+        // echo $per;
+        // dd($ro,$do);
+        // echo 'DO: '.$do.' RO: '.$ro; dd($per);
+        if(($per) > 5)
+        {
+            $customer_loyality_value = 'Black List';
+        }
+        else
+        {
+            // customer_loyality_value = 'Lo';
+        } 
+        $data = array([
+            'customer_status'=>$customer_loyality_value,
+            'do'=>$do,
+            'ro'=>$ro
+            ]);
+        return $data;
+    }
+    
+    public function test()
+    {
+        
+        
+        $this->test_session = Utils::loadCurrentSession(
+            $requestHeaders,
+            $requestCookies,
+            $isOnline
+        );
+        
+        $storefront_access_token = new StorefrontAccessToken($this->test_session);
+        $storefront_access_token->title = "Test";
+        $storefront_access_token->save(
+            true 
+        );
+        dd('working');
+    }
+    
+    
+    
+        
+    public function TestFileUpload(Request $request)
+    {
+        dd('working');
+        $image = $request->file('file');
+        dd($image);
+        $imageName = time().'.'.$image->extension();
+        $image->move(public_path('images'),$imageName);
+        return response()->json(['success'=>$imageName]);
+    }
+    
+    public function GetCustomerId(Request $request)
+    {
+        // dd($request);
+        // dd($request->number);
+        
+        $query = Customers::Select('id', 'first_name', 'last_name', 'address', 'email', 'number',  'whatsapp_number', 'created_at')->where('number',$request->number);
+        // $query = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->where('customers.number',$request->number);
+        $search_text = $request->number;
+        $query = $query->
+            where(function ($query) use ($search_text) {
+                $query->where('customers.number','like',$search_text.'%')
+                    ->orWhere('customers.number','like','%'.$search_text.'%')
+                    ->orWhere('customers.number','like','%'.$search_text)
+                    ->orWhere('customers.whatsapp_number','like',$search_text.'%')
+                    ->orWhere('customers.whatsapp_number','like','%'.$search_text.'%')
+                    ->orWhere('customers.whatsapp_number','like','%'.$search_text);
+            });
+        
+            // dd($query->first());
+        return response()->json(['success'=>1,'data'=> $query->get()]);
+    }
     
     
  

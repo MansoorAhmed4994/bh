@@ -559,6 +559,17 @@ var order_link='';
                 
                 
                 ?>
+                <td>
+                    <div class="btn-group" role="group">
+                        <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" style="background:white;border:2px solid #4ac95a;color:black;padding: 0 11px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/WhatsApp_icon.png/640px-WhatsApp_icon.png" width=30 style="margin-right: 5px;">Start msg
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">            
+                            <a target="_blank" class="dropdown-item" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualaikum {{$lists->first_name}},%0aI am from Brandhub, %0aPlease Follow the Social Platform for latest product upcomming %0aFacebook:https://www.facebook.com/Brandhub000/ %0aInstagram: https://www.instagram.com/brandshub000/ %0aTiktok: https://www.tiktok.com/@brandhub994 %0aYoutube: https://www.youtube.com/@brandhub8324 ">Social Links</a> 
+                            <a target="_blank" class="dropdown-item" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualaikum {{$lists->first_name}},%0aMain brandhub se mukhatib hoon, %0aham dekh sakte hain ke apne bht time se hamse kuch khareedari nahi ki hai, %0aMubarak hoo, khush khabri hai apke liye apke agle order per apko dene ke liye hamari janib se ak tohfa hai barae meherbani 7 din kay ander apna order place krain or apne tohfe se lutf andooz hoon shukria apka code ye hai: '{{$lists->id}}' isko code ko order place krte wkt agent ko bata dain.%0a %0a %0Or ye social platforms ko like and follow bhi zaroor karain ta ke apko new products ki malomat bawakt milti rhe %0aFacebook: https://www.facebook.com/Brandhub000/ %0aInstagram: https://www.instagram.com/brandshub000/ %0aTiktok: https://www.tiktok.com/@brandhub994 %0aYoutube: https://www.youtube.com/@brandhub8324">Customer Retain</a> 
+                        </div>
+                    </div>
+                </td>
                 <td><a target="_blank" href="https://api.whatsapp.com/send?phone=<?=$reciever_number?>&text=Assalamualikum {{$lists->first_name}}, I am from Brandhub, Mam you are our loyal customers, Mam you purchase some articles on {{date('d-M-y', strtotime($lists->created_at))}}, please let me know if you have issue with our product Thank you"><?=$reciever_number?></a></td> 
                 <td><a ><?=$number?></a></td> 
                 

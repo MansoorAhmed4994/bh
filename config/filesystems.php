@@ -64,6 +64,11 @@ return [
             'url' => env('AWS_URL'),
             'endpoint' => env('AWS_ENDPOINT'),
         ],
+        
+        'upload_images' => [
+            'driver' => 'local',
+            'root' => storage_path('images/orders/manual-orders/'),
+        ],
 
     ],
 
