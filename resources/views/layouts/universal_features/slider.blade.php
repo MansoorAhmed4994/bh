@@ -106,6 +106,43 @@
         // alert(image);
     }
     
+    function checkImage2(url) {
+        var image_status = false;
+        var request = new XMLHttpRequest();
+        request.open("GET", url, true);
+        request.send();
+        request.onload = function() {
+            status = request.status;
+            if (request.status == 200)  
+            {
+                image_status = true;
+            } 
+            else {
+                image_status = false;
+            }
+        }
+        return image_status;
+    }
+     
+    function checkImage(img) {
+    // During the onload event, IE correctly identifies any images that
+        // weren’t downloaded as not complete. Others should too. Gecko-based
+        // browsers act like NS4 in that they report this incorrectly.
+        if (!img.complete) {
+            return false;
+        }
+    
+        // However, they do have two very useful properties: naturalWidth and
+        // naturalHeight. These give the true size of the image. If it failed
+        // to load, either of these should be zero.
+        if (img.naturalWidth === 0) {
+            return false;
+        }
+    
+        // No other way of checking: assume it’s ok.
+        return true;
+    }
+    
     function UniversalImagesBoxes(image_index,images,order_id)
     {
         order_id_for_demand = order_id;
@@ -115,6 +152,7 @@
         var slider_imgage_src = "";
         for(var i=0; i<images_array.length; i++)
         {
+            found_image = '';
             if(image_index == i)
             {
                 active_image_index = 'active';
@@ -122,6 +160,39 @@
             else
             {
                 active_image_index = '';
+            }
+            
+            // var find_image = fileExists("{{  url('') }}/"+images_array[i],images_array[i]);
+            var check_image = checkImage("{{  url('') }}/"+images_array[i]);
+            console.log(check_image);
+            if(check_image == false)
+            {
+                console.log('image bot found 1');
+                check_image = checkImage("https://demo.desenador.com/brandhubportal/"+images_array[i]);
+                if(check_image == false)
+                {
+                    console.log('image bot found 2');
+                    check_image = checkImage("https://customer.brandhub.com.pk/"+images_array[i]);
+                    if(check_image == false)
+                    {
+                        console.log('image bot found 3');
+                        found_image = "https://customer.brandhub.com.pk/"+images_array[i];
+                    }
+                    else
+                    {
+                        console.log('image found 1');
+                    }
+                }
+                else
+                {
+                    console.log('image found 2');
+                    found_image = "https://demo.desenador.com/brandhubportal/"+images_array[i];
+                }
+            }
+            else
+            {
+                console.log('image found 3', check_image);
+                found_image = "{{  url('') }}/"+images_array[i];
             }
             
             slider_imgage_src +='<div class="col-sm-4">'; 

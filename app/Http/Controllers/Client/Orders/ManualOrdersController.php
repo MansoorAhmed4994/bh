@@ -272,7 +272,7 @@ class ManualOrdersController extends Controller
             ->where('manual_orders.created_at', '<',$from_date) 
             
             ->groupBy('customers.id','customers.first_name','customers.status','customers.number','customers.whatsapp_number','customers.created_at','customers.description','customers.address','customers.remarks')
-            ->orderBy('total_purchase', 'ASC')
+            ->orderBy('total_purchase', 'DESC')
             ->paginate(100);
             // dd($views_customer_data);
         return view('client.orders.manual-orders.inactive_customers')->with('list',$views_customer_data); 

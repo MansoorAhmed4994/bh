@@ -185,3 +185,213 @@ Stack trace:
 [26-Sep-2024 19:33:09 Asia/Karachi] PHP Fatal error:  Namespace declaration statement has to be the very first statement or after any declare call in the script in /home/desenado/demo.desenador.com/brandhubstagingportal/app/Http/Controllers/Frontend/CustomersController.php on line 3
 [26-Sep-2024 19:33:57 Asia/Karachi] PHP Fatal error:  Namespace declaration statement has to be the very first statement or after any declare call in the script in /home/desenado/demo.desenador.com/brandhubstagingportal/app/Http/Controllers/Frontend/CustomersController.php on line 3
 >>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
+[23-Dec-2024 10:12:35 Asia/Karachi] PHP Fatal error:  During class fetch: Uncaught ParseError: syntax error, unexpected '<<' (T_SL) in /home/desenado/manualorders.brandhub.com.pk/app/Traits/CurlTraits.php:57
+Stack trace:
+#0 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#1 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Curl...')
+#2 /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php(15): spl_autoload_call('App\\Traits\\Curl...')
+#3 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(571): include('/home/desenado/...')
+#4 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#5 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Leop...')
+#6 /home/desenado/manualorders.brandhub.com.pk/app/Http/Controllers/Client/Orders/ManualOrdersController.php(39): spl_autoload_call('App\\Traits\\Leop...')
+#7 /home/de in /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php on line 15
+[23-Dec-2024 10:16:30 Asia/Karachi] PHP Fatal error:  During class fetch: Uncaught ParseError: syntax error, unexpected '<<' (T_SL) in /home/desenado/manualorders.brandhub.com.pk/app/Traits/CurlTraits.php:57
+Stack trace:
+#0 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#1 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Curl...')
+#2 /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php(15): spl_autoload_call('App\\Traits\\Curl...')
+#3 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(571): include('/home/desenado/...')
+#4 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#5 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Leop...')
+#6 /home/desenado/manualorders.brandhub.com.pk/app/Http/Controllers/Client/Orders/ManualOrdersController.php(39): spl_autoload_call('App\\Traits\\Leop...')
+#7 /home/de in /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php on line 15
+[23-Dec-2024 10:16:43 Asia/Karachi] PHP Fatal error:  During class fetch: Uncaught ParseError: syntax error, unexpected '<<' (T_SL) in /home/desenado/manualorders.brandhub.com.pk/app/Traits/CurlTraits.php:57
+Stack trace:
+#0 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#1 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Curl...')
+#2 /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php(15): spl_autoload_call('App\\Traits\\Curl...')
+#3 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(571): include('/home/desenado/...')
+#4 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#5 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Leop...')
+#6 /home/desenado/manualorders.brandhub.com.pk/app/Http/Controllers/Client/Orders/ManualOrdersController.php(39): spl_autoload_call('App\\Traits\\Leop...')
+#7 /home/de in /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php on line 15
+[23-Dec-2024 11:13:32 Asia/Karachi] PHP Fatal error:  During class fetch: Uncaught ParseError: syntax error, unexpected '<<' (T_SL) in /home/desenado/manualorders.brandhub.com.pk/app/Traits/CurlTraits.php:57
+Stack trace:
+#0 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#1 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Curl...')
+#2 /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php(15): spl_autoload_call('App\\Traits\\Curl...')
+#3 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(571): include('/home/desenado/...')
+#4 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#5 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Leop...')
+#6 /home/desenado/manualorders.brandhub.com.pk/app/Http/Controllers/Client/Orders/ManualOrdersController.php(39): spl_autoload_call('App\\Traits\\Leop...')
+#7 /home/de in /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php on line 15
+[23-Dec-2024 11:58:24 Asia/Karachi] PHP Fatal error:  During class fetch: Uncaught ParseError: syntax error, unexpected '<<' (T_SL) in /home/desenado/manualorders.brandhub.com.pk/app/Traits/CurlTraits.php:57
+Stack trace:
+#0 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#1 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Curl...')
+#2 /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php(15): spl_autoload_call('App\\Traits\\Curl...')
+#3 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(571): include('/home/desenado/...')
+#4 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#5 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Leop...')
+#6 /home/desenado/manualorders.brandhub.com.pk/app/Http/Controllers/Shipment/LeopordController.php(13): spl_autoload_call('App\\Traits\\Leop...')
+#7 /home/desenado/man in /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php on line 15
+[23-Dec-2024 11:58:36 Asia/Karachi] PHP Fatal error:  During class fetch: Uncaught ParseError: syntax error, unexpected '<<' (T_SL) in /home/desenado/manualorders.brandhub.com.pk/app/Traits/CurlTraits.php:57
+Stack trace:
+#0 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#1 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Curl...')
+#2 /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php(15): spl_autoload_call('App\\Traits\\Curl...')
+#3 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(571): include('/home/desenado/...')
+#4 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#5 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Leop...')
+#6 /home/desenado/manualorders.brandhub.com.pk/app/Http/Controllers/Shipment/LeopordController.php(13): spl_autoload_call('App\\Traits\\Leop...')
+#7 /home/desenado/man in /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php on line 15
+[23-Dec-2024 11:58:53 Asia/Karachi] PHP Fatal error:  During class fetch: Uncaught ParseError: syntax error, unexpected '<<' (T_SL) in /home/desenado/manualorders.brandhub.com.pk/app/Traits/CurlTraits.php:57
+Stack trace:
+#0 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#1 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Curl...')
+#2 /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php(15): spl_autoload_call('App\\Traits\\Curl...')
+#3 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(571): include('/home/desenado/...')
+#4 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#5 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Leop...')
+#6 /home/desenado/manualorders.brandhub.com.pk/app/Http/Controllers/Shipment/LeopordController.php(13): spl_autoload_call('App\\Traits\\Leop...')
+#7 /home/desenado/man in /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php on line 15
+[23-Dec-2024 12:00:19 Asia/Karachi] PHP Fatal error:  During class fetch: Uncaught ParseError: syntax error, unexpected '<<' (T_SL) in /home/desenado/manualorders.brandhub.com.pk/app/Traits/CurlTraits.php:57
+Stack trace:
+#0 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#1 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Curl...')
+#2 /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php(15): spl_autoload_call('App\\Traits\\Curl...')
+#3 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(571): include('/home/desenado/...')
+#4 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#5 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Leop...')
+#6 /home/desenado/manualorders.brandhub.com.pk/app/Http/Controllers/Shipment/LeopordController.php(13): spl_autoload_call('App\\Traits\\Leop...')
+#7 /home/desenado/man in /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php on line 15
+[23-Dec-2024 12:22:51 Asia/Karachi] PHP Fatal error:  During class fetch: Uncaught ParseError: syntax error, unexpected '<<' (T_SL) in /home/desenado/manualorders.brandhub.com.pk/app/Traits/CurlTraits.php:57
+Stack trace:
+#0 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#1 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Curl...')
+#2 /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php(15): spl_autoload_call('App\\Traits\\Curl...')
+#3 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(571): include('/home/desenado/...')
+#4 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#5 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Leop...')
+#6 /home/desenado/manualorders.brandhub.com.pk/app/Http/Controllers/Shipment/LeopordController.php(13): spl_autoload_call('App\\Traits\\Leop...')
+#7 /home/desenado/man in /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php on line 15
+[23-Dec-2024 13:01:17 Asia/Karachi] PHP Fatal error:  During class fetch: Uncaught ParseError: syntax error, unexpected '<<' (T_SL) in /home/desenado/manualorders.brandhub.com.pk/app/Traits/CurlTraits.php:57
+Stack trace:
+#0 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#1 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Curl...')
+#2 /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php(15): spl_autoload_call('App\\Traits\\Curl...')
+#3 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(571): include('/home/desenado/...')
+#4 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#5 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Leop...')
+#6 /home/desenado/manualorders.brandhub.com.pk/app/Http/Controllers/Client/Orders/ManualOrdersController.php(39): spl_autoload_call('App\\Traits\\Leop...')
+#7 /home/de in /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php on line 15
+[23-Dec-2024 13:07:10 Asia/Karachi] PHP Fatal error:  During class fetch: Uncaught ParseError: syntax error, unexpected '<<' (T_SL) in /home/desenado/manualorders.brandhub.com.pk/app/Traits/CurlTraits.php:57
+Stack trace:
+#0 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#1 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Curl...')
+#2 /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php(15): spl_autoload_call('App\\Traits\\Curl...')
+#3 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(571): include('/home/desenado/...')
+#4 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#5 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Leop...')
+#6 /home/desenado/manualorders.brandhub.com.pk/app/Http/Controllers/Client/Orders/ManualOrdersController.php(39): spl_autoload_call('App\\Traits\\Leop...')
+#7 /home/de in /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php on line 15
+[23-Dec-2024 13:07:17 Asia/Karachi] PHP Fatal error:  During class fetch: Uncaught ParseError: syntax error, unexpected '<<' (T_SL) in /home/desenado/manualorders.brandhub.com.pk/app/Traits/CurlTraits.php:57
+Stack trace:
+#0 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#1 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Curl...')
+#2 /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php(15): spl_autoload_call('App\\Traits\\Curl...')
+#3 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(571): include('/home/desenado/...')
+#4 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#5 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Leop...')
+#6 /home/desenado/manualorders.brandhub.com.pk/app/Http/Controllers/Client/Orders/ManualOrdersController.php(39): spl_autoload_call('App\\Traits\\Leop...')
+#7 /home/de in /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php on line 15
+[23-Dec-2024 13:07:27 Asia/Karachi] PHP Fatal error:  During class fetch: Uncaught ParseError: syntax error, unexpected '<<' (T_SL) in /home/desenado/manualorders.brandhub.com.pk/app/Traits/CurlTraits.php:57
+Stack trace:
+#0 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#1 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Curl...')
+#2 /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php(15): spl_autoload_call('App\\Traits\\Curl...')
+#3 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(571): include('/home/desenado/...')
+#4 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#5 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Leop...')
+#6 /home/desenado/manualorders.brandhub.com.pk/app/Http/Controllers/Client/Orders/ManualOrdersController.php(39): spl_autoload_call('App\\Traits\\Leop...')
+#7 /home/de in /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php on line 15
+[23-Dec-2024 13:07:45 Asia/Karachi] PHP Fatal error:  During class fetch: Uncaught ParseError: syntax error, unexpected '<<' (T_SL) in /home/desenado/manualorders.brandhub.com.pk/app/Traits/CurlTraits.php:57
+Stack trace:
+#0 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#1 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Curl...')
+#2 /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php(15): spl_autoload_call('App\\Traits\\Curl...')
+#3 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(571): include('/home/desenado/...')
+#4 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#5 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Leop...')
+#6 /home/desenado/manualorders.brandhub.com.pk/app/Http/Controllers/Client/Orders/ManualOrdersController.php(39): spl_autoload_call('App\\Traits\\Leop...')
+#7 /home/de in /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php on line 15
+[23-Dec-2024 13:07:50 Asia/Karachi] PHP Fatal error:  During class fetch: Uncaught ParseError: syntax error, unexpected '<<' (T_SL) in /home/desenado/manualorders.brandhub.com.pk/app/Traits/CurlTraits.php:57
+Stack trace:
+#0 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#1 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Curl...')
+#2 /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php(15): spl_autoload_call('App\\Traits\\Curl...')
+#3 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(571): include('/home/desenado/...')
+#4 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#5 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Leop...')
+#6 /home/desenado/manualorders.brandhub.com.pk/app/Http/Controllers/Client/Orders/ManualOrdersController.php(39): spl_autoload_call('App\\Traits\\Leop...')
+#7 /home/de in /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php on line 15
+[23-Dec-2024 13:08:37 Asia/Karachi] PHP Fatal error:  During class fetch: Uncaught ParseError: syntax error, unexpected '<<' (T_SL) in /home/desenado/manualorders.brandhub.com.pk/app/Traits/CurlTraits.php:57
+Stack trace:
+#0 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#1 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Curl...')
+#2 /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php(15): spl_autoload_call('App\\Traits\\Curl...')
+#3 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(571): include('/home/desenado/...')
+#4 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#5 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Leop...')
+#6 /home/desenado/manualorders.brandhub.com.pk/app/Http/Controllers/Client/Orders/ManualOrdersController.php(39): spl_autoload_call('App\\Traits\\Leop...')
+#7 /home/de in /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php on line 15
+[23-Dec-2024 13:08:41 Asia/Karachi] PHP Fatal error:  During class fetch: Uncaught ParseError: syntax error, unexpected '<<' (T_SL) in /home/desenado/manualorders.brandhub.com.pk/app/Traits/CurlTraits.php:57
+Stack trace:
+#0 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#1 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Curl...')
+#2 /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php(15): spl_autoload_call('App\\Traits\\Curl...')
+#3 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(571): include('/home/desenado/...')
+#4 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#5 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Leop...')
+#6 /home/desenado/manualorders.brandhub.com.pk/app/Http/Controllers/Client/Orders/ManualOrdersController.php(39): spl_autoload_call('App\\Traits\\Leop...')
+#7 /home/de in /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php on line 15
+[23-Dec-2024 13:09:45 Asia/Karachi] PHP Fatal error:  During class fetch: Uncaught ParseError: syntax error, unexpected '<<' (T_SL) in /home/desenado/manualorders.brandhub.com.pk/app/Traits/CurlTraits.php:57
+Stack trace:
+#0 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#1 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Curl...')
+#2 /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php(15): spl_autoload_call('App\\Traits\\Curl...')
+#3 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(571): include('/home/desenado/...')
+#4 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#5 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Leop...')
+#6 /home/desenado/manualorders.brandhub.com.pk/app/Http/Controllers/Client/Orders/ManualOrdersController.php(39): spl_autoload_call('App\\Traits\\Leop...')
+#7 /home/de in /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php on line 15
+[23-Dec-2024 13:09:47 Asia/Karachi] PHP Fatal error:  During class fetch: Uncaught ParseError: syntax error, unexpected '<<' (T_SL) in /home/desenado/manualorders.brandhub.com.pk/app/Traits/CurlTraits.php:57
+Stack trace:
+#0 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#1 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Curl...')
+#2 /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php(15): spl_autoload_call('App\\Traits\\Curl...')
+#3 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(571): include('/home/desenado/...')
+#4 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#5 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Leop...')
+#6 /home/desenado/manualorders.brandhub.com.pk/app/Http/Controllers/Client/Orders/ManualOrdersController.php(39): spl_autoload_call('App\\Traits\\Leop...')
+#7 /home/de in /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php on line 15
+[23-Dec-2024 14:33:18 Asia/Karachi] PHP Fatal error:  During class fetch: Uncaught ParseError: syntax error, unexpected '<<' (T_SL) in /home/desenado/manualorders.brandhub.com.pk/app/Traits/CurlTraits.php:57
+Stack trace:
+#0 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#1 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Curl...')
+#2 /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php(15): spl_autoload_call('App\\Traits\\Curl...')
+#3 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(571): include('/home/desenado/...')
+#4 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#5 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Leop...')
+#6 /home/desenado/manualorders.brandhub.com.pk/app/Http/Controllers/Client/Orders/ManualOrdersController.php(39): spl_autoload_call('App\\Traits\\Leop...')
+#7 /home/de in /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php on line 15
+[23-Dec-2024 14:38:38 Asia/Karachi] PHP Fatal error:  During class fetch: Uncaught ParseError: syntax error, unexpected '<<' (T_SL) in /home/desenado/manualorders.brandhub.com.pk/app/Traits/CurlTraits.php:57
+Stack trace:
+#0 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#1 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Curl...')
+#2 /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php(15): spl_autoload_call('App\\Traits\\Curl...')
+#3 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(571): include('/home/desenado/...')
+#4 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#5 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Leop...')
+#6 /home/desenado/manualorders.brandhub.com.pk/app/Http/Controllers/Client/Orders/ManualOrdersController.php(39): spl_autoload_call('App\\Traits\\Leop...')
+#7 /home/de in /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php on line 15
