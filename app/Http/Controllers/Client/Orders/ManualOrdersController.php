@@ -63,11 +63,11 @@ class ManualOrdersController extends Controller
     {
         return array(
             'manual_orders.id',
-            'customers.first_name',
-            'customers.last_name',
-            'customers.number',
-            'customers.address',
-            'customers.loyality_count',
+            // 'customers.first_name',
+            // 'customers.last_name',
+            // 'customers.number',
+            // 'customers.address',
+            // 'customers.loyality_count',
             'manual_orders.consignment_id',
             'manual_orders.advance_payment',
             'manual_orders.cod_amount',
@@ -84,8 +84,8 @@ class ManualOrdersController extends Controller
             'manual_orders.created_at',
             'manual_orders.updated_at',
             'manual_orders.shipment_company',
-            DB::raw("(select count(*) from manual_orders where customers.id = manual_orders.customers_id and status = 'return') as return_count"), 
-            DB::raw("(select count(*) from manual_orders where customers.id = manual_orders.customers_id and status = 'dispatched') as dispatched_count"), 
+            // DB::raw("(select count(*) from manual_orders where customers.id = manual_orders.customers_id and status = 'return') as return_count"), 
+            // DB::raw("(select count(*) from manual_orders where customers.id = manual_orders.customers_id and status = 'dispatched') as dispatched_count"), 
             // DB::raw("CONCAT(t.first_name,'') as updated_by"), 
             // DB::raw("CONCAT(users.first_name,'') as created_by"), 
             'manual_orders.created_by as created_by',
@@ -246,7 +246,10 @@ class ManualOrdersController extends Controller
         
         $assign_to_users = User::whereHas('roles', function($q){$q->where('name', 'calling');})->get();
         
+        $list = $query->take(300);
         $list = $query->Paginate(20); 
+        // dd($list);
+        //  $list = $query->take(100)->Paginate(20);
         // $pagination_cuttons = $query->paginate(20);
         $statuses = get_active_order_status_list();
         $catgories = product_child_categories();

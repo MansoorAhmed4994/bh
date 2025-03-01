@@ -3,6 +3,7 @@
 
 @section('content')
  
+ 
 <script type="text/javascript">
         var base_url = '<?php echo e(url('/')); ?>';
         var row_id="1";
@@ -19,6 +20,7 @@
           }
         }
         
+  
         function change_cod_amount(cod_amount)
         {
             //total_parcels--;
@@ -43,7 +45,7 @@
         function PrintElem()
         {
             removeElementsByClass('delete_btn_class');
-            var mywindow = window.open('', 'PRINT', 'height=400,width=600');
+            var mywindow = window.open('', 'PRINT', 'height=800,width=1080');
         
             mywindow.document.write('<html>'); 
             mywindow.document.write('<title>' + document.title  + '</title>'); 
@@ -178,7 +180,20 @@
                                 }
                                 total_parcels++;
                                 $('#total_parcels').html(total_parcels);
-                                var row_data = '<tr id="'+row_id+'"><td class="delete_btn_class"><button type="button" class="btn btn-danger " onclick="delete_row('+row_id+','+cod_amount+')">Delete</button></td><td class="delete_btn_class"><input type="checkbox" value="'+e.messege.id+'" name="order_ids[]" checked></td><td>'+e.messege.id+'</td><td>'+e.messege.receiver_name+'</td><td>'+e.messege.receiver_number+'</td><td>'+e.messege.reciever_address+'</td><td><input tye="hidden" onkeyup="change_cod_amount(this.value)" value="'+cod_amount+'" name="cod_amount[]" id="total_amount"></td></td><td>'+e.messege.status+'</td><td style="border: 2px solid black;"></td></tr>';
+                                var row_data = '<tr id="'+row_id+'">';
+                                row_data += '<td class="delete_btn_class"><button type="button" class="btn btn-danger " onclick="delete_row('+row_id+','+cod_amount+')"><i class="bi bi-trash"></i></button></td>';
+                                row_data += '<td class="delete_btn_class"><input type="checkbox" value="'+e.messege.id+'" name="order_ids[]" checked></td>';
+                                row_data += '<td>'+e.messege.id+'</td>';
+                                row_data += '<td>'+e.messege.receiver_name+'</td>';
+                                row_data += '<td>'+e.messege.receiver_number+'</td>';
+                                row_data += '<td>'+e.messege.reciever_address+'</td>';
+                                row_data += '<td>'+e.messege.product_price+'</td>';
+                                row_data += '<td>'+e.messege.advance_payment+'</td>';
+                                row_data += '<td>'+e.messege.dc+'</td>';
+                                row_data += '<td><input tye="hidden" onkeyup="change_cod_amount(this.value)" value="'+cod_amount+'" name="cod_amount[]" id="total_amount" readonly></td>';
+                                row_data += '<td>'+e.messege.status+'</td><td style="border: 2px solid black;"></td>';
+                                row_data += '</tr>';
+                                
                                 $("#row_data").prepend(row_data);
                                 row_id++;
                                 $("body").removeClass("loading");
@@ -329,11 +344,14 @@
                         </tr>
                         <tr>
                             <th scope="col" class="delete_btn_class">#</th>
-                            <th scope="col"  class="delete_btn_class"><input type="checkbox" onclick="checkAll(this)" ></th>
+                            <th scope="col" class="delete_btn_class"><input type="checkbox" onclick="checkAll(this)" ></th>
                             <th scope="col">id</th>
                             <th scope="col">Name</th>
                             <th scope="col">number</th>
                             <th scope="col">Address</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Advance</th>
+                            <th scope="col">dc</th>
                             <th scope="col">COD</th>
                             <th scope="col">status</th>
                             <th scope="col">Cus. Sign</th>

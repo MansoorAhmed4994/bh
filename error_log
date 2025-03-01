@@ -185,3 +185,30 @@ Stack trace:
 [26-Sep-2024 19:33:09 Asia/Karachi] PHP Fatal error:  Namespace declaration statement has to be the very first statement or after any declare call in the script in /home/desenado/demo.desenador.com/brandhubstagingportal/app/Http/Controllers/Frontend/CustomersController.php on line 3
 [26-Sep-2024 19:33:57 Asia/Karachi] PHP Fatal error:  Namespace declaration statement has to be the very first statement or after any declare call in the script in /home/desenado/demo.desenador.com/brandhubstagingportal/app/Http/Controllers/Frontend/CustomersController.php on line 3
 >>>>>>> 83d51e85ccf776b1433fdd327875fe24036e4d32
+[23-Dec-2024 11:14:43 Asia/Karachi] PHP Fatal error:  During class fetch: Uncaught ParseError: syntax error, unexpected '<<' (T_SL) in /home/desenado/manualordersstaging.brandhub.com.pk/app/Traits/CurlTraits.php:57
+Stack trace:
+#0 /home/desenado/manualordersstaging.brandhub.com.pk/vendor/composer/ClassLoader.php(427): Composer\Autoload\{closure}('/home/desenado/...')
+#1 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Curl...')
+#2 /home/desenado/manualordersstaging.brandhub.com.pk/app/Traits/LeopordTraits.php(15): spl_autoload_call('App\\Traits\\Curl...')
+#3 /home/desenado/manualordersstaging.brandhub.com.pk/vendor/composer/ClassLoader.php(576): include('/home/desenado/...')
+#4 /home/desenado/manualordersstaging.brandhub.com.pk/vendor/composer/ClassLoader.php(427): Composer\Autoload\{closure}('/home/desenado/...')
+#5 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Leop...')
+#6 /home/desenado/manualordersstaging.brandhub.com.pk/app/Http/Controllers/Client/Orders/ManualOrdersController.php(39): spl_autoload_ca in /home/desenado/manualordersstaging.brandhub.com.pk/app/Traits/LeopordTraits.php on line 15
+[03-Feb-2025 01:05:00 Asia/Karachi] PHP Fatal error:  During class fetch: Uncaught ParseError: syntax error, unexpected '<<' (T_SL) in /home/desenado/manualordersstaging.brandhub.com.pk/app/Traits/CurlTraits.php:57
+Stack trace:
+#0 /home/desenado/manualordersstaging.brandhub.com.pk/vendor/composer/ClassLoader.php(427): Composer\Autoload\{closure}('/home/desenado/...')
+#1 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Curl...')
+#2 /home/desenado/manualordersstaging.brandhub.com.pk/app/Traits/LeopordTraits.php(15): spl_autoload_call('App\\Traits\\Curl...')
+#3 /home/desenado/manualordersstaging.brandhub.com.pk/vendor/composer/ClassLoader.php(576): include('/home/desenado/...')
+#4 /home/desenado/manualordersstaging.brandhub.com.pk/vendor/composer/ClassLoader.php(427): Composer\Autoload\{closure}('/home/desenado/...')
+#5 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Leop...')
+#6 /home/desenado/manualordersstaging.brandhub.com.pk/app/Http/Controllers/Client/Orders/ManualOrdersController.php(39): spl_autoload_ca in /home/desenado/manualordersstaging.brandhub.com.pk/app/Traits/LeopordTraits.php on line 15
+[23-Feb-2025 19:16:33 Asia/Karachi] PHP Fatal error:  During class fetch: Uncaught ParseError: syntax error, unexpected '<<' (T_SL) in /home/desenado/manualordersstaging.brandhub.com.pk/app/Traits/CurlTraits.php:57
+Stack trace:
+#0 /home/desenado/manualordersstaging.brandhub.com.pk/vendor/composer/ClassLoader.php(427): Composer\Autoload\{closure}('/home/desenado/...')
+#1 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Curl...')
+#2 /home/desenado/manualordersstaging.brandhub.com.pk/app/Traits/LeopordTraits.php(15): spl_autoload_call('App\\Traits\\Curl...')
+#3 /home/desenado/manualordersstaging.brandhub.com.pk/vendor/composer/ClassLoader.php(576): include('/home/desenado/...')
+#4 /home/desenado/manualordersstaging.brandhub.com.pk/vendor/composer/ClassLoader.php(427): Composer\Autoload\{closure}('/home/desenado/...')
+#5 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Leop...')
+#6 /home/desenado/manualordersstaging.brandhub.com.pk/app/Http/Controllers/Client/Orders/ManualOrdersController.php(39): spl_autoload_ca in /home/desenado/manualordersstaging.brandhub.com.pk/app/Traits/LeopordTraits.php on line 15

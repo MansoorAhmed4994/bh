@@ -935,14 +935,14 @@ var container = "";
                 <td >
                     <button class="btn btn-primary bi bi-image" onclick="UniversalImagesBoxes(0,'{{$lists->images}}',{{$lists->id}})"></button>
                     <div id="order_images">
-                    @if(!empty($lists->images)) 
-                     <?php $count_image_index= 0;?>
-                        @foreach(explode('|', $lists->images) as $image)   
+                    <!--@if(!empty($lists->images)) -->
+                    <!-- <?php $count_image_index= 0;?>-->
+                    <!--    @foreach(explode('|', $lists->images) as $image)   -->
                         
-                        <img class="pop rounded imgaes-demand" style="margin-right: 5px;display:none" src="{{asset($image)}}" onclick="UniversalImagesBoxes(<?=$count_image_index;?>,'{{$lists->images}}',{{$lists->id}})" width="25" />
-                        <?php $count_image_index++;?>
-                        @endforeach
-                    @endif
+                    <!--    <img class="pop rounded imgaes-demand" style="margin-right: 5px;display:none" src="{{asset($image)}}" onclick="UniversalImagesBoxes(<?=$count_image_index;?>,'{{$lists->images}}',{{$lists->id}})" width="25" />-->
+                    <!--    <?php $count_image_index++;?>-->
+                    <!--    @endforeach-->
+                    <!--@endif-->
                     </div>
                 </td>
                 
@@ -988,8 +988,8 @@ var container = "";
                     <span> 
                         
                         <i class="bi bi-copy"  onclick="copy_clipboard_by_id('{{$lists->id}}_customer_data')"></i>
-                        <span class="@if($per > 5) blink @endif">{{$lists->first_name}} Code: {{$lists->customers_id}}</span> 
-                        <div style="display:none" id="{{$lists->id}}_customer_data">{{$lists->first_name}} Code: {{$lists->customers_id}}</div>
+                        <span class="@if($per > 5) blink @endif">{{$lists->customers->first_name}} Code: {{$lists->customers_id}}</span> 
+                        <div style="display:none" id="{{$lists->id}}_customer_data">{{$lists->customers->first_name}} Code: {{$lists->customers_id}}</div>
                         
                         @if($per > 5)
                             

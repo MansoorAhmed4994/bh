@@ -85,7 +85,7 @@ tfoot tr td input {
 {
     font-size:25px;
     word-break: break-all;
-    padding:10px 0;
+    padding:0;
 }
 .label2 
 {
@@ -103,7 +103,7 @@ tfoot tr td input {
 @media print {
   html, body {
     width: 210mm;
-    height: 297mm;        
+    height:297mm ;        
   }
   .main-page {
     margin: 0;
@@ -178,20 +178,24 @@ tfoot tr td input {
                     			<span class="notranslate barcode-text"><h3>{{$ManualOrder->id}}</h3></span></tr>
                             </td> 
                             
-                            @if($clc[0]['customer_status'] == 'Black List')
-                        <tr class="label2">
+                        @if($clc[0]['customer_status'] == 'Black List')
+                        
+                        <!--<tr class="label2">-->
                             
-                                <td colspan=2 ><h5 class="black_list">{{$clc[0]['customer_status']}}</h5></td>
+                        <!--        <td colspan=2 ><h5 class="black_list">{{$clc[0]['customer_status']}}</h5></td>-->
                             
                               
-                        </tr>
-                        <tr class="label2">
-                            <td colspan=2 ><h5 >Dispatched: {{$clc[0]['do']}}, Returned:{{$clc[0]['ro']}}</h5></td>
-                        </tr>
+                        <!--</tr>-->
+                        
+                        <!--<tr class="label2">-->
+                        <!--    <td colspan=2 ><h5 >Dispatched: {{$clc[0]['do']}}, Returned:{{$clc[0]['ro']}}</h5></td>-->
+                        <!--</tr>-->
+                        
                         @endif
+                        
                         <tr class="label2">
                             <td><h5>Name: </h5></td>
-                            <td><h4>{{$ManualOrder->receiver_name}}</h4></td> 
+                            <td><h4>{{$ManualOrder->customers_id}} {{$ManualOrder->receiver_name}}</h4></td> 
                         </tr>
                         <tr class="label2">
                             <td><h5>Number: </h5></td>
