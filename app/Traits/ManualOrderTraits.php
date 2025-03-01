@@ -180,7 +180,7 @@ trait ManualOrderTraits {
                 $manual_orders->service_type = '';
                 $manual_orders->created_by = Auth::id();
                 $manual_orders->updated_by = Auth::id(); 
-                $manual_orders->assign_to = $this->AssignOrderToUser();
+                $manual_orders->assign_to = Auth::id();
                 $manual_orders->status = 'pending';
                 //$manual_orders = $manual_orders->save();
                 $status = $customer_id->first()->manual_orders()->save($manual_orders);
