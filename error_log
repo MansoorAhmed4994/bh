@@ -425,3 +425,12 @@ Stack trace:
 #6 /home/desenado/manualorders.brandhub.com.pk/app/Http/Controllers/Client/Orders/ManualOrdersController.php(39): spl_autoload_call('App\\Traits\\Leop...')
 #7 /home/de in /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php on line 15
 >>>>>>> 6832fc183971b5afb9a8fb34ef762d4a76ab0edc
+[02-Mar-2025 03:26:34 Asia/Karachi] PHP Fatal error:  During class fetch: Uncaught ParseError: syntax error, unexpected '<<' (T_SL), expecting ';' or '{' in /home/desenado/manualorders.brandhub.com.pk/app/Traits/CurlTraits.php:56
+Stack trace:
+#0 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#1 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Curl...')
+#2 /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php(15): spl_autoload_call('App\\Traits\\Curl...')
+#3 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(571): include('/home/desenado/...')
+#4 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home/desenado/...')
+#5 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Traits\\Leop...')
+#6 /home/desenado/manualorders.brandhub.com.pk/app/Http/Controllers/Client/Orders/ManualOrdersController.php(39): spl_autoload_call('App\\Traits\ in /home/desenado/manualorders.brandhub.com.pk/app/Traits/LeopordTraits.php on line 15
