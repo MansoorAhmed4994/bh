@@ -54,8 +54,8 @@ trait CurlTraits {
     
     public function LeopordCurlPostRequest($url,$data = []) 
     {  
-        $data['api_key'] = env('LEOPORD_API_KEY');
-        $data['api_password'] = env('LEOPORD_API_PASSWORD'); 
+        // $data['api_key'] = env('LEOPORD_API_KEY');
+        // $data['api_password'] = env('LEOPORD_API_PASSWORD'); 
         // dd($data);  
         // dd($data);
           
