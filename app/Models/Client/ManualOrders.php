@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ManualOrders extends Model
 {
+    public $timestamps = false;
     protected $guarded = [];  
     protected $manual_orders = 'ManualOrders';
     public function customers()

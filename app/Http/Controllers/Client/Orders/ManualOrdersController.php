@@ -420,10 +420,10 @@ class ManualOrdersController extends Controller
         
         
         // $cities = $this->LeopordGetCities()->city_list;
-        // dd($cities);
+        
         $order_id = $ManualOrder;
         $this->UpdateReferenceNumberByOrderIds([$ManualOrder]);
-        // dd($Manualorders);
+        
         $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.id',$ManualOrder)->first();
         // dd($ManualOrder);
         if($ManualOrder == null)
