@@ -164,7 +164,7 @@
                     </ul>
                     <ul class="navbar-nav ms-auto"> 
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false"> Profile </a>
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false"> {{auth()->user()->first_name}}</a>
                             <ul class="dropdown-menu dropdown-menu-right">
                             <li>
                                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();

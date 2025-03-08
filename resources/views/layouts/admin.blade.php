@@ -108,7 +108,7 @@
         
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
             <div class="container-fluid">
-                <a class="navbar-brand" href="{{route('admin.dashboard')}}"><img src="{{ asset('public/images/logo.png') }}" class="bh-logo"/></a>
+                <a class="navbar-brand" href="{{route('admin.dashboard')}}"><img src="{{ asset('public/images/brandhub_logo_100_x_100.png') }}" class="bh-logo"/></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main_nav"  aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
                 </button>
@@ -219,7 +219,7 @@
                                                     document.getElementById('logout-form').submit();">
                                     {{ __('Logout') }}
                                 </a>
-                                <form class="dropdown-item" id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                <form class="dropdown-item" id="logout-form" action="{{ route('admin.logout') }}" method="POST" class="d-none">
                                         @csrf
                                 </form> 
                             </li> 

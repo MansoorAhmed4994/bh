@@ -76,14 +76,11 @@ class LoginController extends Controller
         {
             // dd();
             if(Hash::check($request->password, $user->password))
-            {
-                // dd($user);
-                // Hash::check($request->email, $user->password);
-                // return redirect()
-                // ->route('admin.dashboard')
-                // ->with('status','You are Logged in as Admin!');
-                if(Auth::guard('admin')->attempt($request->only('email','password'),$request->filled('remember'))){
+            { 
+                if(Auth::guard('admin')->attempt($request->only('email','password'),$request->filled('remember')))
+                {
                 //Authentication passed...
+                Auth::guard('admin')->setUser($user);
                     return redirect()
                     ->route('admin.dashboard')
                     ->with('status','You are Logged in as Admin!');

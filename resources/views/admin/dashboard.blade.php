@@ -1,6 +1,5 @@
 
-@extends('layouts.'.Auth::getDefaultDriver())
-
+@extends('layouts.'.Auth::getDefaultDriver()) 
 @section('content') 
 
 <?php 
@@ -28,12 +27,22 @@
         width: 100%;
         background: #8a16d9;
         color: white;
+    } 
+    .admin-dashboard-card-box-content
+    {
+        background: white;
+        border-radius: 10px;
+        padding:10px;
     }
-</style>
-<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
-<script type="text/javascript">
+    .admin-dashboard-card-box {
+        padding: 15px;
+    }
+    </style>
 
-var test = @json($shipment_cities_data);
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script> 
+<script type="text/javascript">
+   
+//====================barchart
 window.onload = function () {
 
 var chart = new CanvasJS.Chart("chartContainer", {
@@ -41,11 +50,13 @@ var chart = new CanvasJS.Chart("chartContainer", {
 	title:{
 		text: "Top Ten Cities"
 	},
-	height:500,
+	height:2000,
+	backgroundColor:"white",
+// 	backgroundColor:"rgb(0 0 0 / 0%)",
 	axisY: {
-		title: "Medals",
-		includeZero: true,
-		maximum: 610
+		title: "Order Count",
+		includeZero: true
+// 		maximum: 100
 	},
 	legend: {
 		cursor:"pointer",
@@ -55,29 +66,23 @@ var chart = new CanvasJS.Chart("chartContainer", {
 		shared: true,
 		content: toolTipFormatter
 	},
+	axisX: {
+		interval: 1
+	},
+	axisY2: {
+		interlacedColor: "rgba(1,77,101,.2)",
+		gridColor: "rgba(1,77,101,.1)",
+		title: "Number of Companies"
+	},
 	data: [
 	    {
 		type: "bar",
 		showInLegend: true,
 		name: "Gold",
 		color: "gold",
-		dataPoints:@json($shipment_cities_data)
-	},
-// 	{
-// 		type: "bar",
-// 		showInLegend: true,
-// 		name: "Silver",
-// 		color: "silver",
-// 		dataPoints: [
-// 			{"y":26,"label":"Abbottabad"},
-// 			{ y: 186, label: "China" },
-// 			{ y: 272, label: "France" },
-// 			{ y: 299, label: "Great Britain" },
-// 			{ y: 270, label: "Germany" },
-// 			{ y: 165, label: "Russia" },
-// 			{ y: 896, label: "USA" }
-// 		]
-// 	},
+		background:"rgb(0 0 0 / 0%)",
+		dataPoints:{!! json_encode($shipment_cities_data) !!}
+	}, 
 // 	{
 // 		type: "bar",
 // 		showInLegend: true,
@@ -91,17 +96,18 @@ var chart = new CanvasJS.Chart("chartContainer", {
 // 		]
 // 	}
 	]
-});
-// handleChartHeight(chart);
-chart.render();
+}); 
+chart.render(); 
 
 function handleChartHeight(chart){    
     var dpsWidth = 30;
     var plotAreaHeight = chart.axisX[0].bounds.height;
     var chartHeight = plotAreaHeight + (50 * dpsWidth);
     chart.options.dataPointWidth = dpsWidth;
-    chart.options.height = chartHeight;
+    chart.options.height = chartHeight; 
 }
+
+
 
 // {!! json_encode($shipment_cities_data) !!}
 function toolTipFormatter(e) {
@@ -151,7 +157,7 @@ function toggleDataSeries(e) {
     
     <?php $total_orders=0;$rows_division=0;?>
         @foreach($data as $list)
-            <div class="col-sm-3 form-group">  
+            <div class="col-sm form-group">  
                 <div class="card" style="width: 100%;"> 
                   <div class="card-body status-{!! str_replace(' ', '-', $list->status) !!} dashbord-card-body">
                     <h5 class="card-title text-capitalize">{{$list->status}}: {{$list->total_orders}} <span class="float-right">Rs: {{(int)$list->total_amount}}</span></h5>
@@ -159,9 +165,9 @@ function toggleDataSeries(e) {
                     <table>
                         <thead>
                             <tr>
-                                <th>ID</th>
-                                
+                                <th>ID</th> 
                                 <th>Orders</th>
+                                <th>Qty</th>
                                 <th>Amount</th>
                             </tr>
                         </thead>
@@ -184,11 +190,15 @@ function toggleDataSeries(e) {
                         </tbody>
                     </table>
                     <br>
-                    <form action="{{route('ManualOrders.index')}}" method="post">
+                    
+                    <form action="{{route('ManualOrders.index')}}" method="post" class="card-box-go-btn">
                         @csrf
                         <input type="hidden" name="order_status"  value="{{$list->status}}">
-                    <button type="submit" class="btn btn-primary">Go</button>
+                        <input class="form-control mr-sm-2" type="hidden" name="date_to" id="date_to" value="{{$date_to}}">
+                        <input class="form-control mr-sm-2" type="hidden" name="date_from" id="date_from" value="{{$date_from}}">
+                        <button type="submit" class="btn btn-primary">Go</button>
                     </form>
+                    
                     <!--<a href="{{route('ManualOrders.status.order.list',$list->status)}}" class="btn btn-primary">Go</a>-->
                   </div> 
                 </div>
@@ -340,88 +350,85 @@ function toggleDataSeries(e) {
     
     
        
-        
-    <div class="row">  
-        <div class="col-sm-12"> 
-            <h2>inventory</h2><hr>
-        </div>
-        <div class="col-sm-4 form-group">  
-            <div class="card" style="width: 18rem;"> 
-              <div class="card-body" style="background:linear-gradient(45deg, <?=$color1?>, <?=$color2?>)">
-                    <h5>Total Qty: {{$remaining_invertory[0]->total}}</h6>
-                    <h6 class="card-title">Total Amount: {{$remaining_invertory[0]->amount}}</h6> 
-                
-                <a href="" class="btn btn-primary">Go</a>
-              </div> 
-            </div>
-        </div>
-    </div>
+      
     
-    <div class="row">  
-        <div class="col-sm-12"> 
-            <h2>Order Shipment Status</h2><hr>
-        </div>
-        <?php 
-            $total_qty=0;
-            $total_cost = 0; 
-        ?> 
-            <?php
-                $color1 = '#'.$rand[rand(0,15)].$rand[rand(0,15)].$rand[rand(0,15)].$rand[rand(0,15)].$rand[rand(0,15)].$rand[rand(0,15)];
-                $color2 = '#'.$rand[rand(0,15)].$rand[rand(0,15)].$rand[rand(0,15)].$rand[rand(0,15)].$rand[rand(0,15)].$rand[rand(0,15)];
-            ?>
-            @for ($i = 0; $i < count($inventories); $i++)
-            <div class="col-sm-4 form-group">  
-                <div class="card" style="width: 18rem;"> 
-                  <div class="card-body" style="background:linear-gradient(45deg, <?=$color1?>, <?=$color2?>)">
-                    
-                    <h5>Status: {{$inventories[$i]->stock_status}}</h6>
+    
+    
+    <div class="row">
+           
+        <div class="col-sm-12"><h2>Inventory Detail</h2><hr></div>
+        <?php $total_qty=0;?>
+        <?php $total_cost = 0;?>   
+        @for ($i = 0; $i < count($inventories); $i++)
+            <div class="col-sm">   
+                <div class="admin-dashboard-card-box">
+                    <div class="admin-dashboard-card-box-content"> 
+                        <h3>{{$inventories[$i]->stock_status}}</h3><hr>
                         <h6 class="card-title">Qty: {{$inventories[$i]->qty}}</h6> 
                         <h6 class="card-title">Cost: {{$inventories[$i]->cost}}</h6> 
                         <h6 class="card-title">Sale: {{$inventories[$i]->sale}}</h6> 
-                        <?php $total_qty +=$inventories[$i]->qty; ?>
-                    
-                    <a href="{{route('inventory.index',[$inventories[$i]->stock_status,$date_from,$date_to])}}" class="btn btn-primary">Go</a>
-                  </div> 
+                        <?php $total_qty +=$inventories[$i]->qty; ?> 
+                        <a href="{{route('inventory.index',[$inventories[$i]->stock_status,$date_from,$date_to])}}" class="btn btn-primary">Go</a>
+                    </div> 
                 </div>
             </div>
-            @endfor
-                
-            
+        @endfor 
         
-        
-        <div class="col-sm-4 form-group">  
-            <div class="card" style="width: 18rem;"> 
-              <div class="card-body">
-                  
-                    <h3>Total Order</h3>
-                <h5 class="card-title"><?php echo $total_trax_orders;?></h5>
-                 
-              </div> 
+        <div class="col-sm">
+            <div class="admin-dashboard-card-box">
+                <div class="admin-dashboard-card-box-content"> 
+                    <h3>Remaining nventory</h3><hr>
+                    <h5>Total Qty: {{$remaining_invertory[0]->total}}</h6>
+                    <h6 class="card-title">Total Amount: {{$remaining_invertory[0]->amount}}</h6>  
+                    <a href="" class="btn btn-primary">Go</a>
+                </div> 
             </div>
         </div>
         
-    </div>  
-    
-    <div style="width: 100%; margin: auto;">
-        <canvas id="myChart1"></canvas>
     </div>
     
-    <div style="width: 100%; margin: auto;">
-        <canvas id="parcels_by_shipment_company"></canvas>
-    </div>
-    
-    
-    
-    <div style="width: 100%; margin: auto;">
-        <div id="chartContainer" style="height: auto; width: 100%;"></div>
-    </div>
 
-
-
-</div>
+</div> 
+    
+    <div class="row">
+                <div class="col-sm-12"><h2>Inventory Detail</h2><hr></div>
+        <div class="col-sm-4">
+            <div class="admin-dashboard-card-box"> 
+                <div class="admin-dashboard-card-box-content" style="height:2050px;">
+                    <div id="chartContainer" style="border-radius: 18px;"></div>  
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8"> 
+            <div class="row">
+                <div class="col-sm-6">   
+                    <div class="admin-dashboard-card-box">
+                        <div class="admin-dashboard-card-box-content">
+                            <canvas id="parcels_by_shipment_company"></canvas>
+                        </div>
+                    </div> 
+                </div>
+                
+                <div class="col-sm-6">
+                    <div class="admin-dashboard-card-box">
+                        <div class="admin-dashboard-card-box-content">
+                            <canvas id="myChart1"></canvas>
+                        </div>
+                    </div> 
+                </div>
+                
+            </div>
+        </div>
+        
+    </div> 
+    
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+   
+   
+   
+   
    
 //Parcels delivered Cities Chart
   const labels = {!! json_encode($cities_name) !!}; 
@@ -429,13 +436,13 @@ function toggleDataSeries(e) {
   const data = {
     labels: labels,
     datasets: [{
-      label: 'Order Delivered ',
+      label: 'Local VS Other Cities',
       backgroundColor: 'rgb(255, 99, 132)',
-      borderColor: 'rgb(255, 99, 132)',
-      data :{!! json_encode($total_city_orders)!!},
+      borderColor: 'rgb(255, 99, 132)',   
+      data :{!! json_encode($total_city_orders)!!}, 
 
     }]
-  }; 
+  };  
 
   const config = {
     type: 'line',
@@ -480,7 +487,8 @@ function toggleDataSeries(e) {
   ); 
   
   
-  
+ 
+
   
   
   

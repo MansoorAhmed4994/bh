@@ -6,6 +6,7 @@
     use App\Models\Statuses;
     use App\Models\User;
     use App\Models\Category;
+    use App\Models\ActivityLog;
 
     if(!function_exists('create_activity_log'))
     {
@@ -51,6 +52,32 @@
             }
         }
     }
+    
+    
+    
+    if(!function_exists('check_order_pos_slip'))
+    {
+        function check_order_pos_slip($order_id)
+        {
+            $query=ActivityLogs::query();
+            $status = $query->where(['ref_id'=>$order_id]);
+            $query = $query->where('activity_logs.activity_desc','=','pos slip'); 
+            $query = $query->where('activity_logs.method','=','print'); 
+            
+            if($query->get()->count() > 0)
+            { 
+                $query = $query->first();
+                // dd($query->status);
+                return ['row_count'=>$query->count(),'status'=>$query->status];
+            }
+            else
+            {
+                
+                return ['row_count'=>$query->count(),'status'=>''];
+            }
+        }
+    }
+
     
     if(!function_exists('get_active_order_status_list'))
     {

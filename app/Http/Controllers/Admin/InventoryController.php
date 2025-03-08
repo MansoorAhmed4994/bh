@@ -8,7 +8,11 @@ use App\Models\Client\ManualOrders;
 use App\Models\Riders;
 use App\Models\Client\Customers;
 use App\Models\Inventory;
-use App\Models\remaining_inventories;
+use App\Models\remaining_inventories; 
+use Illuminate\Support\Facades\File; 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 
 //Traits
@@ -23,6 +27,14 @@ use App\Models\Order_details;
 
 class InventoryController extends Controller
 {
+    
+    public function __construct(Request $request)
+    { 
+        
+        // dd('no admin');
+        // $this->middleware('auth:admin');
+    }
+
     /**
      * Display a listing of the resource.
      *

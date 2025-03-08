@@ -47,8 +47,7 @@ class ManualOrdersController extends Controller
      */
 
     public function __construct()
-    {
-
+    { 
         // dd(Auth::guard('admin')->check());
         //$this->middleware('auth');
     }
@@ -1049,12 +1048,17 @@ class ManualOrdersController extends Controller
         }
         elseif($order_action == 'print_pos_slips')
         {
-            
             $explode_id = explode(',', $order_ids); 
             $ManualOrders = Manualorders::whereIn('manual_orders.id',$explode_id)->get();
             // dd($ManualOrders->first()->id);
             $clc = $this->CheckCustomerLoyalityStatus($ManualOrders->first()->id);
             
+            $check_status = check_order_pos_slip($ManualOrders->first()->id);
+            if( $check_status['row_count'] > 0)
+            { 
+                toastr()->error('Order pos slip is already printed, you cant print another slip','Error');
+                return back(); 
+            }
             // dd($customer_loyality_status->first());
             // dd($customer_loyality_value);
             foreach($ManualOrders as $ManualOrder)

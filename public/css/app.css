@@ -4475,10 +4475,10 @@ input[type=button].btn-block {
 .bh-logo
 {
     padding: 5px;
-    width: 80px;
+    width: 50px;
     background-color: #fffafa;
     display: inline-block;
-    border-radius: 8px;
+    border-radius: 40px;
 }
 
 .dashbord-card-body
@@ -5125,6 +5125,13 @@ li.nav-item {
   background-clip: border-box;
   border: 0px solid rgba(0, 0, 0, 0.125);
   border-radius: 0.25rem;
+  height: 100%;
+}
+
+.card-box-go-btn
+{
+    position: absolute;
+    bottom: 0;
 }
 
 .card > hr {

@@ -62,12 +62,7 @@ class LoginController extends Controller
      * @return \Illuminate\View\View
      */
     public function showLoginForm() 
-    {
-
-        
-        // if(Auth::guard('admin')->check()){
-        //     return redirect()->route('admin.dashboard');
-        // }
+    { 
        
             return view('auth.user.login');
     }
@@ -98,11 +93,13 @@ class LoginController extends Controller
 
         //     return $this->sendLockoutResponse($request);
         // }
+        $user = User::select("*")->where(['email'=>$request->email])->first();
         if ($this->attemptLogin($request)) {
              
              
              
             if(Auth::guard('user')->attempt($request->only('email','password'),$request->filled('remember'))){
+                Auth::guard('user')->setUser($user);
         //Authentication passed...
         //dd('done');
             return redirect()
@@ -249,7 +246,7 @@ class LoginController extends Controller
 
         return $request->wantsJson()
             ? new JsonResponse([], 204)
-            : redirect('/admin/login');
+            : redirect('/login');
     }
 
     /**
