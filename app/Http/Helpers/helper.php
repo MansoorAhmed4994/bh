@@ -100,12 +100,36 @@
         }
     }
     
+    
     if(!function_exists('product_child_categories'))
     {
         function product_child_categories()
         {
             $categories = Category::select('*')->get();
             return $categories;
+        }
+    }
+    
+    
+    if(!function_exists('check_order_dispacthed'))
+    {
+        function check_order_dispacthed($order_id)
+        {
+            $query=ManualOrders::query();
+            $status = $query->where(['id'=>$order_id]);
+            $query = $query->where('manual_orders.status','=','dispatched');
+            
+            if($query->get()->count() > 0)
+            { 
+                $query = $query->first();
+                // dd($query->status);
+                return ['row_count'=>$query->count(),'status'=>$query->status];
+            }
+            else
+            {
+                
+                return ['row_count'=>$query->count(),'status'=>''];
+            }
         }
     }
 

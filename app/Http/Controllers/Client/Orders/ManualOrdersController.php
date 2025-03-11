@@ -383,6 +383,13 @@ class ManualOrdersController extends Controller
      
     public function edit($ManualOrder)
     { 
+        $check_status = check_order_dispacthed($ManualOrder);
+        if( $check_status['row_count'] > 0)
+        {
+            toastr()->error('Parcel Status is already'.$check_status['status'].' and parcel cannot be edited','Error');
+            return back();
+        }
+        
         $user_id = User::find(auth()->user()->id);
         $user_roles = $user_id->roles()->get()->pluck('name')->toArray();
 

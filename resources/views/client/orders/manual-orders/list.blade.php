@@ -790,7 +790,7 @@ var container = "";
                 <td>
                     
                     <div class="btn-group" role="group">
-                        <button id="btnGroupDrop1" type="button" class="btn btn-secondary bi bi-gear" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">  </button>
+                        <button id="btnGroupDrop1" type="button" class="btn btn-secondary bi bi-gear" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" @if($lists->status == 'dispatched')disabled="disabled" @endif>  </button>
                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">            
                             <a type="button" target="_blank" href="@if($lists->id) {{route('ManualOrders.edit',$lists->id)}} @endif" class="dropdown-item">Edit</a>   
                             <button type="button" id="dispatch-btn" onclick="QuickEditOrder({{$lists->id}})" class="dropdown-item" >Quick Edit</button>          
@@ -801,7 +801,7 @@ var container = "";
                     
                         @if(Auth::guard('admin')->check())
                         <div class="btn-group " role="group">
-                            <select class=" form-select form-select-sm @if($errors->get('assign_to')) is-invalid @endif assign_to_dropdown city btn-group" style="width:120px" onchange="assign_to('{{$lists->id}}',this.value)" id="assign_to"  name="assign_to">
+                            <select class=" form-select form-select-sm @if($errors->get('assign_to')) is-invalid @endif assign_to_dropdown city btn-group" style="width:120px" onchange="assign_to('{{$lists->id}}',this.value)" id="assign_to"  name="assign_to" @if($lists->status == 'dispatched')disabled="disabled" @endif>
                                 <option value="">Select Assign To</option>
                                 
                                 @foreach($users as $user)
@@ -830,7 +830,7 @@ var container = "";
                 
                 <td>
                     <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-                        <select class="form-select form-select-sm" onchange="ChangeOrderStatus('{{$lists->id}}')" id="ChnageOrderStatusId_{{$lists->id}}" style="width: 153px;">
+                        <select class="form-select form-select-sm" onchange="ChangeOrderStatus('{{$lists->id}}')" id="ChnageOrderStatusId_{{$lists->id}}" style="width: 153px;" @if($lists->status == 'dispatched')disabled="disabled" @endif>
                             <option selected >Select Status</option> 
                             
                             @if(in_array('author', $user_roles) || in_array('admin', $user_roles))
