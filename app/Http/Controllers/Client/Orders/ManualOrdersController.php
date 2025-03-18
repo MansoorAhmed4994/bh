@@ -348,7 +348,7 @@ class ManualOrdersController extends Controller
         
         $status = $this->CreateOrder($request);
         // dd($status);
-        toastr()->success('Order has been saved successfully!');
+        flash()->success('Order has been saved successfully!');
         return back();
         // return redirect()->route('ManualOrders.create')->with('success', $status);
     }
