@@ -15,12 +15,12 @@ use App\Http\Controllers\Client\Orders\ManualOrdersController;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-    
-     
-Route::post('manualorders/image/upload123', 'Client\Orders\ManualOrdersController@ImageUpload123');
-});
+Route::get('/books', [ManualOrdersController::class, 'testingapi']);
+
+//========== Manualorders API
+Route::get('/GetLeopordDispatchOrderList', [ManualOrdersController::class, 'GetLeopordDispatchOrderList']);
+
+
 
 // Route::post('manualorders/image/upload', 'Client\Orders\ManualOrdersController@ImageUpload123');
 Route::resource('manualorders/image/upload', 'Client\Orders\ManualOrdersController@ImageUpload123');

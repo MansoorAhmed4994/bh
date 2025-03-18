@@ -347,7 +347,7 @@ class ManualOrdersController extends Controller
     { 
         
         $status = $this->CreateOrder($request);
-        dd($status);
+        // dd($status);
         toastr()->success('Order has been saved successfully!');
         return back();
         // return redirect()->route('ManualOrders.create')->with('success', $status);
@@ -2188,5 +2188,57 @@ class ManualOrdersController extends Controller
     }
     
     
+    public function testingapi(Request $request)
+    {
+        $books =Customers::all();
+        return response()->json($books);
+        // return 'working';
+    }
+    
+    
+    
+    //============Api
+    
+    public function GetLeopordDispatchOrderList(Request $request)
+    { 
+        $date_from= date('Y-m-01').' 00:00:00';
+        $date_to = date('Y-m-t').' 23:59:59';
+        
+        if($request->date_from)
+        {
+            $date_from = $request->date_from.' 00:00:00';
+            $date_to = $request->date_to.' 23:59:59';   
+        }
+        
+        $query = ManualOrders::query();
+        $query = $query->select('id','updated_at')->where(['status'=>'dispatched','shipment_company'=>'leopord']);
+        // $query = $query->where(DB::raw("manual_orders.updated_at") ,$from_date);
+        $query = $query->whereBetween("manual_orders.updated_at" ,[$date_from,$date_to]);
+        // $query = $query->where(DB::raw("(DATE_FORMAT(manual_orders.".$to_date.",'%Y-%m-%d'))") ,$to_date); 
+        $query = $query->get();
+        return response()->json($query);
+    }
+    
+    
+    
+    public function UpdateLeopordStatusToManualOrdersStatus(Request $data)
+    { 
+        $date_from= date('Y-m-01').' 00:00:00';
+        $date_to = date('Y-m-t').' 23:59:59';
+        
+        if($request->date_from)
+        {
+            $date_from = $request->date_from.' 00:00:00';
+            $date_to = $request->date_to.' 23:59:59';   
+        }
+        
+        $query = ManualOrders::query();
+        $query = $query->select('id','updated_at')->where(['status'=>'dispatched','shipment_company'=>'leopord']);
+        // $query = $query->where(DB::raw("manual_orders.updated_at") ,$from_date);
+        $query = $query->whereBetween("manual_orders.updated_at" ,[$date_from,$date_to]);
+        // $query = $query->where(DB::raw("(DATE_FORMAT(manual_orders.".$to_date.",'%Y-%m-%d'))") ,$to_date); 
+        $query = $query->get();
+        return response()->json($query);
+    }
  
 }
