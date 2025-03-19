@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Flasher\Prime\FlasherInterface;
+use Flasher\Laravel\Facade\Flasher;
 
 //Models
 use App\Models\Client\ManualOrders;
