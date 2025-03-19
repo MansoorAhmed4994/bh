@@ -58,7 +58,9 @@ trait CurlTraits {
         // $data['api_password'] = env('LEOPORD_API_PASSWORD'); 
         // dd($data);  
         // dd($data);
-          
+        // echo '<pre>';
+        //   var_dump(json_decode($data,true));
+        //   dd($data);
         $curl_handle = curl_init();
         curl_setopt($curl_handle, CURLOPT_URL, $url); // Write here Test or Production Link
         curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);

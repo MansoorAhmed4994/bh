@@ -52,7 +52,7 @@ trait LeopordTraits {
     {
         $url = "https://merchantapi.leopardscourier.com/api/bookPacket/format/json/";
         $headers = ['Authorization:'.env('LEOPORD_API_KEY'), 'Accepts:' . 'application/json',"real:json content"];
-        $response = $this->LeopordCurlPostRequest($url,json_decode($data));
+        $response = $this->LeopordCurlPostRequest($url,json_decode($data,true));
         return $response = json_decode($response);
     }
     

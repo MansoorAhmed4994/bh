@@ -57,7 +57,7 @@ var order_status = '';
 var order_link='';
 var container = "";
       
-      
+    
     function demand_view()
     {
         if (document.getElementById('demand_checkbox').checked) 
@@ -187,11 +187,11 @@ var container = "";
                 //$('#successMsg').show();
                 if(typeof response.success !== 'undefined')
                 {
-                    toastr["success"](response.messege, 'Assigning Order');
+                    flasher.success(response.messege, 'Assigning Order');
                 } 
                 else 
                 {
-                    toastr.error(response.messege,'Error');
+                    flasher.error(response.messege,'Error');
                 }
                     // alert(response.messege);
                  
@@ -201,7 +201,7 @@ var container = "";
             error: function(response) 
             {
                 // alert(response); 
-                toastr.error(response);
+                flasher.error(response);
                 $("body").removeClass("loading");
             },
       });
@@ -235,7 +235,7 @@ var container = "";
                 if(status_reason == '')
                 {
                     $("body").removeClass("loading"); 
-                    toastr.error("please give Reason to "+order_status,'Error'); 
+                    flasher.error("please give Reason to "+order_status,'Error'); 
                     return;
                 }
                 
@@ -259,12 +259,12 @@ var container = "";
                 if(typeof e.success !== 'undefined')
                 {
                     $("body").removeClass("loading");
-                    toastr["success"](e.messege, 'Assigning Order');
+                    flasher.success(e.messege, 'Assigning Order');
                 } 
                 else 
                 {
                     $("body").removeClass("loading");
-                    toastr.error(e.messege,'Error');
+                    flasher.error(e.messege,'Error');
                 }
                 if(e.messege == true)
                 {
@@ -420,7 +420,7 @@ var container = "";
                     @if(Auth::guard('admin')->check())
                     
                     @else
-                        toastr.error('you cant edit this order cause it is already dispatched', 'Error');
+                        flasher.error('you cant edit this order cause it is already dispatched', 'Error');
                         $("body").removeClass("loading");
                         return;
                     @endif
@@ -477,12 +477,12 @@ var container = "";
             {
                 if(typeof e.success !== 'undefined')
                 {
-                    toastr.success(e.messege, 'Error');
+                    flasher.success(e.messege, 'Error');
 
                 }
                 else
                 {
-                    toastr.success(e.messege, 'Success');
+                    flasher.success(e.messege, 'Success');
                 }
                 $("body").removeClass("loading");
                  

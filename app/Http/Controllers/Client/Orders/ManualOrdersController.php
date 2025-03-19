@@ -388,7 +388,7 @@ class ManualOrdersController extends Controller
         $check_status = check_order_dispacthed($ManualOrder);
         if( $check_status['row_count'] > 0)
         {
-            toastr()->error('Parcel Status is already'.$check_status['status'].' and parcel cannot be edited','Error');
+            flash()->error('Parcel Status is already'.$check_status['status'].' and parcel cannot be edited','Error');
             return back();
         }
         
@@ -403,7 +403,7 @@ class ManualOrdersController extends Controller
             }
             else
             {
-                toastr()->error('Parcel is dispatched only admin can edit this order');
+                flash()->error('Parcel is dispatched only admin can edit this order');
                 return back();
             }
         }
@@ -419,7 +419,7 @@ class ManualOrdersController extends Controller
         }
         else
         { 
-            toastr()->error('This is not your parcel, You Dont Have Permission to edit this order, contact Admin');
+            flash()->error('This is not your parcel, You Dont Have Permission to edit this order, contact Admin');
             return back();
         }
         
@@ -659,7 +659,7 @@ class ManualOrdersController extends Controller
                     if( $check_status['row_count'] > 0)
                     {
                         // echo '5'; re
-                        toastr()->error('Parcel Status is '.$check_status['status'].' and parcel cannot print slip until parcel status is confirmed OR Dispatched','Error');
+                        flash()->error('Parcel Status is '.$check_status['status'].' and parcel cannot print slip until parcel status is confirmed OR Dispatched','Error');
                         return back();
                         // dd();
                     }
@@ -670,7 +670,7 @@ class ManualOrdersController extends Controller
                 
                 else
                 {
-                    toastr()->error('These shipments not created! Please contact Admin','Error');
+                    flash()->error('These shipments not created! Please contact Admin','Error');
                     return back(); 
                 }
                 
@@ -793,7 +793,7 @@ class ManualOrdersController extends Controller
                     if( $check_status['row_count'] > 0)
                     {
                         // echo '5'; re
-                        toastr()->error('Parcel Status is '.$check_status['status'].' and parcel cannot print slip until parcel status is confirmed OR Dispatched','Error');
+                        flash()->error('Parcel Status is '.$check_status['status'].' and parcel cannot print slip until parcel status is confirmed OR Dispatched','Error');
                         return back();
                         // dd();
                     }
@@ -804,7 +804,7 @@ class ManualOrdersController extends Controller
                 
                 else
                 {
-                    toastr()->error('These shipments not created! Please contact Admin','Error');
+                    flash()->error('These shipments not created! Please contact Admin','Error');
                     return back(); 
                 }
                 
@@ -816,7 +816,7 @@ class ManualOrdersController extends Controller
                 $ManualOrder->updated_by = Auth::id();
                 if(check_customer_advance_payment($order_id) > 0)
                 {
-                    toastr()->error('payment not approved','Error');
+                    flash()->error('payment not approved','Error');
                     return back(); 
                     // dd('payment not approved');
                 }
@@ -831,7 +831,7 @@ class ManualOrdersController extends Controller
                 $check_status = check_order_status_for_print($order_id); 
                 if( $check_status['row_count'] > 0)
                 {
-                    toastr()->error('Parcel Status is '.$check_status['status'].' and parcel cannot print slip until parcel status is confirmed OR Dispatched','Error');
+                    flash()->error('Parcel Status is '.$check_status['status'].' and parcel cannot print slip until parcel status is confirmed OR Dispatched','Error');
                     return back(); 
                 }
                 $ManualOrder = ManualOrders::select('*')->where('manual_orders.id',$ManualOrder->id)->get();
@@ -929,13 +929,13 @@ class ManualOrdersController extends Controller
             $ManualOrder = ManualOrders::select('*')->whereIn('manual_orders.id',$explode_id)->get();
             if(check_customer_advance_payment($ManualOrders->id) > 0)
             {
-                toastr()->error('payment not approved','Error');
+                flash()->error('payment not approved','Error');
                 return back();
             }
             $check_status = check_order_status_for_print($ManualOrders->id); 
             if( $check_status['row_count'] > 0)
             { 
-                toastr()->error('Parcel Status is '.$check_status['status'].' and parcel cannot print slip until parcel status is confirmed OR Dispatched','Error');
+                flash()->error('Parcel Status is '.$check_status['status'].' and parcel cannot print slip until parcel status is confirmed OR Dispatched','Error');
                 return back(); 
             }
             foreach($ManualOrder as $ManualOrders)
@@ -1013,7 +1013,7 @@ class ManualOrdersController extends Controller
                     else
                     {
                         
-                        toastr()->error('Order Id: '.$ManualOrder->id.' is already dispacthed only admin can print this slip');
+                        flash()->error('Order Id: '.$ManualOrder->id.' is already dispacthed only admin can print this slip');
                         return back();
                     }
                 }
@@ -1043,7 +1043,7 @@ class ManualOrdersController extends Controller
                     else
                     {
                         
-                        toastr()->error('Order Id: '.$ManualOrder->id.' is already dispacthed only admin can print this slip');
+                        flash()->error('Order Id: '.$ManualOrder->id.' is already dispacthed only admin can print this slip');
                         return back();
                     }
                 }
@@ -1066,7 +1066,7 @@ class ManualOrdersController extends Controller
             $check_status = check_order_pos_slip($ManualOrders->first()->id);
             if( $check_status['row_count'] > 0)
             { 
-                toastr()->error('Order pos slip is already printed, you cant print another slip','Error');
+                flash()->error('Order pos slip is already printed, you cant print another slip','Error');
                 return back(); 
             }
             // dd($customer_loyality_status->first());
@@ -1082,7 +1082,7 @@ class ManualOrdersController extends Controller
                     else
                     {
                         
-                        toastr()->error('Order Id: '.$ManualOrder->id.' is already dispacthed only admin can print this slip');
+                        flash()->error('Order Id: '.$ManualOrder->id.' is already dispacthed only admin can print this slip');
                         return back();
                     }
                 }
@@ -1442,7 +1442,7 @@ class ManualOrdersController extends Controller
         //dd($ManualOrder);
         if(check_customer_advance_payment($ManualOrder_id) > 0)
         {
-            toastr()->error('payment not approved','Error');
+            flash()->error('payment not approved','Error');
             return back(); 
             // dd('payment not approved'); 
         }
@@ -1893,7 +1893,7 @@ class ManualOrdersController extends Controller
         $clc = $this->CheckCustomerLoyalityStatus($ManualOrders->id);
         if($ManualOrders->status == 'dispatched' || $ManualOrders->status == 'confirmed')
         {
-            toastr()->error('Parcel Status is '.$ManualOrders->status.' and cannot print pos slip cause parcel status is Dispatched','Error');
+            flash()->error('Parcel Status is '.$ManualOrders->status.' and cannot print pos slip cause parcel status is Dispatched','Error');
             return back();
         }
         if($ManualOrders->status == 'pending' || $ManualOrders->status == 'addition')

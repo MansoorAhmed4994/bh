@@ -3,6 +3,7 @@
 
 @section('content')
  <head>
+
 <script type="text/javascript">
 
         var row_id="1";
@@ -93,14 +94,14 @@
                     $('#product_price').val(e.price);
                     
                     $("#total_amount").html(e.price);
-                    toastr["success"](e.messege, 'Customer Product Minise');
+                    flasher.success(e.messege, 'Customer Product Minise');
                     
                     get_fare_list();
                     onchangeprice();
                 } 
                 else if(typeof e.error !== 'undefined')
                 {
-                    toastr(e.messege, 'Error');
+                    flasher.error(e.messege, 'Error');
                     // alert(e.messege);
                 }
                 $("body").removeClass("loading");
@@ -287,16 +288,16 @@
                         if(typeof e.success !== 'undefined')
                         {
                             $("body").removeClass("loading");
-                            toastr(e.messege);
+                            flasher.success(e.messege);
                         } 
                         else if(typeof e.error !== 'undefined')
                         {
                             $("body").removeClass("loading");
-                            toastr.error(e.messege,'Error');
+                            flasher.error(e.messege,'Error');
                         }
                         else
                         {
-                            toastr.warning(e.messege,'Warning');
+                            flasher.warning(e.messege,'Warning');
                         }
                         $('#ImageDeleteModal').modal('hide');
                         $("body").removeClass("loading"); 
@@ -403,7 +404,7 @@
             // console.log(product_price);
             if( product_price <= '0')
             {
-                // toastr.warning('Please enter price', 'Warning'); 
+                // flasher.warning('Please enter price', 'Warning'); 
                 $('#product_price_error').html('Product price cannot be zero');  
                 validation_status = false;
                 // console.log(1);
@@ -422,7 +423,7 @@
         
         if($('#dc').val() == '' || $('#dc').val() <= '0')
         {
-            toastr.warning('Please enter Delivery Charges', 'Warning'); 
+            flasher.warning('Please enter Delivery Charges', 'Warning'); 
             $('#dc_error').html('Please enter Delivery Charges');  
             validation_status = false; 
         }
@@ -436,7 +437,7 @@
         {
             
             validation_status = false; 
-            toastr.warning('You cant select dispatch while only saving record', 'Warning'); 
+            flasher.warning('You cant select dispatch while only saving record', 'Warning'); 
             $('#cod_amount_error').html('You cant select dispatch while only saving record');
         }
         else
@@ -450,7 +451,7 @@
             {  
                 validation_status = false;
                 // alert(this.id+'_error');
-                // toastr.warning('Please fill '+this.id, 'Warning'); 
+                // flasher.warning('Please fill '+this.id, 'Warning'); 
                 $('#'+this.id+'_error').html('Please fill '+this.id); 
                 // return false; 
                 
@@ -488,7 +489,7 @@
         
         if(validation_status == false)
         {
-            toastr.error('Please check Fields Error', 'Warning'); 
+            flasher.warning('Please check Fields Error', 'Warning'); 
             return false;
         }
 
@@ -510,8 +511,8 @@
             if($('#shipping_mode_id').val() == '')
             {
                 validation_status = false;
-                toastr.warning('Please Select Shipment Method to auto fil fare', 'Warning'); 
-                toastr.warning('Please Select Shipment Method', 'Warning'); 
+                flasher.warning('Please Select Shipment Method to auto fil fare', 'Warning'); 
+                flasher.warning('Please Select Shipment Method', 'Warning'); 
                 $('#shipping_mode_id_error').html('Please Select Shipment Method'); 
                 $('#fare_error').html('Please Select Shipment Method to auto fil fare');
             }
@@ -525,7 +526,7 @@
             {
                 
                 validation_status = false;
-                toastr.warning('Please Select Shipment Method to auto fil fare', 'Warning'); 
+                flasher.warning('Please Select Shipment Method to auto fil fare', 'Warning'); 
                 $('#fare_error').html('Please Select Shipment Method to auto fil fare');
             }
             else
@@ -538,7 +539,7 @@
             {
                 
                 validation_status = false;
-                toastr.warning('Please Select Shipment Method to auto fil fare', 'Warning'); 
+                flasher.warning('Please Select Shipment Method to auto fil fare', 'Warning'); 
                 $('#reference_number_error').html('Please Select Shipment Method to auto fil fare');
                 
             }
@@ -555,7 +556,7 @@
             if($('#leopord_shipment_type_id').val() == '')
             {
                 validation_status = false;  
-                toastr.warning('Please Select Shipment Method', 'Warning'); 
+                flasher.warning('Please Select Shipment Method', 'Warning'); 
                 $('#leopord_shipment_type_id_error').html('Please Select Shipment Method'); 
                 return validation_status;
             }
@@ -570,8 +571,8 @@
             {
                 validation_status = false;
                 // console.log('city not selected');
-                toastr.warning('Please Select Shipment Method to auto fil fare', 'Warning'); 
-                toastr.warning('Please Select Shipment Method', 'Warning'); 
+                flasher.warning('Please Select Shipment Method to auto fil fare', 'Warning'); 
+                flasher.warning('Please Select Shipment Method', 'Warning'); 
                 $('#leopord_city_error').html('Please Select City');  
                 return validation_status;
             }
@@ -1309,25 +1310,25 @@ function get_fare_list()
         
         if( shipment_type_value == 'local' || shipment_type_value == '')
         {
-            toastr.warning('Please Select Shipmet Type','Warning');
+            flasher.warning('Please Select Shipmet Type','Warning');
             return;
         } 
 
         if (leopord_city == '')
         { 
-            toastr.warning('Please Select City','Warning');
+            flasher.warning('Please Select City','Warning');
             return; 
         }
         else if ( weight <=0  ||  weight == "")
         { 
             
-            toastr.warning('Please Select Weight','Warning');
+            flasher.warning('Please Select Weight','Warning');
             return;
         } 
         else if ( price <0  ||  price == "" || advance_payment == "")
         { 
             
-            toastr.warning('Please Check price and advance payment','Warning');
+            flasher.warning('Please Check price and advance payment','Warning');
             return;
         }
         
@@ -1359,7 +1360,7 @@ function get_fare_list()
                 else if(typeof e.error !== 'undefined')
                 {
                     $("body").removeClass("loading");
-                    // toastr.error(e.messege,'Error');
+                    // flasher.error(e.messege,'Error');
                 }
                 
                 $("body").removeClass("loading");
@@ -1406,7 +1407,7 @@ function GetTraxFareList()
     else if ( cod <0  ||  cod == "" || advance_payment == "")
     {
         
-        toastr["success"](e.messege, 'Please Check Price');
+        flasher.success(e.messege, 'Please Check Price');
         // alert('cod and advance');
         return;
     }
