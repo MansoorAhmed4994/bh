@@ -99,60 +99,71 @@
                 // $('#mobileErrorMsg').text(response.responseJSON.errors.mobile);
                 // $('#messageErrorMsg').text(response.responseJSON.errors.message);
               },
-          });
-        
-        // alert(category);
-        
-        // alert(image);
+          }); 
     }
     
-    function checkImage2(url) {
-        var image_status = false;
-        var request = new XMLHttpRequest();
-        request.open("GET", url, true);
-        request.send();
-        request.onload = function() {
-            status = request.status;
-            if (request.status == 200)  
-            {
-                image_status = true;
-            } 
-            else {
-                image_status = false;
+    var image_status;  
+    function ImageExistTrueStatus()
+    {
+        // console.log(true);
+        image_status = true;
+    }
+      
+    
+    function ImageExistfalseStatus()
+    {
+        // console.log(false);
+        image_status = false;
+    } 
+    
+    function testImage(url, callback, timeout,element_id) {
+        timeout = timeout || 5000;
+        var timedOut = false, timer;
+        var img = new Image();
+        img.onerror = img.onabort = function() {
+            if (!timedOut) {
+                clearTimeout(timer);
+                callback(url, "error");
             }
-        }
-        return image_status;
+        };
+        img.onload = function() {
+            if (!timedOut) {
+                clearTimeout(timer);
+                // console.log(element_id);
+                $('#'+element_id).attr("src", url);
+                callback(url, "success");
+            }
+        };
+        img.src = url;
+        timer = setTimeout(function() {
+            timedOut = true;
+            // reset .src to invalid URL so it stops previous
+            // loading, but doesn't trigger new load
+            img.src = "//!!!!/test.jpg";
+            callback(url, "timeout");
+        }, timeout); 
+    } 
+    
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms))
     }
      
-    function checkImage(img) {
-    // During the onload event, IE correctly identifies any images that
-        // weren’t downloaded as not complete. Others should too. Gecko-based
-        // browsers act like NS4 in that they report this incorrectly.
-        if (!img.complete) {
-            return false;
-        }
-    
-        // However, they do have two very useful properties: naturalWidth and
-        // naturalHeight. These give the true size of the image. If it failed
-        // to load, either of these should be zero.
-        if (img.naturalWidth === 0) {
-            return false;
-        }
-    
-        // No other way of checking: assume it’s ok.
-        return true;
-    }
     
     function UniversalImagesBoxes(image_index,images,order_id)
     {
+        $("body").addClass("loading"); 
         order_id_for_demand = order_id;
-        var UCSIM = document.getElementById('universal_carousel_box_inner_images');
         const images_array = images.split("|");
         var active_image_index = '';
-        var slider_imgage_src = "";
+        
+        
         for(var i=0; i<images_array.length; i++)
         {
-            found_image = '';
+            
+            var UCSIM = document.getElementById('universal_carousel_box_inner_images');
+            var slider_imgage_src = "";
+            var found_image = '';
+            var image_path = '';  
             if(image_index == i)
             {
                 active_image_index = 'active';
@@ -162,46 +173,13 @@
                 active_image_index = '';
             }
             
-            // var find_image = fileExists("{{  url('') }}/"+images_array[i],images_array[i]);
-            var check_image = checkImage("{{  url('') }}/"+images_array[i]);
-            console.log(check_image);
-            if(check_image == false)
-            {
-                console.log('image bot found 1');
-                check_image = checkImage("https://demo.desenador.com/brandhubportal/"+images_array[i]);
-                if(check_image == false)
-                {
-                    console.log('image bot found 2');
-                    check_image = checkImage("https://customer.brandhub.com.pk/"+images_array[i]);
-                    if(check_image == false)
-                    {
-                        console.log('image bot found 3');
-                        found_image = "https://customer.brandhub.com.pk/"+images_array[i];
-                    }
-                    else
-                    {
-                        console.log('image found 1');
-                    }
-                }
-                else
-                {
-                    console.log('image found 2');
-                    found_image = "https://demo.desenador.com/brandhubportal/"+images_array[i];
-                }
-            }
-            else
-            {
-                console.log('image found 3', check_image);
-                found_image = "{{  url('') }}/"+images_array[i];
-            }
-            
             slider_imgage_src +='<div class="col-sm-4">'; 
                 slider_imgage_src +='<div class="card col-sm-12" id="imagebox" >';
                 
                     
                     slider_imgage_src+='<div class="card-body" >';
                     
-                        slider_imgage_src +='<img class="card-img-top "  style="width: 100%;" title="'+images_array[i]+'" id="image_src_id_'+i+'" src="{{  url('') }}/'+images_array[i]+'" alt="Card image cap" >';
+                        slider_imgage_src +='<img class="card-img-top "  style="width: 100%;" title="'+images_array[i]+'" id="image_src_id_'+i+'" src="'+found_image+'" alt="Card image cap" >';
             
                     slider_imgage_src +='</div>';
                     
@@ -236,11 +214,42 @@
                 slider_imgage_src +='</div>';
             slider_imgage_src +='</div> ';
             
+            UCSIM.innerHTML = slider_imgage_src;
+            
+            image_path = "https://{{env('STORAGE_PATH')}}"+images_array[i];
+            testImage(image_path, ImageExistTrueStatus, 10000,'image_src_id_'+i);
+            
+            
+            image_path = "https://manualorders.brandhub.com.pk/"+images_array[i];
+            testImage(image_path, ImageExistTrueStatus, 10000,'image_src_id_'+i);
+            
+            
+            image_path = "{{  url('') }}/"+images_array[i];  
+            testImage(image_path, ImageExistTrueStatus, 10000,'image_src_id_'+i);
+            
+            
+            image_path = "https://customer.brandhub.com.pk/"+images_array[i];  
+            testImage(image_path, ImageExistTrueStatus, 10000,'image_src_id_'+i);
+            
+            
+            image_path = "https://manualordersstaging.brandhub.com.pk/"+images_array[i]; 
+            testImage(image_path, ImageExistTrueStatus, 10000,'image_src_id_'+i);
+            
+            
+            image_path = "https://manualordersstaging.brandhub.com.pk/"+images_array[i];
+            testImage(image_path, ImageExistTrueStatus, 10000,'image_src_id_'+i);
+            
+            
+            image_path = "https://demo.desenador.com/brandhubportal/"+images_array[i];   
+            testImage(image_path, ImageExistTrueStatus, 10000,'image_src_id_'+i); 
+            
+            $("body").removeClass("loading");
+            
         }
         
  
         
-        UCSIM.innerHTML = slider_imgage_src;
+        
         // console.log(slider_imgage_src);
         $('#UniversalImageBoxModal').modal('show');
     }

@@ -40,7 +40,7 @@ use Illuminate\Support\Picqer\Barcode;
 
 class ManualOrdersController extends Controller 
 { 
-    private $images_path =  'storage/images/orders/manual-orders/';
+    private $images_path =  'images/orders/manual-orders/'; 
 
     /**
      * Display a listing of the resource.
@@ -49,7 +49,8 @@ class ManualOrdersController extends Controller
      */
 
     public function __construct()
-    { 
+    {  
+        // dd(env('STORAGE_PATH'));
         // dd(Auth::guard('admin')->check());
         //$this->middleware('auth');
     }
@@ -248,7 +249,7 @@ class ManualOrdersController extends Controller
         $assign_to_users = User::whereHas('roles', function($q){$q->where('name', 'calling');})->get();
         
         $list = $query->take(300);
-        $list = $query->Paginate(20); 
+        $list = $query->simplePaginate(20); 
         // dd($list);
         //  $list = $query->take(100)->Paginate(20);
         // $pagination_cuttons = $query->paginate(20);
@@ -347,7 +348,7 @@ class ManualOrdersController extends Controller
      */
     public function store(Request $request)
     { 
-        
+ 
         $status = $this->CreateOrder($request);
         // dd($status);
         flash()->success('Order has been saved successfully!');
@@ -514,7 +515,7 @@ class ManualOrdersController extends Controller
             foreach($files as $file){
                 $name=$file->getClientOriginalName();
                 
-                $file->move($this->images_path,$name);
+                $file->move(env('STORAGE_PATH').$this->images_path,$name);
                 $images[]=$this->images_path.$name;
             }
         }  

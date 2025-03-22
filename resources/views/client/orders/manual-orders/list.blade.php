@@ -1056,8 +1056,8 @@ var container = "";
         
     </table>
 </div>
-{!! $list->appends(Request::all())->links() !!} 
-
+<!--{!! $list->appends(Request::all())->links() !!} -->
+{{ $list->links() }}
 
 <script type="application/javascript">
 

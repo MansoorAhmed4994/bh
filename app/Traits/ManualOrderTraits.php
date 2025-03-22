@@ -14,8 +14,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use DB;
 
-trait ManualOrderTraits {
-    
+trait ManualOrderTraits { 
     public function CreateOrder(Request $request)
     { 
         
@@ -43,7 +42,7 @@ trait ManualOrderTraits {
                 foreach($files as $file){
                     $name=$file->getClientOriginalName();
                     
-                    $file->move($this->images_path,$name);
+                    $file->move('../'.env('STORAGE_PATH').$this->images_path,$name); 
                     $images[]=$this->images_path.$name;
                 }
             }
@@ -113,7 +112,8 @@ trait ManualOrderTraits {
                 foreach($files as $file){
                     $name=$file->getClientOriginalName();
                     
-                    $file->move($this->images_path,$name);
+                    $file->move('../'.env('STORAGE_PATH').$this->images_path,$name);
+                    // dd($file->move('../'.env('STORAGE_PATH').$this->images_path,$name));
                     $images[]=$this->images_path.$name;
                 }
             }

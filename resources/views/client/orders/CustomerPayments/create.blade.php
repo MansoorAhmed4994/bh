@@ -1,32 +1,26 @@
- 
+  
 @extends('layouts.'.Auth::getDefaultDriver())
 
 @section('content') 
 <script type="application/javascript">
 var base_url = '<?php echo e(url('/')); ?>';
+        
         function fetch_data(name,address)
         {
             $( document ).ready(function() {
                 $('#first_name').val(name);
                 $('#address').val(address); 
-             });
-             
-             
-            
-              
+             });  
         }
         
         function delete_image(id)
-        {
-            
+        { 
             $('#'+id).show();
-            $('#edit_images_box').hide();
-        //     const fileListArr = 
-        //   fileListArr.splice(index, 1)
-        //   console.log(fileListArr)
+            $('#edit_images_box').hide(); 
         }
         
-        function edit_readURL(input) { 
+        function edit_readURL(input) 
+        { 
             console.log(input.files.length);
             
             var imgages= '';
@@ -45,10 +39,8 @@ var base_url = '<?php echo e(url('/')); ?>';
                     imgages = $('#edit_selected_img_card_body').html()+'<img class="card-img-top col-sm-3" src="'+e.target.result+'" alt="Card image cap" >';
                     $('#edit_selected_img_card_body').html(imgages);
                     
-                    };
-                    
-                }
-              
+                    }; 
+                } 
                 reader.readAsDataURL(input.files[i]);
             }
             $('#edit_images_box').show();
@@ -327,12 +319,50 @@ var base_url = '<?php echo e(url('/')); ?>';
             });
         }
         
+        
+        function ShowPaymentImage(id) 
+        { 
+            $("body").addClass("loading"); 
+            
+            image_path = "https://manualorders.brandhub.com.pk/"+$('#'+id).attr("src"); 
+            testImage(image_path, ImageExistTrueStatus, 10000,"payment_image_src");
+            
+            
+            image_path = "https://{{env('STORAGE_PATH')}}"+$('#'+id).attr("src"); 
+            testImage(image_path, ImageExistTrueStatus, 10000,"payment_image_src");
+            
+            
+            image_path = "https://customer.brandhub.com.pk/"+$('#'+id).attr("src"); 
+            testImage(image_path, ImageExistTrueStatus, 10000,"payment_image_src");            
+            
+            
+            image_path = "https://manualordersstaging.brandhub.com.pk/"+$('#'+id).attr("src"); 
+            testImage(image_path, ImageExistTrueStatus, 10000,"payment_image_src");            
+
+
+            image_path = "https://demo.desenador.com/brandhubportal/"+$('#'+id).attr("src"); 
+            testImage(image_path, ImageExistTrueStatus, 10000,"payment_image_src");            
+            
+            
+            image_path = "{{  url('') }}/"+$('#'+id).attr("src"); 
+            testImage(image_path, ImageExistTrueStatus, 10000,"payment_image_src");            
+            
+            
+            open_image_modal(id);
+            $("#payment_image_zoom").width($(window).width());
+            
+            $("body").removeClass("loading");
+        }
+        
          
     
     
     </script>
     
     <style> 
+        img#payment_image_src {
+            width: 100%;
+        }
         
         input[type=file] 
         {
@@ -582,7 +612,7 @@ var base_url = '<?php echo e(url('/')); ?>';
             <div class="modal-content"> 
             <div class="modal-body">
                 
-                <img id="payment_image_src" src="">  
+                <img id="payment_image_src" class="previouse_order_images" src="">  
             </div>
             <div class="modal-footer">  
                 <button type="button" class="btn btn-secondary" id="payment_image_zoom_close" data-dismiss="modal">Close</button>
@@ -647,4 +677,6 @@ var base_url = '<?php echo e(url('/')); ?>';
      <script>
          get_payments();
      </script>
+     
+     
   @endsection

@@ -80,7 +80,7 @@
             
             $('#print_loadsheet_btn').on('click',function(e)
             { 
-                alert('working');
+                
                     $("body").addClass("loading"); 
                     //console.log($('#load_sheet_form').serialize());
                     $.ajax({
@@ -99,7 +99,7 @@
                             $("body").removeClass("loading");
                         },
                         error: function(e) {
-                            alert(e.messege);
+                            flasher.error(e.messege);
                             $("body").removeClass("loading");
                         }
                     });
@@ -120,7 +120,7 @@
             
             if(jQuery.inArray(id, order_ids) !== -1)
             {
-                alert('Already exist');
+                flasher.warning('Already exist');
                 document.getElementById('order_id').value = '';
                 return
             }
@@ -139,11 +139,10 @@
                         dataType: 'json',
                         success: function(e)
                         {
-                            console.log(e);
+                            $("body").removeClass("loading"); 
                             if (typeof e.error !== 'undefined') 
                             {
-                                alert(e.messege);
-                                $("body").removeClass("loading");
+                                flasher.error(e.messege); 
                                 return;
                             } 
                             if(typeof e.success !== 'undefined')
@@ -158,21 +157,17 @@
                                 $('#total_parcels').html(total_parcels);
                                 var row_data = '<tr id="'+row_id+'"><td class="delete_btn_class"><button type="button" class="btn btn-danger " onclick="delete_row('+row_id+','+cod_amount+')">Delete</button></td><td class="delete_btn_class"><input type="checkbox" value="'+e.data.track_number+'" name="order_ids[]" checked></td><td>'+e.data.track_number+'</td><td>'+e.data.consignment_name_eng+'</td><td>'+e.data.consignment_phone+'</td><td>'+e.data.consignment_address+'</td><td><input tye="hidden" onkeyup="change_cod_amount(this.value)" value="'+cod_amount+'" name="cod_amount[]" id="total_amount"></td></td><td>'+e.data.booked_packet_status+'</td></tr>';
                                 $("#row_data").prepend(row_data);
-                                row_id++;
-                                $("body").removeClass("loading");
+                                row_id++; 
                                 document.getElementById('order_id').value = '';
                                  
-                                order_ids.push(id); 
+                                order_ids.push(id);
+                                flasher.success('Consignment#'+e.data.track_number+ ' Added'); 
                                 
                             }
                             else
                             {
-                                alert('no record found');
-                                $("body").removeClass("loading");
-                            }
-                            
-                            //cosole.log(e.messege);
-                            $("body").removeClass("loading");
+                                flasher.error('no record found'); 
+                            } 
                         },
                         error: function(e) {
                             console.log(e.messege);
@@ -219,9 +214,9 @@
         //             dataType: 'json',
         //             success: function(e)
         //             {
-        //                 alert(e.messege);  
+        //                 flasher.error(e.messege);  
         //                 // $('#'+image_box_id).remove();
-        //                 // alert(response);
+        //                 // flasher.error(response);
         //             },
         //             error: function(e) {
         //                 console.log(e.responseText);

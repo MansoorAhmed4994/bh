@@ -19,7 +19,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class CustomerPaymentController extends Controller
 {
-    private $images_path =  'storage/images/orders/customer_payments/';
+    private $images_path =  'images/orders/customer-payments/manual-orders/';
     /**
      * Display a listing of the resource.
      *
@@ -87,7 +87,7 @@ class CustomerPaymentController extends Controller
                     
                     $name=uniqid().$file->getClientOriginalName();
                     $finaly_path = $this->images_path;
-                    $file->move($finaly_path,$name);
+                    $file->move('../'.env('STORAGE_PATH').$finaly_path,$name);
                     $images[]=$finaly_path.$name;
                 }
             } 
@@ -176,7 +176,8 @@ class CustomerPaymentController extends Controller
                 foreach($files as $file){
                     $name=$file->getClientOriginalName();
                     
-                    $file->move($this->images_path,$name);
+                    $file->move('../'.env('STORAGE_PATH').$this->images_path,$name);
+                     
                     $images[]=$this->images_path.$name;
                 }
             }
@@ -385,7 +386,7 @@ class CustomerPaymentController extends Controller
                 $image_url = asset($customerPayment->images);
                 $data .= '<tr> 
                     <th>'.$customerPayment->id.'</th> 
-                    <th><img class="previouse_order_images" id="'.$customerPayment->transaction_id.'" onclick="open_image_modal('.$customerPayment->transaction_id.')" src="'.$image_url.'"/ width="100"></th>
+                    <td ><button class="btn btn-primary bi bi-image " id="'.$customerPayment->id.'" onclick="ShowPaymentImage('.$customerPayment->id.');" src="'.$customerPayment->images.'"></button><div id="order_images"></div></td> 
                     <td>'.$customerPayment->order_id.'</td>
                     <td>'.$customerPayment->transaction_id.'</td>
                     <td>'.$customerPayment->sender_name.'</td>

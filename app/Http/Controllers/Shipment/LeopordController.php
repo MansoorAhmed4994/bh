@@ -165,10 +165,11 @@ class LeopordController extends Controller
     public function GetCnDetails($cn)
     {
         $response = $this->LeopordTrackBookedPacket($cn);
-        // dd($response->packet_list[0]);
-        if($response->status == 1)
+        // dd($response->bookeddpacketdetails);
+        if($response->bookeddpacketdetails->status == 1)
         {
-            return response()->json(['success'=>'1','messege' => 'some thing went wrong','data'=> $response->packet_list[0]]);
+            // dd($response->bookeddpacketdetails->packet_list[0]); 
+            return response()->json(['success'=>'1','data'=> $response->bookeddpacketdetails->packet_list[0]]);
         }
         else
         {
@@ -178,8 +179,9 @@ class LeopordController extends Controller
     
     public function PrintLoadsheet(Request $request)
     { 
+        // dd($request->order_ids);
         $response = $this->LeopordGenerateLoadsheet($request->order_ids);
-        
+        dd(json_decode($response));
         return response()->json(['error'=>'1','messege' => 'some thing went wrong','data'=> $response]);
     }
     

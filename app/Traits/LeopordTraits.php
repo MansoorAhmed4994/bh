@@ -54,46 +54,14 @@ trait LeopordTraits {
         $headers = ['Authorization:'.env('LEOPORD_API_KEY'), 'Accepts:' . 'application/json',"real:json content"];
         $response = $this->LeopordCurlPostRequest($url,json_decode($data,true));
         return $response = json_decode($response);
-    }
-    
-    
-    // public function LeopordGetCnDetails($tracking_number)
-    // {
-    //     $data = array(
-    //     'api_key' => env('LEOPORD_API_KEY'),
-    //     'api_password' => env('LEOPORD_API_PASSWORD'),
-    //     'track_numbers' => $tracking_number
-    //     );
-    //     $url = "https://merchantapistaging.leopardscourier.com/api/trackBookedPacket/format/json/";
-    //     $headers = ['Authorization:'.env('LEOPORD_API_KEY'), 'Accepts:' . 'application/json',"real:json content"];
-    //     $response = $this->LeopordCurlPostRequest($url,$data);
-    //     return $response = json_decode($response);
-    // }
+    } 
     
   
     public function LeopordPrintAirWayBill($slip)
     {
         
-        return Redirect::to($slip);
-        // $apiUrl = 'http://new.leopardscod.com/webservice/getPaymentDetails/format/json/?api_key='.env('LEOPORD_API_KEY').'&api_password='.(env('LEOPORD_API_PASSWORD')).'&cn_numbers='.$tracking_number;
-        // // $apiUrl = 'http://new.leopardscod.com/webservice/getTariffDetails/format/json/?api_key='.env('LEOPORD_API_KEY').'&api_password='.(env('LEOPORD_API_PASSWORD')).'&packet_weight='.$weight.'&shipment_type='.$shipment_type.'&origin_city='.(env('LEOPORD_ORIGIN_CITY')).'&destination_city='.$destination_city.'&cod_amount='.$cod;
-        // $headers = ['Authorization:'.env('Leopord_API_KEY'), 'Accepts:' . 'application/json',"real:json content"];
-        // $response = $this->CurlGetRequest($apiUrl,$headers);
-        // $response = json_decode($response);
-        // return($response);
-    }
-     
-    
-    // public function GetTariffDetails($weight,$shipment_type,$origion_city,$destination_city,$cod)
-    // {
-        
-    //     $apiUrl = 'http://new.leopardscod.com/webservice/getTariffDetails/format/json/?api_key='.env('LEOPORD_API_KEY').'&api_password='.(env('LEOPORD_API_PASSWORD')).'&packet_weight='.$weight.'&shipment_type='.$shipment_type.'&origin_city='.(env('LEOPORD_ORIGIN_CITY')).'&destination_city='.$destination_city.'&cod_amount='.$cod;
-    //     $headers = ['Authorization:'.env('Leopord_API_KEY'), 'Accepts:' . 'application/json',"real:json content"];
-    //     $response = $this->CurlGetRequest($apiUrl,$headers);
-    //     $response = json_decode($response);
-    //     return($response);
-
-    // } 
+        return Redirect::to($slip); 
+    } 
      
     
     public function GetTariffDetails($weight,$shipment_type,$origion_city,$destination_city,$cod)
@@ -146,79 +114,54 @@ trait LeopordTraits {
     
     public function LeopordGenerateLoadsheet($ids)
     {
-        // $data= json_encode(array(
-        //     'api_key' => '503AFB5BBBD7779D4DA0A3BCC4082076',
-        //     'api_password' => 'MANSOOR1@3',
-        //     'cn_numbers' => array('KI780348439','KI780653757'),
-        //     'courier_name' => 'Mansoor',
-        //     'courier_code' => '1@3',
-        // ));
-        // trim($str, "Hir");
-        // return $data;
+        $data = array(
+        'api_key' => '503AFB5BBBD7779D4DA0A3BCC4082076',
+        'api_password' => 'MANSOOR1@3',
+        'cn_numbers' => array('154147828'),
+        'courier_name' => 'Mansoor',
+        'courier_code' => '1@3'
+        );
+        $url = "https://merchantapi.leopardscourier.com/api/generateLoadSheet/format/json/";
+        $headers = ['Authorization:'.env('LEOPORD_API_KEY'), 'Accepts:' . 'application/json',"real:json content"];
+        $response = $this->LeopordCurlPostRequest($url,$data);
+        dd($response);
+        return $response = json_decode($response);
+        
+        
+        // $data = json_encode(array(
+        //         'api_key' => (env('LEOPORD_API_KEY')),
+        //         'api_password' => (env('LEOPORD_API_PASSWORD')),
+        //         'cn_numbers' => array('KI796397020'),
+        //         'courier_name' => 'Mansoor',
+        //         'courier_code' => '1@3'
+        //         ));
+        // $url = "https://merchantapi.leopardscourier.com/api/generateLoadSheet/format/json/";
+        // $headers = ['Authorization:'.env('LEOPORD_API_KEY'), 'Accepts:' . 'application/json',"real:json content"];
+        // $response = $this->LeopordCurlPostRequest($url,json_decode($data,true));
+        // dd($response);
+        // return $response = json_decode($response);
+        
+        
+        
+        
         // $curl_handle = curl_init();
-        // curl_setopt($curl_handle, CURLOPT_URL, 'https://merchantapi.leopardscourier.com/api/generateLoadSheet/format/json/'); // Write here Test or Production Link
+        // curl_setopt($curl_handle, CURLOPT_URL,
+        // 'https://merchantapi.leopardscourier.com/api/generateLoadSheet/format/json/'); // Write here 
         // curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
         // curl_setopt($curl_handle, CURLOPT_POST, 1);
         // curl_setopt($curl_handle, CURLOPT_HTTPHEADER, ['Authorization:'.env('LEOPORD_API_KEY'), 'Accepts:' . 'application/json',"real:json content"]);
-        // curl_setopt($curl_handle, CURLOPT_POSTFIELDS,$data) ;
-        
-        // $buffer = curl_exec($curl_handle);
+        // curl_setopt($curl_handle, CURLOPT_POSTFIELDS, json_encode(array(
+        // 'api_key' => env('LEOPORD_API_KEY'),
+        // 'api_password' => env('LEOPORD_API_PASSWORD'),
+        // 'cn_numbers' => array('KI796397020'), // E.g. array('XXYYYYYYYY') OR array('XXYYYYYYY1', 
+        // 'courier_name' => 'Mansoor',
+        // 'courier_code' => '1@3'
+        // )));
+        // dd(curl_exec($curl_handle));
         // curl_close($curl_handle);
         // return $buffer;
         
-        
-        
-        $data = array();
-        $data['api_key'] = env('LEOPORD_API_KEY');
-        $data['api_password'] = env('LEOPORD_API_PASSWORD');
-        $data['cn_numbers'] = array('I780348439');
-        $data['courier_name'] = 'Mansoor';
-        $data['courier_code'] = '1@3';
-        
-        $curl_handle = curl_init();
-        curl_setopt($curl_handle, CURLOPT_URL,
-        'https://merchantapi.leopardscourier.com/api/generateLoadSheet/format/json/'); // Write here 
-        curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl_handle, CURLOPT_POST, 1);
-        
-        curl_setopt($curl_handle, CURLOPT_HTTPHEADER, ['Authorization:'.env('LEOPORD_API_KEY'), 'Accepts:' . 'application/json',"real:json content"]);
-        curl_setopt($curl_handle, CURLOPT_POSTFIELDS, json_encode($data));
-        $buffer = curl_exec($curl_handle);
-        curl_close($curl_handle);
-        return $buffer;
-        
-        
-        
-        
-        // $curl_handle = curl_init();
-        // curl_setopt($curl_handle, CURLOPT_URL,'https://merchantapi.leopardscourier.com/api/generateLoadSheet/format/json/'); // Write here
-        // curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
-        // curl_setopt($curl_handle, CURLOPT_POST, 1); 
-        // // curl_setopt($curl_handle, CURLOPT_HTTPHEADER, ['api_key:503AFB5BBBD7779D4DA0A3BCC4082076', 'Accepts:' . 'application/json',"real:json content"]);
-        // curl_setopt($curl_handle, CURLOPT_POSTFIELDS, array(
-        //     'api_key' => '503AFB5BBBD7779D4DA0A3BCC4082076',
-        //     'api_password' => 'MANSOOR1@3',
-        //     'cn_numbers' => array('KI780348439'),
-        //     'courier_name' => 'Mansoor',
-        //     'courier_code' => '1@3',
-        // ));
-        // $buffer = curl_exec($curl_handle);
-        // curl_close($curl_handle);
-        
-        // return $buffer;
-        
-        
-        
-        // $data['api_key'] = env('LEOPORD_API_KEY');
-        // $data['api_password'] = env('LEOPORD_API_PASSWORD');
-        // $data['cn_numbers'] = 'KI780348439';
-        // $data['courier_name'] = 'Mansoor';
-        // $data['courier_code'] = '1@3';
-        
-        // $url = "https://merchantapi.leopardscourier.com/api/generateLoadSheet/format/json/";
-        // $headers = ['Authorization:'.env('LEOPORD_API_KEY'), 'Accepts:' . 'application/json',"real:json content"];
-        // $response = $this->LeopordCurlPostRequest($url,json_encode($data));
-        // return $response = ($response);
+ 
     }
     
     // public function TestGetPickupAddresses($tracking_number,$print_type)
