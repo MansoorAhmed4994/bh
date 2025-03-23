@@ -20,9 +20,9 @@
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-<!--flasher --> 
-<script  src="{{ asset('public/vendor/flasher/flasher.min.js') }}" ></script>
-<link href="{{ asset('public/vendor/flasher/flasher.min.css') }}" rel="stylesheet"> 
+    <!--flasher --> 
+    <script  src="{{ asset('public/vendor/flasher/flasher.min.js') }}" ></script>
+    <link href="{{ asset('public/vendor/flasher/flasher.min.css') }}" rel="stylesheet"> 
 
 
 

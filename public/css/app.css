@@ -4491,22 +4491,22 @@ input[type=button].btn-block {
 .status-addition
 { 
     color: black;
-    background: #ffec00;
+    background: #d5c501;
 }
 .status-pending
 { 
     color: white;
-    background: orange; 
+    background: #f5b53f; 
 }
 .status-prepared
 { 
     color: white;
-    background:#1ed4be; 
+    background: #5f87f7;
 }
 .status-incomplete
 {
     color: white;
-    background: grey; 
+    background: #b5b5b5; 
 }
 .status-not-responding
 { 
@@ -4516,7 +4516,7 @@ input[type=button].btn-block {
 .status-not-responding
 { 
     color: white;
-    background: #4bf34f; 
+    background: #bf488f; 
 }
 
 .status-hold
@@ -4532,19 +4532,28 @@ input[type=button].btn-block {
 .status-dispatched
 {
     color: white;
-    background: green; 
+    background: #00a500; 
 }
-.status-deleted,.status-cancel,.status-return
+.status-dc-comming
 {
     color: white;
-    background: #ad1515; 
+    background: #bbc700; 
+}
+.status-deleted,.status-cancel,.status-return,.status-NR-cancel,.status-NA-cancel
+{
+    color: white;
+    background: #f75f5f; 
+}
+.status-duplicate,.status-late-order-Cancel,.status-wrong-order,.status-sorted
+{
+    background: white;   
 }
 .nav {
-  display: flex;
-  flex-wrap: wrap;
-  padding-left: 0;
-  margin-bottom: 0;
-  list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
 }
 
 .nav-link {

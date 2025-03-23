@@ -58,9 +58,9 @@ Route::post('test/fileupload', 'Client\Orders\ManualOrdersController@TestFileUpl
 Route::group(['middleware' => 'auth:user'],function(){
 
     Route::get('/', 'HomeController@index')->name('dashboard');
-    Route::get('/contactmanage', 'HomeController@contact')->name('contactmanage'); 
-    
+    Route::get('/contactmanage', 'HomeController@contact')->name('contactmanage');  
     Route::get('user/dashboard', 'Auth\DashboardController@index')->name('user.dashboard');
+    Route::post('user/dashboard', 'Auth\DashboardController@index')->name('user.dashboard.search');
 });
 
 

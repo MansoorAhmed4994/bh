@@ -111,22 +111,12 @@ class ManualOrdersController extends Controller
         $date_by = 'created_at';
         // dd('working');
         $query = ManualOrders::query();
-        
-        // dd($query->paginate(20)->first());
+         
         $query = $query
         ->leftJoin('customers', 'manual_orders.customers_id', '=', 'customers.id')
         // ->leftJoin('users', 'manual_orders.created_by', '=', 'users.id') 
         // ->leftJoin('users as t', 'manual_orders.updated_by', '=', 't.id')  
-        ->select($this->OrderFieldList()); 
-        
-        
-        // $query = Customers::query();
-        // $query = $query
-        // ->rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')
-        // ->rightJoin('users', 'manual_orders.created_by', '=', 'users.id') 
-        // ->rightJoin('users as t', 'manual_orders.updated_by', '=', 't.id') 
-        // ->select($this->OrderFieldList()); 
-        // dd($query->paginate(20));
+        ->select($this->OrderFieldList());  
         
         if($order_id != '')
         { 
@@ -216,6 +206,10 @@ class ManualOrdersController extends Controller
             $query = $query->orderBy('manual_orders.id', 'DESC');
         }
         
+        if($request->has('dashboard_status'))
+        { 
+            $query = $query->where('manual_orders.status',$order_status);
+        } 
         
         //========================filter on status column
         if($order_status != '')
@@ -1067,7 +1061,7 @@ class ManualOrdersController extends Controller
             $check_status = check_order_pos_slip($ManualOrders->first()->id);
             if( $check_status['row_count'] > 0)
             { 
-                flash()->error('Order pos slip is already printed, you cant print another slip','Error');
+                flash()->error('Order pos slip is already printed, you cant print another slip');
                 return back(); 
             }
             // dd($customer_loyality_status->first());

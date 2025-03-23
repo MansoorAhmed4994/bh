@@ -28,7 +28,7 @@ class DashboardController extends Controller
 
    
     //
-    public function index()
+    public function index(Request $request)
     {  
         if(Gate::denies('users-pages')) 
         {
@@ -36,43 +36,80 @@ class DashboardController extends Controller
         }
         
         
-        //=================================================date from date to
-        $from_date= date('Y-m-01') . '00:00:00';
-        $to_date = date('Y-m-t') . '11:59:59';
+        //====================================================================
+        //=================================================date from date to 
+        //====================================================================
         
-        if(isset($request->date_from))
-        { 
-            $from_date = $request->date_from . '00:00:00';
-            $to_date = $request->date_to . '11:59:59';   
+        $from_date= date('Y-m-01').' 00:00:00';
+        $to_date = date('Y-m-t').' 23:59:59';
+        
+        if($request->date_from)
+        {
+            $from_date = $request->date_from.' 00:00:00';
+            $to_date = $request->date_to.' 23:59:59';   
         } 
         
         
-        //================================================= inventory
-        $remaining_invertory = DB::table('remaining_inventories')
-        ->select( DB::raw('sum(qty) as total'), DB::raw('sum(cost*qty) as amount')) 
-        ->get();    
         
-        $inventory = DB::table('inventories')
-        ->select('stock_status', DB::raw('sum(qty) as qty'), DB::raw('sum(cost) as cost'), DB::raw('sum(sale) as sale'))
-        ->whereBetween('updated_at', [$from_date, $to_date])
-        ->groupBy('stock_status')
-        ->get();  
+        
+        //====================================================================
+        //================================================= Orders Details boxes
+        //====================================================================
+        $group_by_status = DB::table('manual_orders')
+             ->select('status', DB::raw('count(*) as total_orders'), DB::raw('sum(price) as total_amount'))
+             ->whereBetween('updated_at', [$from_date, $to_date])
+             ->groupBy('status')
+             ->get()->toArray(); 
+         
+        for($i=0; $i<sizeof($group_by_status); $i++)
+        {
+            $users_order_status = DB::table('manual_orders')
+            ->select('assign_to as id', DB::raw('count(*) as total_orders'),DB::raw('sum(price) as total_amount'))
+            ->leftJoin('users', 'manual_orders.assign_to', '=', 'users.id') 
+            ->whereBetween('updated_at', [$from_date, $to_date])->where('status',$group_by_status[$i]->status)
+            ->groupBy('assign_to')
+            ->get()->toArray();  
+            $group_by_status[$i]->users = $users_order_status; 
+        }  
         
         
         //================================================= Orders Details
+        
         $orders_dashboard_query = ManualOrders::query();
-        $orders_dashboard_query = $orders_dashboard_query->select('status', DB::raw('count(*) as total_orders'), DB::raw('sum(price) as total_amount'))->whereBetween('updated_at', [$from_date, $to_date])->where("manual_orders.assign_to" ,auth()->user()->id);
+        $orders_dashboard_query = $orders_dashboard_query->select('status', DB::raw('count(*) as total_orders'), DB::raw('sum(price) as total_amount'))->whereBetween('updated_at', [$from_date, $to_date]);
         $user_id = User::find(auth()->user()->id);
         $user_roles = $user_id->roles()->get()->pluck('name')->toArray();
         
         // dd($user_roles);
-        if(in_array('author', $user_roles) || in_array('admin', $user_roles))
+        if( in_array('admin', $user_roles))
         { 
             // dd('working');
-        } 
-        elseif(in_array('user', $user_roles))
+        }  
+        elseif(in_array('author', $user_roles))
+        {
+            // $orders_dashboard_query = $orders_dashboard_query->where('status','');
+            $orders_dashboard_query = $orders_dashboard_query->where(function($query) {
+                $query->where('status', 'pending')
+                ->orWhere('status', 'addition')
+                ->orWhere('status', 'incomplete')
+                ->orWhere('status', 'duplicate')
+                ->orWhere('status', 'not responding')
+                ->orWhere('status', 'prepared')
+                ->orWhere('status', 'sorted')
+                ->orWhere('status', 'wrong order');
+                });
+        }
+        elseif(in_array('calling', $user_roles))
         {
             $orders_dashboard_query = $orders_dashboard_query->where('assign_to',Auth::id());
+        }
+        elseif(in_array('user', $user_roles))
+        {
+            $orders_dashboard_query = $orders_dashboard_query-> where(function($query) {
+                $query->where('created_by', Auth::id())
+                ->orWhere('updated_by', Auth::id())
+                ->orWhere('status', Auth::id());
+                });
         }
         
              
@@ -141,8 +178,8 @@ class DashboardController extends Controller
             'shipmenttracking'=>$statusfinal,
             'date_from'=> $from_date,
             'date_to'=>$to_date,
-            'remaining_invertory'=>$remaining_invertory,
-            'inventories'=>$inventory,
+            // 'remaining_invertory'=>$remaining_invertory,
+            // 'inventories'=>$inventory,
             'cities_name'=>$cities_name,
             'total_city_orders'=>$total_city_orders,
             ]); 

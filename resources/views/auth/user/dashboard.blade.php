@@ -3,25 +3,50 @@
 @section('content')
 
 <div class="container">
-    <div class="row">  
-    <?php $total_orders=0;?>
-        @foreach($data as $list)
-        <div class="col-sm-4 form-group">  
-                <div class="card" style="width: 100%;"> 
-                  <div class="card-body status-{!! str_replace(' ', '-', $list->status) !!} dashbord-card-body">
-                    <h3>{{$list->status}}</h3>
-                    <h5 class="card-title">{{$list->total_orders}}</h5> 
-                    <h5 class="card-title">{{$list->total_amount}}</h5>  
-                    <br>
-                    <form action="{{route('ManualOrders.index')}}" method="post">
-                        @csrf
-                        <input type="hidden" name="order_status"  value="{{$list->status}}">
-                    <!--<button type="submit" class="btn btn-primary">Go</button>-->
-                    </form>
-                    <a href="{{route('ManualOrders.status.order.list',$list->status)}}" class="btn btn-primary">Go</a>
-                  </div> 
-                </div>
-            </div>
+    <div class="row">   
+        <!--<table class="table">-->
+        <!--    <thead>-->
+        <!--        <tr>-->
+        <!--            <th scope="col">Status</th>-->
+        <!--            <th scope="col">Order</th>-->
+        <!--            <th scope="col">Amount</th>-->
+        <!--            <th scope="col">Action</th>-->
+        <!--        </tr>-->
+        <!--    </thead>-->
+        <!--    <tbody>-->
+                <?php $total_orders=0;?>
+                @foreach($data as $list) 
+                
+                    <!--<tr class="status-{!! str_replace(' ', '-', $list->status) !!} ">-->
+                    <!--    <th scope="row">{{$list->status}}</th>-->
+                    <!--    <td>{{$list->total_orders}}</td>-->
+                    <!--    <td>{{$list->total_amount}}</td>-->
+                    <!--    <td><a href="{{route('ManualOrders.status.order.list',$list->status)}}" class="btn btn-primary">Go</a></td> -->
+                    <!--    <form action="{{route('ManualOrders.index')}}" method="post">-->
+                    <!--        @csrf-->
+                    <!--        <input type="hidden" name="order_status"  value="{{$list->status}}"> -->
+                    <!--    </form>-->
+                    <!--</tr> -->
+                    
+                    
+                    <div class="col-sm-4 form-group">  
+                            <div class="card" style="width: 100%;"> 
+                              <div class="card-body status-{!! str_replace(' ', '-', $list->status) !!} dashbord-card-body">
+                                <h3>{{$list->status}}</h3>
+                                <h5 class="card-title">{{$list->total_orders}}</h5> 
+                                <h5 class="card-title">{{$list->total_amount}}</h5>  
+                                <br>
+                    
+                                <form action="{{route('ManualOrders.index')}}" method="post" >
+                                    @csrf
+                                    <input type="hidden" name="order_status"  value="{{$list->status}}">
+                                    <input class="form-control mr-sm-2" type="hidden" name="date_to" id="date_to" value="{{$date_to}}">
+                                    <input class="form-control mr-sm-2" type="hidden" name="date_from" id="date_from" value="{{$date_from}}">
+                                    <button type="submit" class="btn btn-primary">Go</button>
+                                </form>
+                              </div> 
+                            </div>
+                        </div>
             
             <?php $total_orders += $list->total; ?>
         @endforeach 
