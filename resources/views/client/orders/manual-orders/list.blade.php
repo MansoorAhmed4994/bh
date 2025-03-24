@@ -930,25 +930,25 @@ var container = "";
                         {
                             $per =0;
                         }
-                    ?>
+                        
+                        $number = $lists->number;
+                        $reciever_number = $lists->receiver_number;
+                        
+                        $get_char_num = substr($lists->number,0,1);
+                        if($get_char_num == 0)
+                        {
+                            $number = substr($lists->number, 1);
+                            $number = '+92'.$number; 
+                        } 
+                        $get_char_rec_num = substr($lists->receiver_number,0,1);
+                        if($get_char_rec_num == 0)
+                        {
+                            $reciever_number = substr($lists->receiver_number, 1);
+                            $reciever_number = '+92'.$reciever_number; 
+                        } 
+                    ?> 
                     <td style="white-space: nowrap;"> 
-                        <?php  
-                            $number = $lists->number;
-                            $reciever_number = $lists->receiver_number;
-                            
-                            $get_char_num = substr($lists->number,0,1);
-                            if($get_char_num == 0)
-                            {
-                                $number = substr($lists->number, 1);
-                                $number = '+92'.$number; 
-                            } 
-                            $get_char_rec_num = substr($lists->receiver_number,0,1);
-                            if($get_char_rec_num == 0)
-                            {
-                                $reciever_number = substr($lists->receiver_number, 1);
-                                $reciever_number = '+92'.$reciever_number; 
-                            } 
-                        ?> 
+                        
                         <span>  
                             <i class="bi bi-copy"  onclick="copy_clipboard_by_id('{{$lists->id}}_customer_data')"></i>
                             <span class="@if($per > 5) blink @endif">{{$lists->customers->first_name}} Code: {{$lists->customers_id}}</span> 

@@ -176,12 +176,14 @@ class ManualOrdersController extends Controller
         }
         
         
-        
-        //========================get user roles
+         
+        //====================================================================
+        //=================================================get user roles 
+        //==================================================================== 
         $user_id = User::find(auth()->user()->id);
         $user_roles = $user_id->roles()->get()->pluck('name')->toArray();
         
-        //========================filter on assign column
+        //========================assign column
         if(in_array('author', $user_roles) || in_array('admin', $user_roles))
         { 
             
@@ -211,33 +213,38 @@ class ManualOrdersController extends Controller
             $query = $query->where('manual_orders.status',$order_status);
         } 
         
-        //========================filter on status column
-        if($order_status != '')
-        {
-            // dd(in_array('calling', $user_roles));
-            if(in_array('calling', $user_roles))
-            {
-                $query->where('manual_orders.status','!=','pending'); 
-            } 
-            elseif($order_status == 'all')
-            {
-                $query->where('manual_orders.status','like','%%'); 
-            }  
-            else
-            {
+        
+         
+        //====================================================================
+        //================================================= status column
+        //====================================================================
+        
+        if($order_status != '' && $order_status != 'all')
+        { 
+            // dd($order_status);
+            // if(in_array('calling', $user_roles))
+            // {
+            //     $query->where('manual_orders.status','!=','pending'); 
+            // } 
+            // elseif($order_status == 'all')
+            // {
+            //     $query->where('manual_orders.status','like','%%'); 
+            // }  
+            // else
+            // {
                 $query = $query->where('manual_orders.status',$order_status);
-            } 
+            // } 
         }
         elseif($order_status == 'all')
         {
-            if(in_array('calling', $user_roles))
-            {
-                $query->where('manual_orders.status','!=','pending'); 
-            } 
-            else
-            {
+            // if(in_array('calling', $user_roles))
+            // {
+            //     $query->where('manual_orders.status','!=','pending'); 
+            // } 
+            // else
+            // {
                 $query->where('manual_orders.status','like','%%'); 
-            }
+            // }
         } 
         
         $assign_to_users = User::whereHas('roles', function($q){$q->where('name', 'calling');})->get();

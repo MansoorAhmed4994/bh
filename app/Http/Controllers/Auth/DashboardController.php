@@ -47,9 +47,7 @@ class DashboardController extends Controller
         {
             $from_date = $request->date_from.' 00:00:00';
             $to_date = $request->date_to.' 23:59:59';   
-        } 
-        
-        
+        }  
         
         
         //====================================================================
@@ -70,11 +68,12 @@ class DashboardController extends Controller
             ->groupBy('assign_to')
             ->get()->toArray();  
             $group_by_status[$i]->users = $users_order_status; 
-        }  
+        } 
         
         
+        //====================================================================
         //================================================= Orders Details
-        
+        //====================================================================  
         $orders_dashboard_query = ManualOrders::query();
         $orders_dashboard_query = $orders_dashboard_query->select('status', DB::raw('count(*) as total_orders'), DB::raw('sum(price) as total_amount'))->whereBetween('updated_at', [$from_date, $to_date]);
         $user_id = User::find(auth()->user()->id);
@@ -87,20 +86,11 @@ class DashboardController extends Controller
         }  
         elseif(in_array('author', $user_roles))
         {
-            // $orders_dashboard_query = $orders_dashboard_query->where('status','');
-            $orders_dashboard_query = $orders_dashboard_query->where(function($query) {
-                $query->where('status', 'pending')
-                ->orWhere('status', 'addition')
-                ->orWhere('status', 'incomplete')
-                ->orWhere('status', 'duplicate')
-                ->orWhere('status', 'not responding')
-                ->orWhere('status', 'prepared')
-                ->orWhere('status', 'sorted')
-                ->orWhere('status', 'wrong order');
-                });
+            $orders_dashboard_query = $orders_dashboard_query->where('status', '!=', 'dispatched'); 
         }
         elseif(in_array('calling', $user_roles))
         {
+            $orders_dashboard_query = $orders_dashboard_query->where('status', '!=', 'pending');
             $orders_dashboard_query = $orders_dashboard_query->where('assign_to',Auth::id());
         }
         elseif(in_array('user', $user_roles))
