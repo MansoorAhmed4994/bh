@@ -47,28 +47,7 @@ class DashboardController extends Controller
         {
             $from_date = $request->date_from.' 00:00:00';
             $to_date = $request->date_to.' 23:59:59';   
-        }  
-        
-        
-        //====================================================================
-        //================================================= Orders Details boxes
-        //====================================================================
-        $group_by_status = DB::table('manual_orders')
-             ->select('status', DB::raw('count(*) as total_orders'), DB::raw('sum(price) as total_amount'))
-             ->whereBetween('updated_at', [$from_date, $to_date])
-             ->groupBy('status')
-             ->get()->toArray(); 
-         
-        for($i=0; $i<sizeof($group_by_status); $i++)
-        {
-            $users_order_status = DB::table('manual_orders')
-            ->select('assign_to as id', DB::raw('count(*) as total_orders'),DB::raw('sum(price) as total_amount'))
-            ->leftJoin('users', 'manual_orders.assign_to', '=', 'users.id') 
-            ->whereBetween('updated_at', [$from_date, $to_date])->where('status',$group_by_status[$i]->status)
-            ->groupBy('assign_to')
-            ->get()->toArray();  
-            $group_by_status[$i]->users = $users_order_status; 
-        } 
+        }   
         
         
         //====================================================================
@@ -100,23 +79,59 @@ class DashboardController extends Controller
                 ->orWhere('updated_by', Auth::id())
                 ->orWhere('status', Auth::id());
                 });
-        }
+        }    
+        $orders_dashboard_query = $orders_dashboard_query->groupBy('status')->get();
         
-             
-         $orders_dashboard_query = $orders_dashboard_query->groupBy('status')->get(); 
-             
-        $order_report_by_cities = ManualOrders::leftJoin('cities', 'manual_orders.cities_id', '=', 'cities.id')->
-        select('cities.name', DB::raw('count(*) as total'))
-        ->whereBetween('updated_at', [$from_date, $to_date])
-        ->groupBy('cities.name')->havingRaw('COUNT(*) > 10')->get();
         
-        $cities_name = array();
-        $total_city_orders = array();
-        // $total_orders=[];
-        foreach($order_report_by_cities as $city)
+        //====================================================================
+        //================================================= Graph Daily Performance
+        //==================================================================== 
+        $query = ManualOrders::query();
+        $result = $query->selectRaw('sum(price) as amount, DATE(updated_at) as date')
+            ->whereBetween('updated_at', [$from_date, $to_date])
+            ->where('status', 'dispatched');
+        
+        if( in_array('admin', $user_roles))
+        {  
+            $query = $query->where('status', 'dispatched');
+        }  
+        elseif(in_array('author', $user_roles))
         {
-            $cities_name[] = $city->name;
-            $total_city_orders[] = $city->total;
+            $query = $query->where('status', 'dispatched'); 
+        }
+        elseif(in_array('calling', $user_roles))
+        {
+            $query = $query->where('status', 'dispatched');
+            $query = $query->where('assign_to',Auth::id());
+        }
+        elseif(in_array('user', $user_roles))
+        {
+            $query = $query-> where(function($query) {
+                $query->where('created_by', Auth::id())
+                ->orWhere('updated_by', Auth::id())
+                ->orWhere('status', Auth::id());
+                });
+        } 
+            
+            
+        $result = $query->groupBy('date')->orderby('date','DESC')->get()
+            ->map(function ($item) {
+                return [
+                    'date'  => date('d M', strtotime($item->date)),
+                    'total' => $item->amount,
+                ];
+            });
+            
+            
+            // dd($result);
+        $daily_performance_date = array();
+        $daily_performance_amount = array();
+        // $total_orders=[];
+        foreach($result as $results)
+        {
+            // dd($results['date']);
+            $daily_performance_date[] = $results['date'];
+            $daily_performance_amount[] = $results['total'];
         }
         
     
@@ -168,10 +183,10 @@ class DashboardController extends Controller
             'shipmenttracking'=>$statusfinal,
             'date_from'=> $from_date,
             'date_to'=>$to_date,
+            'daily_performance_date'=> $daily_performance_date,
+            'daily_performance_amount'=> $daily_performance_amount
             // 'remaining_invertory'=>$remaining_invertory,
-            // 'inventories'=>$inventory,
-            'cities_name'=>$cities_name,
-            'total_city_orders'=>$total_city_orders,
+            // 'inventories'=>$inventory, 
             ]); 
     }
 } 

@@ -214,7 +214,7 @@ function toggleDataSeries(e) {
             <div class="card total_user_order_card"> 
               <div class="card-body">
          
-                    <h3>Total Order</h3>
+                    <h3>Total Order: <?=$total_orders?></h3>
                     <table>
                             <thead>
                                 <tr>

@@ -1,35 +1,18 @@
 @extends('layouts.'.Auth::getDefaultDriver())
 
 @section('content')
-
-<div class="container">
-    <div class="row">   
-        <!--<table class="table">-->
-        <!--    <thead>-->
-        <!--        <tr>-->
-        <!--            <th scope="col">Status</th>-->
-        <!--            <th scope="col">Order</th>-->
-        <!--            <th scope="col">Amount</th>-->
-        <!--            <th scope="col">Action</th>-->
-        <!--        </tr>-->
-        <!--    </thead>-->
-        <!--    <tbody>-->
+ 
+    <div class="row"> 
+     
+        
+        
+<!--====================================================================-->
+<!--================================================= Order Details-->
+<!--==================================================================== -->
+            <div class="col-sm-2">
                 <?php $total_orders=0;?>
-                @foreach($data as $list) 
-                
-                    <!--<tr class="status-{!! str_replace(' ', '-', $list->status) !!} ">-->
-                    <!--    <th scope="row">{{$list->status}}</th>-->
-                    <!--    <td>{{$list->total_orders}}</td>-->
-                    <!--    <td>{{$list->total_amount}}</td>-->
-                    <!--    <td><a href="{{route('ManualOrders.status.order.list',$list->status)}}" class="btn btn-primary">Go</a></td> -->
-                    <!--    <form action="{{route('ManualOrders.index')}}" method="post">-->
-                    <!--        @csrf-->
-                    <!--        <input type="hidden" name="order_status"  value="{{$list->status}}"> -->
-                    <!--    </form>-->
-                    <!--</tr> -->
-                    
-                    
-                    <div class="col-sm-4 form-group">  
+                @foreach($data as $list)  
+                    <div class="col-sm form-group">  
                             <div class="card" style="width: 100%;"> 
                               <div class="card-body status-{!! str_replace(' ', '-', $list->status) !!} dashbord-card-body">
                                 <h3>{{$list->status}}</h3>
@@ -47,66 +30,67 @@
                               </div> 
                             </div>
                         </div>
-            
-            <?php $total_orders += $list->total; ?>
-        @endforeach 
-        
-        <div class="col-sm-3 form-group">  
-            <div class="card" style="width: 18rem;"> 
-              <div class="card-body">
-                  
-                    <h3>Total Order</h3>
-                <h5 class="card-title"><?php echo $total_orders;?></h5>
-                 
-              </div> 
+                    
+                    <?php $total_orders += $list->total_orders; ?>
+                @endforeach 
+                
+                <div class="col-sm-3 form-group">  
+                    <div class="card" style="width: 18rem;"> 
+                      <div class="card-body">
+                          
+                            <h3>Total Order</h3>
+                        <h5 class="card-title"><?php echo $total_orders;?></h5>
+                         
+                      </div> 
+                    </div>
+                </div> 
             </div>
-        </div>
+     
         
+        
+<!--====================================================================-->
+<!--================================================= Graph Daily Performance-->
+<!--==================================================================== -->
+            
+            <div class="col-sm-10"> 
+                <div style="width: 100%; margin: auto;">
+                    <canvas id="DailyPerformanceChartId" style="max-height:500px"></canvas>
+                </div>  
+            </div>
+            
+              
     </div> 
-    <div style="width: 100%; margin: auto;">
-        <canvas id="myChart1"></canvas>
-    </div>
-
-
-
-</div> 
+     
+        
+        
+<!--====================================================================-->
+<!--================================================= Graph Daily Performance-->
+<!--==================================================================== -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-//   const labels = [
-//     'January',
-//     'February',
-//     'March',
-//     'April',
-//     'May',
-//     'June',
-//   ];
-  
-  const labels = {!! json_encode($cities_name) !!};
-  
+<script> 
+//Parcels delivered Cities Chart
+  const labels = {!! json_encode($daily_performance_date) !!}; 
 
   const data = {
     labels: labels,
     datasets: [{
-      label: 'Order Delivered in Cities',
+      label: 'Local VS Other Cities',
       backgroundColor: 'rgb(255, 99, 132)',
-      borderColor: 'rgb(255, 99, 132)',
-    //   data: [0, 10, 5, 2, 20, 30, 45],
-      data :{!! json_encode($total_city_orders)!!},
+      borderColor: 'rgb(255, 99, 132)',   
+      data :{!! json_encode($daily_performance_amount)!!}, 
+
     }]
-  };
+  };  
 
   const config = {
     type: 'line',
     data: data,
     options: {}
   };
-</script>
-<script>
   
-//   const myChart = new Chart(
-//     document.getElementById('myChart1'),
-//     config
-//   );
-  
+  const myChart = new Chart(
+    document.getElementById('DailyPerformanceChartId'),
+    config
+  );
 </script>
 @endsection

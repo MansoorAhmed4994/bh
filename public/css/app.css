@@ -4485,6 +4485,7 @@ input[type=button].btn-block {
 {
     border-radius: 15px;
     border: 1px solid white;
+    padding-bottom: 42px;
     
 }
 
@@ -11108,4 +11109,8 @@ a.text-dark:focus {
     border-color: #dee2e6;
   }
 }
-
+table, tr, td, th {
+    border-radius: 5px;
+    border: none;
+    padding-top: 8px;
+}
