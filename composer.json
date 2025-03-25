@@ -1,6 +1,6 @@
 {
     "name": "laravel/laravel",
-    "type": "project",
+    "type": "module",
     "description": "The Laravel Framework.",
     "keywords": [
         "framework",

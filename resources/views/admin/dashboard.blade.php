@@ -424,84 +424,60 @@ function toggleDataSeries(e) {
     
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-   
-   
-   
-   
-   
-//Parcels delivered Cities Chart
-  const labels = {!! json_encode($cities_name) !!}; 
-
-  const data = {
-    labels: labels,
-    datasets: [{
-      label: 'Local VS Other Cities',
-      backgroundColor: 'rgb(255, 99, 132)',
-      borderColor: 'rgb(255, 99, 132)',   
-      data :{!! json_encode($total_city_orders)!!}, 
-
-    }]
-  };  
-
-  const config = {
-    type: 'line',
-    data: data,
-    options: {}
-  };
-  
-  const myChart = new Chart(
-    document.getElementById('myChart1'),
-    config
-  );
-  
-  
-  //Parcels delivered Cities Chart
-  @if(!empty($shipment_cities_summary['shipment_cities_name'])) 
-  const labels2 = {!! json_encode($shipment_cities_summary['shipment_cities_name']) !!}; 
-    @endif
-
-  const data2 = {
-    labels: labels2,
-    datasets: [{
-      label: 'Order Delivered in Cities',
-      backgroundColor: 'rgb(255, 99, 132)',
-      borderColor: 'rgb(255, 99, 132)',
-      @if(!empty($shipment_cities_summary['shipment_cities_orders'])) 
-        data :{!! json_encode($shipment_cities_summary['shipment_cities_orders'])!!},
-      @endif
+<script> 
+    //Parcels delivered Cities Chart
+      const labels = {!! json_encode($cities_name) !!}; 
+    
+        const data = {
+            labels: labels,
+            datasets: [{
+              label: 'Local VS Other Cities',
+              backgroundColor: 'rgb(255, 99, 132)',
+              borderColor: 'rgb(255, 99, 132)',   
+              data :{!! json_encode($total_city_orders)!!}, 
+        
+            }]
+        };  
+    
+        const config = {
+            type: 'line',
+            data: data,
+            options: {}
+        };
       
-
-    }]
-  };
-
-  const config2 = {
-    type: 'bar',
-    data: data2,
-    options: {}
-  };
-  
-  const myChart2 = new Chart(
-    document.getElementById('parcels_by_shipment_company'),
-    config2
-  ); 
-  
-  
- 
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+        const myChart = new Chart(
+            document.getElementById('myChart1'),
+            config
+        );
+      
+      
+        //Parcels delivered Cities Chart
+        @if(!empty($shipment_cities_summary['shipment_cities_name'])) 
+            const labels2 = {!! json_encode($shipment_cities_summary['shipment_cities_name']) !!}; 
+        @endif
+        
+        const data2 = {
+            labels: labels2,
+            datasets: [{
+                label: 'Order Delivered in Cities',
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                @if(!empty($shipment_cities_summary['shipment_cities_orders'])) 
+                    data :{!! json_encode($shipment_cities_summary['shipment_cities_orders'])!!},
+                @endif 
+            }]
+        };
+    
+        const config2 = {
+            type: 'bar',
+            data: data2,
+            options: {}
+        };
+      
+        const myChart2 = new Chart(
+            document.getElementById('parcels_by_shipment_company'),
+            config2
+        );  
+        
 </script>
 @endsection

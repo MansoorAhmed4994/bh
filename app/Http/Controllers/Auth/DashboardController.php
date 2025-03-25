@@ -37,7 +37,7 @@ class DashboardController extends Controller
         
         
         //====================================================================
-        //=================================================date from date to 
+        //========================== date from date to =======================
         //====================================================================
         
         $from_date= date('Y-m-01').' 00:00:00';
@@ -51,7 +51,7 @@ class DashboardController extends Controller
         
         
         //====================================================================
-        //================================================= Orders Details
+        //===================== Orders Details by Status =====================
         //====================================================================  
         $orders_dashboard_query = ManualOrders::query();
         $orders_dashboard_query = $orders_dashboard_query->select('status', DB::raw('count(*) as total_orders'), DB::raw('sum(price) as total_amount'))->whereBetween('updated_at', [$from_date, $to_date]);
@@ -83,9 +83,9 @@ class DashboardController extends Controller
         $orders_dashboard_query = $orders_dashboard_query->groupBy('status')->get();
         
         
-        //====================================================================
-        //================================================= Graph Daily Performance
-        //==================================================================== 
+        //==========================================================================
+        //=========================== Graph Daily Performance ======================
+        //==========================================================================
         $query = ManualOrders::query();
         $result = $query->selectRaw('sum(price) as amount, DATE(updated_at) as date')
             ->whereBetween('updated_at', [$from_date, $to_date])
@@ -120,10 +120,8 @@ class DashboardController extends Controller
                     'date'  => date('d M', strtotime($item->date)),
                     'total' => $item->amount,
                 ];
-            });
+            }); 
             
-            
-            // dd($result);
         $daily_performance_date = array();
         $daily_performance_amount = array();
         // $total_orders=[];
@@ -134,59 +132,40 @@ class DashboardController extends Controller
             $daily_performance_amount[] = $results['total'];
         }
         
-    
-    
-        $shipment = DB::table('manual_orders')
-        ->select('manual_orders.payment_status', DB::raw('count(*) as total' ), DB::raw('sum(price-fare) as amount'), DB::raw('(sum(orderpayments.amount) ) as t_amount'), DB::raw('sum(fare) as fare'))
-        ->leftJoin('orderpayments', 'orderpayments.order_id', '=', 'manual_orders.id')
-        ->leftJoin('customers', 'customers.id', '=', 'manual_orders.customers_id')
-        ->whereBetween('manual_orders.updated_at', [$from_date, $to_date]) 
-        ->where('manual_orders.consignment_id' ,'>','0') 
-        ->groupBy('manual_orders.payment_status')
-        ->get();
         
-        $shipment_statuses = DB::table('manual_orders')
-        ->select('shipment_tracking_status')
-        ->groupBy('shipment_tracking_status')
-            ->whereBetween('manual_orders.updated_at', [$from_date, $to_date])
-            ->where('manual_orders.consignment_id' ,'>','0') 
-        ->get();
-        // dd($shipment_statuses);
         
-        $statusfinal=[];
-        foreach($shipment_statuses as  $shipment_statuses)
+        //====================================================================
+        //======================= CALLING TEAM PERFORMANCE ===================
+        //====================================================================  
+        $calling_team_performance_data = DB::table('manual_orders')
+        ->select('assign_to as id','users.first_name as name', DB::raw('count(*) as total_orders'),DB::raw('sum(price) as total_amount'))
+        ->leftJoin('users', 'manual_orders.assign_to', '=', 'users.id') 
+        ->whereBetween('updated_at', [$from_date, $to_date])
+        ->groupBy('assign_to','name')->orderby('total_amount','ASC')->get(); 
+            
+        
+        // dd($calling_team_performance_data);
+        // dd($calling_team_performance_data->pluck('name'));    
+        $calling_team_performance_name = array();
+        $calling_team_performance_amount = array();
+        // $total_orders=[];
+        foreach($calling_team_performance_data as $results)
         {
-            //$statusfinal[] = $shipment_statuses->shipment_tracking_status;
-            // echo $shipment_statuses->shipment_tracking_status;
-            $shipmenttrackings = DB::table('manual_orders')
-            ->select('manual_orders.payment_status', DB::raw('count(*) as total' ), DB::raw('sum(price-fare) as amount'))
-            ->leftJoin('orderpayments', 'orderpayments.order_id', '=', 'manual_orders.id')
-            ->leftJoin('customers', 'customers.id', '=', 'manual_orders.customers_id')
-            ->whereBetween('manual_orders.updated_at', [$from_date, $to_date])
-            ->where('manual_orders.consignment_id' ,'>','0') 
-            ->where('manual_orders.shipment_tracking_status' ,'=',$shipment_statuses->shipment_tracking_status) 
-            ->groupBy('manual_orders.payment_status')
-            ->get();
-            //dd($shipmenttrackings);
-            foreach($shipmenttrackings as  $shipmenttracking)
-            {
-                
-                $statusfinal[$shipment_statuses->shipment_tracking_status][] = $shipmenttracking;
-                // array_push($statusfinal, $shipmenttrackings);
-            } 
-             
+            // dd($results['date']);
+            $calling_team_performance_name[] = $results->name;
+            $calling_team_performance_amount[] = $results->total_amount;
         }
+        
              
         return view('auth.user.dashboard')->with([
-            'data'=>$orders_dashboard_query,
-            'shipment'=>$shipment,
-            'shipmenttracking'=>$statusfinal,
+            'data'=>$orders_dashboard_query,  
             'date_from'=> $from_date,
             'date_to'=>$to_date,
             'daily_performance_date'=> $daily_performance_date,
-            'daily_performance_amount'=> $daily_performance_amount
-            // 'remaining_invertory'=>$remaining_invertory,
-            // 'inventories'=>$inventory, 
+            'daily_performance_amount'=> $daily_performance_amount ,
+            'calling_team_performance_name' => $calling_team_performance_name,
+            'calling_team_performance_amount' => $calling_team_performance_amount,
+            'calling_team_performance_data' => $calling_team_performance_data
             ]); 
     }
 } 
