@@ -1,0 +1,115 @@
+[27-Mar-2025 10:31:20 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/desenado/manualorders.brandhub.com.pk/vendor/composer/../../app/Helper/BladeHelpers.php' (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php:41
+Stack trace:
+#0 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php(45): {closure}('23d37711aa74dd0...', '/home/desenado/...')
+#1 /home/desenado/manualorders.brandhub.com.pk/vendor/autoload.php(25): ComposerAutoloaderInit8befe8132d623baa733cb6a5bf774189::getLoader()
+#2 /home/desenado/manualorders.brandhub.com.pk/index.php(24): require('/home/desenado/...')
+#3 {main}
+  thrown in /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php on line 41
+[27-Mar-2025 10:31:24 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/desenado/manualorders.brandhub.com.pk/vendor/composer/../../app/Helper/BladeHelpers.php' (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php:41
+Stack trace:
+#0 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php(45): {closure}('23d37711aa74dd0...', '/home/desenado/...')
+#1 /home/desenado/manualorders.brandhub.com.pk/vendor/autoload.php(25): ComposerAutoloaderInit8befe8132d623baa733cb6a5bf774189::getLoader()
+#2 /home/desenado/manualorders.brandhub.com.pk/index.php(24): require('/home/desenado/...')
+#3 {main}
+  thrown in /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php on line 41
+[27-Mar-2025 10:31:38 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/desenado/manualorders.brandhub.com.pk/vendor/composer/../../app/Helper/BladeHelpers.php' (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php:41
+Stack trace:
+#0 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php(45): {closure}('23d37711aa74dd0...', '/home/desenado/...')
+#1 /home/desenado/manualorders.brandhub.com.pk/vendor/autoload.php(25): ComposerAutoloaderInit8befe8132d623baa733cb6a5bf774189::getLoader()
+#2 /home/desenado/manualorders.brandhub.com.pk/index.php(24): require('/home/desenado/...')
+#3 {main}
+  thrown in /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php on line 41
+[27-Mar-2025 10:31:47 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/desenado/manualorders.brandhub.com.pk/vendor/composer/../../app/Helper/BladeHelpers.php' (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php:41
+Stack trace:
+#0 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php(45): {closure}('23d37711aa74dd0...', '/home/desenado/...')
+#1 /home/desenado/manualorders.brandhub.com.pk/vendor/autoload.php(25): ComposerAutoloaderInit8befe8132d623baa733cb6a5bf774189::getLoader()
+#2 /home/desenado/manualorders.brandhub.com.pk/index.php(24): require('/home/desenado/...')
+#3 {main}
+  thrown in /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php on line 41
+[27-Mar-2025 10:31:49 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/desenado/manualorders.brandhub.com.pk/vendor/composer/../../app/Helper/BladeHelpers.php' (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php:41
+Stack trace:
+#0 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php(45): {closure}('23d37711aa74dd0...', '/home/desenado/...')
+#1 /home/desenado/manualorders.brandhub.com.pk/vendor/autoload.php(25): ComposerAutoloaderInit8befe8132d623baa733cb6a5bf774189::getLoader()
+#2 /home/desenado/manualorders.brandhub.com.pk/index.php(24): require('/home/desenado/...')
+#3 {main}
+  thrown in /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php on line 41
+[27-Mar-2025 10:31:55 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/desenado/manualorders.brandhub.com.pk/vendor/composer/../../app/Helper/BladeHelpers.php' (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php:41
+Stack trace:
+#0 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php(45): {closure}('23d37711aa74dd0...', '/home/desenado/...')
+#1 /home/desenado/manualorders.brandhub.com.pk/vendor/autoload.php(25): ComposerAutoloaderInit8befe8132d623baa733cb6a5bf774189::getLoader()
+#2 /home/desenado/manualorders.brandhub.com.pk/index.php(24): require('/home/desenado/...')
+#3 {main}
+  thrown in /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php on line 41
+[27-Mar-2025 10:32:10 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/desenado/manualorders.brandhub.com.pk/vendor/composer/../../app/Helper/BladeHelpers.php' (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php:41
+Stack trace:
+#0 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php(45): {closure}('23d37711aa74dd0...', '/home/desenado/...')
+#1 /home/desenado/manualorders.brandhub.com.pk/vendor/autoload.php(25): ComposerAutoloaderInit8befe8132d623baa733cb6a5bf774189::getLoader()
+#2 /home/desenado/manualorders.brandhub.com.pk/index.php(24): require('/home/desenado/...')
+#3 {main}
+  thrown in /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php on line 41
+[27-Mar-2025 10:32:11 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/desenado/manualorders.brandhub.com.pk/vendor/composer/../../app/Helper/BladeHelpers.php' (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php:41
+Stack trace:
+#0 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php(45): {closure}('23d37711aa74dd0...', '/home/desenado/...')
+#1 /home/desenado/manualorders.brandhub.com.pk/vendor/autoload.php(25): ComposerAutoloaderInit8befe8132d623baa733cb6a5bf774189::getLoader()
+#2 /home/desenado/manualorders.brandhub.com.pk/index.php(24): require('/home/desenado/...')
+#3 {main}
+  thrown in /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php on line 41
+[27-Mar-2025 10:32:18 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/desenado/manualorders.brandhub.com.pk/vendor/composer/../../app/Helper/BladeHelpers.php' (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php:41
+Stack trace:
+#0 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php(45): {closure}('23d37711aa74dd0...', '/home/desenado/...')
+#1 /home/desenado/manualorders.brandhub.com.pk/vendor/autoload.php(25): ComposerAutoloaderInit8befe8132d623baa733cb6a5bf774189::getLoader()
+#2 /home/desenado/manualorders.brandhub.com.pk/index.php(24): require('/home/desenado/...')
+#3 {main}
+  thrown in /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php on line 41
+[27-Mar-2025 10:32:27 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/desenado/manualorders.brandhub.com.pk/vendor/composer/../../app/Helper/BladeHelpers.php' (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php:41
+Stack trace:
+#0 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php(45): {closure}('23d37711aa74dd0...', '/home/desenado/...')
+#1 /home/desenado/manualorders.brandhub.com.pk/vendor/autoload.php(25): ComposerAutoloaderInit8befe8132d623baa733cb6a5bf774189::getLoader()
+#2 /home/desenado/manualorders.brandhub.com.pk/index.php(24): require('/home/desenado/...')
+#3 {main}
+  thrown in /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php on line 41
+[27-Mar-2025 10:32:34 UTC] PHP Warning:  require(/home/desenado/manualorders.brandhub.com.pk/vendor/composer/../../app/Helper/BladeHelpers.php): Failed to open stream: No such file or directory in /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php on line 41
+[27-Mar-2025 10:32:34 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/desenado/manualorders.brandhub.com.pk/vendor/composer/../../app/Helper/BladeHelpers.php' (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php:41
+Stack trace:
+#0 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php(45): {closure}('23d37711aa74dd0...', '/home/desenado/...')
+#1 /home/desenado/manualorders.brandhub.com.pk/vendor/autoload.php(25): ComposerAutoloaderInit8befe8132d623baa733cb6a5bf774189::getLoader()
+#2 /home/desenado/manualorders.brandhub.com.pk/artisan(18): require('/home/desenado/...')
+#3 {main}
+  thrown in /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php on line 41
+[27-Mar-2025 10:32:44 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/desenado/manualorders.brandhub.com.pk/vendor/composer/../../app/Helper/BladeHelpers.php' (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php:41
+Stack trace:
+#0 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php(45): {closure}('23d37711aa74dd0...', '/home/desenado/...')
+#1 /home/desenado/manualorders.brandhub.com.pk/vendor/autoload.php(25): ComposerAutoloaderInit8befe8132d623baa733cb6a5bf774189::getLoader()
+#2 /home/desenado/manualorders.brandhub.com.pk/index.php(24): require('/home/desenado/...')
+#3 {main}
+  thrown in /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php on line 41
+[27-Mar-2025 10:32:57 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/desenado/manualorders.brandhub.com.pk/vendor/composer/../../app/Helper/BladeHelpers.php' (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php:41
+Stack trace:
+#0 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php(45): {closure}('23d37711aa74dd0...', '/home/desenado/...')
+#1 /home/desenado/manualorders.brandhub.com.pk/vendor/autoload.php(25): ComposerAutoloaderInit8befe8132d623baa733cb6a5bf774189::getLoader()
+#2 /home/desenado/manualorders.brandhub.com.pk/index.php(24): require('/home/desenado/...')
+#3 {main}
+  thrown in /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php on line 41
+[27-Mar-2025 10:33:08 UTC] PHP Warning:  require(/home/desenado/manualorders.brandhub.com.pk/vendor/composer/../../app/Helper/BladeHelpers.php): Failed to open stream: No such file or directory in /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php on line 41
+[27-Mar-2025 10:33:08 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/desenado/manualorders.brandhub.com.pk/vendor/composer/../../app/Helper/BladeHelpers.php' (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php:41
+Stack trace:
+#0 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php(45): {closure}('23d37711aa74dd0...', '/home/desenado/...')
+#1 /home/desenado/manualorders.brandhub.com.pk/vendor/autoload.php(25): ComposerAutoloaderInit8befe8132d623baa733cb6a5bf774189::getLoader()
+#2 /home/desenado/manualorders.brandhub.com.pk/artisan(18): require('/home/desenado/...')
+#3 {main}
+  thrown in /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php on line 41
+[27-Mar-2025 10:33:15 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/desenado/manualorders.brandhub.com.pk/vendor/composer/../../app/Helper/BladeHelpers.php' (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php:41
+Stack trace:
+#0 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php(45): {closure}('23d37711aa74dd0...', '/home/desenado/...')
+#1 /home/desenado/manualorders.brandhub.com.pk/vendor/autoload.php(25): ComposerAutoloaderInit8befe8132d623baa733cb6a5bf774189::getLoader()
+#2 /home/desenado/manualorders.brandhub.com.pk/index.php(24): require('/home/desenado/...')
+#3 {main}
+  thrown in /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php on line 41
+[27-Mar-2025 10:33:31 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/desenado/manualorders.brandhub.com.pk/vendor/composer/../../app/Helper/BladeHelpers.php' (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php:41
+Stack trace:
+#0 /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php(45): {closure}('23d37711aa74dd0...', '/home/desenado/...')
+#1 /home/desenado/manualorders.brandhub.com.pk/vendor/autoload.php(25): ComposerAutoloaderInit8befe8132d623baa733cb6a5bf774189::getLoader()
+#2 /home/desenado/manualorders.brandhub.com.pk/index.php(24): require('/home/desenado/...')
+#3 {main}
+  thrown in /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php on line 41
+[27-Mar-2025 15:49:22 Asia/Karachi] PHP Fatal error:  Cannot redeclare generateLightColor() (previously declared in /home/desenado/manualorders.brandhub.com.pk/storage/framework/views/41c71cc7f1d18ed817e548045902332f.php:61) in /home/desenado/manualorders.brandhub.com.pk/storage/framework/views/41c71cc7f1d18ed817e548045902332f.php on line 61

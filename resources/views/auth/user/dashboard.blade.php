@@ -28,7 +28,7 @@
                             <h3>{{$list->total_orders}} {{$list->status}}</h3> 
                             <h5 class="card-title">{{$list->total_amount}}</h5>   
                 
-                            <form action="{{route('user.dashboard.search')}}" method="post" >
+                            <form action="{{route('ManualOrders.index')}}" method="post" >
                                 @csrf
                                 <input type="hidden" name="order_status"  value="{{$list->status}}">
                                 <input class="form-control mr-sm-2" type="hidden" name="date_to" id="date_to" value="{{$date_to}}">
@@ -70,14 +70,16 @@
             <div class="row col-sm-12"> 
                 <div class="btn-toolbar justify-content-center" role="toolbar" aria-label="Toolbar with button groups">
                     <div class="btn-group mr-2" role="group" aria-label="First group">
-                        <?php $i=0;?>
-                        @foreach ($calling_team_achieved_data as $employee)
-                            @php $color = generateLightColor(); @endphp
-                            <button type="button" class="btn" style="color:black;background-color: {{ $color }};"  onclick="addEmployeeDailyAchievedData({{$employee->id}},'{{$employee->name}}',{{$i}},'{{$date_from}}','{{$date_to}}');">{{ $employee->name }}</button>
-                                
-                            </button> 
-                            <?php $i++;?>
-                        @endforeach 
+                        @if($calling_team_list != '')
+                            <?php $i=0;?>
+                            @foreach ($calling_team_list as $employee)
+                                @php $color = generateLightColor(); @endphp
+                                <button type="button" class="btn" style="color:black;background-color: {{ $color }};"  onclick="addEmployeeDailyAchievedData({{$employee->id}},'{{$employee->name}}',{{$i}},'{{$date_from}}','{{$date_to}}');">{{ $employee->name }}</button>
+                                    
+                                </button> 
+                                <?php $i++;?>
+                            @endforeach 
+                        @endif 
                     
                     </div> 
                 </div>

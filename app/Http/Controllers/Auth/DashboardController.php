@@ -29,7 +29,7 @@ class DashboardController extends Controller
        
     }
 
-    protected  $backgroundColor =  [
+    private  $backgroundColor =  [
                 'rgba(255, 99, 132, 0.5)',   // Red
                 'rgba(255, 159, 64, 0.5)',   // Orange
                 'rgba(255, 205, 86, 0.5)',   // Yellow
@@ -48,7 +48,7 @@ class DashboardController extends Controller
                 'rgba(173, 255, 47, 0.5)',   // Green Yellow
                 'rgba(250, 128, 114, 0.5)'   // Salmon
             ];
-    protected  $borderColor = [
+    private  $borderColor = [
                 'rgb(255, 0, 0)',      // Strong Red for contrast
                 'rgb(204, 85, 0)',     // Deep Orange
                 'rgb(204, 153, 0)',    // Dark Yellow
@@ -71,6 +71,7 @@ class DashboardController extends Controller
     //
     public function index(Request $request)
     {  
+        $calling_team_list = '';
         if(Gate::denies('users-pages')) 
         {
             return redirect('login'); 
@@ -88,41 +89,7 @@ class DashboardController extends Controller
         {
             $from_date = $request->date_from.' 00:00:00';
             $to_date = $request->date_to.' 23:59:59';   
-        }   
-         
-        //====================================================================
-        //===================== Orders Details by Status =====================
-        //====================================================================  
-        $orders_dashboard_query = ManualOrders::query();
-        $orders_dashboard_query = $orders_dashboard_query->select('status', DB::raw('count(*) as total_orders'), DB::raw('sum(price) as total_amount'))->whereBetween('updated_at', [$from_date, $to_date]);
-        $user_id = User::find(auth()->user()->id);
-        $user_roles = $user_id->roles()->get()->pluck('name')->toArray();
-        
-        // dd($user_roles);
-        if( in_array('admin', $user_roles))
-        { 
-            // dd('working');
-        }  
-        elseif(in_array('author', $user_roles))
-        {
-            $orders_dashboard_query = $orders_dashboard_query->where('status', '!=', 'dispatched'); 
-        }
-        elseif(in_array('calling', $user_roles))
-        {
-            $orders_dashboard_query = $orders_dashboard_query->where('status', '!=', 'pending');
-            $orders_dashboard_query = $orders_dashboard_query->where('assign_to',Auth::id());
-            $permornace_type = Auth::user()->first_name;
-            
-        }
-        elseif(in_array('user', $user_roles))
-        {
-            $orders_dashboard_query = $orders_dashboard_query-> where(function($query) {
-                $query->where('created_by', Auth::id())
-                ->orWhere('updated_by', Auth::id())
-                ->orWhere('status', Auth::id());
-                });
-        }    
-        $orders_dashboard_query = $orders_dashboard_query->groupBy('status')->get();
+        } 
         
         
         
@@ -146,7 +113,42 @@ class DashboardController extends Controller
             // dd($results['date']);
             $calling_team_achieved_name[] = $results->name;
             $calling_team_achieved_amount[] = $results->total_amount;
+        }  
+         
+        //====================================================================
+        //===================== Orders Details by Status =====================
+        //====================================================================  
+        $orders_dashboard_query = ManualOrders::query();
+        $orders_dashboard_query = $orders_dashboard_query->select('status', DB::raw('count(*) as total_orders'), DB::raw('sum(price) as total_amount'))->whereBetween('updated_at', [$from_date, $to_date]);
+        $user_id = User::find(auth()->user()->id);
+        $user_roles = $user_id->roles()->get()->pluck('name')->toArray();
+        
+        // dd($user_roles);
+        if( in_array('admin', $user_roles))
+        { 
+            $calling_team_list = $calling_team_achieved_data; 
+            // dd('working');
+        }  
+        elseif(in_array('author', $user_roles))
+        {
+            $orders_dashboard_query = $orders_dashboard_query->where('status', '!=', 'dispatched'); 
         }
+        elseif(in_array('calling', $user_roles))
+        {
+            $orders_dashboard_query = $orders_dashboard_query->where('status', '!=', 'pending');
+            $orders_dashboard_query = $orders_dashboard_query->where('assign_to',Auth::id());
+            $permornace_type = Auth::user()->first_name;
+            
+        }
+        elseif(in_array('user', $user_roles))
+        {
+            $orders_dashboard_query = $orders_dashboard_query-> where(function($query) {
+                $query->where('created_by', Auth::id())
+                ->orWhere('updated_by', Auth::id())
+                ->orWhere('status', Auth::id());
+                });
+        }    
+        $orders_dashboard_query = $orders_dashboard_query->groupBy('status')->get();
         
         
         //==========================================================================
@@ -209,11 +211,11 @@ class DashboardController extends Controller
             // foreach($team_performance['amount'] as $team_performances => $key)
             // { 
             //     $TeamDailyPerformance['datasets'][] = [
-            //             'backgroundColor' => $backgroundColor[$BgColorLoop],
+            //             'backgroundColor' => $this->backgroundColor[$BgColorLoop],
             //             'label' => $team_performances, 
             //             'data' => $key, 
             //             'fill' => true,
-            //             'borderColor' => $borderColor[$BgColorLoop],
+            //             'borderColor' => $this->borderColor[$BgColorLoop],
             //             'tension' => 0.1, 
             //         ]; 
             //     $BgColorLoop++;
@@ -270,11 +272,11 @@ class DashboardController extends Controller
             ];   
             
             $TeamDailyPerformance['datasets'][] = [
-                'backgroundColor' => $backgroundColor[0], 
+                'backgroundColor' => $this->backgroundColor[0], 
                 'data' => $team_result->pluck('amount')->toArray(),
                 'label'=>Auth::user()->first_name, 
                 'fill' => true,
-                'borderColor' => $borderColor[0],
+                'borderColor' => $this->borderColor[0],
                 'borderWidth'=> 1,
                 'tension' => 0.1, 
                 'onClick'=> '(e, activeEls) => {getdatadb()}',
@@ -282,6 +284,7 @@ class DashboardController extends Controller
              
         }  
         
+ 
         return view('auth.user.dashboard')->with([
             'data'=>$orders_dashboard_query,  
             'date_from'=> $from_date,
@@ -290,6 +293,7 @@ class DashboardController extends Controller
             'calling_team_achieved_name' => $calling_team_achieved_name,
             'calling_team_achieved_amount' => $calling_team_achieved_amount,
             'calling_team_achieved_data' => $calling_team_achieved_data,
+            'calling_team_list' => $calling_team_list,
             'permornace_type'=>$permornace_type,
             'from_date' => $from_date,
             'to_date' => $to_date

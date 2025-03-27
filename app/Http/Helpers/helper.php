@@ -1,5 +1,4 @@
-<?php 
-namespace App\Http\Helpers\Helper;
+<?php  
     use App\Models\ActivityLogs;
     use App\Models\Client\CustomerPayments;
     use App\Models\Client\ManualOrders;
