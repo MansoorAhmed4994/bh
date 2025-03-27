@@ -61,6 +61,7 @@ Route::group(['middleware' => 'auth:user'],function(){
     Route::get('/contactmanage', 'HomeController@contact')->name('contactmanage');  
     Route::get('user/dashboard', 'Auth\DashboardController@index')->name('user.dashboard');
     Route::post('user/dashboard', 'Auth\DashboardController@index')->name('user.dashboard.search');
+    Route::post('user/dashboard/GetDailyCallingTeamDispatchData', 'Auth\DashboardController@GetDailyCallingTeamDispatchData')->name('user.dashboard.GetDailyCallingTeamDispatchData');
 });
 
 

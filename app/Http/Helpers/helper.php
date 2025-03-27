@@ -1,12 +1,12 @@
 <?php 
-
+namespace App\Http\Helpers\Helper;
     use App\Models\ActivityLogs;
     use App\Models\Client\CustomerPayments;
     use App\Models\Client\ManualOrders;
     use App\Models\Statuses;
     use App\Models\User;
     use App\Models\Category;
-    use App\Models\ActivityLog;
+    use App\Models\ActivityLog; 
 
     if(!function_exists('create_activity_log'))
     {
@@ -132,4 +132,6 @@
             }
         }
     }
+    
+     
 

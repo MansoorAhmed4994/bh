@@ -71,9 +71,22 @@ body {
   font-weight: 400;
   line-height: 1.6;
   color: #212529;
-  text-align: left;
-  /*background-color: #f8fafc;*/
-    background: linear-gradient(120.55deg,#e5f0e7 -1.27%,#66009873 79.83%)!important;
+  text-align: left; 
+}
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url(https://manualordersstaging.brandhub.com.pk/public/images/small_portal_fashion_background.jpeg);
+    background-repeat: repeat;
+    background-size: auto;
+    background-attachment: local;
+    /*background-size: 600px 600px;*/
+    opacity: 0.1;  
+    z-index: -1;
 }
 .text-hidden-ellipsis-nowrap
 {
@@ -4492,62 +4505,87 @@ input[type=button].btn-block {
 .status-addition
 { 
     color: black;
-    background: #d5c501;
+    background-color: rgb(249 234 49 / 62%);
+    border-color: #d9c900;
+    border-width: 3px;
 }
 .status-pending
 { 
     color: white;
-    background: #f5b53f; 
+    background-color: rgba(248, 187, 75, 0.7);
+    border-color: rgb(253 164 0);
+    border-width: 3px;
 }
 .status-prepared
 { 
     color: white;
-    background: #5f87f7;
+    background-color: rgb(95 135 247 / 74%);
+    border-color: rgb(95 135 247);
+    border-width: 3px;
 }
 .status-incomplete
 {
     color: white;
-    background: #b5b5b5; 
+    background-color: rgb(181 181 181 / 86%);
+    border-color: rgb(161 158 158);
+    border-width: 3px; 
 }
 .status-not-responding
 { 
     color: white;
     background: #7e218c; 
+    border-color: #d9c900;
+    border-width: 3px;
 }
 .status-not-responding
 { 
     color: white;
-    background: #bf488f; 
+    background-color: rgb(191 72 143 / 69%);
+    border-color: rgb(191, 72, 143);
+    border-width: 3px;
 }
 
 .status-hold
 { 
     color: white;
-    background: lightgreen; 
+    background: lightgreen;
+    border-color: #d9c900;
+    border-width: 3px; 
 }
 .status-confirmed
 { 
     color: white;
-    background: #2828bd; 
+    background: #2828bd;
+    border-color: #d9c900;
+    border-width: 3px; 
 }
 .status-dispatched
 {
     color: white;
-    background: #00a500; 
+    background-color: rgb(0 165 0 / 70%);
+    border-color: rgb(2 149 2);
+    border-width: 3px;
 }
 .status-dc-comming
 {
     color: white;
     background: #bbc700; 
+    border-color: #d9c900;
+    border-width: 3px;
 }
 .status-deleted,.status-cancel,.status-return,.status-NR-cancel,.status-NA-cancel
 {
     color: white;
-    background: #f75f5f; 
+    background-color: rgba(247, 95, 95, 0.67);
+    border-color: #ff0000;
+    border-width: 3px;
 }
 .status-duplicate,.status-late-order-Cancel,.status-wrong-order,.status-sorted
 {
-    background: white;   
+    color: white;
+    background-color: rgb(211 113 22 / 67%);
+    border-color: rgb(211 113 22);
+    border-width: 3px;   
 }
 .nav {
     display: flex;
@@ -11160,3 +11198,56 @@ table, tr, td, th {
         display: block;
         z-index: 11111;
     }
+    .chartjs-container
+    {
+        max-height:500px;
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        border: 1px solid #d1cece;
+        /*animation: movingShadow 3s infinite linear;*/
+    }
+    .chartjs-container .bar
+    {
+        
+    }
+    .chartjs-container .pie
+    {
+        
+    }
+    .chartjs-container .line
+    {
+        
+    }
+    .login-form
+    {
+    
+            /*animation: movingShadow 3s infinite linear;*/
+    }
+    
+    @keyframes movingShadow {
+    0% { box-shadow: 0px 0px 10px 2px red; }
+    25% { box-shadow: 10px 0px 10px 2px blue; }
+    50% { box-shadow: 0px 10px 10px 2px green; }
+    75% { box-shadow: -10px 0px 10px 2px purple; }
+    100% { box-shadow: 0px 0px 10px 2px red; }
+    }
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    

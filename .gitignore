@@ -18,4 +18,4 @@ Homestead.json
 /.vagrant 
 storage/images/orders/
 .ftpquota
-error_log
+error_log.log
