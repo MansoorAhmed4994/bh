@@ -113,3 +113,16 @@ Stack trace:
 #3 {main}
   thrown in /home/desenado/manualorders.brandhub.com.pk/vendor/composer/autoload_real.php on line 41
 [27-Mar-2025 15:49:22 Asia/Karachi] PHP Fatal error:  Cannot redeclare generateLightColor() (previously declared in /home/desenado/manualorders.brandhub.com.pk/storage/framework/views/41c71cc7f1d18ed817e548045902332f.php:61) in /home/desenado/manualorders.brandhub.com.pk/storage/framework/views/41c71cc7f1d18ed817e548045902332f.php on line 61
+[27-Mar-2025 17:01:02 UTC] PHP Warning:  require(/home/desenado/manualordersstaging.brandhub.com.pk/vendor/composer/../../app/Helper/BladeHelpers.php): Failed to open stream: No such file or directory in /home/desenado/manualordersstaging.brandhub.com.pk/vendor/composer/autoload_real.php on line 41
+[27-Mar-2025 17:01:02 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/desenado/manualordersstaging.brandhub.com.pk/vendor/composer/../../app/Helper/BladeHelpers.php' (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home/desenado/manualordersstaging.brandhub.com.pk/vendor/composer/autoload_real.php:41
+Stack trace:
+#0 /home/desenado/manualordersstaging.brandhub.com.pk/vendor/composer/autoload_real.php(45): {closure}('23d37711aa74dd0...', '/home/desenado/...')
+#1 /home/desenado/manualordersstaging.brandhub.com.pk/vendor/autoload.php(25): ComposerAutoloaderInitf8a2aa3c52b43655e50fa259113e7eee::getLoader()
+#2 /home/desenado/manualordersstaging.brandhub.com.pk/index.php(24): require('/home/desenado/...')
+#3 {main}
+  thrown in /home/desenado/manualordersstaging.brandhub.com.pk/vendor/composer/autoload_real.php on line 41
+[27-Mar-2025 23:53:27 Asia/Karachi] PHP Deprecated:  Optional parameter $sku declared before required parameter $stock_type is implicitly treated as a required parameter in /home/desenado/manualordersstaging.brandhub.com.pk/app/Http/Controllers/Admin/InventoryController.php on line 130
+[27-Mar-2025 23:53:27 Asia/Karachi] PHP Deprecated:  Optional parameter $stock_status declared before required parameter $stock_type is implicitly treated as a required parameter in /home/desenado/manualordersstaging.brandhub.com.pk/app/Http/Controllers/Admin/InventoryController.php on line 130
+[27-Mar-2025 23:53:27 Asia/Karachi] PHP Deprecated:  Optional parameter $reference_id declared before required parameter $stock_type is implicitly treated as a required parameter in /home/desenado/manualordersstaging.brandhub.com.pk/app/Http/Controllers/Admin/InventoryController.php on line 130
+[27-Mar-2025 23:53:27 Asia/Karachi] PHP Deprecated:  Optional parameter $qty declared before required parameter $stock_type is implicitly treated as a required parameter in /home/desenado/manualordersstaging.brandhub.com.pk/app/Http/Controllers/Admin/InventoryController.php on line 130
+[27-Mar-2025 23:53:27 Asia/Karachi] PHP Deprecated:  Optional parameter $cost declared before required parameter $stock_type is implicitly treated as a required parameter in /home/desenado/manualordersstaging.brandhub.com.pk/app/Http/Controllers/Admin/InventoryController.php on line 130

@@ -1,18 +1,6 @@
 @extends('layouts.'.Auth::getDefaultDriver())
 
-@section('content')
-    <div class="row">
-        <form class="form-inline" method="post" action="{{ route('user.dashboard.search') }}">
-            @csrf
-            <div class="form-group">
-                <input class="form-control mr-sm-2" type="date" name="date_from" id="date_from">
-            </div>
-            <div class="form-group">
-                <input class="form-control mr-sm-2" type="date" name="date_to" id="date_to"  >
-            </div>
-            <button type="submit">Search</button>
-        </form>
-    </div>
+@section('content') 
     
     <div class="row">
           
@@ -67,22 +55,42 @@
                     return sprintf("#%02X%02X%02X", $r, $g, $b);
                 }
             @endphp
-            <div class="row col-sm-12"> 
-                <div class="btn-toolbar justify-content-center" role="toolbar" aria-label="Toolbar with button groups">
-                    <div class="btn-group mr-2" role="group" aria-label="First group">
-                        @if($calling_team_list != '')
-                            <?php $i=0;?>
-                            @foreach ($calling_team_list as $employee)
-                                @php $color = generateLightColor(); @endphp
-                                <button type="button" class="btn" style="color:black;background-color: {{ $color }};"  onclick="addEmployeeDailyAchievedData({{$employee->id}},'{{$employee->name}}',{{$i}},'{{$date_from}}','{{$date_to}}');">{{ $employee->name }}</button>
-                                    
-                                </button> 
-                                <?php $i++;?>
-                            @endforeach 
-                        @endif 
-                    
+            <div class="row col-sm-12">
+                 
+                <div class="d-flex"> 
+                 
+                    <div class="d-flex justify-content-start"> 
+                        <div class="btn-toolbar " role="toolbar" aria-label="Toolbar with button groups">
+                            <div class="btn-group mr-2" role="group" aria-label="First group">
+                                @if($calling_team_list != '')
+                                    <?php $i=0;?>
+                                    @foreach ($calling_team_list as $employee)
+                                        @php $color = generateLightColor(); @endphp
+                                        <button type="button" class="btn" style="color:black;background-color: {{ $color }};"  onclick="addEmployeeDailyAchievedData({{$employee->id}},'{{$employee->name}}',{{$i}},'{{$date_from}}','{{$date_to}}');">{{ $employee->name }}</button>
+                                            
+                                        </button> 
+                                        <?php $i++;?>
+                                    @endforeach 
+                                @endif 
+                            
+                            </div> 
+                        </div>
                     </div> 
-                </div>
+                    
+                    <div class="d-flex justify-content-end">
+                        <form class="form-inline" method="post" action="{{ route('user.dashboard.search') }}">
+                            @csrf
+                            <div class="form-group">
+                                <input class="form-control mr-sm-2" type="date" name="date_from" id="date_from">
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control mr-sm-2" type="date" name="date_to" id="date_to"  >
+                            </div>
+                            <button type="submit">Search</button>
+                        </form>
+                     </div>
+                     
+                </div> 
             </div>
             
        

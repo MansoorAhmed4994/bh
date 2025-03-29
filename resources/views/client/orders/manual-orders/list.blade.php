@@ -49,6 +49,11 @@
             opacity: 0;
         }
     }
+    
+    td 
+    {
+        padding-bottom:0!important; 
+    }
 </style>
 <script  type="application/javascript">
 var base_url = '<?php echo e(url('/')); ?>';
@@ -1009,11 +1014,12 @@ var container = "";
                     
                     
                     <!-- copy Description -->
-                    <td style="position:relative">
-                        <span>
-                            <i class="bi bi-copy" onclick="copy_clipboard_by_id('{{$lists->id}}_description')"></i> 
-                            <p class="text-hidden-ellipsis-nowrap " id="{{$lists->id}}_description" >{{$lists->description}}</p>
-                        </span>
+                    <td>
+                        <div class="btn-group" role="group" aria-label="Address">
+                            <!--<button type="button" class="btn btn-sm btn-primary text-hidden-ellipsis-nowrap" data-bs-toggle="popover" title="Address" id="{{$lists->id}}_address" data-bs-content="{{$lists->reciever_address}}">View More</button>-->
+                            <button tabindex="0" class="btn btn-sm btn-primary text-hidden-ellipsis-nowrap" data-bs-content="{{$lists->description}}">{{$lists->description}}</button>
+                            <button type="button" class="btn btn-primary"><i class="bi bi-copy " onclick="copy_clipboard_by_id('{{$lists->id}}_description')"></i> </button>
+                        </div> 
                     </td>
                     
                     
@@ -1021,13 +1027,13 @@ var container = "";
                     <td>@if($lists->leopord_cities != null) {{$lists->leopord_cities->name}} @endif</td>
                     
                     
-                    
                     <!-- copy Address-->
-                    <td style="position:relative">
-                        <span>
-                            <i class="bi bi-copy " onclick="copy_clipboard_by_id('{{$lists->id}}_address')"></i>
-                            <p class="text-hidden-ellipsis-nowrap" id="{{$lists->id}}_address" > {{$lists->reciever_address}}</p>
-                        </span>
+                    <td>
+                        <div class="btn-group" role="group" aria-label="Address">
+                            <!--<button type="button" class="btn btn-sm btn-primary text-hidden-ellipsis-nowrap" data-bs-toggle="popover" title="Address" id="{{$lists->id}}_address" data-bs-content="{{$lists->reciever_address}}">View More</button>-->
+                            <button tabindex="0" class="btn btn-sm btn-primary text-hidden-ellipsis-nowrap" role="button" data-bs-toggle="popover" data-bs-trigger="focus" id="{{$lists->id}}_address" title="Address" data-bs-content="{{$lists->reciever_address}}">{{$lists->reciever_address}}</button>
+                            <button type="button" class="btn btn-primary"><i class="bi bi-copy " onclick="copy_clipboard_by_id('{{$lists->id}}_address')"></i> </button>
+                        </div>
                     </td>
                     
                     
@@ -1044,11 +1050,11 @@ var container = "";
                     
                     
                     <!-- Created details -->   
-                    <td > @if(!empty($lists->UsersCreatedBy->first_name)) {{$lists->UsersCreatedBy->first_name}} @endif <br> <span style="font-size: 10px;">{{date('d-M-y', strtotime($lists->created_at))}} {{date('G:i a', strtotime($lists->created_at))}} ({{$lists->created_by}})</td>
+                    <td style="white-space: pre;"> @if(!empty($lists->UsersCreatedBy->first_name)) {{$lists->UsersCreatedBy->first_name}} @endif {{date('d-M-y', strtotime($lists->created_at))}} {{date('G:i a', strtotime($lists->created_at))}} ({{$lists->created_by}})</td>
                     
                     
                     <!-- Updated details -->
-                    <td > @if(!empty($lists->UsersUpdatedBy->first_name)) {{$lists->UsersUpdatedBy->first_name}} @endif <br> <span style="font-size: 10px;">{{date('d-M-y', strtotime($lists->updated_at))}} {{date('G:i a', strtotime($lists->updated_at))}} ({{$lists->updated_by}})</span></td>
+                    <td style="white-space: pre;">@if(!empty($lists->UsersUpdatedBy->first_name)) {{$lists->UsersUpdatedBy->first_name}} @endif {{date('d-M-y', strtotime($lists->updated_at))}} {{date('G:i a', strtotime($lists->updated_at))}} ({{$lists->updated_by}})</td>
                 </tr>
                 <?php $count++;?>
             @endforeach
@@ -1065,12 +1071,13 @@ var container = "";
         // Get the text field
         var copyText = document.getElementById(id);
         
+        // alert(copyText.getAttribute("data-bs-content"));
         // Select the text field
         //   copyText.select();
         //   copyText.setSelectionRange(0, 99999); // For mobile devices
         
         // Copy the text inside the text field
-        navigator.clipboard.writeText(copyText.innerHTML);
+        navigator.clipboard.writeText(copyText.getAttribute("data-bs-content"));
         
         // Alert the copied text 
     }
@@ -1108,9 +1115,22 @@ var container = "";
         }); 
     
         $('.js-example-basic-multiple').select2();
+        
+        
+        $('.popover-dismiss').popover({
+            trigger: 'focus'
+        });
+        
+        
+        
     });
      
-
+    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+        return new bootstrap.Popover(popoverTriggerEl)
+    })
+ 
+          
          
 </script>
 @endsection

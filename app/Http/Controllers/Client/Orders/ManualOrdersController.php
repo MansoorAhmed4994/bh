@@ -411,8 +411,7 @@ class ManualOrdersController extends Controller
         }
 
         if(in_array('author', $user_roles) || in_array('admin', $user_roles) || Auth::guard('admin')->check())
-        { 
-            // dd('');
+        {  
         } 
         elseif(auth()->user()->id == (ManualOrders::find($ManualOrder)->assign_to))
         { 
@@ -424,20 +423,17 @@ class ManualOrdersController extends Controller
             flash()->error('This is not your parcel, You Dont Have Permission to edit this order, contact Admin');
             return back();
         }
-        
-        // $cities = $this->get_trax_cities();
+         
         $cities = $this->LeopordGetCities()->city_list;
         
-        $leopordCities = $this->LeopordGetCities()->city_list;
+        // $leopordCities = $this->LeopordGetCities()->city_list;
         
-        
-        // $cities = $this->LeopordGetCities()->city_list;
+        //  dd($cities);
         
         $order_id = $ManualOrder;
         $this->UpdateReferenceNumberByOrderIds([$ManualOrder]);
         
         $ManualOrder = Customers::rightJoin('manual_orders', 'manual_orders.customers_id', '=', 'customers.id')->where('manual_orders.id',$ManualOrder)->first();
-        // dd($ManualOrder);
         if($ManualOrder == null)
         {
             dd('no such order id found');
@@ -454,7 +450,6 @@ class ManualOrdersController extends Controller
         
         $advance_payment_status='';
         $advance_payments = CustomerPayments::where('order_id',$order_id)->get();
-        // dd($advance_payment);
         if($advance_payments->isEmpty())
         {
             $advance_payment_status = ' No payment Found ';
@@ -476,20 +471,10 @@ class ManualOrdersController extends Controller
                 
             }
         } 
-         $statuses = get_active_order_status_list();
+        $statuses = get_active_order_status_list();
         
-        return view('client.orders.manual-orders.edit')->with(['ManualOrder'=>$ManualOrder, 'LeopordCities' => $leopordCities,'cities'=>$cities,'inventories'=>$inventory,'product_price'=>$this->updateorderprice($ManualOrder->id),'advance_payment_status'=>$advance_payment_status,'statuses'=>$statuses]);
+        return view('client.orders.manual-orders.edit')->with(['ManualOrder'=>$ManualOrder, 'LeopordCities' => $cities,'cities' => $cities, 'inventories'=>$inventory,'product_price'=>$this->updateorderprice($ManualOrder->id),'advance_payment_status'=>$advance_payment_status,'statuses'=>$statuses]);
 
-        // if($Manualorders != null)
-        // {
-         
-        // }
-        // else
-        // {
-        //     return view('client.orders.manual-orders.edit')->with(['cities'=>$cities]);
-
-        // }
-        //
     }
 
     /**
