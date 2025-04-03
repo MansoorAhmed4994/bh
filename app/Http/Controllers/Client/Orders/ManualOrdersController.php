@@ -390,7 +390,7 @@ class ManualOrdersController extends Controller
         $check_status = check_order_dispacthed($ManualOrder);
         if( $check_status['row_count'] > 0)
         {
-            flash()->error('Parcel Status is already'.$check_status['status'].' and parcel cannot be edited','Error');
+            flash()->error('Parcel Status is already'.$check_status['status'].' and parcel cannot be edited');
             return back();
         }
         
@@ -423,9 +423,11 @@ class ManualOrdersController extends Controller
             flash()->error('This is not your parcel, You Dont Have Permission to edit this order, contact Admin');
             return back();
         }
-         
+        //  dd($this->LeopordGetCities());
         $cities = $this->LeopordGetCities()->city_list;
         
+        // $cities = [];
+        // dd('2');
         // $leopordCities = $this->LeopordGetCities()->city_list;
         
         //  dd($cities);
